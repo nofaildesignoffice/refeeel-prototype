@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RE:FEEEL 유저앱 클릭 프로토타입 v1</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#F5F5F5; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --placeholder-bg:#E0E0E0; --placeholder-icon:#BCBCBC;
+  --radius-sm:8px; --radius-md:12px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08); --shadow-md:0 4px 12px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:#EBEBEB;color:var(--text-black);display:flex;flex-direction:column;align-items:center;}
+i[data-lucide]{flex-shrink:0;}
+[data-go],[data-back],[data-tab]{cursor:pointer;}
+
+/* ===== 점프바 (리뷰용) ===== */
+.jumpbar{width:100%;max-width:420px;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;scrollbar-width:none;}
+.jumpbar::-webkit-scrollbar{display:none;}
+.jumpbar button{flex-shrink:0;font-size:11px;font-weight:600;color:var(--text-gray);background:var(--bg-white);border:1px solid var(--border-light);border-radius:999px;padding:5px 11px;cursor:pointer;font-family:inherit;}
+.jumpbar button.on{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
+
+/* ===== 폰 프레임 ===== */
+.phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;}
+@media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:24px;} }
+
+/* ===== 화면 ===== */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
+.screen.active{display:flex;}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;}
+
+/* ===== 상단바 ===== */
+.topbar{flex-shrink:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
+.topbar .logo{font-size:13px;font-weight:700;letter-spacing:0.8px;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.topbar-right i{width:20px;height:20px;color:var(--text-dark);}
+.avatar{width:26px;height:26px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+.avatar i{width:14px;height:14px;color:var(--placeholder-icon);}
+.bell-wrap{position:relative;display:flex;}
+.bell-dot{position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--text-black);}
+.topbar.dark{background:var(--bg-dark);border-bottom-color:var(--bg-dark);}
+.topbar.dark .logo{color:var(--bg-white);}
+.topbar.dark .topbar-right i{color:var(--bg-white);}
+
+.gnb{flex-shrink:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
+.gnb .gnb-title{font-size:13px;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+.gnb i{width:20px;height:20px;color:var(--text-dark);}
+.gnb-side{display:flex;align-items:center;gap:12px;min-width:20px;}
+.progress-thin{flex-shrink:0;height:3px;background:var(--border-light);}
+.progress-thin>div{height:100%;background:var(--text-black);}
+
+/* ===== 하단 네비 ===== */
+.bottomnav{flex-shrink:0;display:flex;border-top:1px solid var(--border-light);background:var(--bg-white);}
+.bottomnav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 12px;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;}
+.bottomnav .nav-item i{width:22px;height:22px;}
+.bottomnav .nav-item span{font-size:10px;font-weight:600;}
+.bottomnav .nav-item.on{color:var(--text-black);}
+
+/* ===== 공통 ===== */
+.sec{padding:20px 16px;}
+.sec.alt{background:var(--bg-light);}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
+.sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
+.sec-more{font-size:12px;color:var(--text-light);}
+.img-ph{background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.img-ph i{width:22px;height:22px;color:var(--placeholder-icon);}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text-dark);background:var(--bg-white);border:1px solid var(--border-light);border-radius:999px;padding:7px 14px;cursor:pointer;}
+.chip.on{background:var(--bg-dark);color:var(--bg-white);border-color:var(--bg-dark);}
+.chip i{width:13px;height:13px;}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:700;border-radius:var(--radius-sm);padding:13px 16px;cursor:pointer;border:none;font-family:inherit;}
+.btn-primary{background:var(--bg-black);color:var(--bg-white);}
+.btn-secondary{background:var(--bg-white);color:var(--text-black);border:1px solid var(--text-black);}
+.btn i{width:15px;height:15px;}
+.reason{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-light);margin-bottom:6px;}
+.reason i{width:12px;height:12px;}
+.lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text-gray);background:var(--bg-light);border:1px solid var(--border-light);border-radius:4px;padding:2px 7px;}
+.lock-badge i{width:10px;height:10px;}
+.progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
+.progress-bar>div{height:100%;background:var(--text-black);border-radius:2px;}
+.card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;}
+
+/* 홈 */
+.hero-dark{background:var(--bg-dark);color:var(--bg-white);padding:24px 16px 22px;}
+.hero-dark .hd-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:6px;font-weight:600;}
+.hero-dark .hd-greet{font-size:19px;font-weight:800;line-height:1.45;}
+.hero-dark .hd-stat{font-size:12px;color:rgba(255,255,255,0.6);margin-top:8px;}
+.continue-card{display:flex;gap:12px;padding:12px;align-items:center;}
+.continue-card .img-ph{width:68px;height:68px;}
+.continue-body{flex:1;min-width:0;}
+.continue-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
+.continue-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;}
+.continue-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-light);margin-top:6px;}
+.hcard{min-width:190px;cursor:pointer;}
+.hcard .img-ph{width:100%;aspect-ratio:16/10;border-radius:0;}
+.hcard-body{padding:12px;}
+.hcard-num{font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:4px;letter-spacing:0.5px;}
+.hcard-title{font-size:13px;font-weight:700;line-height:1.45;}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.hscroll::-webkit-scrollbar{display:none;}
+.thumbrow-item{min-width:118px;cursor:pointer;}
+.thumbrow-item .img-ph{width:118px;height:78px;}
+.thumbrow-item p{font-size:12px;font-weight:600;line-height:1.4;margin-top:6px;}
+.bigcard{cursor:pointer;}
+.bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:0;}
+.bigcard-body{padding:14px;}
+.bigcard-kicker{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.bigcard-kicker .k{font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-light);}
+.bigcard-title{font-size:16px;font-weight:800;line-height:1.4;}
+.bigcard-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
+.quote-card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px;cursor:pointer;}
+.quote-card .q-mark i{width:16px;height:16px;color:var(--text-muted);}
+.quote-card .q-text{font-size:13px;font-weight:600;line-height:1.6;margin:8px 0;}
+.quote-card .q-src{font-size:11px;color:var(--text-light);}
+.quote-card .q-cnt{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-light);margin-top:8px;}
+.quote-card .q-cnt i{width:12px;height:12px;}
+.rank-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);cursor:pointer;}
+.rank-row:last-child{border-bottom:none;}
+.rank-num{font-size:15px;font-weight:800;color:var(--text-muted);width:18px;text-align:center;}
+.rank-row .img-ph{width:44px;height:44px;}
+.rank-body{flex:1;min-width:0;}
+.rank-title{font-size:13px;font-weight:700;line-height:1.4;}
+.rank-meta{font-size:11px;color:var(--text-light);margin-top:2px;}
+.ai-card{background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px;}
+.sec.alt .ai-card{background:var(--bg-white);}
+.ai-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ai-card .ac-head i{width:16px;height:16px;}
+.ai-card .ac-head b{font-size:13px;font-weight:800;}
+.ai-card p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:12px;}
+
+/* 검색 */
+.search-input{display:flex;align-items:center;gap:8px;background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-light);cursor:pointer;}
+.search-input i{width:16px;height:16px;color:var(--text-light);}
+.search-input.filled{color:var(--text-black);font-weight:600;background:var(--bg-white);}
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.pain-card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px 12px;cursor:pointer;}
+.pain-card i{width:18px;height:18px;color:var(--text-dark);margin-bottom:8px;}
+.pain-card b{display:block;font-size:13px;font-weight:700;line-height:1.4;}
+.pain-card span{display:block;font-size:11px;color:var(--text-light);margin-top:3px;}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+.kw-row{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13px;color:var(--text-dark);border-bottom:1px solid var(--border-light);cursor:pointer;}
+.kw-row:last-child{border-bottom:none;}
+.kw-row .kw-n{font-size:12px;font-weight:800;color:var(--text-muted);width:14px;}
+.result-card{padding:14px;border-bottom:1px solid var(--border-light);cursor:pointer;}
+.result-card:last-child{border-bottom:none;}
+.result-head{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.result-num{font-size:10px;font-weight:700;color:var(--text-light);letter-spacing:0.5px;}
+.result-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:5px;}
+.result-snippet{font-size:12px;color:var(--text-gray);line-height:1.6;}
+.result-snippet mark{background:var(--placeholder-bg);color:var(--text-black);font-weight:700;padding:0 2px;}
+
+/* AI챗 */
+.chat-area{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:14px;background:var(--bg-light);}
+.bubble{max-width:82%;font-size:13px;line-height:1.6;padding:12px 14px;border-radius:var(--radius-md);}
+.bubble.user{align-self:flex-end;background:var(--bg-dark);color:var(--bg-white);border-bottom-right-radius:4px;}
+.bubble.ai{align-self:flex-start;background:var(--bg-white);border:1px solid var(--border-light);border-bottom-left-radius:4px;}
+.chat-rekit{align-self:flex-start;width:82%;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:12px;display:flex;gap:10px;align-items:center;cursor:pointer;}
+.chat-rekit .img-ph{width:48px;height:48px;}
+.chat-rekit .cr-body{flex:1;min-width:0;}
+.chat-rekit .cr-num{font-size:10px;font-weight:700;color:var(--text-light);}
+.chat-rekit .cr-title{font-size:13px;font-weight:700;line-height:1.4;margin-top:2px;}
+.chat-rekit>i{width:16px;height:16px;color:var(--text-light);}
+.chat-input{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--border-light);background:var(--bg-white);}
+.chat-input .ci-box{flex:1;display:flex;align-items:center;background:var(--bg-light);border:1px solid var(--border-light);border-radius:999px;padding:11px 16px;font-size:13px;color:var(--text-light);}
+.chat-input>i{width:22px;height:22px;color:var(--text-dark);}
+
+/* 보관함 */
+.memo-card{padding:14px;cursor:pointer;}
+.memo-quote{border-left:3px solid var(--border-default);padding:2px 0 2px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:10px;}
+.memo-mine{display:flex;gap:8px;align-items:flex-start;}
+.memo-mine i{width:14px;height:14px;color:var(--text-dark);margin-top:2px;}
+.memo-mine p{font-size:13px;font-weight:600;line-height:1.55;}
+.memo-src{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--text-light);}
+.type-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--bg-light);border-radius:4px;padding:2px 7px;color:var(--text-gray);}
+.type-tag i{width:10px;height:10px;}
+.series-card{padding:14px;display:flex;gap:12px;align-items:center;cursor:pointer;}
+.series-card .img-ph{width:54px;height:54px;}
+.series-body{flex:1;min-width:0;}
+.series-title{font-size:14px;font-weight:700;}
+.series-meta{font-size:11px;color:var(--text-light);margin:4px 0 8px;}
+
+/* 보관함 베리에이션 */
+.variant-bar{display:flex;gap:6px;padding:10px 16px;background:var(--bg-light);border-bottom:1px solid var(--border-light);align-items:center;flex-shrink:0;}
+.variant-bar .vlabel{font-size:10px;font-weight:700;color:var(--text-light);margin-right:2px;white-space:nowrap;}
+.variant-bar button{flex:1;font-size:11px;font-weight:700;padding:6px 0;border-radius:6px;border:1px solid var(--border-light);background:var(--bg-white);color:var(--text-gray);font-family:inherit;cursor:pointer;}
+.variant-bar button.on{background:var(--bg-dark);color:var(--bg-white);border-color:var(--bg-dark);}
+.libv{display:none;}
+.libv.on{display:block;}
+.variant-note{font-size:10px;color:var(--text-muted);text-align:center;padding:4px 20px 18px;line-height:1.6;}
+.lib-stats{display:flex;gap:8px;padding:14px 16px 0;}
+.lib-stat{flex:1;background:var(--bg-light);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;}
+.lib-stat b{display:block;font-size:15px;font-weight:800;}
+.lib-stat span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
+.seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
+.seg button{flex:1;font-size:12px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;}
+.seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
+.bseg-view{display:none;}
+.bseg-view.on{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.gcard{cursor:pointer;}
+.gcard .img-ph{width:100%;aspect-ratio:16/10;}
+.gcard b{display:block;font-size:12px;font-weight:700;line-height:1.4;margin-top:6px;}
+.gcard span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
+.group-card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px;cursor:pointer;}
+.group-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.group-head .gt{font-size:13px;font-weight:800;line-height:1.4;max-width:75%;}
+.group-head .gc{font-size:11px;color:var(--text-light);white-space:nowrap;}
+.week-card{background:var(--bg-dark);color:var(--bg-white);border-radius:var(--radius-md);padding:16px;cursor:pointer;display:flex;align-items:center;gap:12px;}
+.week-card i{width:20px;height:20px;color:var(--bg-white);}
+.week-card b{font-size:14px;font-weight:800;display:block;}
+.week-card p{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.5;margin-top:2px;}
+
+/* 마이 */
+.my-profile{display:flex;align-items:center;gap:14px;padding:20px 16px 12px;}
+.my-profile .avatar-lg{width:56px;height:56px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+.my-profile .avatar-lg i{width:24px;height:24px;color:var(--placeholder-icon);}
+.my-name{font-size:17px;font-weight:800;}
+.my-interest{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--text-gray);margin-top:4px;cursor:pointer;}
+.my-interest i{width:12px;height:12px;}
+.badge-row{display:flex;gap:8px;padding:0 16px 16px;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat-tile{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px 6px;text-align:center;}
+.stat-tile b{display:block;font-size:17px;font-weight:800;}
+.stat-tile span{display:block;font-size:10px;color:var(--text-light);margin-top:3px;}
+.menu-list{background:var(--bg-white);}
+.menu-row{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:1px solid var(--border-light);font-size:14px;font-weight:600;color:var(--text-dark);cursor:pointer;}
+.menu-row:last-child{border-bottom:none;}
+.menu-row i:first-child{width:18px;height:18px;color:var(--text-gray);}
+.menu-row .grow{flex:1;}
+.menu-row>i:last-child{width:16px;height:16px;color:var(--text-muted);}
+.menu-row.danger{color:var(--text-light);font-weight:500;font-size:13px;}
+
+/* 알림 */
+.noti-row{display:flex;gap:12px;padding:15px 16px;border-bottom:1px solid var(--border-light);align-items:flex-start;cursor:pointer;}
+.noti-row:last-child{border-bottom:none;}
+.noti-ic{width:36px;height:36px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
+.noti-ic i{width:16px;height:16px;color:var(--text-dark);}
+.noti-ic .dot{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--text-black);}
+.noti-body{flex:1;}
+.noti-title{font-size:13px;font-weight:700;line-height:1.45;}
+.noti-desc{font-size:12px;color:var(--text-gray);line-height:1.5;margin-top:2px;}
+.noti-time{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.noti-row.read .noti-title{font-weight:500;color:var(--text-gray);}
+
+/* 뷰어 */
+.viewer-body{padding:24px 20px;}
+.viewer-num{font-size:11px;font-weight:700;letter-spacing:0.8px;color:var(--text-light);margin-bottom:8px;}
+.viewer-title{font-size:21px;font-weight:800;line-height:1.45;margin-bottom:20px;}
+.tline{height:10px;background:var(--placeholder-bg);border-radius:3px;margin-bottom:10px;}
+.tline.w90{width:90%;}.tline.w75{width:75%;}.tline.w60{width:60%;}
+.viewer-para{font-size:15px;line-height:1.85;color:var(--text-dark);margin-bottom:18px;}
+.viewer-para .hl{background:var(--bg-light);border-bottom:2px solid var(--border-default);cursor:pointer;position:relative;}
+.sel-tooltip{display:flex;background:var(--bg-dark);border-radius:var(--radius-sm);overflow:hidden;width:max-content;margin:4px auto 16px;box-shadow:var(--shadow-md);}
+.sel-tooltip button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--bg-white);font-size:10px;font-weight:600;padding:10px 14px;background:none;border:none;border-right:1px solid rgba(255,255,255,0.15);font-family:inherit;cursor:pointer;}
+.sel-tooltip button:last-child{border-right:none;}
+.sel-tooltip i{width:14px;height:14px;}
+
+/* 완독 직후 */
+.done-hero{padding:32px 16px 20px;text-align:center;}
+.done-hero .done-ic{width:56px;height:56px;border-radius:50%;background:var(--bg-dark);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.done-hero .done-ic i{width:26px;height:26px;color:var(--bg-white);}
+.done-hero b{font-size:18px;font-weight:800;display:block;}
+.done-hero span{font-size:12px;color:var(--text-light);display:block;margin-top:4px;}
+.eval-box{margin:0 16px;background:var(--bg-light);border-radius:var(--radius-md);padding:18px 16px;text-align:center;}
+.eval-box b{font-size:15px;font-weight:800;display:block;margin-bottom:12px;}
+.eval-btns{display:flex;gap:8px;}
+.eval-btns .btn{flex:1;padding:11px;font-size:13px;}
+.memo-input{margin:10px 16px 0;border:1px dashed var(--border-default);border-radius:var(--radius-sm);padding:13px 14px;font-size:13px;color:var(--text-light);display:none;align-items:center;gap:8px;}
+.memo-input.show{display:flex;}
+.memo-input i{width:15px;height:15px;}
+
+/* 시리즈 */
+.series-hero{background:var(--bg-dark);color:var(--bg-white);padding:26px 16px;}
+.series-hero .sh-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:700;margin-bottom:8px;}
+.series-hero h3{font-size:20px;font-weight:800;line-height:1.4;}
+.series-hero p{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6;margin-top:8px;}
+.series-prog{padding:16px;border-bottom:1px solid var(--border-light);}
+.series-prog .sp-txt{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;}
+.series-prog .sp-txt b{font-weight:700;}
+.series-prog .sp-txt span{color:var(--text-light);}
+.ep-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border-light);cursor:pointer;}
+.ep-row:last-child{border-bottom:none;}
+.ep-status{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg-light);flex-shrink:0;}
+.ep-status i{width:14px;height:14px;color:var(--text-gray);}
+.ep-status.done{background:var(--bg-dark);}
+.ep-status.done i{color:var(--bg-white);}
+.ep-body{flex:1;min-width:0;}
+.ep-title{font-size:13px;font-weight:700;}
+.ep-meta{font-size:11px;color:var(--text-light);margin-top:2px;}
+
+/* 온보딩 */
+.ob-head{padding:32px 20px 8px;}
+.ob-step{display:flex;gap:6px;margin-bottom:20px;}
+.ob-step span{height:4px;flex:1;border-radius:2px;background:var(--border-light);}
+.ob-step span.on{background:var(--bg-dark);}
+.ob-head h3{font-size:20px;font-weight:800;line-height:1.4;}
+.ob-head p{font-size:13px;color:var(--text-gray);margin-top:6px;line-height:1.6;}
+.ob-skip{font-size:12px;color:var(--text-light);text-decoration:underline;text-align:center;padding:14px 0 20px;cursor:pointer;}
+.ob-bottom{margin-top:auto;padding:0 16px 8px;}
+</style>
+</head>
+<body>
+
+<div class="jumpbar" id="jumpbar">
+  <button data-jump="scr-ob1">온보딩</button>
+  <button data-jump="scr-home">홈</button>
+  <button data-jump="scr-search">검색</button>
+  <button data-jump="scr-results">검색결과</button>
+  <button data-jump="scr-chat">AI챗</button>
+  <button data-jump="scr-library">보관함</button>
+  <button data-jump="scr-viewer">뷰어</button>
+  <button data-jump="scr-done">완독직후</button>
+  <button data-jump="scr-series">시리즈</button>
+  <button data-jump="scr-my">마이</button>
+  <button data-jump="scr-noti">알림</button>
+</div>
+
+<div class="phone">
+
+<!-- ══════════ 온보딩 1: 업종 ══════════ -->
+<section class="screen" id="scr-ob1">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <div class="ob-step"><span class="on"></span><span></span><span></span><span></span></div>
+      <h3>어떤 사업을<br>하고 계세요?</h3>
+      <p>낙타AI와 맞춤 추천이 리건님의 상황을 이해하는 데 사용돼요</p>
+    </div>
+    <div class="sec">
+      <div class="chip-wrap" style="gap:10px">
+        <span class="chip toggle on"><i data-lucide="store"></i>오프라인 매장 (카페·음식점·뷰티·공간)</span>
+        <span class="chip toggle"><i data-lucide="shopping-bag"></i>온라인 판매 (쇼핑몰·제품 브랜드)</span>
+        <span class="chip toggle"><i data-lucide="briefcase"></i>전문 서비스 (교육·컨설팅·시술·상담)</span>
+        <span class="chip toggle"><i data-lucide="clapperboard"></i>콘텐츠 · 크리에이터</span>
+        <span class="chip toggle"><i data-lucide="lightbulb"></i>아직 준비 중이에요</span>
+        <span class="chip toggle"><i data-lucide="ellipsis"></i>기타</span>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ob2">다음</button>
+      <p class="ob-skip" data-go="scr-ob2">건너뛰기</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 온보딩 2: 단계 ══════════ -->
+<section class="screen" id="scr-ob2">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <div class="ob-step"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+      <h3>지금 비즈니스는<br>어떤 단계인가요?</h3>
+      <p>하나만 선택해주세요</p>
+    </div>
+    <div class="sec">
+      <div class="chip-wrap" style="gap:10px">
+        <span class="chip toggle"><i data-lucide="lightbulb"></i>준비 중이에요</span>
+        <span class="chip toggle on"><i data-lucide="rocket"></i>오픈 1년 미만</span>
+        <span class="chip toggle"><i data-lucide="store"></i>운영 중 (1년 이상)</span>
+        <span class="chip toggle"><i data-lucide="trending-up"></i>확장을 고민 중</span>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ob3">다음</button>
+      <p class="ob-skip" data-go="scr-ob3">건너뛰기</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 온보딩 3: 주력 채널 ══════════ -->
+<section class="screen" id="scr-ob3">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <div class="ob-step"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+      <h3>주로 어떤 채널로<br>마케팅하세요?</h3>
+      <p>복수 선택 가능</p>
+    </div>
+    <div class="sec">
+      <div class="chip-wrap" style="gap:10px">
+        <span class="chip toggle on"><i data-lucide="instagram"></i>인스타그램</span>
+        <span class="chip toggle"><i data-lucide="map-pin"></i>네이버 (블로그·플레이스)</span>
+        <span class="chip toggle"><i data-lucide="youtube"></i>유튜브</span>
+        <span class="chip toggle"><i data-lucide="at-sign"></i>스레드 · X</span>
+        <span class="chip toggle"><i data-lucide="circle-off"></i>아직 없어요</span>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ob4">다음</button>
+      <p class="ob-skip" data-go="scr-ob4">건너뛰기</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 온보딩 4: 고민 (핵심) ══════════ -->
+<section class="screen" id="scr-ob4">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <div class="ob-step"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+      <h3>지금 가장 큰 고민이<br>무엇인가요?</h3>
+      <p>최대 3개 · 선택한 고민에 맞는 리킷을 바로 골라드려요</p>
+    </div>
+    <div class="sec">
+      <div class="chip-wrap" style="gap:10px">
+        <span class="chip toggle"><i data-lucide="pencil-off"></i>뭘 올려야 할지 모르겠어요</span>
+        <span class="chip toggle on"><i data-lucide="eye-off"></i>올려도 반응이 없어요</span>
+        <span class="chip toggle on"><i data-lucide="trending-down"></i>팔로워는 있는데 매출이 안 돼요</span>
+        <span class="chip toggle"><i data-lucide="megaphone-off"></i>판매글 쓰는 게 부담스러워요</span>
+        <span class="chip toggle"><i data-lucide="palette"></i>우리 브랜드만의 색깔이 없어요</span>
+        <span class="chip toggle"><i data-lucide="brain"></i>고객 마음을 모르겠어요</span>
+        <span class="chip toggle"><i data-lucide="bot"></i>AI를 활용하고 싶어요</span>
+        <span class="chip toggle"><i data-lucide="search-x"></i>AI 검색 시대가 불안해요</span>
+        <span class="chip toggle"><i data-lucide="clock"></i>혼자 다 하느라 시간이 없어요</span>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ob5">다음</button>
+      <p class="ob-skip" data-go="scr-home">건너뛰기</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 온보딩 5: 완료 — 첫 리킷 제시 ══════════ -->
+<section class="screen" id="scr-ob5">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <h3>리건님을 위한<br>첫 리킷을 골라뒀어요</h3>
+      <p>고른 고민에 맞는 리킷부터 시작해보세요</p>
+    </div>
+    <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+        <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'를 고르셔서</div>
+        <div class="continue-num">RE:KIT 20</div>
+        <div class="continue-title" style="margin-bottom:0">이번 릴스도 실패했다…?</div>
+      </div>
+      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+        <div class="reason"><i data-lucide="sparkles"></i>'매출이 안 돼요'를 고르셔서</div>
+        <div class="continue-num">RE:KIT 41</div>
+        <div class="continue-title" style="margin-bottom:0">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+      </div>
+      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+        <div class="reason"><i data-lucide="trophy"></i>사장님들이 가장 많이 완독한 리킷</div>
+        <div class="continue-num">RE:KIT 68</div>
+        <div class="continue-title" style="margin-bottom:0">한국인 욕구별 훅 템플릿 40개</div>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-viewer">첫 리킷 읽기</button>
+      <p class="ob-skip" data-go="scr-home">홈으로</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 홈 ══════════ -->
+<section class="screen" id="scr-home">
+  <div class="topbar dark">
+    <span class="logo">RE:FEEEL</span>
+    <div class="topbar-right">
+      <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
+      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
+    </div>
+  </div>
+  <div class="scroll">
+
+    <div class="hero-dark">
+      <p class="hd-label">Problem Redefined</p>
+      <p class="hd-greet">리건님,<br>이번 주 깨달음 3개째예요</p>
+      <p class="hd-stat">연속 3주 읽는 중 · 완독 12</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">읽던 리킷</span></div>
+      <div class="card continue-card" data-go="scr-viewer">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="continue-body">
+          <div class="continue-num">RE:KIT 41</div>
+          <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+          <div class="progress-bar"><div style="width:45%"></div></div>
+          <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">이번 주 새 리킷</span></div>
+      <div class="card bigcard" data-go="scr-viewer">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="bigcard-body">
+          <div class="bigcard-kicker"><span class="k">RE:KIT 89 · NEW</span></div>
+          <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+          <div class="bigcard-desc">AI는 배우는 게 아니라 시키는 것. 마케터의 판단 기준을 AI에 심는 법.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">리건님을 위한 추천</span><span class="sec-more" data-go="scr-search">더보기</span></div>
+      <div class="hscroll">
+        <div class="card hcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 리킷</div>
+            <div class="hcard-num">RE:KIT 20</div>
+            <div class="hcard-title">이번 릴스도 실패했다…?</div>
+          </div>
+        </div>
+        <div class="card hcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="reason"><i data-lucide="book-open-check"></i>RE:KIT 41을 읽고 계셔서</div>
+            <div class="hcard-num">RE:KIT 03</div>
+            <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
+          </div>
+        </div>
+        <div class="card hcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
+            <div class="hcard-num">RE:KIT 59</div>
+            <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span><span class="sec-more" data-go="scr-search">더보기</span></div>
+      <div class="hscroll">
+        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>빼는 게 먼저, 더하는 게 나중</p></div>
+        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>'OO 하면 떠오르는 브랜드'가 되는 법</p></div>
+        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>사람은 타겟이 아니다</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">시리즈</span></div>
+      <div class="card bigcard" data-go="scr-series">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="bigcard-body">
+          <div class="bigcard-kicker"><span class="k">Series · 9개 회차</span><span class="lock-badge"><i data-lucide="lock"></i>구매 회원 전용</span></div>
+          <div class="bigcard-title">브랜딩 클래스</div>
+          <div class="bigcard-desc">마케팅의 순서부터 가이드라인까지, 브랜딩의 전 과정을 순서대로.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">사장님들이 밑줄 친 문장</span></div>
+      <div class="quote-card" data-go="scr-viewer">
+        <span class="q-mark"><i data-lucide="quote"></i></span>
+        <p class="q-text">본인이 느꼈다면, 팔로워는 훨씬 먼저 느꼈다.</p>
+        <p class="q-src">RE:KIT 59 · 판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</p>
+        <div class="q-cnt"><i data-lucide="highlighter"></i>이번 주 128명이 밑줄</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">이번 주 완독 TOP</span></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">1</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">한국인 욕구별 훅 템플릿 40개</div><div class="rank-meta">RE:KIT 68 · 완독률 82%</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">2</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">RE:KIT 41 · 완독률 76%</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">3</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">RE:KIT 55 · 완독률 71%</div></div></div>
+    </div>
+
+    <div class="sec alt">
+      <div class="ai-card">
+        <div class="ac-head"><i data-lucide="message-circle"></i><b>낙타AI</b></div>
+        <p>요즘 어떤 고민 있으세요? 진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+        <button class="btn btn-primary" style="width:100%" data-tab="scr-chat">고민 이야기하기<i data-lucide="arrow-right"></i></button>
+      </div>
+    </div>
+
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item on" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 검색 (탐색 홈) ══════════ -->
+<section class="screen" id="scr-search">
+  <div class="topbar">
+    <span class="logo">검색</span>
+    <div class="topbar-right">
+      <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
+      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
+    </div>
+  </div>
+  <div class="scroll">
+
+    <div class="sec">
+      <div class="search-input" data-go="scr-results"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
+    </div>
+
+    <div class="sec" style="padding-top:4px">
+      <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
+      <div class="pain-grid">
+        <div class="pain-card" data-go="scr-results"><i data-lucide="pencil-off"></i><b>뭘 올려야 할지 모르겠어요</b><span>콘텐츠 기획 · 리킷 24</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="eye-off"></i><b>올려도 반응이 없어요</b><span>인스타 운영 · 리킷 11</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="trending-down"></i><b>매출로 안 이어져요</b><span>전환 설계 · 리킷 10</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="palette"></i><b>브랜드 색깔이 없어요</b><span>브랜딩 · 리킷 14</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="bot"></i><b>AI를 활용하고 싶어요</b><span>AI·자동화 · 리킷 15</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="search-x"></i><b>AI 검색이 불안해요</b><span>AEO · 리킷 7</span></div>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">주제별로 찾기</span></div>
+      <div class="chip-wrap">
+        <span class="chip" data-go="scr-results">콘텐츠</span><span class="chip" data-go="scr-results">인스타그램</span><span class="chip" data-go="scr-results">전환·세일즈</span>
+        <span class="chip" data-go="scr-results">브랜딩</span><span class="chip" data-go="scr-results">소비자 심리</span><span class="chip" data-go="scr-results">AI·자동화</span>
+        <span class="chip" data-go="scr-results">AEO·AI 검색</span><span class="chip" data-go="scr-results">네이버 플레이스</span>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
+      <div class="card series-card" data-go="scr-series">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="series-body">
+          <div class="series-title">브랜딩 클래스</div>
+          <div class="series-meta" style="margin-bottom:0">9개 회차 · 순서형 커리큘럼</div>
+        </div>
+        <span class="lock-badge"><i data-lucide="lock"></i>구매 전용</span>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">인기 검색어</span></div>
+      <div class="kw-row" data-go="scr-results"><span class="kw-n">1</span>릴스 훅</div>
+      <div class="kw-row" data-go="scr-results"><span class="kw-n">2</span>AEO</div>
+      <div class="kw-row" data-go="scr-results"><span class="kw-n">3</span>콘텐츠 퍼널</div>
+    </div>
+
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item on" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 검색 결과 ══════════ -->
+<section class="screen" id="scr-results">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">검색 결과</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+
+    <div class="sec" style="padding-bottom:10px">
+      <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto"></i></div>
+    </div>
+
+    <div class="sec" style="padding-top:0;padding-bottom:10px">
+      <div class="ai-card">
+        <div class="ac-head"><i data-lucide="message-circle"></i><b>질문이신 것 같아요</b></div>
+        <p>검색보다 낙타AI가 진짜 문제를 찾는 데 도움이 될 수 있어요.</p>
+        <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 물어보기<i data-lucide="arrow-right"></i></button>
+      </div>
+    </div>
+
+    <div class="sec" style="padding-top:0;padding-bottom:8px">
+      <div class="chip-wrap">
+        <span class="chip on">전체</span><span class="chip">안 읽은 것</span><span class="chip">5분 이내</span><span class="chip">보유 콘텐츠</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin:0 16px 20px">
+      <div class="result-card" data-go="scr-viewer">
+        <div class="result-head"><span class="result-num">RE:KIT 41</span></div>
+        <div class="result-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+        <p class="result-snippet">…2주, 2300만원. <mark>조회수</mark>가 아니라 채널별 역할 분리가 만든 결과. 당신의 피드는 지금 어떤 역할을…</p>
+      </div>
+      <div class="result-card" data-go="scr-viewer">
+        <div class="result-head"><span class="result-num">RE:KIT 03</span><span class="lock-badge"><i data-lucide="lock"></i>구독 전용</span></div>
+        <div class="result-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
+        <p class="result-snippet">…사람들은 이렇게 산다. 노출이 <mark>매출</mark>이 되기까지, 콘텐츠 퍼널 3단계…</p>
+      </div>
+      <div class="result-card" data-go="scr-viewer">
+        <div class="result-head"><span class="result-num">RE:KIT 69</span></div>
+        <div class="result-title">돈이 되는 릴스의 제 1법칙</div>
+        <p class="result-snippet">…<mark>릴스</mark>의 매체는 영상이다. 스펙이 아니라 장면을 먼저 정한다. 데이터는 신뢰를 만들지 않는다…</p>
+      </div>
+    </div>
+
+    <div class="sec alt" style="text-align:center">
+      <p style="font-size:12px;color:var(--text-gray);margin-bottom:10px">찾는 내용이 없나요?</p>
+      <button class="btn btn-secondary" style="width:100%;padding:10px">이 주제 리킷 요청하기</button>
+    </div>
+
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item on" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ AI챗 (낙타AI) ══════════ -->
+<section class="screen" id="scr-chat">
+  <div class="topbar">
+    <span class="logo">낙타AI</span>
+    <div class="topbar-right">
+      <i data-lucide="history"></i>
+      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="bubble user">릴스 조회수는 잘 나오는데 매출이 안 늘어요. 릴스를 더 올려야 할까요?</div>
+    <div class="bubble ai">조회수가 나오는데 매출이 안 는다면, 문제는 릴스의 양이 아니라 <b>조회 이후의 전환 구조</b>일 가능성이 높아요.<br><br>지금 릴스를 본 사람이 그다음에 하게 되는 행동이 뭔가요?</div>
+    <div class="bubble user">음... 딱히 없는 것 같아요. 프로필 링크 정도?</div>
+    <div class="bubble ai">그게 진짜 문제예요. <b>조회수가 아니라 전환 설계가 비어있는 것.</b> 이 리킷 두 개가 정확히 그 문제를 다룹니다.</div>
+    <div class="chat-rekit" data-go="scr-viewer">
+      <div class="img-ph"><i data-lucide="image"></i></div>
+      <div class="cr-body"><div class="cr-num">RE:KIT 41</div><div class="cr-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div></div>
+      <i data-lucide="chevron-right"></i>
+    </div>
+    <div class="chat-rekit" data-go="scr-viewer">
+      <div class="img-ph"><i data-lucide="image"></i></div>
+      <div class="cr-body"><div class="cr-num">RE:KIT 03</div><div class="cr-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div></div>
+      <i data-lucide="chevron-right"></i>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="ci-box">고민을 이야기해보세요</div>
+    <i data-lucide="send"></i>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item on" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 보관함 ══════════ -->
+<section class="screen" id="scr-library">
+  <div class="topbar">
+    <span class="logo">보관함</span>
+    <div class="topbar-right">
+      <i data-lucide="search"></i>
+      <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
+      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
+    </div>
+  </div>
+
+  <div class="variant-bar">
+    <span class="vlabel">안 비교</span>
+    <button data-libv="a" class="on">A 통합피드</button>
+    <button data-libv="b">B 유형탭</button>
+    <button data-libv="c">C 노트중심</button>
+    <button data-libv="d">D 상태별</button>
+  </div>
+
+  <div class="scroll">
+
+    <!-- ── A안: 통합 피드 ── -->
+    <div class="libv on" id="libv-a">
+      <div class="lib-stats">
+        <div class="lib-stat"><b>8</b><span>이번 달 깨달음</span></div>
+        <div class="lib-stat"><b>24</b><span>밑줄</span></div>
+        <div class="lib-stat"><b>12</b><span>저장</span></div>
+      </div>
+      <div class="sec" style="padding-bottom:10px">
+        <div class="chip-wrap">
+          <span class="chip toggle on">전체</span><span class="chip toggle"><i data-lucide="bookmark"></i>저장</span><span class="chip toggle"><i data-lucide="highlighter"></i>밑줄</span><span class="chip toggle"><i data-lucide="pen-line"></i>메모</span><span class="chip toggle"><i data-lucide="layers"></i>시리즈</span>
+        </div>
+      </div>
+      <div class="sec" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
+        <div class="card memo-card" data-go="scr-viewer">
+          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+          <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
+        </div>
+        <div class="card memo-card" data-go="scr-viewer">
+          <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+          <div class="memo-src"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
+        </div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 68 <span class="type-tag" style="margin-left:4px"><i data-lucide="bookmark"></i>저장</span></div>
+            <div class="continue-title" style="margin-bottom:0">한국인 욕구별 훅 템플릿 40개</div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+        <div class="card series-card" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="series-body">
+            <div class="series-title">브랜딩 클래스</div>
+            <div class="series-meta">보유 시리즈 · 9개 중 3개 완독</div>
+            <div class="progress-bar"><div style="width:33%"></div></div>
+          </div>
+          <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+        </div>
+      </div>
+      <p class="variant-note">A안 — 모든 기록을 시간순 한 피드로. 최근 기록 재발견에 강하고 구조가 단순. 기록이 쌓이면 스크롤이 길어지는 게 약점.</p>
+    </div>
+
+    <!-- ── B안: 유형 탭 분리 ── -->
+    <div class="libv" id="libv-b">
+      <div class="seg">
+        <button data-bseg="saved" class="on">저장 리킷 12</button>
+        <button data-bseg="notes">밑줄·메모 32</button>
+        <button data-bseg="series">시리즈 1</button>
+      </div>
+      <div class="bseg-view on" id="bseg-saved">
+        <div class="sec">
+          <div class="grid2">
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-notes">
+        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+            <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+            <div class="memo-src"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-series">
+        <div class="sec">
+          <div class="card series-card" data-go="scr-series">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="series-body">
+              <div class="series-title">브랜딩 클래스</div>
+              <div class="series-meta">9개 중 3개 완독</div>
+              <div class="progress-bar"><div style="width:33%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+          </div>
+        </div>
+      </div>
+      <p class="variant-note">B안 — 유형별 탭 분리 (기존 마이페이지 탭 UX 계승). 목적이 뚜렷한 방문("저장한 그 리킷 어딨지")에 가장 빠름. 유형을 오가는 탐색은 번거로움.</p>
+    </div>
+
+    <!-- ── C안: 깨달음 노트 중심 ── -->
+    <div class="libv" id="libv-c">
+      <div class="sec" style="padding-bottom:0">
+        <div class="week-card" data-go="scr-viewer">
+          <i data-lucide="lightbulb"></i>
+          <div><b>지난주 깨달음 3개 돌아보기</b><p>일요일마다 한 주의 밑줄·메모를 모아드려요</p></div>
+        </div>
+      </div>
+      <div class="sec" style="padding-bottom:10px">
+        <div class="chip-wrap">
+          <span class="chip toggle on">전체</span><span class="chip toggle">전환·세일즈</span><span class="chip toggle">콘텐츠</span><span class="chip toggle">브랜딩</span><span class="chip toggle">AI</span>
+        </div>
+      </div>
+      <div class="sec" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
+        <div class="group-card" data-go="scr-viewer">
+          <div class="group-head"><span class="gt">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</span><span class="gc">RE:KIT 59</span></div>
+          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+          <div class="memo-quote">"소셜은 사람을 만나러 오는 자리다."</div>
+          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. CTA 위치부터 다시 정하자.</p></div>
+          <div class="memo-src" style="margin-top:8px"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄 2 · 메모 1</span><span>어제</span></div>
+        </div>
+        <div class="group-card" data-go="scr-viewer">
+          <div class="group-head"><span class="gt">선택할 수밖에 없게 만드는, 마케팅 설계 4가지</span><span class="gc">RE:KIT 53</span></div>
+          <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+          <div class="memo-src" style="margin-top:8px"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄 1</span><span>3일 전</span></div>
+        </div>
+      </div>
+      <div class="sec alt" style="padding-top:12px;padding-bottom:12px">
+        <div class="menu-row" style="padding:12px 0;border-bottom:1px solid var(--border-light)" data-go="scr-viewer"><i data-lucide="bookmark"></i><span class="grow">저장한 리킷 12</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row" style="padding:12px 0" data-go="scr-series"><i data-lucide="layers"></i><span class="grow">보유 시리즈 1 — 브랜딩 클래스 33%</span><i data-lucide="chevron-right"></i></div>
+      </div>
+      <p class="variant-note">C안 — 밑줄·메모가 주인공인 "깨달음 노트". 리킷 단위 그룹핑 + 고민별 필터로 내 깨달음이 지식 자산처럼 쌓임. 북극성 지표(깨달음)와 정체성이 가장 일치. 저장·시리즈는 하단 보조.</p>
+    </div>
+
+    <!-- ── D안: 상태별 워크스페이스 ── -->
+    <div class="libv" id="libv-d">
+      <div class="sec" style="padding-bottom:0">
+        <div class="sec-head"><span class="sec-title">읽는 중</span></div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 41</div>
+            <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+            <div class="progress-bar"><div style="width:45%"></div></div>
+            <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-head"><span class="sec-title">나중에 읽으려고 저장</span><span class="sec-more">12개</span></div>
+        <div class="hscroll">
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>한국인 욕구별 훅 템플릿 40개</p></div>
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>빼는 게 먼저, 더하는 게 나중</p></div>
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>AI 검색에서 추천되게 만드는 법</p></div>
+        </div>
+      </div>
+      <div class="sec alt">
+        <div class="sec-head"><span class="sec-title">내가 남긴 기록</span><span class="sec-more">32개</span></div>
+        <div class="card memo-card" data-go="scr-viewer">
+          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. CTA 위치부터 다시 정하자.</p></div>
+          <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-head"><span class="sec-title">보유 시리즈</span></div>
+        <div class="card series-card" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="series-body">
+            <div class="series-title">브랜딩 클래스</div>
+            <div class="series-meta">9개 중 3개 완독</div>
+            <div class="progress-bar"><div style="width:33%"></div></div>
+          </div>
+          <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+        </div>
+      </div>
+      <p class="variant-note">D안 — "다음에 뭘 읽지"를 해결하는 작업대. 읽는 중 → 저장 → 기록 → 시리즈의 상태 순서. 리텐션(재방문 시 즉시 행동)에 가장 직접적. 기록 열람은 한 단계 아래로 밀림.</p>
+    </div>
+
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
+    <button class="nav-item on" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 리킷 뷰어 ══════════ -->
+<section class="screen" id="scr-viewer">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</span>
+    <div class="gnb-side"><i data-lucide="bookmark"></i></div>
+  </div>
+  <div class="progress-thin"><div style="width:45%"></div></div>
+  <div class="scroll">
+    <div class="viewer-body">
+      <div class="viewer-num">RE:KIT 41</div>
+      <div class="viewer-title">팔지 않으면 팔리는<br>3단계 콘텐츠 퍼널</div>
+
+      <div class="tline"></div><div class="tline"></div><div class="tline w90"></div><div class="tline w75"></div>
+      <div style="height:8px"></div>
+
+      <p class="viewer-para">대부분의 사업자가 불안해하는 것. 팔지 않으면 아무 일도 일어나지 않을 것 같다는 감각이다. 그래서 직접 해봤다. <span class="hl" id="hl-sentence">2주, 2300만원. 조회수가 아니라 채널별 역할 분리가 만든 결과였다.</span> 당신의 피드는 지금 어떤 역할을 하고 있는가.</p>
+
+      <div class="sel-tooltip">
+        <button><i data-lucide="highlighter"></i>하이라이트</button>
+        <button><i data-lucide="pen-line"></i>메모</button>
+        <button><i data-lucide="copy"></i>복사</button>
+      </div>
+      <p style="text-align:center;font-size:10px;color:var(--text-muted);margin-bottom:16px">문장 선택 시 툴팁 (프로토타입 시연용 고정 표시)</p>
+
+      <div class="tline"></div><div class="tline w90"></div><div class="tline"></div><div class="tline w75"></div>
+      <div class="tline"></div><div class="tline w60"></div>
+      <div style="height:8px"></div>
+      <div class="tline"></div><div class="tline w90"></div><div class="tline w75"></div>
+
+      <button class="btn btn-primary" style="width:100%;margin-top:24px" data-go="scr-done">끝까지 읽기 (완독 시뮬레이션)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 완독 직후 (골든 모먼트) ══════════ -->
+<section class="screen" id="scr-done">
+  <div class="gnb">
+    <span style="width:20px"></span>
+    <span class="gnb-title">완독</span>
+    <div class="gnb-side"><i data-lucide="x" data-tab="scr-home"></i></div>
+  </div>
+  <div class="scroll">
+
+    <div class="done-hero">
+      <div class="done-ic"><i data-lucide="check"></i></div>
+      <b>완독했어요</b>
+      <span>RE:KIT 41 · 팔지 않으면 팔리는 3단계 콘텐츠 퍼널</span>
+    </div>
+
+    <div class="eval-box">
+      <b>새로운 관점을 얻으셨나요?</b>
+      <div class="eval-btns">
+        <button class="btn btn-primary" id="eval-yes"><i data-lucide="lightbulb"></i>네, 얻었어요</button>
+        <button class="btn btn-secondary">아직이요</button>
+      </div>
+    </div>
+
+    <div class="memo-input" id="memo-input"><i data-lucide="pen-line"></i>지금의 깨달음을 한 줄로 남겨보세요 (선택)</div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">이 리킷을 본 분들이 함께 본 리킷</span></div>
+      <div class="hscroll">
+        <div class="card hcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body"><div class="hcard-num">RE:KIT 03</div><div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div></div>
+        </div>
+        <div class="card hcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body"><div class="hcard-num">RE:KIT 59</div><div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="ai-card">
+        <div class="ac-head"><i data-lucide="message-circle"></i><b>낙타AI</b></div>
+        <p>이 고민, 내 가게 상황에서는 어떻게 되는지 이어서 물어보세요.</p>
+        <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 이어서 묻기<i data-lucide="arrow-right"></i></button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ 시리즈 상세 (허브) ══════════ -->
+<section class="screen" id="scr-series">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">시리즈</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+
+    <div class="series-hero">
+      <p class="sh-label">Series · 9 Chapters</p>
+      <h3>브랜딩 클래스</h3>
+      <p>마케팅의 순서부터 가이드라인까지, 브랜딩의 전 과정을 순서대로 배우는 커리큘럼.</p>
+    </div>
+
+    <div class="series-prog">
+      <div class="sp-txt"><b>내 진행률</b><span>9개 중 3개 완독</span></div>
+      <div class="progress-bar" style="height:6px"><div style="width:33%"></div></div>
+    </div>
+
+    <div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status done"><i data-lucide="check"></i></div><div class="ep-body"><div class="ep-title">01. 마케팅의 순서</div><div class="ep-meta">완독 · 8/2</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status done"><i data-lucide="check"></i></div><div class="ep-body"><div class="ep-title">02. 정체성</div><div class="ep-meta">완독 · 8/4</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status done"><i data-lucide="check"></i></div><div class="ep-body"><div class="ep-title">03. 고객 정의</div><div class="ep-meta">완독 · 8/6</div></div></div>
+      <div class="ep-row" style="background:var(--bg-light)" data-go="scr-viewer">
+        <div class="ep-status"><i data-lucide="book-open"></i></div>
+        <div class="ep-body"><div class="ep-title">04. 포지셔닝</div><div class="ep-meta">읽는 중 · 20%</div></div>
+        <button class="btn btn-primary" style="padding:8px 14px;font-size:12px" data-go="scr-viewer">이어서</button>
+      </div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status"><i data-lucide="lock"></i></div><div class="ep-body"><div class="ep-title">05. 차별화</div><div class="ep-meta">미시작</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status"><i data-lucide="lock"></i></div><div class="ep-body"><div class="ep-title">06. 메시지</div><div class="ep-meta">미시작</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status"><i data-lucide="lock"></i></div><div class="ep-body"><div class="ep-title">07. 차별화 실전</div><div class="ep-meta">미시작</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status"><i data-lucide="lock"></i></div><div class="ep-body"><div class="ep-title">08. 채널 전략</div><div class="ep-meta">미시작</div></div></div>
+      <div class="ep-row" data-go="scr-viewer"><div class="ep-status"><i data-lucide="lock"></i></div><div class="ep-body"><div class="ep-title">09. 가이드라인</div><div class="ep-meta">미시작</div></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ 마이페이지 ══════════ -->
+<section class="screen" id="scr-my">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">마이페이지</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+
+    <div class="my-profile">
+      <div class="avatar-lg"><i data-lucide="user"></i></div>
+      <div>
+        <div class="my-name">리건</div>
+        <div class="my-interest" data-go="scr-ob1"><i data-lucide="settings-2"></i>관심사 수정 — 오프라인 매장 · 반응이 없어요 · 매출 전환</div>
+      </div>
+    </div>
+
+    <div class="badge-row">
+      <span class="chip"><i data-lucide="badge-check"></i>구독중</span>
+      <span class="chip"><i data-lucide="layers"></i>브랜딩 클래스 보유</span>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">내 읽기 기록</span></div>
+      <div class="stat-grid">
+        <div class="stat-tile"><b>12</b><span>완독</span></div>
+        <div class="stat-tile"><b>4.2h</b><span>읽은 시간</span></div>
+        <div class="stat-tile"><b>8</b><span>이번 달 깨달음</span></div>
+        <div class="stat-tile"><b>3주</b><span>연속 읽기</span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">진행 중인 시리즈</span></div>
+      <div class="card series-card" data-go="scr-series">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="series-body">
+          <div class="series-title">브랜딩 클래스</div>
+          <div class="series-meta">9개 중 3개 완독</div>
+          <div class="progress-bar"><div style="width:33%"></div></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted)"></i>
+      </div>
+    </div>
+
+    <div class="sec alt" style="padding:0">
+      <div class="menu-list">
+        <div class="menu-row"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row"><i data-lucide="globe"></i><span class="grow">언어</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row"><i data-lucide="file-text"></i><span class="grow">이용약관 · 개인정보처리방침</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row"><i data-lucide="log-out"></i><span class="grow">로그아웃</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row danger"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ 알림 센터 ══════════ -->
+<section class="screen" id="scr-noti">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">알림</span>
+    <span style="font-size:11px;color:var(--text-light)">모두 읽음</span>
+  </div>
+  <div class="scroll">
+    <div class="noti-row" data-go="scr-viewer">
+      <div class="noti-ic"><i data-lucide="mail"></i><span class="dot"></span></div>
+      <div class="noti-body">
+        <div class="noti-title">새 리킷이 도착했어요</div>
+        <div class="noti-desc">RE:KIT 89 · 프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+        <div class="noti-time">2시간 전</div>
+      </div>
+    </div>
+    <div class="noti-row" data-go="scr-series">
+      <div class="noti-ic"><i data-lucide="layers"></i><span class="dot"></span></div>
+      <div class="noti-body">
+        <div class="noti-title">브랜딩 클래스 4강이 기다리고 있어요</div>
+        <div class="noti-desc">3강 완독 후 2주가 지났어요. 이어서 읽어볼까요?</div>
+        <div class="noti-time">어제</div>
+      </div>
+    </div>
+    <div class="noti-row read" data-go="scr-library">
+      <div class="noti-ic"><i data-lucide="pen-line"></i></div>
+      <div class="noti-body">
+        <div class="noti-title">지난주 남긴 깨달음을 다시 볼까요?</div>
+        <div class="noti-desc">"내 피드가 영업 전단이 되고 있었네…"</div>
+        <div class="noti-time">3일 전</div>
+      </div>
+    </div>
+    <div class="noti-row read">
+      <div class="noti-ic"><i data-lucide="megaphone"></i></div>
+      <div class="noti-body">
+        <div class="noti-title">공지사항</div>
+        <div class="noti-desc">서비스 업데이트 안내</div>
+        <div class="noti-time">1주 전</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.phone -->
+
+<script>
+lucide.createIcons();
+
+const TABS = ["scr-home","scr-search","scr-chat","scr-library"];
+let stack = [];
+let current = "scr-ob1";
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add("active");
+  const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
+  current = id;
+  document.querySelectorAll("#jumpbar button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.jump === id);
+  });
+}
+
+function go(id){ if(id===current) return; stack.push(current); show(id); }
+function tab(id){ stack = []; show(id); }
+function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("[data-libv],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  if(!t) return;
+  if(t.dataset.libv){
+    document.querySelectorAll("[data-libv]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".libv").forEach(v=>v.classList.toggle("on", v.id==="libv-"+t.dataset.libv));
+    return;
+  }
+  if(t.dataset.bseg){
+    document.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
+    return;
+  }
+  if(t.dataset.jump){ stack=[]; show(t.dataset.jump); return; }
+  if(t.hasAttribute("data-back")){ back(); return; }
+  if(t.dataset.tab){ tab(t.dataset.tab); return; }
+  if(t.dataset.go){ go(t.dataset.go); return; }
+  if(t.id === "eval-yes"){ document.getElementById("memo-input").classList.add("show"); return; }
+  if(t.classList.contains("toggle")){ t.classList.toggle("on"); return; }
+});
+
+show("scr-ob1");
+</script>
+</body>
+</html>
