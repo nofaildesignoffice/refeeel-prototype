@@ -174,7 +174,7 @@ i[data-lucide]{flex-shrink:0;}
 .memo-card{padding:14px;cursor:pointer;}
 .memo-quote{border-left:3px solid var(--border-default);padding:2px 0 2px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:10px;}
 .memo-mine{display:flex;gap:8px;align-items:flex-start;}
-.memo-mine i{width:14px;height:14px;color:var(--text-dark);margin-top:2px;}
+.memo-mine i{width:11px;height:11px;color:var(--text-muted);margin-top:4px;}
 .memo-mine p{font-size:13px;font-weight:600;line-height:1.55;}
 .memo-src{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--text-light);}
 .type-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--bg-light);border-radius:4px;padding:2px 7px;color:var(--text-gray);}
@@ -202,6 +202,9 @@ i[data-lucide]{flex-shrink:0;}
 .seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
 .bseg-view{display:none;}
 .bseg-view.on{display:block;}
+.utabs{display:flex;gap:20px;padding:0 16px;border-bottom:1px solid var(--border-light);}
+.utabs button{font-size:13px;font-weight:600;color:var(--text-light);padding:12px 0 10px;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;cursor:pointer;}
+.utabs button.on{color:var(--text-black);font-weight:700;border-bottom-color:var(--text-black);}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .gcard{cursor:pointer;}
 .gcard .img-ph{width:100%;aspect-ratio:16/10;}
@@ -758,139 +761,15 @@ i[data-lucide]{flex-shrink:0;}
 
   <div class="variant-bar">
     <span class="vlabel">안 비교</span>
-    <button data-libv="a" class="on">A 통합피드</button>
-    <button data-libv="b">B 유형탭</button>
-    <button data-libv="c">C 노트중심</button>
-    <button data-libv="d">D 상태별</button>
+    <button data-libv="a" class="on">V1 기본형</button>
+    <button data-libv="b">V2 4탭 분리</button>
+    <button data-libv="c">V3 노트 그룹</button>
   </div>
 
   <div class="scroll">
 
-    <!-- ── A안: 통합 피드 ── -->
+    <!-- ── V1: 기본형 — 읽는 중 + 세그먼트 유형탭 ── -->
     <div class="libv on" id="libv-a">
-      <div class="lib-stats">
-        <div class="lib-stat"><b>8</b><span>이번 달 깨달음</span></div>
-        <div class="lib-stat"><b>24</b><span>밑줄</span></div>
-        <div class="lib-stat"><b>12</b><span>저장</span></div>
-      </div>
-      <div class="sec" style="padding-bottom:10px">
-        <div class="chip-wrap">
-          <span class="chip toggle on">전체</span><span class="chip toggle"><i data-lucide="bookmark"></i>저장</span><span class="chip toggle"><i data-lucide="highlighter"></i>밑줄</span><span class="chip toggle"><i data-lucide="pen-line"></i>메모</span><span class="chip toggle"><i data-lucide="layers"></i>시리즈</span>
-        </div>
-      </div>
-      <div class="sec" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
-        <div class="card memo-card" data-go="scr-viewer">
-          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-          <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
-        </div>
-        <div class="card memo-card" data-go="scr-viewer">
-          <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-          <div class="memo-src"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
-        </div>
-        <div class="card continue-card" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
-          <div class="continue-body">
-            <div class="continue-num">RE:KIT 68 <span class="type-tag" style="margin-left:4px"><i data-lucide="bookmark"></i>저장</span></div>
-            <div class="continue-title" style="margin-bottom:0">한국인 욕구별 훅 템플릿 40개</div>
-          </div>
-          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-        </div>
-        <div class="card series-card" data-go="scr-series">
-          <div class="img-ph"><i data-lucide="image"></i></div>
-          <div class="series-body">
-            <div class="series-title">브랜딩 클래스</div>
-            <div class="series-meta">보유 시리즈 · 9개 중 3개 완독</div>
-            <div class="progress-bar"><div style="width:33%"></div></div>
-          </div>
-          <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
-        </div>
-      </div>
-      <p class="variant-note">A안 — 모든 기록을 시간순 한 피드로. 최근 기록 재발견에 강하고 구조가 단순. 기록이 쌓이면 스크롤이 길어지는 게 약점.</p>
-    </div>
-
-    <!-- ── B안: 유형 탭 분리 ── -->
-    <div class="libv" id="libv-b">
-      <div class="seg">
-        <button data-bseg="saved" class="on">저장 리킷 12</button>
-        <button data-bseg="notes">밑줄·메모 32</button>
-        <button data-bseg="series">시리즈 1</button>
-      </div>
-      <div class="bseg-view on" id="bseg-saved">
-        <div class="sec">
-          <div class="grid2">
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="bseg-view" id="bseg-notes">
-        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-            <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-            <div class="memo-src"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="bseg-view" id="bseg-series">
-        <div class="sec">
-          <div class="card series-card" data-go="scr-series">
-            <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="series-body">
-              <div class="series-title">브랜딩 클래스</div>
-              <div class="series-meta">9개 중 3개 완독</div>
-              <div class="progress-bar"><div style="width:33%"></div></div>
-            </div>
-            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
-          </div>
-        </div>
-      </div>
-      <p class="variant-note">B안 — 유형별 탭 분리 (기존 마이페이지 탭 UX 계승). 목적이 뚜렷한 방문("저장한 그 리킷 어딨지")에 가장 빠름. 유형을 오가는 탐색은 번거로움.</p>
-    </div>
-
-    <!-- ── C안: 깨달음 노트 중심 ── -->
-    <div class="libv" id="libv-c">
-      <div class="sec" style="padding-bottom:0">
-        <div class="week-card" data-go="scr-viewer">
-          <i data-lucide="lightbulb"></i>
-          <div><b>지난주 깨달음 3개 돌아보기</b><p>일요일마다 한 주의 밑줄·메모를 모아드려요</p></div>
-        </div>
-      </div>
-      <div class="sec" style="padding-bottom:10px">
-        <div class="chip-wrap">
-          <span class="chip toggle on">전체</span><span class="chip toggle">전환·세일즈</span><span class="chip toggle">콘텐츠</span><span class="chip toggle">브랜딩</span><span class="chip toggle">AI</span>
-        </div>
-      </div>
-      <div class="sec" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
-        <div class="group-card" data-go="scr-viewer">
-          <div class="group-head"><span class="gt">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</span><span class="gc">RE:KIT 59</span></div>
-          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-          <div class="memo-quote">"소셜은 사람을 만나러 오는 자리다."</div>
-          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. CTA 위치부터 다시 정하자.</p></div>
-          <div class="memo-src" style="margin-top:8px"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄 2 · 메모 1</span><span>어제</span></div>
-        </div>
-        <div class="group-card" data-go="scr-viewer">
-          <div class="group-head"><span class="gt">선택할 수밖에 없게 만드는, 마케팅 설계 4가지</span><span class="gc">RE:KIT 53</span></div>
-          <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-          <div class="memo-src" style="margin-top:8px"><span class="type-tag"><i data-lucide="highlighter"></i>밑줄 1</span><span>3일 전</span></div>
-        </div>
-      </div>
-      <div class="sec alt" style="padding-top:12px;padding-bottom:12px">
-        <div class="menu-row" style="padding:12px 0;border-bottom:1px solid var(--border-light)" data-go="scr-viewer"><i data-lucide="bookmark"></i><span class="grow">저장한 리킷 12</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row" style="padding:12px 0" data-go="scr-series"><i data-lucide="layers"></i><span class="grow">보유 시리즈 1 — 브랜딩 클래스 33%</span><i data-lucide="chevron-right"></i></div>
-      </div>
-      <p class="variant-note">C안 — 밑줄·메모가 주인공인 "깨달음 노트". 리킷 단위 그룹핑 + 고민별 필터로 내 깨달음이 지식 자산처럼 쌓임. 북극성 지표(깨달음)와 정체성이 가장 일치. 저장·시리즈는 하단 보조.</p>
-    </div>
-
-    <!-- ── D안: 상태별 워크스페이스 ── -->
-    <div class="libv" id="libv-d">
       <div class="sec" style="padding-bottom:0">
         <div class="sec-head"><span class="sec-title">읽는 중</span></div>
         <div class="card continue-card" data-go="scr-viewer">
@@ -904,35 +783,199 @@ i[data-lucide]{flex-shrink:0;}
           <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
         </div>
       </div>
-      <div class="sec">
-        <div class="sec-head"><span class="sec-title">나중에 읽으려고 저장</span><span class="sec-more">12개</span></div>
-        <div class="hscroll">
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>한국인 욕구별 훅 템플릿 40개</p></div>
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>빼는 게 먼저, 더하는 게 나중</p></div>
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>AI 검색에서 추천되게 만드는 법</p></div>
-        </div>
+      <div class="seg">
+        <button data-bseg="v1-saved" class="on">저장 12</button>
+        <button data-bseg="v1-notes">밑줄·메모 32</button>
+        <button data-bseg="v1-series">시리즈 1</button>
       </div>
-      <div class="sec alt">
-        <div class="sec-head"><span class="sec-title">내가 남긴 기록</span><span class="sec-more">32개</span></div>
-        <div class="card memo-card" data-go="scr-viewer">
-          <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-          <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. CTA 위치부터 다시 정하자.</p></div>
-          <div class="memo-src"><span class="type-tag"><i data-lucide="pen-line"></i>메모</span><span>RE:KIT 59 · 어제</span></div>
-        </div>
-      </div>
-      <div class="sec">
-        <div class="sec-head"><span class="sec-title">보유 시리즈</span></div>
-        <div class="card series-card" data-go="scr-series">
-          <div class="img-ph"><i data-lucide="image"></i></div>
-          <div class="series-body">
-            <div class="series-title">브랜딩 클래스</div>
-            <div class="series-meta">9개 중 3개 완독</div>
-            <div class="progress-bar"><div style="width:33%"></div></div>
+      <div class="bseg-view on" id="bseg-v1-saved">
+        <div class="sec">
+          <div class="grid2">
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
           </div>
-          <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
         </div>
       </div>
-      <p class="variant-note">D안 — "다음에 뭘 읽지"를 해결하는 작업대. 읽는 중 → 저장 → 기록 → 시리즈의 상태 순서. 리텐션(재방문 시 즉시 행동)에 가장 직접적. 기록 열람은 한 단계 아래로 밀림.</p>
+      <div class="bseg-view" id="bseg-v1-notes">
+        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+            <div class="memo-src"><span class="type-tag">메모</span><span>RE:KIT 59 · 어제</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+            <div class="memo-src"><span class="type-tag">밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v1-series">
+        <div class="sec">
+          <div class="card series-card" data-go="scr-series">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="series-body">
+              <div class="series-title">브랜딩 클래스</div>
+              <div class="series-meta">9개 중 3개 완독</div>
+              <div class="progress-bar"><div style="width:33%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+          </div>
+        </div>
+      </div>
+      <p class="variant-note">V1 기본형 — 읽는 중 상단 고정 + 세그먼트 유형탭 3개 (전체 뷰 없음). 밑줄과 메모는 한 탭에서 시간순. 가장 단순한 합의형.</p>
+    </div>
+
+    <!-- ── V2: 4탭 분리 — 언더라인 탭, 밑줄/메모 독립 ── -->
+    <div class="libv" id="libv-b">
+      <div class="sec" style="padding-bottom:0">
+        <div class="sec-head"><span class="sec-title">읽는 중</span></div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 41</div>
+            <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+            <div class="progress-bar"><div style="width:45%"></div></div>
+            <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+      <div class="utabs" style="margin-top:14px">
+        <button data-bseg="v2-saved" class="on">저장 12</button>
+        <button data-bseg="v2-hl">밑줄 24</button>
+        <button data-bseg="v2-memo">메모 8</button>
+        <button data-bseg="v2-series">시리즈 1</button>
+      </div>
+      <div class="bseg-view on" id="bseg-v2-saved">
+        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 68</div>
+              <div class="continue-title" style="margin-bottom:0">한국인 욕구별 훅 템플릿 40개</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 57</div>
+              <div class="continue-title" style="margin-bottom:0">빼는 게 먼저, 더하는 게 나중</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v2-hl">
+        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-src"><span>RE:KIT 59 · 어제</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+            <div class="memo-src"><span>RE:KIT 53 · 3일 전</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v2-memo">
+        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+            <div class="memo-quote" style="margin:10px 0 0">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-src" style="margin-top:8px"><span>RE:KIT 59 · 어제</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v2-series">
+        <div class="sec">
+          <div class="card series-card" data-go="scr-series">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="series-body">
+              <div class="series-title">브랜딩 클래스</div>
+              <div class="series-meta">9개 중 3개 완독</div>
+              <div class="progress-bar"><div style="width:33%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+          </div>
+        </div>
+      </div>
+      <p class="variant-note">V2 4탭 분리 — 언더라인 탭(기존 마이페이지 스타일)으로 밑줄/메모까지 완전 분리. 메모 탭은 내 글이 위, 원문 인용이 아래. 유형별 몰입은 최고, 탭 4개라 폭이 빠듯.</p>
+    </div>
+
+    <!-- ── V3: 노트 그룹 — 깨달음 노트 탭 강화 ── -->
+    <div class="libv" id="libv-c">
+      <div class="sec" style="padding-bottom:0">
+        <div class="sec-head"><span class="sec-title">읽는 중</span></div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 41</div>
+            <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+            <div class="progress-bar"><div style="width:45%"></div></div>
+            <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+      <div class="seg">
+        <button data-bseg="v3-notes" class="on">깨달음 노트 32</button>
+        <button data-bseg="v3-saved">저장 12</button>
+        <button data-bseg="v3-series">시리즈 1</button>
+      </div>
+      <div class="bseg-view on" id="bseg-v3-notes">
+        <div class="sec" style="padding-bottom:10px">
+          <div class="week-card" data-go="scr-viewer">
+            <i data-lucide="lightbulb"></i>
+            <div><b>지난주 깨달음 3개 돌아보기</b><p>일요일마다 한 주의 밑줄·메모를 모아드려요</p></div>
+          </div>
+        </div>
+        <div class="sec" style="padding-top:0;padding-bottom:10px">
+          <div class="chip-wrap">
+            <span class="chip toggle on">전환·세일즈</span><span class="chip toggle">콘텐츠</span><span class="chip toggle">브랜딩</span><span class="chip toggle">AI</span>
+          </div>
+        </div>
+        <div class="sec" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
+          <div class="group-card" data-go="scr-viewer">
+            <div class="group-head"><span class="gt">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</span><span class="gc">RE:KIT 59</span></div>
+            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-quote">"소셜은 사람을 만나러 오는 자리다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. CTA 위치부터 다시 정하자.</p></div>
+            <div class="memo-src" style="margin-top:8px"><span class="type-tag">밑줄 2 · 메모 1</span><span>어제</span></div>
+          </div>
+          <div class="group-card" data-go="scr-viewer">
+            <div class="group-head"><span class="gt">선택할 수밖에 없게 만드는, 마케팅 설계 4가지</span><span class="gc">RE:KIT 53</span></div>
+            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+            <div class="memo-src" style="margin-top:8px"><span class="type-tag">밑줄 1</span><span>3일 전</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v3-saved">
+        <div class="sec">
+          <div class="grid2">
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
+            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v3-series">
+        <div class="sec">
+          <div class="card series-card" data-go="scr-series">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="series-body">
+              <div class="series-title">브랜딩 클래스</div>
+              <div class="series-meta">9개 중 3개 완독</div>
+              <div class="progress-bar"><div style="width:33%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+          </div>
+        </div>
+      </div>
+      <p class="variant-note">V3 노트 그룹 — V1 구조에서 밑줄·메모 탭을 "깨달음 노트"로 강화: 리킷 단위 그룹핑 + 고민별 필터 + 주간 리뷰 카드. 노트 탭이 첫 탭(기본 진입).</p>
     </div>
 
   </div>
@@ -1204,8 +1247,9 @@ document.addEventListener("click", e=>{
     return;
   }
   if(t.dataset.bseg){
-    document.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
-    document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
+    const scope = t.closest(".libv") || document;
+    scope.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
+    scope.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
     return;
   }
   if(t.dataset.jump){ stack=[]; show(t.dataset.jump); return; }
