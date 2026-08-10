@@ -86,11 +86,20 @@ i[data-lucide]{flex-shrink:0;}
 .progress-bar>div{height:100%;background:var(--text-black);border-radius:2px;}
 .card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;}
 
-/* 홈 */
-.hero-dark{background:var(--bg-dark);color:var(--bg-white);padding:24px 16px 22px;}
-.hero-dark .hd-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:6px;font-weight:600;}
-.hero-dark .hd-greet{font-size:19px;font-weight:800;line-height:1.45;}
-.hero-dark .hd-stat{font-size:12px;color:rgba(255,255,255,0.6);margin-top:8px;}
+/* 홈 — 히어로 슬라이더 (4:3 카드) */
+.hero-slider{position:relative;}
+.hs-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.hs-track::-webkit-scrollbar{display:none;}
+.hs-slide{position:relative;min-width:100%;flex-shrink:0;scroll-snap-align:start;aspect-ratio:4/3;background:var(--bg-dark);cursor:pointer;overflow:hidden;}
+.hs-img{position:absolute;inset:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+.hs-img i{width:28px;height:28px;color:var(--placeholder-icon);}
+.hs-body{position:absolute;left:0;right:0;bottom:0;padding:20px 20px 46px;background:var(--bg-dark);}
+.hs-label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:700;margin-bottom:7px;}
+.hs-title{font-size:20px;font-weight:800;line-height:1.4;color:var(--bg-white);}
+.hs-sub{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.55;margin-top:7px;}
+.hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:7px;}
+.hs-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;padding:0;cursor:pointer;transition:width .2s,background .2s;}
+.hs-dot.on{width:18px;border-radius:3px;background:var(--bg-white);}
 .continue-card{display:flex;gap:12px;padding:12px;align-items:center;}
 .continue-card .img-ph{width:68px;height:68px;}
 .continue-body{flex:1;min-width:0;}
@@ -468,10 +477,38 @@ i[data-lucide]{flex-shrink:0;}
   </div>
   <div class="scroll">
 
-    <div class="hero-dark">
-      <p class="hd-label">Problem Redefined</p>
-      <p class="hd-greet">리건님,<br>이번 주 기록 3개째예요</p>
-      <p class="hd-stat">연속 3주 읽는 중 · 완독 12</p>
+    <div class="hero-slider">
+      <div class="hs-track" id="hs-track">
+        <div class="hs-slide" data-go="scr-viewer">
+          <div class="hs-img"><i data-lucide="image"></i></div>
+          <div class="hs-body">
+            <p class="hs-label">This Week</p>
+            <h2 class="hs-title">프롬프트 대신,<br>마케터의 기준을 넣었습니다</h2>
+            <p class="hs-sub">AI는 배우는 게 아니라 시키는 것. RE:KIT 89</p>
+          </div>
+        </div>
+        <div class="hs-slide" data-go="scr-series">
+          <div class="hs-img"><i data-lucide="image"></i></div>
+          <div class="hs-body">
+            <p class="hs-label">Series</p>
+            <h2 class="hs-title">브랜딩 클래스<br>9개 회차</h2>
+            <p class="hs-sub">마케팅의 순서부터 가이드라인까지, 순서대로</p>
+          </div>
+        </div>
+        <div class="hs-slide" data-tab="scr-chat">
+          <div class="hs-img"><i data-lucide="image"></i></div>
+          <div class="hs-body">
+            <p class="hs-label">NAKTA AI</p>
+            <h2 class="hs-title">요즘 어떤<br>고민 있으세요?</h2>
+            <p class="hs-sub">진짜 문제가 뭔지 같이 찾아드릴게요</p>
+          </div>
+        </div>
+      </div>
+      <div class="hs-dots" id="hs-dots">
+        <button class="hs-dot on" data-hs="0"></button>
+        <button class="hs-dot" data-hs="1"></button>
+        <button class="hs-dot" data-hs="2"></button>
+      </div>
     </div>
 
     <div class="sec">
@@ -1238,7 +1275,21 @@ function go(id){ if(id===current) return; stack.push(current); show(id); }
 function tab(id){ stack = []; show(id); }
 function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
 
+// 히어로 슬라이더
+const hsTrack = document.getElementById("hs-track");
+const hsDots = document.querySelectorAll(".hs-dot");
+if(hsTrack){
+  hsTrack.addEventListener("scroll", ()=>{
+    const i = Math.round(hsTrack.scrollLeft / hsTrack.clientWidth);
+    hsDots.forEach((d,n)=>d.classList.toggle("on", n===i));
+  }, {passive:true});
+  hsDots.forEach(d=>d.addEventListener("click", ()=>{
+    hsTrack.scrollTo({left: hsTrack.clientWidth * Number(d.dataset.hs), behavior:"smooth"});
+  }));
+}
+
 document.addEventListener("click", e=>{
+  if(e.target.closest(".hs-dot")) return;
   const t = e.target.closest("[data-libv],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.dataset.libv){
