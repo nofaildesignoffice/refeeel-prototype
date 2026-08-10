@@ -26,6 +26,9 @@ i[data-lucide]{flex-shrink:0;}
 .jumpbar::-webkit-scrollbar{display:none;}
 .jumpbar button{flex-shrink:0;font-size:11px;font-weight:600;color:var(--text-gray);background:var(--bg-white);border:1px solid var(--border-light);border-radius:999px;padding:5px 11px;cursor:pointer;font-family:inherit;}
 .jumpbar button.on{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
+/* ?clean — 점프바 없이 실제 앱처럼 보는 모드 */
+body.clean .jumpbar{display:none;}
+@media (max-width:430px){body.clean .phone{border:none;border-radius:0;box-shadow:none;}}
 
 /* ===== 폰 프레임 ===== */
 .phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;}
@@ -1244,7 +1247,10 @@ i[data-lucide]{flex-shrink:0;}
 <script>
 lucide.createIcons();
 
-const TABS = ["scr-home","scr-search","scr-chat","scr-library"];
+/* ?clean 파라미터: 리뷰용 점프바를 숨기고 실제 앱처럼 보기 */
+if(new URLSearchParams(location.search).has("clean")) document.body.classList.add("clean");
+
+const TABS =["scr-home","scr-search","scr-chat","scr-library"];
 let stack = [];
 let current = "scr-ob1";
 
