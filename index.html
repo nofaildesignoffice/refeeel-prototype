@@ -201,6 +201,14 @@ body.clean .jumpbar{display:none;}
 /* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
 .sseg-view{display:none;}
 .sseg-view.on{display:block;}
+/* 검색 상태 전환 — 화면 이동이 아니라 같은 페이지의 상태 */
+.search-input.filled{display:none;}
+.find-results{display:none;}
+#sseg-find.searching .search-input.plain{display:none;}
+#sseg-find.searching .search-input.filled{display:flex;}
+#sseg-find.searching .find-default{display:none;}
+#sseg-find.searching .find-results{display:block;}
+.ex-desc mark{background:none;color:var(--text-black);font-weight:700;}
 .ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .ch-card{display:flex;align-items:center;gap:9px;background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
 .ch-card i{width:15px;height:15px;color:var(--text-dark);}
@@ -356,7 +364,6 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
   <button data-jump="scr-search">검색</button>
-  <button data-jump="scr-results">검색결과</button>
   <button data-jump="scr-chat">AI챗</button>
   <button data-jump="scr-library">보관함</button>
   <button data-jump="scr-viewer">뷰어</button>
@@ -666,22 +673,80 @@ body.clean .jumpbar{display:none;}
   <div class="scroll sseg-view on" id="sseg-find">
 
     <div class="sec">
-      <div class="search-input" data-go="scr-results"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
+      <div class="search-input plain" data-search="on"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
+      <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto" data-search="off"></i></div>
     </div>
+
+    <!-- ── 검색 결과 (검색 중 상태) ── -->
+    <div class="find-results">
+      <div class="sec" style="padding-top:0;padding-bottom:10px">
+        <div class="ai-card">
+          <div class="ac-head"><i data-lucide="message-circle"></i><b>질문이신 것 같아요</b></div>
+          <p>검색보다 낙타AI가 진짜 문제를 찾는 데 도움이 될 수 있어요.</p>
+          <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 물어보기<i data-lucide="arrow-right"></i></button>
+        </div>
+      </div>
+
+      <div class="sec" style="padding-top:0;padding-bottom:8px">
+        <div class="chip-wrap">
+          <span class="chip on">전체</span><span class="chip">안 읽은 것</span><span class="chip">3분컷</span><span class="chip">템플릿</span>
+        </div>
+      </div>
+
+      <div class="browse-meta" style="padding-top:0"><span>결과 12개</span><span class="sort-btn">정확도순 <i data-lucide="chevron-down"></i></span></div>
+
+      <div class="sec" style="padding-top:8px">
+        <div class="ex-row" data-go="scr-viewer">
+          <div class="ex-thumb"><i data-lucide="image"></i></div>
+          <div class="ex-body">
+            <div class="ex-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+            <div class="ex-desc">…2주, 2300만원. <mark>조회수</mark>가 아니라 채널별 역할 분리가…</div>
+            <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span></div>
+          </div>
+        </div>
+        <div class="ex-row" data-go="scr-viewer">
+          <div class="ex-thumb"><i data-lucide="image"></i></div>
+          <div class="ex-body">
+            <div class="ex-title">인스타랑 밀당하는 법</div>
+            <div class="ex-desc">…<mark>조회수</mark>는 알고리즘이 매긴 점수일 뿐, 통장을 못 채운다…</div>
+            <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span><span>콘텐츠</span></div>
+          </div>
+        </div>
+        <div class="ex-row read" data-go="scr-viewer">
+          <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
+          <div class="ex-body">
+            <div class="ex-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
+            <div class="ex-desc">…노출이 <mark>매출</mark>이 되기까지, 고객이 거치는 8개의 접점…</div>
+            <div class="ex-tags"><span>전환·매출</span><span>콘텐츠</span></div>
+          </div>
+        </div>
+        <div class="ex-row" data-go="scr-viewer">
+          <div class="ex-thumb"><i data-lucide="image"></i></div>
+          <div class="ex-body">
+            <div class="ex-title">돈이 되는 릴스의 제 1법칙</div>
+            <div class="ex-desc">…<mark>릴스</mark>의 매체는 영상이다. 스펙이 아니라 장면을 먼저…</div>
+            <div class="ex-tags"><span>릴스</span><span>콘텐츠</span><span>전환·매출</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 기본 상태 ── -->
+    <div class="find-default">
 
     <div class="sec" style="padding-top:4px">
       <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
       <div class="pain-grid">
-        <div class="pain-card" data-go="scr-results"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>리킷 31</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>리킷 20</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="trending-down"></i><b>반응은 오는데 안 팔려요</b><span>리킷 19</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="hand-coins"></i><b>파는 티가 나는 게 싫어요</b><span>리킷 5</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="palette"></i><b>다들 비슷해 보여요</b><span>리킷 24</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="brain"></i><b>왜 안 사는지 모르겠어요</b><span>리킷 15</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="bot"></i><b>AI를 어떻게 쓸지 모르겠어요</b><span>리킷 16</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="sparkles"></i><b>AI 검색이 불안해요</b><span>리킷 9</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="bar-chart-3"></i><b>숫자가 뭘 말하는지 몰라요</b><span>리킷 13</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="battery-low"></i><b>바쁜데 남는 게 없어요</b><span>리킷 4</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>리킷 31</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>리킷 20</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="trending-down"></i><b>반응은 오는데 안 팔려요</b><span>리킷 19</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="hand-coins"></i><b>파는 티가 나는 게 싫어요</b><span>리킷 5</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="palette"></i><b>다들 비슷해 보여요</b><span>리킷 24</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="brain"></i><b>왜 안 사는지 모르겠어요</b><span>리킷 15</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="bot"></i><b>AI를 어떻게 쓸지 모르겠어요</b><span>리킷 16</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="sparkles"></i><b>AI 검색이 불안해요</b><span>리킷 9</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="bar-chart-3"></i><b>숫자가 뭘 말하는지 몰라요</b><span>리킷 13</span></div>
+        <div class="pain-card" data-search="on"><i data-lucide="battery-low"></i><b>바쁜데 남는 게 없어요</b><span>리킷 4</span></div>
       </div>
     </div>
 
@@ -710,11 +775,11 @@ body.clean .jumpbar{display:none;}
     <div class="sec">
       <div class="sec-head"><span class="sec-title">어디에 올리시나요?</span></div>
       <div class="ch-grid">
-        <div class="ch-card" data-go="scr-results"><i data-lucide="clapperboard"></i><b>릴스</b><span>9</span></div>
-        <div class="ch-card" data-go="scr-results"><i data-lucide="instagram"></i><b>인스타그램</b><span>20</span></div>
-        <div class="ch-card" data-go="scr-results"><i data-lucide="map-pin"></i><b>네이버 플레이스</b><span>2</span></div>
-        <div class="ch-card" data-go="scr-results"><i data-lucide="pen-tool"></i><b>블로그</b><span>3</span></div>
-        <div class="ch-card" data-go="scr-results"><i data-lucide="layout-template"></i><b>상세페이지</b><span>1</span></div>
+        <div class="ch-card" data-goseg="browse"><i data-lucide="clapperboard"></i><b>릴스</b><span>9</span></div>
+        <div class="ch-card" data-goseg="browse"><i data-lucide="instagram"></i><b>인스타그램</b><span>20</span></div>
+        <div class="ch-card" data-goseg="browse"><i data-lucide="map-pin"></i><b>네이버 플레이스</b><span>2</span></div>
+        <div class="ch-card" data-goseg="browse"><i data-lucide="pen-tool"></i><b>블로그</b><span>3</span></div>
+        <div class="ch-card" data-goseg="browse"><i data-lucide="layout-template"></i><b>상세페이지</b><span>1</span></div>
       </div>
     </div>
 
@@ -724,6 +789,8 @@ body.clean .jumpbar{display:none;}
       <div class="rank-row" data-go="scr-viewer"><span class="rank-num">2</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">RE:KIT 41</div></div></div>
       <div class="rank-row" data-go="scr-viewer"><span class="rank-num">3</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">RE:KIT 55</div></div></div>
     </div>
+
+    </div><!-- /find-default -->
 
   </div>
 
@@ -818,71 +885,6 @@ body.clean .jumpbar{display:none;}
         <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>판매원처럼 보이기 싫은데</b><span>RE:KIT 59</span></div>
         <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
       </div>
-    </div>
-
-  </div>
-  <nav class="bottomnav">
-    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
-    <button class="nav-item on" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
-    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>AI챗</span></button>
-    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
-  </nav>
-</section>
-
-<!-- ══════════ 검색 결과 ══════════ -->
-<section class="screen" id="scr-results">
-  <div class="gnb">
-    <i data-lucide="chevron-left" data-back></i>
-    <span class="gnb-title">검색 결과</span>
-    <span class="gnb-side"></span>
-  </div>
-
-  <div class="seg" style="margin:12px 16px 0">
-    <button class="on">검색하기</button>
-    <button data-goseg="browse">둘러보기</button>
-  </div>
-
-  <div class="scroll">
-
-    <div class="sec" style="padding-bottom:10px">
-      <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto"></i></div>
-    </div>
-
-    <div class="sec" style="padding-top:0;padding-bottom:10px">
-      <div class="ai-card">
-        <div class="ac-head"><i data-lucide="message-circle"></i><b>질문이신 것 같아요</b></div>
-        <p>검색보다 낙타AI가 진짜 문제를 찾는 데 도움이 될 수 있어요.</p>
-        <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 물어보기<i data-lucide="arrow-right"></i></button>
-      </div>
-    </div>
-
-    <div class="sec" style="padding-top:0;padding-bottom:8px">
-      <div class="chip-wrap">
-        <span class="chip on">전체</span><span class="chip">안 읽은 것</span><span class="chip">5분 이내</span><span class="chip">보유 콘텐츠</span>
-      </div>
-    </div>
-
-    <div class="card" style="margin:0 16px 20px">
-      <div class="result-card" data-go="scr-viewer">
-        <div class="result-head"><span class="result-num">RE:KIT 41</span></div>
-        <div class="result-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
-        <p class="result-snippet">…2주, 2300만원. <mark>조회수</mark>가 아니라 채널별 역할 분리가 만든 결과. 당신의 피드는 지금 어떤 역할을…</p>
-      </div>
-      <div class="result-card" data-go="scr-viewer">
-        <div class="result-head"><span class="result-num">RE:KIT 03</span><span class="lock-badge"><i data-lucide="lock"></i>구독 전용</span></div>
-        <div class="result-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
-        <p class="result-snippet">…사람들은 이렇게 산다. 노출이 <mark>매출</mark>이 되기까지, 콘텐츠 퍼널 3단계…</p>
-      </div>
-      <div class="result-card" data-go="scr-viewer">
-        <div class="result-head"><span class="result-num">RE:KIT 69</span></div>
-        <div class="result-title">돈이 되는 릴스의 제 1법칙</div>
-        <p class="result-snippet">…<mark>릴스</mark>의 매체는 영상이다. 스펙이 아니라 장면을 먼저 정한다. 데이터는 신뢰를 만들지 않는다…</p>
-      </div>
-    </div>
-
-    <div class="sec alt" style="text-align:center">
-      <p style="font-size:12px;color:var(--text-gray);margin-bottom:10px">찾는 내용이 없나요?</p>
-      <button class="btn btn-secondary" style="width:100%;padding:10px">이 주제 리킷 요청하기</button>
     </div>
 
   </div>
@@ -1325,8 +1327,15 @@ if(hsTrack){
 
 document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
-  const t = e.target.closest("[data-goseg],[data-sseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
+  if(t.dataset.search){
+    /* 검색은 화면 이동이 아니라 같은 페이지의 상태 전환 */
+    const find = document.getElementById("sseg-find");
+    find.classList.toggle("searching", t.dataset.search === "on");
+    find.scrollTop = 0;
+    return;
+  }
   if(t.dataset.goseg){
     /* 다른 화면에서 검색탭의 특정 페이지로 이동 */
     const key = t.dataset.goseg;
