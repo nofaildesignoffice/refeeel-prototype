@@ -199,7 +199,7 @@ body.clean .jumpbar{display:none;}
 .lib-stat b{display:block;font-size:15px;font-weight:800;}
 .lib-stat span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
 .seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
-.seg button{flex:1;font-size:12px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;}
+.seg button{flex:1;font-size:11.5px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
 .seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
 .bseg-view{display:none;}
 .bseg-view.on{display:block;}
@@ -504,7 +504,7 @@ body.clean .jumpbar{display:none;}
     </div>
 
     <div class="sec">
-      <div class="sec-head"><span class="sec-title">읽던 리킷</span></div>
+      <div class="sec-head"><span class="sec-title">최근 읽고 있는 리킷</span></div>
       <div class="card continue-card" data-go="scr-viewer">
         <div class="img-ph"><i data-lucide="image"></i></div>
         <div class="continue-body">
@@ -784,7 +784,7 @@ body.clean .jumpbar{display:none;}
   <div class="scroll">
 
       <div class="sec" style="padding-bottom:0">
-        <div class="sec-head"><span class="sec-title">읽는 중</span></div>
+        <div class="sec-head"><span class="sec-title">최근 읽고 있는 리킷</span></div>
         <div class="card continue-card" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="continue-body">
@@ -797,11 +797,56 @@ body.clean .jumpbar{display:none;}
         </div>
       </div>
       <div class="seg">
-        <button data-bseg="v1-saved" class="on">저장 12</button>
+        <button data-bseg="v1-reading" class="on">읽는 중 5</button>
+        <button data-bseg="v1-saved">저장 12</button>
         <button data-bseg="v1-notes">내 기록 32</button>
         <button data-bseg="v1-series">시리즈 1</button>
       </div>
-      <div class="bseg-view on" id="bseg-v1-saved">
+      <div class="bseg-view on" id="bseg-v1-reading">
+        <div class="sec" style="display:flex;flex-direction:column;gap:10px">
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 68</div>
+              <div class="continue-title">한국인 욕구별 훅 템플릿 40개</div>
+              <div class="progress-bar"><div style="width:62%"></div></div>
+              <div class="continue-meta"><span>62%</span><span>3일 전</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 51</div>
+              <div class="continue-title">뇌는 왜 이야기에 속는가</div>
+              <div class="progress-bar"><div style="width:28%"></div></div>
+              <div class="continue-meta"><span>28%</span><span>5일 전</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 82</div>
+              <div class="continue-title">마케팅에서 할 말이 없는 게 아니라, 있는데 모르는 것</div>
+              <div class="progress-bar"><div style="width:9%"></div></div>
+              <div class="continue-meta"><span>9%</span><span>1주 전</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+          <div class="card continue-card" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="continue-body">
+              <div class="continue-num">RE:KIT 34</div>
+              <div class="continue-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
+              <div class="progress-bar"><div style="width:3%"></div></div>
+              <div class="continue-meta"><span>3%</span><span>2주 전</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bseg-view" id="bseg-v1-saved">
         <div class="sec">
           <div class="grid2">
             <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
