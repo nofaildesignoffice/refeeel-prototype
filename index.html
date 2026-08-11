@@ -198,6 +198,47 @@ body.clean .jumpbar{display:none;}
 .lib-stat{flex:1;background:var(--bg-light);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;}
 .lib-stat b{display:block;font-size:15px;font-weight:800;}
 .lib-stat span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
+/* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
+.sseg-view{display:none;}
+.sseg-view.on{display:block;}
+.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.ch-card{display:flex;align-items:center;gap:9px;background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
+.ch-card i{width:15px;height:15px;color:var(--text-dark);}
+.ch-card b{font-size:12.5px;font-weight:700;}
+.ch-card span{margin-left:auto;font-size:11px;color:var(--text-muted);font-weight:600;}
+.tag-label{font-size:11px;font-weight:800;color:var(--text-light);letter-spacing:0.3px;margin:14px 0 8px;}
+.tag-label:first-child{margin-top:0;}
+.chip em{font-style:normal;color:var(--text-muted);font-size:10px;margin-left:2px;}
+.chip.toggle.on em{color:rgba(255,255,255,0.6);}
+.browse-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0;}
+.chkbox{display:flex;align-items:center;gap:7px;cursor:pointer;}
+.chkbox input{width:15px;height:15px;accent-color:var(--text-black);margin:0;}
+.chkbox span{font-size:12.5px;color:var(--text-dark);font-weight:600;}
+.view-toggle{display:flex;gap:2px;background:var(--bg-light);border-radius:6px;padding:2px;}
+.view-toggle button{width:28px;height:24px;display:flex;align-items:center;justify-content:center;border:none;background:none;border-radius:4px;cursor:pointer;}
+.view-toggle button i{width:14px;height:14px;color:var(--text-light);}
+.view-toggle button.on{background:var(--bg-white);box-shadow:var(--shadow-sm);}
+.view-toggle button.on i{color:var(--text-black);}
+.browse-meta{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0;font-size:12px;color:var(--text-light);}
+.sort-btn{display:flex;align-items:center;gap:3px;cursor:pointer;}
+.sort-btn i{width:13px;height:13px;}
+.browse-view{display:none;}
+.browse-view.on{display:block;}
+.ex-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-light);cursor:pointer;}
+.ex-row:last-child{border-bottom:none;}
+.ex-thumb{position:relative;width:62px;height:62px;flex-shrink:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.ex-thumb>i{width:18px;height:18px;color:var(--placeholder-icon);}
+.ex-read{position:absolute;right:-3px;bottom:-3px;width:17px;height:17px;border-radius:50%;background:var(--text-black);border:2px solid var(--bg-white);display:flex;align-items:center;justify-content:center;}
+.ex-read i{width:9px;height:9px;color:var(--bg-white);}
+.ex-body{flex:1;min-width:0;}
+.ex-title{font-size:13.5px;font-weight:700;line-height:1.4;}
+.ex-desc{font-size:11.5px;color:var(--text-light);line-height:1.45;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ex-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;}
+.ex-tags span{font-size:10px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:20px;padding:2px 7px;}
+.ex-row.read .ex-title,.ex-row.read .ex-desc{color:var(--text-muted);}
+.gcard.read b{color:var(--text-muted);}
+.gcard .img-ph{position:relative;}
+
 .seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
 .seg button{flex:1;font-size:11.5px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
 .seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
@@ -591,13 +632,6 @@ body.clean .jumpbar{display:none;}
     </div>
 
     <div class="sec">
-      <div class="sec-head"><span class="sec-title">이번 주 인기 TOP</span></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">1</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">한국인 욕구별 훅 템플릿 40개</div><div class="rank-meta">RE:KIT 68</div></div></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">2</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">RE:KIT 41</div></div></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">3</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">RE:KIT 55</div></div></div>
-    </div>
-
-    <div class="sec alt">
       <div class="ai-card">
         <div class="ac-head"><i data-lucide="message-circle"></i><b>낙타AI</b></div>
         <p>요즘 어떤 고민 있으세요? 진짜 문제가 뭔지 같이 찾아드릴게요.</p>
@@ -623,7 +657,13 @@ body.clean .jumpbar{display:none;}
       <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
     </div>
   </div>
-  <div class="scroll">
+  <div class="seg" style="margin:12px 16px 0">
+    <button data-sseg="find" class="on">검색하기</button>
+    <button data-sseg="browse">둘러보기</button>
+  </div>
+
+  <!-- ── A. 검색하기 ── -->
+  <div class="scroll sseg-view on" id="sseg-find">
 
     <div class="sec">
       <div class="search-input" data-go="scr-results"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
@@ -632,33 +672,151 @@ body.clean .jumpbar{display:none;}
     <div class="sec" style="padding-top:4px">
       <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
       <div class="pain-grid">
-        <div class="pain-card" data-go="scr-results"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>콘텐츠 기획 · 리킷 24</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>인스타 운영 · 리킷 11</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="trending-down"></i><b>매출로 안 이어져요</b><span>전환 설계 · 리킷 10</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="palette"></i><b>브랜드 색깔이 없어요</b><span>브랜딩 · 리킷 14</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="bot"></i><b>AI를 활용하고 싶어요</b><span>AI·자동화 · 리킷 15</span></div>
-        <div class="pain-card" data-go="scr-results"><i data-lucide="search-x"></i><b>AI 검색이 불안해요</b><span>AEO · 리킷 7</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>리킷 31</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>리킷 20</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="trending-down"></i><b>반응은 오는데 안 팔려요</b><span>리킷 19</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="hand-coins"></i><b>파는 티가 나는 게 싫어요</b><span>리킷 5</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="palette"></i><b>다들 비슷해 보여요</b><span>리킷 24</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="brain"></i><b>왜 안 사는지 모르겠어요</b><span>리킷 15</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="bot"></i><b>AI를 어떻게 쓸지 모르겠어요</b><span>리킷 16</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="sparkles"></i><b>AI 검색이 불안해요</b><span>리킷 9</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="bar-chart-3"></i><b>숫자가 뭘 말하는지 몰라요</b><span>리킷 13</span></div>
+        <div class="pain-card" data-go="scr-results"><i data-lucide="battery-low"></i><b>바쁜데 남는 게 없어요</b><span>리킷 4</span></div>
       </div>
     </div>
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
-      <div class="card series-card" data-go="scr-series">
-        <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="series-body">
-          <div class="series-title">브랜딩 클래스</div>
-          <div class="series-meta" style="margin-bottom:0">9개 회차 · 순서형 커리큘럼</div>
+      <div class="hscroll">
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">브랜딩 클래스</div>
+            <div class="continue-meta" style="margin-top:6px"><span>9개 회차</span></div>
+          </div>
         </div>
-        <span class="lock-badge"><i data-lucide="lock"></i>구매 전용</span>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">AI 마케팅 실전 가이드</div>
+            <div class="continue-meta" style="margin-top:6px"><span>6개 회차</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="sec">
-      <div class="sec-head"><span class="sec-title">주제별로 찾기</span></div>
+      <div class="sec-head"><span class="sec-title">어디에 올리시나요?</span></div>
+      <div class="ch-grid">
+        <div class="ch-card" data-go="scr-results"><i data-lucide="clapperboard"></i><b>릴스</b><span>9</span></div>
+        <div class="ch-card" data-go="scr-results"><i data-lucide="instagram"></i><b>인스타그램</b><span>20</span></div>
+        <div class="ch-card" data-go="scr-results"><i data-lucide="map-pin"></i><b>네이버 플레이스</b><span>2</span></div>
+        <div class="ch-card" data-go="scr-results"><i data-lucide="pen-tool"></i><b>블로그</b><span>3</span></div>
+        <div class="ch-card" data-go="scr-results"><i data-lucide="layout-template"></i><b>상세페이지</b><span>1</span></div>
+      </div>
+    </div>
+
+    <div class="sec alt">
+      <div class="sec-head"><span class="sec-title">이번 주 인기 TOP</span></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">1</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">한국인 욕구별 훅 템플릿 40개</div><div class="rank-meta">RE:KIT 68</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">2</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">RE:KIT 41</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">3</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">RE:KIT 55</div></div></div>
+    </div>
+
+  </div>
+
+  <!-- ── B. 둘러보기 ── -->
+  <div class="scroll sseg-view" id="sseg-browse">
+
+    <div class="sec" style="padding-bottom:0">
+      <p class="tag-label">지면</p>
       <div class="chip-wrap">
-        <span class="chip" data-go="scr-results">콘텐츠</span><span class="chip" data-go="scr-results">인스타그램</span><span class="chip" data-go="scr-results">전환·세일즈</span>
-        <span class="chip" data-go="scr-results">브랜딩</span><span class="chip" data-go="scr-results">소비자 심리</span><span class="chip" data-go="scr-results">AI·자동화</span>
-        <span class="chip" data-go="scr-results">AEO·AI 검색</span><span class="chip" data-go="scr-results">네이버 플레이스</span>
+        <span class="chip toggle">인스타그램 <em>20</em></span><span class="chip toggle">릴스 <em>9</em></span><span class="chip toggle">블로그 <em>3</em></span><span class="chip toggle">네이버 플레이스 <em>2</em></span><span class="chip toggle">상세페이지 <em>1</em></span>
+      </div>
+      <p class="tag-label">주제</p>
+      <div class="chip-wrap">
+        <span class="chip toggle">콘텐츠 <em>31</em></span><span class="chip toggle">카피·후킹 <em>20</em></span><span class="chip toggle">브랜딩 <em>24</em></span><span class="chip toggle">타겟·차별화 <em>14</em></span><span class="chip toggle">전환·매출 <em>19</em></span><span class="chip toggle">소비자 심리 <em>15</em></span><span class="chip toggle">SEO <em>3</em></span><span class="chip toggle">AEO·AI검색 <em>6</em></span><span class="chip toggle">AI·프롬프트 <em>16</em></span><span class="chip toggle">자동화 <em>9</em></span><span class="chip toggle">데이터 <em>13</em></span><span class="chip toggle">사업 성장 <em>4</em></span>
+      </div>
+      <p class="tag-label">형태</p>
+      <div class="chip-wrap">
+        <span class="chip toggle">3분컷 <em>15</em></span><span class="chip toggle">심화기획 <em>51</em></span><span class="chip toggle">템플릿 <em>19</em></span><span class="chip toggle">책 요약 <em>4</em></span>
+      </div>
+    </div>
+
+    <div class="browse-bar">
+      <label class="chkbox"><input type="checkbox"><span>읽지 않은 리킷만 보기</span></label>
+      <div class="view-toggle">
+        <button data-view="list" class="on"><i data-lucide="list"></i></button>
+        <button data-view="grid"><i data-lucide="layout-grid"></i></button>
+      </div>
+    </div>
+
+    <div class="browse-meta"><span>89개</span><span class="sort-btn">최신순 <i data-lucide="chevron-down"></i></span></div>
+
+    <!-- 리스트형 -->
+    <div class="sec browse-view on" id="view-list" style="padding-top:4px">
+      <div class="ex-row read" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
+        <div class="ex-body">
+          <div class="ex-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+          <div class="ex-desc">마케터 한 명의 실무 기준 49개를 AI 안에 통째로</div>
+          <div class="ex-tags"><span>AI·프롬프트</span><span>템플릿</span></div>
+        </div>
+      </div>
+      <div class="ex-row" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i></div>
+        <div class="ex-body">
+          <div class="ex-title">인스타랑 밀당하는 법</div>
+          <div class="ex-desc">조회수는 터지는데 매출은 그대로인 이유</div>
+          <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span><span>콘텐츠</span></div>
+        </div>
+      </div>
+      <div class="ex-row" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i></div>
+        <div class="ex-body">
+          <div class="ex-title">낭비하듯 쓴 5%가 95%의 수익을 가져다 준다</div>
+          <div class="ex-desc">세계 1위 레스토랑을 만든 건 2달러 핫도그였다</div>
+          <div class="ex-tags"><span>콘텐츠</span><span>사업 성장</span></div>
+        </div>
+      </div>
+      <div class="ex-row reading" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i></div>
+        <div class="ex-body">
+          <div class="ex-title">한국인 욕구별 훅 템플릿 40개</div>
+          <div class="ex-desc">심리학이 정의한 한국인의 욕구를 건드는 훅 40개</div>
+          <div class="ex-tags"><span>카피·후킹</span><span>소비자 심리</span><span>템플릿</span></div>
+          <div class="progress-bar" style="margin-top:8px"><div style="width:62%"></div></div>
+        </div>
+      </div>
+      <div class="ex-row" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i></div>
+        <div class="ex-body">
+          <div class="ex-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같아요</div>
+          <div class="ex-desc">팔려는 티가 신뢰를 죽인다 — 3가지 함정</div>
+          <div class="ex-tags"><span>전환·매출</span><span>브랜딩</span><span>인스타그램</span></div>
+        </div>
+      </div>
+      <div class="ex-row read" data-go="scr-viewer">
+        <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
+        <div class="ex-body">
+          <div class="ex-title">빼는 게 먼저, 더하는 게 나중</div>
+          <div class="ex-desc">피카소처럼 쌓고, 멍거처럼 뺀다</div>
+          <div class="ex-tags"><span>사업 성장</span><span>콘텐츠</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 그리드형 -->
+    <div class="sec browse-view" id="view-grid" style="padding-top:4px">
+      <div class="grid2">
+        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>프롬프트 대신, 마케터의 기준을 넣었습니다</b><span>RE:KIT 89</span></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>인스타랑 밀당하는 법</b><span>RE:KIT 88</span></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>낭비하듯 쓴 5%가 95%의 수익을</b><span>RE:KIT 87</span></div>
+        <div class="gcard reading" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span><div class="progress-bar" style="margin-top:6px"><div style="width:62%"></div></div></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>판매원처럼 보이기 싫은데</b><span>RE:KIT 59</span></div>
+        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
       </div>
     </div>
 
@@ -1161,8 +1319,18 @@ if(hsTrack){
 
 document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
-  const t = e.target.closest("[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
+  if(t.dataset.sseg){
+    document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+t.dataset.sseg));
+    return;
+  }
+  if(t.dataset.view){
+    document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".browse-view").forEach(v=>v.classList.toggle("on", v.id==="view-"+t.dataset.view));
+    return;
+  }
   if(t.dataset.bseg){
     document.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
