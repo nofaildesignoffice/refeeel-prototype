@@ -201,13 +201,16 @@ body.clean .jumpbar{display:none;}
 /* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
 .sseg-view{display:none;}
 .sseg-view.on{display:block;}
+/* 검색바 고정 — 스크롤과 무관하게 항상 같은 자리 */
+.search-anchor{flex-shrink:0;padding:12px 16px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
+#scr-search.browsing .search-anchor{display:none;}
 /* 검색 상태 전환 — 화면 이동이 아니라 같은 페이지의 상태 */
 .search-input.filled{display:none;}
 .find-results{display:none;}
-#sseg-find.searching .search-input.plain{display:none;}
-#sseg-find.searching .search-input.filled{display:flex;}
-#sseg-find.searching .find-default{display:none;}
-#sseg-find.searching .find-results{display:block;}
+#scr-search.searching .search-input.plain{display:none;}
+#scr-search.searching .search-input.filled{display:flex;}
+#scr-search.searching .find-default{display:none;}
+#scr-search.searching .find-results{display:block;}
 .ex-desc mark{background:none;color:var(--text-black);font-weight:700;}
 .ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .ch-card{display:flex;align-items:center;gap:9px;background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
@@ -669,17 +672,18 @@ body.clean .jumpbar{display:none;}
     <button data-sseg="browse">둘러보기</button>
   </div>
 
+  <!-- 검색바: 스크롤 밖 고정 -->
+  <div class="search-anchor">
+    <div class="search-input plain" data-search="on"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
+    <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto" data-search="off"></i></div>
+  </div>
+
   <!-- ── A. 검색하기 ── -->
   <div class="scroll sseg-view on" id="sseg-find">
 
-    <div class="sec">
-      <div class="search-input plain" data-search="on"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
-      <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto" data-search="off"></i></div>
-    </div>
-
     <!-- ── 검색 결과 (검색 중 상태) ── -->
     <div class="find-results">
-      <div class="sec" style="padding-top:0;padding-bottom:10px">
+      <div class="sec" style="padding-top:14px;padding-bottom:10px">
         <div class="ai-card">
           <div class="ac-head"><i data-lucide="message-circle"></i><b>질문이신 것 같아요</b></div>
           <p>검색보다 낙타AI가 진짜 문제를 찾는 데 도움이 될 수 있어요.</p>
@@ -734,7 +738,7 @@ body.clean .jumpbar{display:none;}
     <!-- ── 기본 상태 ── -->
     <div class="find-default">
 
-    <div class="sec" style="padding-top:4px">
+    <div class="sec" style="padding-top:18px">
       <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
       <div class="pain-grid">
         <div class="pain-card" data-search="on"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>리킷 31</span></div>
@@ -1325,30 +1329,26 @@ if(hsTrack){
   }));
 }
 
+/* 검색탭 세그먼트 전환 — 둘러보기에서는 고정 검색바를 숨긴다 */
+function sseg(key){
+  document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b.dataset.sseg===key));
+  document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+key));
+  document.getElementById("scr-search").classList.toggle("browsing", key==="browse");
+}
+
 document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.dataset.search){
     /* 검색은 화면 이동이 아니라 같은 페이지의 상태 전환 */
-    const find = document.getElementById("sseg-find");
-    find.classList.toggle("searching", t.dataset.search === "on");
-    find.scrollTop = 0;
+    sseg("find");
+    document.getElementById("scr-search").classList.toggle("searching", t.dataset.search === "on");
+    document.getElementById("sseg-find").scrollTop = 0;
     return;
   }
-  if(t.dataset.goseg){
-    /* 다른 화면에서 검색탭의 특정 페이지로 이동 */
-    const key = t.dataset.goseg;
-    document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b.dataset.sseg===key));
-    document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+key));
-    tab("scr-search");
-    return;
-  }
-  if(t.dataset.sseg){
-    document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b===t));
-    document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+t.dataset.sseg));
-    return;
-  }
+  if(t.dataset.goseg){ sseg(t.dataset.goseg); tab("scr-search"); return; }
+  if(t.dataset.sseg){ sseg(t.dataset.sseg); return; }
   if(t.dataset.view){
     document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".browse-view").forEach(v=>v.classList.toggle("on", v.id==="view-"+t.dataset.view));
