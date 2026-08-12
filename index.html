@@ -137,9 +137,11 @@ body.clean .jumpbar{display:none;}
 .rank-body{flex:1;min-width:0;}
 .rank-title{font-size:13px;font-weight:700;line-height:1.4;}
 .rank-meta{font-size:11px;color:var(--text-light);margin-top:2px;}
-.ai-card{background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px;}
+.ai-card{position:relative;background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px;}
+.ac-close{position:absolute;top:10px;right:10px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;}
+.ac-close i{width:14px;height:14px;color:var(--text-light);}
 .sec.alt .ai-card{background:var(--bg-white);}
-.ai-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ai-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-right:26px;}
 .ai-card .ac-head i{width:16px;height:16px;}
 .ai-card .ac-head b{font-size:13px;font-weight:800;}
 .ai-card p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:12px;}
@@ -685,9 +687,10 @@ body.clean .jumpbar{display:none;}
     <div class="find-results">
       <div class="sec" style="padding-top:14px;padding-bottom:10px">
         <div class="ai-card">
-          <div class="ac-head"><i data-lucide="message-circle"></i><b>질문이신 것 같아요</b></div>
-          <p>검색보다 낙타AI가 진짜 문제를 찾는 데 도움이 될 수 있어요.</p>
-          <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 물어보기<i data-lucide="arrow-right"></i></button>
+          <span class="ac-close"><i data-lucide="x"></i></span>
+          <div class="ac-head"><i data-lucide="message-circle"></i><b>원하는 리킷을 못 찾으시겠나요?</b></div>
+          <p>낙타AI에게 고민을 이야기하고 나에게 딱 맞는 리킷을 추천받아보세요.</p>
+          <button class="btn btn-secondary" style="width:100%;padding:10px" data-tab="scr-chat">낙타AI에게 물어보기</button>
         </div>
       </div>
 
@@ -1542,6 +1545,8 @@ function sseg(key){
 
 document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
+  const close = e.target.closest(".ac-close");
+  if(close){ close.closest(".ai-card").style.display="none"; return; }
   const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.dataset.search){
