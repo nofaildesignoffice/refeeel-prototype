@@ -19,6 +19,10 @@
 html,body{height:100%;}
 body{font-family:'Pretendard',-apple-system,sans-serif;background:#EBEBEB;color:var(--text-black);display:flex;flex-direction:column;align-items:center;}
 i[data-lucide]{flex-shrink:0;}
+/* lucide 기본 굵기 2는 이 크기에서 무겁다 — 절반으로. CSS 가 SVG 속성을 이긴다 */
+svg.lucide{stroke-width:1;flex-shrink:0;}
+/* 9px 짜리 읽음 배지 체크는 1로 두면 선이 안 보인다 */
+.ex-read svg{stroke-width:2.5;}
 [data-go],[data-back],[data-tab]{cursor:pointer;}
 
 /* ===== 점프바 (리뷰용) ===== */
