@@ -337,6 +337,19 @@ body.clean .jumpbar{display:none;}
 #scr-search.searching .search-input.filled{display:flex;}
 #scr-search.searching .find-default{display:none;}
 #scr-search.searching .find-results{display:block;}
+/* 검색 결과 리스트/그리드 — 둘러보기와 같은 컨트롤, 다른 뷰 id */
+.find-view{display:none;}
+.find-view.on{display:block;}
+.browse-meta .on-unread{display:none;}
+#scr-search:has(#unread-find:checked) .find-results .ex-row.read,
+#scr-search:has(#unread-find:checked) .find-results .gcard.read{display:none;}
+#scr-search:has(#unread-find:checked) .find-results .off-unread{display:none;}
+#scr-search:has(#unread-find:checked) .find-results .on-unread{display:inline;}
+/* 둘러보기도 같은 규칙 — 같은 컨트롤이 화면마다 다르게 동작하면 안 된다 */
+#sseg-browse:has(#unread-browse:checked) .ex-row.read,
+#sseg-browse:has(#unread-browse:checked) .gcard.read{display:none;}
+#sseg-browse:has(#unread-browse:checked) .off-unread{display:none;}
+#sseg-browse:has(#unread-browse:checked) .on-unread{display:inline;}
 .ex-desc mark{background:none;color:var(--text-black);font-weight:700;}
 .ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .ch-card{display:flex;align-items:center;gap:9px;background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
@@ -830,10 +843,18 @@ body.clean .jumpbar{display:none;}
         </div>
       </div>
 
-      <!-- 검색 결과에는 필터를 두지 않는다. 검색어가 이미 좁혔고 30개는 훑는 규모.
-           태그 필터는 목적 없이 훑는 '둘러보기'에서만 의미가 있다. -->
-      <div class="browse-meta" style="padding-top:0"><span>결과 30개</span><span class="sort-btn">정확도순 <i data-lucide="chevron-down"></i></span></div>
+      <!-- 검색 결과에도 둘러보기와 같은 컨트롤을 쓴다. 좁히는 어휘가 화면마다 달라지면 안 된다.
+           단, 태그 필터는 여기 없다 — 검색어가 이미 좁혔다. -->
+      <div class="browse-bar" style="padding-top:4px">
+        <label class="chkbox"><input type="checkbox" id="unread-find"><span class="sw"></span><span>읽지 않은 리킷만 보기</span></label>
+        <div class="view-toggle">
+          <button data-fview="list" class="on"><i data-lucide="list"></i></button>
+          <button data-fview="grid"><i data-lucide="layout-grid"></i></button>
+        </div>
+      </div>
+      <div class="browse-meta"><span class="off-unread">결과 30개</span><span class="on-unread">읽지 않은 결과 26개</span><span class="sort-btn">정확도순 <i data-lucide="chevron-down"></i></span></div>
 
+      <div class="find-view on" id="fview-list">
       <div class="sec" style="padding-top:8px">
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
@@ -871,13 +892,14 @@ body.clean .jumpbar{display:none;}
             <div class="ex-tags"><span>릴스</span><span>콘텐츠</span><span>전환·매출</span></div>
           </div>
         </div>
-        <div class="ex-row" data-go="scr-viewer">
+        <div class="ex-row reading" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
             <div class="ex-num">RE:KIT 41</div>
             <div class="ex-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
             <div class="ex-desc">…2주, 2300만원. <mark>조회수</mark>가 아니라 채널별 역할 분리가…</div>
             <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span></div>
+            <div class="prog-row" style="margin-top:8px"><div class="progress-bar"><div style="width:45%"></div></div><em>45%</em></div>
           </div>
         </div>
         <div class="ex-row" data-go="scr-viewer">
@@ -997,13 +1019,14 @@ body.clean .jumpbar{display:none;}
             <div class="ex-tags"><span>전환·매출</span><span>타겟·차별화</span><span>심화기획</span></div>
           </div>
         </div>
-        <div class="ex-row" data-go="scr-viewer">
+        <div class="ex-row reading" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
             <div class="ex-num">RE:KIT 68</div>
             <div class="ex-title">한국인 욕구별 훅 템플릿 40개</div>
             <div class="ex-desc">…<mark>릴스</mark> 첫 문장에 그대로 넣는 40개 빈칸 양식…</div>
             <div class="ex-tags"><span>카피·후킹</span><span>템플릿</span></div>
+            <div class="prog-row" style="margin-top:8px"><div class="progress-bar"><div style="width:62%"></div></div><em>62%</em></div>
           </div>
         </div>
         <div class="ex-row" data-go="scr-viewer">
@@ -1106,6 +1129,42 @@ body.clean .jumpbar{display:none;}
           </div>
         </div>
       </div>
+      </div>
+
+      <div class="find-view" id="fview-grid">
+        <div class="sec" style="padding-top:8px"><div class="grid2">
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>조회수는 수십만, 그런데 통장은 그대로</b><span>RE:KIT 88</span><div class="gc-tags"><span>릴스</span><span>전환·매출</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>요즘 전환이 잘 되는 릴스에는 ' '가 있다</b><span>RE:KIT 49</span><div class="gc-tags"><span>릴스</span><span>전환·매출</span></div></div>
+          <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</b><span>RE:KIT 03</span><div class="gc-tags"><span>전환·매출</span><span>콘텐츠</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>돈이 되는 릴스의 제 1법칙</b><span>RE:KIT 69</span><div class="gc-tags"><span>릴스</span><span>콘텐츠</span></div></div>
+          <div class="gcard reading" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>팔지 않으면 팔리는 3단계 콘텐츠 퍼널</b><span>RE:KIT 41</span><div class="gc-tags"><span>인스타그램</span><span>전환·매출</span></div><div class="prog-row" style="margin-top:6px"><div class="progress-bar"><div style="width:45%"></div></div><em>45%</em></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>이번 릴스도 실패했다…?</b><span>RE:KIT 20</span><div class="gc-tags"><span>릴스</span><span>데이터</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>인스타에서 가장 빠르게 문의를 늘리는 방법</b><span>RE:KIT 12</span><div class="gc-tags"><span>인스타그램</span><span>전환·매출</span></div></div>
+          <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>구체성: 콘텐츠를 매출로 바꾸는 단 하나의 차이</b><span>RE:KIT 08</span><div class="gc-tags"><span>콘텐츠</span><span>카피·후킹</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>스크롤을 멈추게 만드는 3가지 원리</b><span>RE:KIT 40</span><div class="gc-tags"><span>릴스</span><span>카피·후킹</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>잘 만든 영상이 아니라, 말하는 사람이 이긴다</b><span>RE:KIT 84</span><div class="gc-tags"><span>릴스</span><span>브랜딩</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>똑같은 말을 반복하는데, 전환율이 올라간다?</b><span>RE:KIT 46</span><div class="gc-tags"><span>전환·매출</span><span>소비자 심리</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>돈 안 쓰고 SNS만으로 파는 법</b><span>RE:KIT 61</span><div class="gc-tags"><span>인스타그램</span><span>전환·매출</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>감이 아니라 데이터로 만드는 콘텐츠</b><span>RE:KIT 26</span><div class="gc-tags"><span>데이터</span><span>콘텐츠</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>쌓인 데이터에서 패턴 읽는 법</b><span>RE:KIT 28</span><div class="gc-tags"><span>데이터</span><span>심화기획</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>끌어들이는 콘텐츠는 F처럼, 사게 만드는 건 T가</b><span>RE:KIT 79</span><div class="gc-tags"><span>콘텐츠</span><span>전환·매출</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다</b><span>RE:KIT 59</span><div class="gc-tags"><span>전환·매출</span><span>브랜딩</span></div></div>
+          <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>상담 10분 만에 1000만 원을 결제하는 이유</b><span>RE:KIT 11</span><div class="gc-tags"><span>전환·매출</span><span>소비자 심리</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>선택할 수밖에 없게 만드는, 마케팅 설계 4가지</b><span>RE:KIT 53</span><div class="gc-tags"><span>전환·매출</span><span>타겟·차별화</span></div></div>
+          <div class="gcard reading" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span><div class="gc-tags"><span>카피·후킹</span><span>템플릿</span></div><div class="prog-row" style="margin-top:6px"><div class="progress-bar"><div style="width:62%"></div></div><em>62%</em></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>낚시가 필요할 때</b><span>RE:KIT 24</span><div class="gc-tags"><span>카피·후킹</span><span>3분컷</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>12억 팔린 상세페이지의 비밀</b><span>RE:KIT 07</span><div class="gc-tags"><span>상세페이지</span><span>전환·매출</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>같은 사람의 두 계정, 사업으로 이어지거나 일기로 끝나거나</b><span>RE:KIT 62</span><div class="gc-tags"><span>인스타그램</span><span>브랜딩</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>콘텐츠 공식이 안 먹히는 진짜 이유</b><span>RE:KIT 22</span><div class="gc-tags"><span>콘텐츠</span><span>타겟·차별화</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>2026 인스타그램, 규칙이 바뀌었다</b><span>RE:KIT 38</span><div class="gc-tags"><span>인스타그램</span><span>데이터</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>릴스 편집이 100배 편해지는 방법</b><span>RE:KIT 09</span><div class="gc-tags"><span>릴스</span><span>템플릿</span></div></div>
+          <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>릴스 음원, 이제 직접 만드세요</b><span>RE:KIT 17</span><div class="gc-tags"><span>릴스</span><span>AI·프롬프트</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>어떻게 제 마음을 아셨어요?</b><span>RE:KIT 05</span><div class="gc-tags"><span>소비자 심리</span><span>카피·후킹</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사람들은 당신을 0.5초 만에 판단하고 결정한다</b><span>RE:KIT 30</span><div class="gc-tags"><span>소비자 심리</span><span>브랜딩</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>95 대 5 법칙</b><span>RE:KIT 87</span><div class="gc-tags"><span>사업 성장</span><span>브랜딩</span></div></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>지금의 매출에서 한 단계 더 올라가고 싶어요</b><span>RE:KIT 60</span><div class="gc-tags"><span>사업 성장</span><span>전환·매출</span></div></div>
+        </div></div>
+      </div>
     </div>
 
     <!-- ── 기본 상태 ── -->
@@ -1190,14 +1249,14 @@ body.clean .jumpbar{display:none;}
     </div>
 
     <div class="browse-bar">
-      <label class="chkbox"><input type="checkbox"><span class="sw"></span><span>읽지 않은 리킷만 보기</span></label>
+      <label class="chkbox"><input type="checkbox" id="unread-browse"><span class="sw"></span><span>읽지 않은 리킷만 보기</span></label>
       <div class="view-toggle">
         <button data-view="list" class="on"><i data-lucide="list"></i></button>
         <button data-view="grid"><i data-lucide="layout-grid"></i></button>
       </div>
     </div>
 
-    <div class="browse-meta"><span>89개</span><span class="sort-btn">최신순 <i data-lucide="chevron-down"></i></span></div>
+    <div class="browse-meta"><span class="off-unread">89개</span><span class="on-unread">읽지 않은 리킷 71개</span><span class="sort-btn">최신순 <i data-lucide="chevron-down"></i></span></div>
 
     <!-- 리스트형 -->
     <div class="sec browse-view on" id="view-list" style="padding-top:4px">
@@ -2090,7 +2149,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.dataset.nview){
     /* 내 기록 정렬 — 시간순 / 리킷별 */
@@ -2115,6 +2174,12 @@ document.addEventListener("click", e=>{
   if(t.dataset.view){
     document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".browse-view").forEach(v=>v.classList.toggle("on", v.id==="view-"+t.dataset.view));
+    return;
+  }
+  if(t.dataset.fview){
+    /* 검색 결과 리스트/그리드 */
+    document.querySelectorAll("[data-fview]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".find-view").forEach(v=>v.classList.toggle("on", v.id==="fview-"+t.dataset.fview));
     return;
   }
   if(t.dataset.bseg){
