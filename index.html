@@ -289,6 +289,37 @@ body.clean .jumpbar{display:none;}
 .lib-stat{flex:1;background:var(--bg-light);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;}
 .lib-stat b{display:block;font-size:15px;font-weight:800;}
 .lib-stat span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
+
+/* ===== 내 기록 =====
+   메모는 밑줄 위에 얹히는 층이다(뷰어에서 하이라이트 → 메모 순).
+   그래서 [밑줄|메모] 배타 분할이 아니라 '좁히기' 토글을 쓴다.
+   배타 분할이면 메모 단 문장이 밑줄 목록에서 사라져 오히려 탐색이 늘어난다. */
+.note-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0;}
+.nseg{display:flex;gap:2px;background:var(--bg-light);border-radius:6px;padding:2px;}
+.nseg button{font-size:11px;font-weight:700;padding:5px 11px;border:none;border-radius:4px;background:none;color:var(--text-light);font-family:inherit;cursor:pointer;}
+.nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
+.note-meta{padding:10px 16px 0;font-size:11px;color:var(--text-light);}
+.note-meta .on-filter{display:none;}
+.nview{display:none;}
+.nview.on{display:block;}
+.note-list{display:flex;flex-direction:column;gap:10px;}
+/* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다 */
+#bseg-v1-notes:has(#memo-only:checked) .memo-card:not(.has-memo){display:none;}
+#bseg-v1-notes:has(#memo-only:checked) .note-group:not(:has(.has-memo)){display:none;}
+#bseg-v1-notes:has(#memo-only:checked) .note-meta .off-filter{display:none;}
+#bseg-v1-notes:has(#memo-only:checked) .note-meta .on-filter{display:inline;}
+/* 메모가 있는 기록은 왼쪽 강조선으로 스크롤 중에 걸러진다 */
+.memo-card.has-memo{border-left:3px solid var(--text-black);}
+/* 리킷별 묶어보기 */
+.note-group{margin-bottom:20px;}
+.note-group:last-child{margin-bottom:0;}
+.ng-head{display:flex;align-items:baseline;gap:8px;margin-bottom:9px;}
+.ng-kit{font-size:10.5px;font-weight:800;color:var(--text-light);flex-shrink:0;letter-spacing:0.2px;}
+.ng-title{font-size:12.5px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ng-cnt{font-size:10.5px;color:var(--text-muted);flex-shrink:0;font-weight:600;}
+/* 리킷별 보기에서는 카드마다 리킷명을 반복하지 않는다 */
+#nview-kit .src-kit{display:none;}
+
 /* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
 .sseg-view{display:none;}
 .sseg-view.on{display:block;}
@@ -1499,7 +1530,7 @@ body.clean .jumpbar{display:none;}
       <div class="seg">
         <button data-bseg="v1-reading" class="on">읽는 중 5</button>
         <button data-bseg="v1-saved">저장 12</button>
-        <button data-bseg="v1-notes">내 기록 32</button>
+        <button data-bseg="v1-notes">내 기록 10</button>
         <button data-bseg="v1-series">시리즈 1</button>
       </div>
       <div class="bseg-view on" id="bseg-v1-reading">
@@ -1557,17 +1588,144 @@ body.clean .jumpbar{display:none;}
         </div>
       </div>
       <div class="bseg-view" id="bseg-v1-notes">
-        <div class="sec" style="display:flex;flex-direction:column;gap:12px">
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-            <div class="memo-src"><span class="type-tag">메모</span><span>RE:KIT 59 · 어제</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-            <div class="memo-src"><span class="type-tag">밑줄</span><span>RE:KIT 53 · 3일 전</span></div>
+
+        <!-- 밑줄이 기본이고 메모는 그 위에 얹히는 층이라, 나누지 않고 좁힌다.
+             '밑줄' 태그는 여기 있는 전부라 정보가 없어서 뺐다. 메모 유무는 왼쪽 강조선으로 보인다. -->
+        <div class="note-bar">
+          <label class="chkbox"><input type="checkbox" id="memo-only"><span class="sw"></span><span>메모 쓴 것만</span></label>
+          <div class="nseg">
+            <button data-nview="time" class="on">시간순</button>
+            <button data-nview="kit">리킷별</button>
           </div>
         </div>
+        <div class="note-meta">
+          <span class="off-filter">기록 10개 · 그중 메모 3개</span>
+          <span class="on-filter">메모 쓴 기록 3개</span>
+        </div>
+
+        <!-- 시간순 -->
+        <div class="nview on" id="nview-time">
+          <div class="sec note-list">
+            <div class="card memo-card has-memo" data-go="scr-viewer">
+              <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+            </div>
+            <div class="card memo-card has-memo" data-go="scr-viewer">
+              <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+            </div>
+            <div class="card memo-card has-memo" data-go="scr-viewer">
+              <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+            </div>
+            <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+              <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 리킷별 -->
+        <div class="nview" id="nview-kit">
+          <div class="sec">
+            <div class="note-group">
+              <div class="ng-head"><span class="ng-kit">RE:KIT 41</span><span class="ng-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</span><span class="ng-cnt">기록 3 · 메모 1</span></div>
+              <div class="note-list">
+                <div class="card memo-card has-memo" data-go="scr-viewer">
+                  <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+                </div>
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+                </div>
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="note-group">
+              <div class="ng-head"><span class="ng-kit">RE:KIT 51</span><span class="ng-title">뇌는 왜 이야기에 속는가</span><span class="ng-cnt">기록 2 · 메모 1</span></div>
+              <div class="note-list">
+                <div class="card memo-card has-memo" data-go="scr-viewer">
+                  <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
+                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+                </div>
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="note-group">
+              <div class="ng-head"><span class="ng-kit">RE:KIT 15</span><span class="ng-title">사업자의 인스타 프로필 설정법</span><span class="ng-cnt">기록 2 · 메모 1</span></div>
+              <div class="note-list">
+                <div class="card memo-card has-memo" data-go="scr-viewer">
+                  <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
+                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+                </div>
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="note-group">
+              <div class="ng-head"><span class="ng-kit">RE:KIT 57</span><span class="ng-title">빼는 게 먼저, 더하는 게 나중</span><span class="ng-cnt">기록 2</span></div>
+              <div class="note-list">
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+                </div>
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="note-group">
+              <div class="ng-head"><span class="ng-kit">RE:KIT 34</span><span class="ng-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</span><span class="ng-cnt">기록 1</span></div>
+              <div class="note-list">
+                <div class="card memo-card" data-go="scr-viewer">
+                  <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+                  <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="bseg-view" id="bseg-v1-series">
         <div class="sec">
@@ -1870,8 +2028,14 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
+  if(t.dataset.nview){
+    /* 내 기록 정렬 — 시간순 / 리킷별 */
+    document.querySelectorAll("[data-nview]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".nview").forEach(v=>v.classList.toggle("on", v.id==="nview-"+t.dataset.nview));
+    return;
+  }
   if(t.dataset.cseg){
     document.querySelectorAll("[data-cseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".cseg-view").forEach(v=>v.classList.toggle("on", v.id==="cseg-"+t.dataset.cseg));
