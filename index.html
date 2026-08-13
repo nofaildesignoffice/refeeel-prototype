@@ -305,20 +305,24 @@ body.clean .jumpbar{display:none;}
 .note-list{display:flex;flex-direction:column;gap:10px;}
 /* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다 */
 #bseg-v1-notes:has(#memo-only:checked) .memo-card:not(.has-memo){display:none;}
-#bseg-v1-notes:has(#memo-only:checked) .note-group:not(:has(.has-memo)){display:none;}
+#bseg-v1-notes:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
 #bseg-v1-notes:has(#memo-only:checked) .note-meta .off-filter{display:none;}
 #bseg-v1-notes:has(#memo-only:checked) .note-meta .on-filter{display:inline;}
 /* 메모가 있는 기록은 왼쪽 강조선으로 스크롤 중에 걸러진다 */
 .memo-card.has-memo{border-left:3px solid var(--text-black);}
-/* 리킷별 묶어보기 */
-.note-group{margin-bottom:20px;}
-.note-group:last-child{margin-bottom:0;}
-.ng-head{display:flex;align-items:baseline;gap:8px;margin-bottom:9px;}
-.ng-kit{font-size:10.5px;font-weight:800;color:var(--text-light);flex-shrink:0;letter-spacing:0.2px;}
-.ng-title{font-size:12.5px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ng-cnt{font-size:10.5px;color:var(--text-muted);flex-shrink:0;font-weight:600;}
-/* 리킷별 보기에서는 카드마다 리킷명을 반복하지 않는다 */
-#nview-kit .src-kit{display:none;}
+/* 리킷별 — 기록을 바로 펼치지 않고 리킷 카드로 접는다.
+   기록이 쌓일수록 평면 나열은 못 읽는다. 리킷은 이미 사람이 기억하는 단위다. */
+.kitcard{padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;}
+.kitcard .img-ph{width:56px;height:56px;flex-shrink:0;}
+.kc-body{flex:1;min-width:0;}
+.kc-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
+.kc-title{font-size:13.5px;font-weight:700;line-height:1.4;}
+.kc-cnt{display:flex;gap:12px;margin-top:8px;}
+.kc-cnt span{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--text-light);}
+.kc-cnt i,.kc-cnt svg{width:11px;height:11px;flex-shrink:0;}
+.kc-cnt .memo{color:var(--text-black);}
+/* 리킷 기록 상세에서는 카드마다 리킷명을 반복하지 않는다 */
+#scr-notekit .src-kit{display:none;}
 
 /* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
 .sseg-view{display:none;}
@@ -368,7 +372,12 @@ body.clean .jumpbar{display:none;}
 .ex-read{position:absolute;right:-3px;bottom:-3px;width:17px;height:17px;border-radius:50%;background:var(--text-black);border:2px solid var(--bg-white);display:flex;align-items:center;justify-content:center;}
 .ex-read i,.ex-read svg{width:9px;height:9px;color:var(--bg-white);}
 .ex-body{flex:1;min-width:0;}
+.ex-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
 .ex-title{font-size:13.5px;font-weight:700;line-height:1.4;}
+/* 진행률은 막대만으로는 '얼마나'가 안 읽힌다 — 숫자를 같이 준다 */
+.prog-row{display:flex;align-items:center;gap:7px;}
+.prog-row .progress-bar{flex:1;}
+.prog-row em{font-style:normal;font-size:10px;font-weight:700;color:var(--text-gray);flex-shrink:0;}
 .ex-desc{font-size:11.5px;color:var(--text-light);line-height:1.45;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ex-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;}
 .ex-tags span{font-size:10px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:20px;padding:2px 7px;}
@@ -390,6 +399,8 @@ body.clean .jumpbar{display:none;}
 .gcard b{display:block;font-size:12px;font-weight:700;line-height:1.4;margin-top:6px;}
 .gcard span{display:block;font-size:10px;color:var(--text-light);margin-top:2px;}
 .gcard span.ex-read{display:flex;margin-top:0;} /* .gcard span 이 배지 스타일을 덮는 것 방지 */
+.gc-tags{display:flex;gap:4px;margin-top:5px;overflow:hidden;}
+.gcard .gc-tags span{display:inline-block;margin-top:0;font-size:9.5px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:20px;padding:2px 6px;white-space:nowrap;}
 .group-card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px;cursor:pointer;}
 .group-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .group-head .gt{font-size:13px;font-weight:800;line-height:1.4;max-width:75%;}
@@ -495,7 +506,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-home">홈</button>
   <button data-jump="scr-search">검색</button>
   <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatroom">AI대화</button><button data-jump="scr-consult">미니컨설팅</button><button data-jump="scr-report">진단리포트</button>
-  <button data-jump="scr-library">보관함</button>
+  <button data-jump="scr-library">보관함</button><button data-jump="scr-notekit">리킷별기록</button>
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
@@ -827,6 +838,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 88</div>
             <div class="ex-title">조회수는 수십만, 그런데 통장은 그대로</div>
             <div class="ex-desc">…<mark>조회수</mark>는 알고리즘이 매긴 점수일 뿐, <mark>매출</mark>과는 다른 지표다…</div>
             <div class="ex-tags"><span>릴스</span><span>전환·매출</span><span>데이터</span></div>
@@ -835,6 +847,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 49</div>
             <div class="ex-title">요즘 전환이 잘 되는 릴스에는 ' '가 있다</div>
             <div class="ex-desc">…같은 <mark>릴스</mark>인데 문의로 이어지는 것과 아닌 것의 한 끗…</div>
             <div class="ex-tags"><span>릴스</span><span>전환·매출</span></div>
@@ -843,6 +856,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row read" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 03</div>
             <div class="ex-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
             <div class="ex-desc">…노출이 <mark>매출</mark>이 되기까지, 고객이 거치는 8개의 접점…</div>
             <div class="ex-tags"><span>전환·매출</span><span>콘텐츠</span></div>
@@ -851,6 +865,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 69</div>
             <div class="ex-title">돈이 되는 릴스의 제 1법칙</div>
             <div class="ex-desc">…<mark>릴스</mark>의 매체는 영상이다. 스펙이 아니라 장면을 먼저…</div>
             <div class="ex-tags"><span>릴스</span><span>콘텐츠</span><span>전환·매출</span></div>
@@ -859,6 +874,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 41</div>
             <div class="ex-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
             <div class="ex-desc">…2주, 2300만원. <mark>조회수</mark>가 아니라 채널별 역할 분리가…</div>
             <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span></div>
@@ -867,6 +883,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 20</div>
             <div class="ex-title">이번 릴스도 실패했다…?</div>
             <div class="ex-desc">…<mark>릴스</mark> 한 편의 성패를 <mark>조회수</mark>로 판단하면 안 되는 이유…</div>
             <div class="ex-tags"><span>릴스</span><span>데이터</span></div>
@@ -875,6 +892,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 12</div>
             <div class="ex-title">인스타에서 가장 빠르게 문의를 늘리는 방법</div>
             <div class="ex-desc">…<mark>매출</mark> 직전 단계인 '문의'를 먼저 설계해야 하는 이유…</div>
             <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span></div>
@@ -883,6 +901,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row read" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 08</div>
             <div class="ex-title">구체성: 콘텐츠를 매출로 바꾸는 단 하나의 차이</div>
             <div class="ex-desc">…같은 말을 해도 <mark>매출</mark>이 되는 문장은 숫자가 박혀 있다…</div>
             <div class="ex-tags"><span>콘텐츠</span><span>카피·후킹</span><span>전환·매출</span></div>
@@ -891,6 +910,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 40</div>
             <div class="ex-title">스크롤을 멈추게 만드는 3가지 원리</div>
             <div class="ex-desc">…<mark>릴스</mark> 첫 1초에서 손가락이 멈추는 조건 3가지…</div>
             <div class="ex-tags"><span>릴스</span><span>카피·후킹</span><span>3분컷</span></div>
@@ -899,6 +919,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 84</div>
             <div class="ex-title">잘 만든 영상이 아니라, 말하는 사람이 이긴다</div>
             <div class="ex-desc">…<mark>릴스</mark> 퀄리티를 올려도 반응이 안 오는 진짜 이유…</div>
             <div class="ex-tags"><span>릴스</span><span>브랜딩</span></div>
@@ -907,6 +928,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 46</div>
             <div class="ex-title">똑같은 말을 반복하는데, 전환율이 올라간다?</div>
             <div class="ex-desc">…반복 노출이 <mark>매출</mark>로 바뀌는 심리적 임계점…</div>
             <div class="ex-tags"><span>전환·매출</span><span>소비자 심리</span></div>
@@ -915,6 +937,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 61</div>
             <div class="ex-title">돈 안 쓰고 SNS만으로 파는 법</div>
             <div class="ex-desc">…광고비 0원으로 <mark>매출</mark>을 만드는 구조의 최소 조건…</div>
             <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span><span>심화기획</span></div>
@@ -923,6 +946,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 26</div>
             <div class="ex-title">감이 아니라 데이터로 만드는 콘텐츠</div>
             <div class="ex-desc">…<mark>조회수</mark> 말고 봐야 할 지표 4개와 수집하는 법…</div>
             <div class="ex-tags"><span>데이터</span><span>콘텐츠</span></div>
@@ -931,6 +955,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 28</div>
             <div class="ex-title">쌓인 데이터에서 패턴 읽는 법</div>
             <div class="ex-desc">…<mark>조회수</mark>가 터진 게시물과 팔린 게시물은 겹치지 않는다…</div>
             <div class="ex-tags"><span>데이터</span><span>심화기획</span></div>
@@ -939,6 +964,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 79</div>
             <div class="ex-title">끌어들이는 콘텐츠는 F처럼, 사게 만드는 건 T가</div>
             <div class="ex-desc">…모으는 글과 <mark>매출</mark>을 만드는 글은 문법이 다르다…</div>
             <div class="ex-tags"><span>콘텐츠</span><span>전환·매출</span></div>
@@ -947,6 +973,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 59</div>
             <div class="ex-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다</div>
             <div class="ex-desc">…파는 티 없이 <mark>매출</mark>로 이어지는 화법의 경계선…</div>
             <div class="ex-tags"><span>전환·매출</span><span>브랜딩</span></div>
@@ -955,6 +982,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row read" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 11</div>
             <div class="ex-title">상담 10분 만에 1000만 원을 결제하는 이유</div>
             <div class="ex-desc">…<mark>매출</mark>은 상담이 아니라 상담 전에 이미 결정된다…</div>
             <div class="ex-tags"><span>전환·매출</span><span>소비자 심리</span></div>
@@ -963,6 +991,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 53</div>
             <div class="ex-title">선택할 수밖에 없게 만드는, 마케팅 설계 4가지</div>
             <div class="ex-desc">…고민 없이 결제되는 구조의 4가지 장치…</div>
             <div class="ex-tags"><span>전환·매출</span><span>타겟·차별화</span><span>심화기획</span></div>
@@ -971,6 +1000,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 68</div>
             <div class="ex-title">한국인 욕구별 훅 템플릿 40개</div>
             <div class="ex-desc">…<mark>릴스</mark> 첫 문장에 그대로 넣는 40개 빈칸 양식…</div>
             <div class="ex-tags"><span>카피·후킹</span><span>템플릿</span></div>
@@ -979,6 +1009,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 24</div>
             <div class="ex-title">낚시가 필요할 때</div>
             <div class="ex-desc">…<mark>조회수</mark>만 끌고 오는 훅과 고객을 데려오는 훅의 차이…</div>
             <div class="ex-tags"><span>카피·후킹</span><span>3분컷</span></div>
@@ -987,6 +1018,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 07</div>
             <div class="ex-title">12억 팔린 상세페이지의 비밀</div>
             <div class="ex-desc">…유입 다음 단계, <mark>매출</mark>이 실제로 일어나는 페이지 구조…</div>
             <div class="ex-tags"><span>상세페이지</span><span>전환·매출</span><span>심화기획</span></div>
@@ -995,6 +1027,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 62</div>
             <div class="ex-title">같은 사람의 두 계정, 사업으로 이어지거나 일기로 끝나거나</div>
             <div class="ex-desc">…반응은 같은데 <mark>매출</mark>만 다른 두 계정의 결정적 차이…</div>
             <div class="ex-tags"><span>인스타그램</span><span>브랜딩</span></div>
@@ -1003,6 +1036,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 22</div>
             <div class="ex-title">콘텐츠 공식이 안 먹히는 진짜 이유</div>
             <div class="ex-desc">…남의 공식을 그대로 써서 <mark>조회수</mark>만 남는 경우…</div>
             <div class="ex-tags"><span>콘텐츠</span><span>타겟·차별화</span></div>
@@ -1011,6 +1045,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 38</div>
             <div class="ex-title">2026 인스타그램, 규칙이 바뀌었다</div>
             <div class="ex-desc">…<mark>조회수</mark> 중심 지표가 바뀌면서 달라진 운영 기준…</div>
             <div class="ex-tags"><span>인스타그램</span><span>데이터</span></div>
@@ -1019,6 +1054,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 09</div>
             <div class="ex-title">릴스 편집이 100배 편해지는 방법</div>
             <div class="ex-desc">…<mark>릴스</mark> 제작 시간을 줄이는 편집 워크플로우…</div>
             <div class="ex-tags"><span>릴스</span><span>템플릿</span></div>
@@ -1027,6 +1063,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row read" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 17</div>
             <div class="ex-title">릴스 음원, 이제 직접 만드세요</div>
             <div class="ex-desc">…<mark>릴스</mark> 음원을 직접 만들어 저작권과 톤을 잡는 법…</div>
             <div class="ex-tags"><span>릴스</span><span>AI·프롬프트</span></div>
@@ -1035,6 +1072,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 05</div>
             <div class="ex-title">어떻게 제 마음을 아셨어요?</div>
             <div class="ex-desc">…읽는 사람이 자기 얘기라고 느끼게 만드는 문장 설계…</div>
             <div class="ex-tags"><span>소비자 심리</span><span>카피·후킹</span></div>
@@ -1043,6 +1081,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 30</div>
             <div class="ex-title">사람들은 당신을 0.5초 만에 판단하고 결정한다</div>
             <div class="ex-desc">…첫인상 0.5초가 이후 <mark>매출</mark>까지 끌고 가는 구조…</div>
             <div class="ex-tags"><span>소비자 심리</span><span>브랜딩</span></div>
@@ -1051,6 +1090,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 87</div>
             <div class="ex-title">95 대 5 법칙</div>
             <div class="ex-desc">…지금 살 5%와 나중에 살 95%, <mark>매출</mark>은 어디서 나오나…</div>
             <div class="ex-tags"><span>사업 성장</span><span>브랜딩</span><span>심화기획</span></div>
@@ -1059,6 +1099,7 @@ body.clean .jumpbar{display:none;}
         <div class="ex-row" data-go="scr-viewer">
           <div class="ex-thumb"><i data-lucide="image"></i></div>
           <div class="ex-body">
+            <div class="ex-num">RE:KIT 60</div>
             <div class="ex-title">지금의 매출에서 한 단계 더 올라가고 싶어요</div>
             <div class="ex-desc">…<mark>매출</mark>이 정체됐을 때 손대야 할 순서…</div>
             <div class="ex-tags"><span>사업 성장</span><span>전환·매출</span></div>
@@ -1163,6 +1204,7 @@ body.clean .jumpbar{display:none;}
       <div class="ex-row read" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 89</div>
           <div class="ex-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
           <div class="ex-desc">마케터 한 명의 실무 기준 49개를 AI 안에 통째로</div>
           <div class="ex-tags"><span>AI·프롬프트</span><span>템플릿</span></div>
@@ -1171,6 +1213,7 @@ body.clean .jumpbar{display:none;}
       <div class="ex-row" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 88</div>
           <div class="ex-title">인스타랑 밀당하는 법</div>
           <div class="ex-desc">조회수는 터지는데 매출은 그대로인 이유</div>
           <div class="ex-tags"><span>인스타그램</span><span>전환·매출</span><span>콘텐츠</span></div>
@@ -1179,6 +1222,7 @@ body.clean .jumpbar{display:none;}
       <div class="ex-row" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 87</div>
           <div class="ex-title">낭비하듯 쓴 5%가 95%의 수익을 가져다 준다</div>
           <div class="ex-desc">세계 1위 레스토랑을 만든 건 2달러 핫도그였다</div>
           <div class="ex-tags"><span>콘텐츠</span><span>사업 성장</span></div>
@@ -1187,15 +1231,17 @@ body.clean .jumpbar{display:none;}
       <div class="ex-row reading" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 68</div>
           <div class="ex-title">한국인 욕구별 훅 템플릿 40개</div>
           <div class="ex-desc">심리학이 정의한 한국인의 욕구를 건드는 훅 40개</div>
           <div class="ex-tags"><span>카피·후킹</span><span>소비자 심리</span><span>템플릿</span></div>
-          <div class="progress-bar" style="margin-top:8px"><div style="width:62%"></div></div>
+          <div class="prog-row" style="margin-top:8px"><div class="progress-bar"><div style="width:62%"></div></div><em>62%</em></div>
         </div>
       </div>
       <div class="ex-row" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 59</div>
           <div class="ex-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같아요</div>
           <div class="ex-desc">팔려는 티가 신뢰를 죽인다 — 3가지 함정</div>
           <div class="ex-tags"><span>전환·매출</span><span>브랜딩</span><span>인스타그램</span></div>
@@ -1204,6 +1250,7 @@ body.clean .jumpbar{display:none;}
       <div class="ex-row read" data-go="scr-viewer">
         <div class="ex-thumb"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div>
         <div class="ex-body">
+          <div class="ex-num">RE:KIT 57</div>
           <div class="ex-title">빼는 게 먼저, 더하는 게 나중</div>
           <div class="ex-desc">피카소처럼 쌓고, 멍거처럼 뺀다</div>
           <div class="ex-tags"><span>사업 성장</span><span>콘텐츠</span></div>
@@ -1214,12 +1261,12 @@ body.clean .jumpbar{display:none;}
     <!-- 그리드형 -->
     <div class="sec browse-view" id="view-grid" style="padding-top:4px">
       <div class="grid2">
-        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>프롬프트 대신, 마케터의 기준을 넣었습니다</b><span>RE:KIT 89</span></div>
-        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>인스타랑 밀당하는 법</b><span>RE:KIT 88</span></div>
-        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>낭비하듯 쓴 5%가 95%의 수익을</b><span>RE:KIT 87</span></div>
-        <div class="gcard reading" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span><div class="progress-bar" style="margin-top:6px"><div style="width:62%"></div></div></div>
-        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>판매원처럼 보이기 싫은데</b><span>RE:KIT 59</span></div>
-        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
+        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>프롬프트 대신, 마케터의 기준을 넣었습니다</b><span>RE:KIT 89</span><div class="gc-tags"><span>AI·프롬프트</span><span>템플릿</span></div></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>인스타랑 밀당하는 법</b><span>RE:KIT 88</span><div class="gc-tags"><span>인스타그램</span><span>전환·매출</span></div></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>낭비하듯 쓴 5%가 95%의 수익을</b><span>RE:KIT 87</span><div class="gc-tags"><span>콘텐츠</span><span>사업 성장</span></div></div>
+        <div class="gcard reading" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span><div class="gc-tags"><span>카피·후킹</span><span>템플릿</span></div><div class="prog-row" style="margin-top:6px"><div class="progress-bar"><div style="width:62%"></div></div><em>62%</em></div></div>
+        <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>판매원처럼 보이기 싫은데</b><span>RE:KIT 59</span><div class="gc-tags"><span>전환·매출</span><span>브랜딩</span></div></div>
+        <div class="gcard read" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i><span class="ex-read"><i data-lucide="check"></i></span></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span><div class="gc-tags"><span>사업 성장</span><span>콘텐츠</span></div></div>
       </div>
     </div>
 
@@ -1654,74 +1701,51 @@ body.clean .jumpbar{display:none;}
 
         <!-- 리킷별 -->
         <div class="nview" id="nview-kit">
-          <div class="sec">
-            <div class="note-group">
-              <div class="ng-head"><span class="ng-kit">RE:KIT 41</span><span class="ng-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</span><span class="ng-cnt">기록 3 · 메모 1</span></div>
-              <div class="note-list">
-                <div class="card memo-card has-memo" data-go="scr-viewer">
-                  <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-                </div>
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-                </div>
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-                </div>
+          <div class="sec note-list">
+            <div class="card kitcard has-memo" data-go="scr-notekit">
+              <div class="img-ph"><i data-lucide="image"></i></div>
+              <div class="kc-body">
+                <div class="kc-num">RE:KIT 41</div>
+                <div class="kc-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 3</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
               </div>
+              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
             </div>
-            <div class="note-group">
-              <div class="ng-head"><span class="ng-kit">RE:KIT 51</span><span class="ng-title">뇌는 왜 이야기에 속는가</span><span class="ng-cnt">기록 2 · 메모 1</span></div>
-              <div class="note-list">
-                <div class="card memo-card has-memo" data-go="scr-viewer">
-                  <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
-                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
-                </div>
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
-                </div>
+            <div class="card kitcard has-memo" data-go="scr-notekit">
+              <div class="img-ph"><i data-lucide="image"></i></div>
+              <div class="kc-body">
+                <div class="kc-num">RE:KIT 51</div>
+                <div class="kc-title">뇌는 왜 이야기에 속는가</div>
+                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
               </div>
+              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
             </div>
-            <div class="note-group">
-              <div class="ng-head"><span class="ng-kit">RE:KIT 15</span><span class="ng-title">사업자의 인스타 프로필 설정법</span><span class="ng-cnt">기록 2 · 메모 1</span></div>
-              <div class="note-list">
-                <div class="card memo-card has-memo" data-go="scr-viewer">
-                  <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
-                  <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-                </div>
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-                </div>
+            <div class="card kitcard has-memo" data-go="scr-notekit">
+              <div class="img-ph"><i data-lucide="image"></i></div>
+              <div class="kc-body">
+                <div class="kc-num">RE:KIT 15</div>
+                <div class="kc-title">사업자의 인스타 프로필 설정법</div>
+                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
               </div>
+              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
             </div>
-            <div class="note-group">
-              <div class="ng-head"><span class="ng-kit">RE:KIT 57</span><span class="ng-title">빼는 게 먼저, 더하는 게 나중</span><span class="ng-cnt">기록 2</span></div>
-              <div class="note-list">
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-                </div>
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-                </div>
+            <div class="card kitcard" data-go="scr-notekit">
+              <div class="img-ph"><i data-lucide="image"></i></div>
+              <div class="kc-body">
+                <div class="kc-num">RE:KIT 57</div>
+                <div class="kc-title">빼는 게 먼저, 더하는 게 나중</div>
+                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span></div>
               </div>
+              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
             </div>
-            <div class="note-group">
-              <div class="ng-head"><span class="ng-kit">RE:KIT 34</span><span class="ng-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</span><span class="ng-cnt">기록 1</span></div>
-              <div class="note-list">
-                <div class="card memo-card" data-go="scr-viewer">
-                  <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
-                  <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
-                </div>
+            <div class="card kitcard" data-go="scr-notekit">
+              <div class="img-ph"><i data-lucide="image"></i></div>
+              <div class="kc-body">
+                <div class="kc-num">RE:KIT 34</div>
+                <div class="kc-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
+                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 1</span></div>
               </div>
+              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
             </div>
           </div>
         </div>
@@ -1748,6 +1772,44 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item on" data-tab="scr-library"><i data-lucide="bookmark"></i><span>보관함</span></button>
   </nav>
+</section>
+
+<!-- ══════════ 리킷 하나의 기록 (내 기록 > 리킷별 > 카드) ══════════ -->
+<section class="screen" id="scr-notekit">
+  <div class="gnb">
+    <i data-lucide="arrow-left" data-back></i>
+    <span class="gnb-title">내 기록</span>
+    <i data-lucide="more-horizontal"></i>
+  </div>
+  <div class="scroll">
+    <div class="sec" style="padding-bottom:0">
+      <!-- 카드를 그대로 헤더로 재사용 — 어디서 들어왔는지가 유지된다 -->
+      <div class="card kitcard" data-go="scr-viewer">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="kc-body">
+          <div class="kc-num">RE:KIT 41</div>
+          <div class="kc-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+          <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 3개 · 그중 메모 1개</span></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
+      </div>
+    </div>
+    <div class="sec note-list">
+      <div class="card memo-card has-memo" data-go="scr-viewer">
+        <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+        <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+        <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+      </div>
+      <div class="card memo-card" data-go="scr-viewer">
+        <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
+        <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+      </div>
+      <div class="card memo-card" data-go="scr-viewer">
+        <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
+        <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════ 리킷 뷰어 ══════════ -->
