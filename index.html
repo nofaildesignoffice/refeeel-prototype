@@ -376,6 +376,21 @@ body.clean .jumpbar{display:none;}
 .browse-meta{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0;font-size:12px;color:var(--text-light);}
 .sort-btn{display:flex;align-items:center;gap:3px;cursor:pointer;}
 .sort-btn i,.sort-btn svg{width:13px;height:13px;}
+/* ===== 정렬 시트 =====
+   화살표만 있고 눌러도 아무것도 안 뜨면 어떤 선택지가 있는지 검증이 안 된다.
+   옵션마다 한 줄 설명을 붙여 '무슨 기준인지'를 화면에서 알 수 있게 한다. */
+.sheet-wrap{position:absolute;inset:0;z-index:50;display:none;}
+.sheet-wrap.on{display:block;}
+.sheet-bd{position:absolute;inset:0;background:rgba(0,0,0,0.35);}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-white);border-radius:16px 16px 0 0;padding:10px 0 16px;box-shadow:0 -4px 16px rgba(0,0,0,.12);}
+.sheet-grip{width:36px;height:4px;border-radius:2px;background:var(--border-default);margin:0 auto 12px;}
+.sheet-title{font-size:11px;font-weight:800;color:var(--text-light);letter-spacing:0.3px;padding:0 20px 4px;}
+.sort-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;cursor:pointer;}
+.sort-row b{font-size:14px;font-weight:600;color:var(--text-dark);}
+.sort-row.on b{font-weight:800;color:var(--text-black);}
+.sort-row em{display:block;font-style:normal;font-size:11px;color:var(--text-light);margin-top:3px;line-height:1.45;}
+.sort-row i,.sort-row svg{width:17px;height:17px;color:var(--text-black);flex-shrink:0;display:none;}
+.sort-row.on i,.sort-row.on svg{display:block;}
 .browse-view{display:none;}
 .browse-view.on{display:block;}
 .ex-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-light);cursor:pointer;}
@@ -852,7 +867,7 @@ body.clean .jumpbar{display:none;}
           <button data-fview="grid"><i data-lucide="layout-grid"></i></button>
         </div>
       </div>
-      <div class="browse-meta"><span class="off-unread">결과 30개</span><span class="on-unread">읽지 않은 결과 26개</span><span class="sort-btn">정확도순 <i data-lucide="chevron-down"></i></span></div>
+      <div class="browse-meta"><span class="off-unread">결과 30개</span><span class="on-unread">읽지 않은 결과 26개</span><span class="sort-btn" data-sort="find"><span class="sv">정확도순</span> <i data-lucide="chevron-down"></i></span></div>
 
       <div class="find-view on" id="fview-list">
       <div class="sec" style="padding-top:8px">
@@ -1256,7 +1271,7 @@ body.clean .jumpbar{display:none;}
       </div>
     </div>
 
-    <div class="browse-meta"><span class="off-unread">89개</span><span class="on-unread">읽지 않은 리킷 71개</span><span class="sort-btn">최신순 <i data-lucide="chevron-down"></i></span></div>
+    <div class="browse-meta"><span class="off-unread">89개</span><span class="on-unread">읽지 않은 리킷 71개</span><span class="sort-btn" data-sort="browse"><span class="sv">최신순</span> <i data-lucide="chevron-down"></i></span></div>
 
     <!-- 리스트형 -->
     <div class="sec browse-view on" id="view-list" style="padding-top:4px">
@@ -2097,6 +2112,16 @@ body.clean .jumpbar{display:none;}
   </div>
 </section>
 
+<!-- ══════════ 정렬 시트 ══════════ -->
+<div class="sheet-wrap" id="sortsheet">
+  <div class="sheet-bd" data-sheet="close"></div>
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">정렬</div>
+    <div id="sheet-rows"></div>
+  </div>
+</div>
+
 </div><!-- /.phone -->
 
 <script>
@@ -2145,12 +2170,39 @@ function sseg(key){
   document.getElementById("scr-search").classList.toggle("browsing", key==="browse");
 }
 
+/* 정렬 옵션 — 검색하기는 둘러보기 것을 다 갖고, 검색어가 있을 때만 성립하는 정확도순을 하나 더 갖는다 */
+const SORTS = {
+  find:   [["정확도순","검색어와 가장 잘 맞는 순서"],
+           ["최신순","최근에 나온 리킷부터"],
+           ["인기순","다른 사장님들이 많이 밑줄·메모한 순서"]],
+  browse: [["최신순","최근에 나온 리킷부터"],
+           ["인기순","다른 사장님들이 많이 밑줄·메모한 순서"]]
+};
+let sortKey = null;
+function openSort(key){
+  sortKey = key;
+  const cur = document.querySelector('[data-sort="'+key+'"] .sv').textContent.trim();
+  document.getElementById("sheet-rows").innerHTML = SORTS[key].map(function(o){
+    return '<div class="sort-row'+(o[0]===cur?" on":"")+'" data-pick="'+o[0]+'">'
+         + '<span><b>'+o[0]+'</b><em>'+o[1]+'</em></span><i data-lucide="check"></i></div>';
+  }).join("");
+  document.getElementById("sortsheet").classList.add("on");
+  lucide.createIcons();
+}
+
 document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
+  if(t.dataset.sort){ openSort(t.dataset.sort); return; }
+  if(t.dataset.pick){
+    document.querySelector('[data-sort="'+sortKey+'"] .sv').textContent = t.dataset.pick;
+    document.getElementById("sortsheet").classList.remove("on");
+    return;
+  }
+  if(t.dataset.sheet){ document.getElementById("sortsheet").classList.remove("on"); return; }
   if(t.dataset.nview){
     /* 내 기록 정렬 — 시간순 / 리킷별 */
     document.querySelectorAll("[data-nview]").forEach(b=>b.classList.toggle("on", b===t));
