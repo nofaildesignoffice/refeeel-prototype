@@ -396,10 +396,14 @@ body.clean .jumpbar{display:none;}
 /* ===== 정렬 시트 =====
    화살표만 있고 눌러도 아무것도 안 뜨면 어떤 선택지가 있는지 검증이 안 된다.
    옵션마다 한 줄 설명을 붙여 '무슨 기준인지'를 화면에서 알 수 있게 한다. */
+/* 시트는 max()가 아니라 calc(기존 여백 + env)를 쓴다.
+   탭바는 배경이 인디케이터 자리를 덮는 게 정상이라 max()로 충분하지만,
+   시트는 마지막 줄이 눌러야 하는 항목이라 인디케이터 위에 원래 여백만큼 더 띄워야 한다.
+   max()로 두면 마지막 줄 끝이 인디케이터 경계에 딱 붙는다. */
 .sheet-wrap{position:absolute;inset:0;z-index:50;display:none;}
 .sheet-wrap.on{display:block;}
 .sheet-bd{position:absolute;inset:0;background:rgba(0,0,0,0.35);}
-.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-white);border-radius:16px 16px 0 0;padding:10px 0 max(16px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.12);}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-white);border-radius:16px 16px 0 0;padding:10px 0 calc(16px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.12);}
 .sheet-grip{width:36px;height:4px;border-radius:2px;background:var(--border-default);margin:0 auto 12px;}
 .sheet-title{font-size:11px;font-weight:800;color:var(--text-light);letter-spacing:0.3px;padding:0 20px 4px;}
 .sort-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;cursor:pointer;}
