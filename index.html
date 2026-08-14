@@ -39,6 +39,11 @@ body.clean .jumpbar{display:none;}
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
 .scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;}
+/* 탭바도 입력창도 없는 화면(온보딩·뷰어·완독·마이·알림·컨설팅…)은 스크롤 영역이 화면 맨 아래다.
+   그래서 맨 끝까지 내렸을 때 마지막 버튼이 iOS 홈 인디케이터에 걸린다.
+   :last-child 로 건 이유 — 탭바나 입력창이 아래에 있는 화면은 그쪽이 이미 여백을 갖고 있어
+   여기서 또 주면 빈 띠가 이중으로 생긴다. */
+.screen>.scroll:last-child{padding-bottom:env(safe-area-inset-bottom);}
 
 /* ===== 상단바 ===== */
 .topbar{flex-shrink:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
