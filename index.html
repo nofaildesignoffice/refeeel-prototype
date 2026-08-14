@@ -203,6 +203,41 @@ body.clean .jumpbar{display:none;}
 .ask-row>i,.ask-row>svg{width:15px;height:15px;color:var(--text-light);flex-shrink:0;}
 .ask-row.hist b{display:block;font-size:13px;font-weight:700;}
 .ask-row.hist em{display:block;font-size:11px;color:var(--text-light);font-style:normal;margin-top:3px;}
+/* ── 낙타AI 첫 화면: 두 갈래 진입 카드 ──
+   같은 껍데기를 쓰되 색으로 위계를 준다. 무료 리킷 추천이 주 동선이라 검정(primary),
+   미니 컨설팅은 흰 바탕 점선 — 아직 안 산 것, 구경하는 것이라는 인상을 준다. */
+.act-card{display:flex;gap:12px;align-items:flex-start;background:var(--bg-white);border:1px dashed var(--border-default);border-radius:var(--radius-md);padding:16px;cursor:pointer;}
+.act-card+.act-card{margin-top:10px;}
+.act-ico{width:38px;height:38px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.act-ico i,.act-ico svg{width:18px;height:18px;color:var(--text-dark);}
+.act-body{flex:1;min-width:0;}
+.act-body>b{display:block;font-size:14px;font-weight:800;line-height:1.4;}
+.act-body p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:5px;}
+.act-body p b{color:var(--text-black);font-weight:700;}
+.act-go{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;margin-top:11px;}
+.act-go i,.act-go svg{width:14px;height:14px;}
+.act-card.primary{background:var(--bg-dark);border:1px solid var(--bg-dark);}
+.act-card.primary .act-ico{background:rgba(255,255,255,.14);}
+.act-card.primary .act-ico i,.act-card.primary .act-ico svg{color:var(--bg-white);}
+.act-card.primary .act-body>b{color:var(--bg-white);}
+.act-card.primary .act-body p{color:#D4D4D4;}
+.act-card.primary .act-go{color:var(--bg-white);}
+/* ── 낙타AI 대화 시작: AI가 건네는 선택지 ──
+   첫 화면에 평평하게 깔려 있던 "이렇게 물어보세요"를 대화 안으로 옮긴 것.
+   AI 말풍선 바로 아래에 붙어야 "AI가 물어봤고 내가 고르는 중"으로 읽힌다. */
+.opt-list{align-self:flex-start;width:88%;display:flex;flex-direction:column;gap:8px;margin-top:-6px;}
+.opt-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:12px 14px;cursor:pointer;}
+.opt-row>span{font-size:12.5px;font-weight:600;line-height:1.45;}
+.opt-row i,.opt-row svg{width:15px;height:15px;color:var(--text-light);flex-shrink:0;}
+/* 선택지에 자기 고민이 없는 사람의 출구.
+   목록 밖으로 빼면 못 찾고, 똑같이 생기면 다섯 번째 선택지로 읽힌다.
+   그래서 같은 줄에 두되 점선·중앙정렬로 성격을 다르게 준다. */
+.opt-none{justify-content:center;background:none;border:1px dashed var(--border-default);}
+.opt-none>span{color:var(--text-gray);}
+.bubble.nk-follow{display:none;}
+.bubble.nk-follow.on{display:block;}
+.nk-eg{display:block;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);font-size:11.5px;color:var(--text-light);line-height:1.85;}
+.ci-box.focus{border-color:var(--text-dark);color:var(--text-dark);background:var(--bg-white);}
 .consult-banner{background:var(--bg-dark);color:var(--bg-white);border-radius:var(--radius-md);padding:16px;cursor:pointer;}
 .cb-top{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
 .cb-top i,.cb-top svg{width:16px;height:16px;}
@@ -279,8 +314,8 @@ body.clean .jumpbar{display:none;}
 .todo-kit{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:var(--radius-sm);padding:8px 10px;margin-top:10px;cursor:pointer;}
 .todo-kit i,.todo-kit svg{width:13px;height:13px;flex-shrink:0;}
 .chat-input{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--border-light);background:var(--bg-white);}
-/* 대화방은 탭바가 없어서 입력창이 화면 맨 아래다 — 이때만 인디케이터를 피한다.
-   낙타AI 탭의 입력창은 아래에 탭바가 있으므로 건드리지 않는다. */
+/* 대화방·대화 시작 화면은 탭바가 없어서 입력창이 화면 맨 아래다 — 이때만 인디케이터를 피한다.
+   :last-child 로 건 이유는 .scroll 쪽과 같다. 아래에 탭바가 있는 화면은 그쪽이 이미 여백을 갖는다. */
 .screen>.chat-input:last-child{padding-bottom:max(12px,env(safe-area-inset-bottom));}
 .chat-input .ci-box{flex:1;display:flex;align-items:center;background:var(--bg-light);border:1px solid var(--border-light);border-radius:999px;padding:11px 16px;font-size:13px;color:var(--text-light);}
 .chat-input>i,.chat-input>svg{width:22px;height:22px;color:var(--text-dark);}
@@ -554,7 +589,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
   <button data-jump="scr-search">검색</button>
-  <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatroom">AI대화</button><button data-jump="scr-consult">미니컨설팅</button><button data-jump="scr-report">진단리포트</button>
+  <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button><button data-jump="scr-consult">미니컨설팅</button><button data-jump="scr-report">진단리포트</button>
   <button data-jump="scr-library">내 리킷</button><button data-jump="scr-notekit">리킷별기록</button>
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
@@ -1319,25 +1354,35 @@ body.clean .jumpbar{display:none;}
   </div>
 
   <div class="scroll">
-    <div class="sec" style="padding-bottom:6px">
+    <div class="sec" style="padding-bottom:2px">
       <div class="nk-hero">
         <div class="nk-face"><i data-lucide="message-circle"></i></div>
         <b>지금 뭐가 막혀 있나요?</b>
-        <p>상황을 그대로 이야기해주세요.<br>89개 리킷 중에서 지금 필요한 걸 찾아드릴게요.</p>
+        <p>상황을 이야기하면 89개 리킷 중에서<br>지금 필요한 걸 찾아드릴게요.</p>
       </div>
     </div>
 
-    <div class="sec" style="padding-top:10px;padding-bottom:6px">
-      <div class="sec-head"><span class="sec-title">이렇게 물어보세요</span></div>
-      <div class="ask-list">
-        <div class="ask-row" data-go="scr-chatroom"><span>릴스 조회수는 나오는데 매출이 안 늘어요</span><i data-lucide="arrow-up-right"></i></div>
-        <div class="ask-row" data-go="scr-chatroom"><span>뭘 올려야 할지 매번 막막해요</span><i data-lucide="arrow-up-right"></i></div>
-        <div class="ask-row" data-go="scr-chatroom"><span>상세페이지까지 오는데 결제가 안 돼요</span><i data-lucide="arrow-up-right"></i></div>
-        <div class="ask-row" data-go="scr-chatroom"><span>내 계정이 남들 눈에 어떻게 보일까요?</span><i data-lucide="arrow-up-right"></i></div>
-      </div>
-    </div>
-
+    <!-- 두 갈래 진입 — 무료 리킷 추천(주) / 미니 컨설팅(부) -->
     <div class="sec" style="padding-top:14px;padding-bottom:6px">
+      <div class="act-card primary" data-go="scr-chatstart">
+        <div class="act-ico"><i data-lucide="sparkles"></i></div>
+        <div class="act-body">
+          <b>낙타AI에게 리킷 추천 받기</b>
+          <p>고민을 이야기하면 지금 읽어야 할 리킷을 골라드려요.</p>
+          <span class="act-go">시작하기 <i data-lucide="arrow-right"></i></span>
+        </div>
+      </div>
+      <div class="act-card" data-go="scr-consult">
+        <div class="act-ico"><i data-lucide="clipboard-check"></i></div>
+        <div class="act-body">
+          <b>낙타의 미니 컨설팅</b>
+          <p>리킷 추천을 넘어, <b>내 계정·내 페이지</b>를 직접 보고 진단받고 싶다면.</p>
+          <span class="act-go">어떤 건지 보기 <i data-lucide="chevron-right"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" style="padding-top:16px">
       <div class="sec-head"><span class="sec-title">최근 대화</span><span class="sec-more">전체보기</span></div>
       <div class="ask-list">
         <div class="ask-row hist" data-go="scr-chatroom">
@@ -1350,20 +1395,6 @@ body.clean .jumpbar{display:none;}
         </div>
       </div>
     </div>
-
-    <!-- 미니 컨설팅 진입 -->
-    <div class="sec" style="padding-top:16px">
-      <div class="consult-banner" data-go="scr-consult">
-        <div class="cb-top"><i data-lucide="clipboard-check"></i><b>낙타의 미니 컨설팅</b></div>
-        <p>리킷 추천을 넘어, <b>내 계정·내 페이지</b>를 직접 보고 진단받고 싶다면.</p>
-        <span class="cb-go">어떤 건지 보기 <i data-lucide="chevron-right"></i></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="chat-input">
-    <div class="ci-box" data-go="scr-chatroom">고민을 이야기해보세요</div>
-    <i data-lucide="send"></i>
   </div>
 
   <nav class="bottomnav">
@@ -1372,6 +1403,38 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item on" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
   </nav>
+</section>
+
+<!-- ══════════ 낙타AI — 대화 시작 (AI가 건네는 선택지) ══════════ -->
+<section class="screen" id="scr-chatstart">
+  <div class="gnb">
+    <i data-lucide="arrow-left" data-back></i>
+    <span class="gnb-title">낙타AI</span>
+    <i data-lucide="more-horizontal"></i>
+  </div>
+
+  <div class="chat-area">
+    <div class="bubble ai">안녕하세요 리건님. 지금 어떤 게 막혀 있나요?<br><br>비슷한 게 있으면 아래에서 골라주세요. 없으면 직접 이야기해주셔도 좋아요.</div>
+
+    <div class="opt-list">
+      <div class="opt-row" data-go="scr-chatroom"><span>릴스 조회수는 나오는데 매출이 안 늘어요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>뭘 올려야 할지 매번 막막해요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>상세페이지까지 오는데 결제가 안 돼요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>내 계정이 남들 눈에 어떻게 보일까요?</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row opt-none" data-optnone><i data-lucide="pencil-line"></i><span>이 중에 없어요 · 직접 이야기할게요</span></div>
+    </div>
+
+    <!-- "이 중에 없어요"를 눌렀을 때만 나온다 -->
+    <div class="bubble ai nk-follow" id="nk-follow">
+      좋아요. <b>정리해서 쓰지 않으셔도 괜찮아요.</b><br>지금 상황을 그대로 적어주시면 제가 되물어가며 정리해드릴게요.
+      <span class="nk-eg">예) 오픈 3개월인데 재방문이 없어요<br>예) DM은 오는데 결제까지 안 이어져요</span>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="ci-box" id="nk-ci" data-go="scr-chatroom">고민을 이야기해보세요</div>
+    <i data-lucide="send"></i>
+  </div>
 </section>
 
 <!-- ══════════ 낙타AI — 대화 화면 ══════════ -->
@@ -2095,10 +2158,21 @@ function show(id){
   if(!el) return;
   el.classList.add("active");
   const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
+  if(id === "scr-chatstart") resetChatStart();
   current = id;
   document.querySelectorAll("#jumpbar button").forEach(b=>{
     b.classList.toggle("on", b.dataset.jump === id);
   });
+}
+
+/* 대화 시작 화면은 들어올 때마다 처음 상태로 되돌린다.
+   시연 중 "이 중에 없어요"를 한 번 누르면 다음에 들어와도 계속 펼쳐져 있는 걸 막는다. */
+function resetChatStart(){
+  const f = document.getElementById("nk-follow"); if(!f) return;
+  f.classList.remove("on");
+  document.querySelectorAll("[data-optnone]").forEach(o=>o.style.display="");
+  document.getElementById("nk-ci").classList.remove("focus");
+  const a = document.querySelector("#scr-chatstart .chat-area"); if(a) a.scrollTop = 0;
 }
 
 function go(id){ if(id===current) return; stack.push(current); show(id); }
@@ -2325,8 +2399,19 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
+  if(t.hasAttribute("data-optnone")){
+    /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
+       선택지 목록은 지우지 않는다. 마음이 바뀌면 다시 고를 수 있어야 한다. */
+    t.style.display = "none";
+    document.getElementById("nk-follow").classList.add("on");
+    document.getElementById("nk-ci").classList.add("focus");
+    const a = document.querySelector("#scr-chatstart .chat-area");
+    lucide.createIcons();
+    a.scrollTo({top:a.scrollHeight, behavior:"smooth"});
+    return;
+  }
   if(t.dataset.sort){ openSort(t.dataset.sort); return; }
   if(t.dataset.pick){
     document.querySelector('[data-sort="'+sortKey+'"] .sv').textContent = t.dataset.pick;
