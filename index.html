@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>RE:FEEEL 유저앱 클릭 프로토타입 v1</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -32,7 +32,7 @@ body.clean .jumpbar{display:none;}
 @media (max-width:430px){body.clean .phone{border:none;border-radius:0;box-shadow:none;}}
 
 /* ===== 폰 프레임 ===== */
-.phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;}
+.phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;padding-top:env(safe-area-inset-top);}
 @media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:24px;} }
 
 /* ===== 화면 ===== */
@@ -58,8 +58,15 @@ body.clean .jumpbar{display:none;}
 .progress-thin>div{height:100%;background:var(--text-black);}
 
 /* ===== 하단 네비 ===== */
-.bottomnav{flex-shrink:0;display:flex;border-top:1px solid var(--border-light);background:var(--bg-white);}
-.bottomnav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 12px;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;}
+/* ── iOS 홈 인디케이터 회피 ──
+   아이폰은 화면 맨 아래 34pt를 시스템 바(가로 막대)가 덮는다. 그 위에 버튼을 두면
+   눌러도 시스템이 먼저 가져가서 탭이 안 눌린다.
+   env(safe-area-inset-bottom) = 그 시스템 영역의 높이(아이폰 34px / 안드로이드·구형 0).
+   <meta viewport-fit=cover> 가 있어야 0이 아닌 값이 들어온다.
+   max()로 감싸는 이유 — 인디케이터가 없는 기기에서 여백이 0이 되지 않게 하한을 준다.
+   결과: 인디케이터 있음 = 라벨 아래 38px(iOS 기본 탭바와 같음) / 없음 = 12px(기존 그대로) */
+.bottomnav{flex-shrink:0;display:flex;border-top:1px solid var(--border-light);background:var(--bg-white);padding-bottom:max(8px,env(safe-area-inset-bottom));}
+.bottomnav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 4px;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;}
 .bottomnav .nav-item i,.bottomnav .nav-item svg{width:22px;height:22px;}
 .bottomnav .nav-item span{font-size:10px;font-weight:600;}
 .bottomnav .nav-item.on{color:var(--text-black);}
@@ -267,6 +274,9 @@ body.clean .jumpbar{display:none;}
 .todo-kit{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:var(--radius-sm);padding:8px 10px;margin-top:10px;cursor:pointer;}
 .todo-kit i,.todo-kit svg{width:13px;height:13px;flex-shrink:0;}
 .chat-input{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--border-light);background:var(--bg-white);}
+/* 대화방은 탭바가 없어서 입력창이 화면 맨 아래다 — 이때만 인디케이터를 피한다.
+   낙타AI 탭의 입력창은 아래에 탭바가 있으므로 건드리지 않는다. */
+.screen>.chat-input:last-child{padding-bottom:max(12px,env(safe-area-inset-bottom));}
 .chat-input .ci-box{flex:1;display:flex;align-items:center;background:var(--bg-light);border:1px solid var(--border-light);border-radius:999px;padding:11px 16px;font-size:13px;color:var(--text-light);}
 .chat-input>i,.chat-input>svg{width:22px;height:22px;color:var(--text-dark);}
 
@@ -384,7 +394,7 @@ body.clean .jumpbar{display:none;}
 .sheet-wrap{position:absolute;inset:0;z-index:50;display:none;}
 .sheet-wrap.on{display:block;}
 .sheet-bd{position:absolute;inset:0;background:rgba(0,0,0,0.35);}
-.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-white);border-radius:16px 16px 0 0;padding:10px 0 16px;box-shadow:0 -4px 16px rgba(0,0,0,.12);}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-white);border-radius:16px 16px 0 0;padding:10px 0 max(16px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.12);}
 .sheet-grip{width:36px;height:4px;border-radius:2px;background:var(--border-default);margin:0 auto 12px;}
 .sheet-title{font-size:11px;font-weight:800;color:var(--text-light);letter-spacing:0.3px;padding:0 20px 4px;}
 .sort-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;cursor:pointer;}
