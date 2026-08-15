@@ -355,10 +355,10 @@ body.clean .jumpbar{display:none;}
 .nview.on{display:block;}
 .note-list{display:flex;flex-direction:column;gap:10px;}
 /* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다 */
-#bseg-v1-notes:has(#memo-only:checked) .memo-card:not(.has-memo){display:none;}
-#bseg-v1-notes:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
-#bseg-v1-notes:has(#memo-only:checked) .note-meta .off-filter{display:none;}
-#bseg-v1-notes:has(#memo-only:checked) .note-meta .on-filter{display:inline;}
+#scr-library:has(#memo-only:checked) .memo-card:not(.has-memo){display:none;}
+#scr-library:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
+#scr-library:has(#memo-only:checked) .note-meta .off-filter{display:none;}
+#scr-library:has(#memo-only:checked) .note-meta .on-filter{display:inline;}
 /* has-memo 는 '메모 쓴 것만' 필터용 표시 — 시각 강조는 주지 않는다.
    메모 유무는 메모 문단(펜 아이콘 + 진한 본문)만으로 이미 구분된다. */
 /* 리킷별 — 기록을 바로 펼치지 않고 리킷 카드로 접는다.
@@ -594,7 +594,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">마이</button>
+  <button data-jump="scr-my">마이</button><button data-jump="scr-settings">설정</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -737,7 +737,6 @@ body.clean .jumpbar{display:none;}
     <span class="logo">RE:FEEEL</span>
     <div class="topbar-right">
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
-      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
     </div>
   </div>
   <div class="scroll">
@@ -877,6 +876,7 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
     <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
+    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>마이</span></button>
   </nav>
 </section>
 
@@ -886,7 +886,6 @@ body.clean .jumpbar{display:none;}
     <span class="logo">검색</span>
     <div class="topbar-right">
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
-      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
     </div>
   </div>
   <div class="seg" style="margin:12px 16px 0">
@@ -1340,6 +1339,7 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item on" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
     <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
+    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>마이</span></button>
   </nav>
 </section>
 
@@ -1349,7 +1349,6 @@ body.clean .jumpbar{display:none;}
     <span class="logo">낙타AI</span>
     <div class="topbar-right">
       <i data-lucide="history"></i>
-      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
     </div>
   </div>
 
@@ -1402,6 +1401,7 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
     <button class="nav-item on" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
+    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>마이</span></button>
   </nav>
 </section>
 
@@ -1647,215 +1647,127 @@ body.clean .jumpbar{display:none;}
     <div class="topbar-right">
       <i data-lucide="search"></i>
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
-      <span class="avatar" data-go="scr-my"><i data-lucide="user"></i></span>
     </div>
   </div>
 
   <div class="scroll">
 
-      <div class="sec" style="padding-bottom:0">
-        <div class="sec-head"><span class="sec-title">최근 읽고 있는 리킷</span></div>
-        <div class="card continue-card" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
-          <div class="continue-body">
-            <div class="continue-num">RE:KIT 41</div>
-            <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
-            <div class="progress-bar"><div style="width:45%"></div></div>
-            <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
-          </div>
-          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+      <!-- 이 탭은 이제 '내 기록' 하나만 담는다 — 읽는 중·저장·시리즈는 마이페이지로 옮겼다.
+           남은 게 하나뿐이라 세그먼트 바를 지웠고, 대신 note-bar 가 바로 첫 줄에 온다.
+           밑줄이 기본이고 메모는 그 위에 얹히는 층이라, 나누지 않고 좁힌다.
+           '밑줄' 태그는 여기 있는 전부라 정보가 없어서 뺐다. 메모 유무는 왼쪽 강조선으로 보인다. -->
+      <div class="note-bar">
+        <label class="chkbox"><input type="checkbox" id="memo-only"><span class="sw"></span><span>메모 쓴 것만</span></label>
+        <div class="nseg">
+          <button data-nview="time" class="on">시간순</button>
+          <button data-nview="kit">리킷별</button>
         </div>
       </div>
-      <div class="seg">
-        <button data-bseg="v1-reading" class="on">읽는 중 5</button>
-        <button data-bseg="v1-saved">저장 12</button>
-        <button data-bseg="v1-notes">내 기록 10</button>
-        <button data-bseg="v1-series">시리즈 1</button>
+      <div class="note-meta">
+        <span class="off-filter">기록 10개 · 그중 메모 3개</span>
+        <span class="on-filter">메모 쓴 기록 3개</span>
       </div>
-      <div class="bseg-view on" id="bseg-v1-reading">
-        <div class="sec" style="display:flex;flex-direction:column;gap:10px">
-          <div class="card continue-card" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="continue-body">
-              <div class="continue-num">RE:KIT 68</div>
-              <div class="continue-title">한국인 욕구별 훅 템플릿 40개</div>
-              <div class="progress-bar"><div style="width:62%"></div></div>
-              <div class="continue-meta"><span>62%</span><span>3일 전</span></div>
-            </div>
-            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-          </div>
-          <div class="card continue-card" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="continue-body">
-              <div class="continue-num">RE:KIT 51</div>
-              <div class="continue-title">뇌는 왜 이야기에 속는가</div>
-              <div class="progress-bar"><div style="width:28%"></div></div>
-              <div class="continue-meta"><span>28%</span><span>5일 전</span></div>
-            </div>
-            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-          </div>
-          <div class="card continue-card" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="continue-body">
-              <div class="continue-num">RE:KIT 82</div>
-              <div class="continue-title">마케팅에서 할 말이 없는 게 아니라, 있는데 모르는 것</div>
-              <div class="progress-bar"><div style="width:9%"></div></div>
-              <div class="continue-meta"><span>9%</span><span>1주 전</span></div>
-            </div>
-            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-          </div>
-          <div class="card continue-card" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="continue-body">
-              <div class="continue-num">RE:KIT 34</div>
-              <div class="continue-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
-              <div class="progress-bar"><div style="width:3%"></div></div>
-              <div class="continue-meta"><span>3%</span><span>2주 전</span></div>
-            </div>
-            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-          </div>
-        </div>
-      </div>
-      <div class="bseg-view" id="bseg-v1-saved">
-        <div class="sec">
-          <div class="grid2">
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
-            <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="bseg-view" id="bseg-v1-notes">
 
-        <!-- 밑줄이 기본이고 메모는 그 위에 얹히는 층이라, 나누지 않고 좁힌다.
-             '밑줄' 태그는 여기 있는 전부라 정보가 없어서 뺐다. 메모 유무는 왼쪽 강조선으로 보인다. -->
-        <div class="note-bar">
-          <label class="chkbox"><input type="checkbox" id="memo-only"><span class="sw"></span><span>메모 쓴 것만</span></label>
-          <div class="nseg">
-            <button data-nview="time" class="on">시간순</button>
-            <button data-nview="kit">리킷별</button>
+      <!-- 시간순 -->
+      <div class="nview on" id="nview-time">
+        <div class="sec note-list">
+          <div class="card memo-card has-memo" data-go="scr-viewer">
+            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+          </div>
+          <div class="card memo-card has-memo" data-go="scr-viewer">
+            <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+          </div>
+          <div class="card memo-card has-memo" data-go="scr-viewer">
+            <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
+            <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
+          </div>
+          <div class="card memo-card" data-go="scr-viewer">
+            <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+            <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
           </div>
         </div>
-        <div class="note-meta">
-          <span class="off-filter">기록 10개 · 그중 메모 3개</span>
-          <span class="on-filter">메모 쓴 기록 3개</span>
-        </div>
-
-        <!-- 시간순 -->
-        <div class="nview on" id="nview-time">
-          <div class="sec note-list">
-            <div class="card memo-card has-memo" data-go="scr-viewer">
-              <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
-            </div>
-            <div class="card memo-card has-memo" data-go="scr-viewer">
-              <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
-            </div>
-            <div class="card memo-card has-memo" data-go="scr-viewer">
-              <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-            </div>
-            <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
-              <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 리킷별 -->
-        <div class="nview" id="nview-kit">
-          <div class="sec note-list">
-            <div class="card kitcard has-memo" data-go="scr-notekit">
-              <div class="img-ph"><i data-lucide="image"></i></div>
-              <div class="kc-body">
-                <div class="kc-num">RE:KIT 41</div>
-                <div class="kc-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
-                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 3</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
-              </div>
-              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
-            </div>
-            <div class="card kitcard has-memo" data-go="scr-notekit">
-              <div class="img-ph"><i data-lucide="image"></i></div>
-              <div class="kc-body">
-                <div class="kc-num">RE:KIT 51</div>
-                <div class="kc-title">뇌는 왜 이야기에 속는가</div>
-                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
-              </div>
-              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
-            </div>
-            <div class="card kitcard has-memo" data-go="scr-notekit">
-              <div class="img-ph"><i data-lucide="image"></i></div>
-              <div class="kc-body">
-                <div class="kc-num">RE:KIT 15</div>
-                <div class="kc-title">사업자의 인스타 프로필 설정법</div>
-                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
-              </div>
-              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
-            </div>
-            <div class="card kitcard" data-go="scr-notekit">
-              <div class="img-ph"><i data-lucide="image"></i></div>
-              <div class="kc-body">
-                <div class="kc-num">RE:KIT 57</div>
-                <div class="kc-title">빼는 게 먼저, 더하는 게 나중</div>
-                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span></div>
-              </div>
-              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
-            </div>
-            <div class="card kitcard" data-go="scr-notekit">
-              <div class="img-ph"><i data-lucide="image"></i></div>
-              <div class="kc-body">
-                <div class="kc-num">RE:KIT 34</div>
-                <div class="kc-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
-                <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 1</span></div>
-              </div>
-              <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
-            </div>
-          </div>
-        </div>
-
       </div>
-      <div class="bseg-view" id="bseg-v1-series">
-        <div class="sec">
-          <div class="card series-card" data-go="scr-series">
+
+      <!-- 리킷별 -->
+      <div class="nview" id="nview-kit">
+        <div class="sec note-list">
+          <div class="card kitcard has-memo" data-go="scr-notekit">
             <div class="img-ph"><i data-lucide="image"></i></div>
-            <div class="series-body">
-              <div class="series-title">브랜딩 클래스</div>
-              <div class="series-meta">9개 중 3개 완독</div>
-              <div class="progress-bar"><div style="width:33%"></div></div>
+            <div class="kc-body">
+              <div class="kc-num">RE:KIT 41</div>
+              <div class="kc-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+              <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 3</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
             </div>
-            <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
+          </div>
+          <div class="card kitcard has-memo" data-go="scr-notekit">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="kc-body">
+              <div class="kc-num">RE:KIT 51</div>
+              <div class="kc-title">뇌는 왜 이야기에 속는가</div>
+              <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
+          </div>
+          <div class="card kitcard has-memo" data-go="scr-notekit">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="kc-body">
+              <div class="kc-num">RE:KIT 15</div>
+              <div class="kc-title">사업자의 인스타 프로필 설정법</div>
+              <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span><span class="memo"><i data-lucide="pen-line"></i>메모 1</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
+          </div>
+          <div class="card kitcard" data-go="scr-notekit">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="kc-body">
+              <div class="kc-num">RE:KIT 57</div>
+              <div class="kc-title">빼는 게 먼저, 더하는 게 나중</div>
+              <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 2</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
+          </div>
+          <div class="card kitcard" data-go="scr-notekit">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="kc-body">
+              <div class="kc-num">RE:KIT 34</div>
+              <div class="kc-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
+              <div class="kc-cnt"><span><i data-lucide="highlighter"></i>밑줄 1</span></div>
+            </div>
+            <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted);flex-shrink:0"></i>
           </div>
         </div>
       </div>
+
 
   </div>
   <nav class="bottomnav">
@@ -1863,6 +1775,7 @@ body.clean .jumpbar{display:none;}
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
     <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
     <button class="nav-item on" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
+    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>마이</span></button>
   </nav>
 </section>
 
@@ -2031,9 +1944,9 @@ body.clean .jumpbar{display:none;}
 <!-- ══════════ 마이페이지 ══════════ -->
 <section class="screen" id="scr-my">
   <div class="gnb">
-    <i data-lucide="chevron-left" data-back></i>
-    <span class="gnb-title">마이페이지</span>
     <span class="gnb-side"></span>
+    <span class="gnb-title">마이페이지</span>
+    <span class="gnb-side" data-go="scr-settings"><i data-lucide="settings"></i></span>
   </div>
   <div class="scroll">
 
@@ -2060,19 +1973,110 @@ body.clean .jumpbar{display:none;}
       </div>
     </div>
 
-    <div class="sec">
-      <div class="sec-head"><span class="sec-title">진행 중인 시리즈</span></div>
-      <div class="card series-card" data-go="scr-series">
+    <div class="sec" style="padding-bottom:0">
+      <div class="sec-head"><span class="sec-title">최근 읽고 있는 리킷</span></div>
+      <div class="card continue-card" data-go="scr-viewer">
         <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="series-body">
-          <div class="series-title">브랜딩 클래스</div>
-          <div class="series-meta">9개 중 3개 완독</div>
-          <div class="progress-bar"><div style="width:33%"></div></div>
+        <div class="continue-body">
+          <div class="continue-num">RE:KIT 41</div>
+          <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
+          <div class="progress-bar"><div style="width:45%"></div></div>
+          <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
         </div>
-        <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted)"></i>
+        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+      </div>
+    </div>
+    <div class="seg">
+      <button data-bseg="v1-reading" class="on">읽는 중 5</button>
+      <button data-bseg="v1-saved">저장 12</button>
+      <button data-bseg="v1-series">시리즈 1</button>
+    </div>
+    <div class="bseg-view on" id="bseg-v1-reading">
+      <div class="sec" style="display:flex;flex-direction:column;gap:10px">
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 68</div>
+            <div class="continue-title">한국인 욕구별 훅 템플릿 40개</div>
+            <div class="progress-bar"><div style="width:62%"></div></div>
+            <div class="continue-meta"><span>62%</span><span>3일 전</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 51</div>
+            <div class="continue-title">뇌는 왜 이야기에 속는가</div>
+            <div class="progress-bar"><div style="width:28%"></div></div>
+            <div class="continue-meta"><span>28%</span><span>5일 전</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 82</div>
+            <div class="continue-title">마케팅에서 할 말이 없는 게 아니라, 있는데 모르는 것</div>
+            <div class="progress-bar"><div style="width:9%"></div></div>
+            <div class="continue-meta"><span>9%</span><span>1주 전</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+        <div class="card continue-card" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="continue-body">
+            <div class="continue-num">RE:KIT 34</div>
+            <div class="continue-title">AI 검색에서 내 브랜드가 추천되게 만드는 법</div>
+            <div class="progress-bar"><div style="width:3%"></div></div>
+            <div class="continue-meta"><span>3%</span><span>2주 전</span></div>
+          </div>
+          <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bseg-view" id="bseg-v1-saved">
+      <div class="sec">
+        <div class="grid2">
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>한국인 욕구별 훅 템플릿 40개</b><span>RE:KIT 68</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>AI 검색에서 내 브랜드가 추천되게 만드는 법</b><span>RE:KIT 34</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사업자의 인스타 프로필 설정법</b><span>RE:KIT 15</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="bseg-view" id="bseg-v1-series">
+      <div class="sec">
+        <div class="card series-card" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="series-body">
+            <div class="series-title">브랜딩 클래스</div>
+            <div class="series-meta">9개 중 3개 완독</div>
+            <div class="progress-bar"><div style="width:33%"></div></div>
+          </div>
+          <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+        </div>
       </div>
     </div>
 
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="bookmark"></i><span>내 리킷</span></button>
+    <button class="nav-item on" data-tab="scr-my"><i data-lucide="user"></i><span>마이</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 설정 (마이페이지 ⚙) ══════════ -->
+<section class="screen" id="scr-settings">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">설정</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
     <div class="sec alt" style="padding:0">
       <div class="menu-list">
         <div class="menu-row"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
@@ -2083,7 +2087,6 @@ body.clean .jumpbar{display:none;}
         <div class="menu-row danger"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -2148,7 +2151,7 @@ lucide.createIcons();
 /* ?clean 파라미터: 리뷰용 점프바를 숨기고 실제 앱처럼 보기 */
 if(new URLSearchParams(location.search).has("clean")) document.body.classList.add("clean");
 
-const TABS =["scr-home","scr-search","scr-chat","scr-library"];
+const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];
 let current = "scr-ob1";
 
