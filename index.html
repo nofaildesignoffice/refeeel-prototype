@@ -1968,20 +1968,13 @@ body.clean .jumpbar{display:none;}
       </div>
     </div>
 
-    <!-- 제목 없이 지표만. 숫자 4개가 무슨 뜻인지는 타일이 직접 말한다.
-         배지 줄이 빠진 자리라 위 여백을 줄여 프로필에 붙인다. -->
-    <div class="sec" style="padding-top:8px">
-      <div class="stat-grid">
-        <div class="stat-tile"><b>12</b><span>완독</span></div>
-        <div class="stat-tile"><b>4.2h</b><span>읽은 시간</span></div>
-        <div class="stat-tile"><b>8</b><span>이번 달 기록</span></div>
-        <div class="stat-tile"><b>3주</b><span>연속 읽기</span></div>
-      </div>
-    </div>
+    <!-- 지표 타일 4개(완독·읽은 시간·이번 달 기록·연속 읽기)는 삭제했다(리건, 2026-08-15).
+         북극성 지표를 유저 화면에 그대로 되비춘 것이라 유저가 볼 이유가 없었다.
+         '기록을 다시 만나게 하는' 지표는 인사이트 탭에서 따로 기획한다.
 
-    <!-- 이어읽기 진입점은 홈 상단 한 곳으로 모은다.
+         이어읽기 진입점도 홈 상단 한 곳으로 모은다.
          여기 또 두면 '읽는 중' 세그먼트 첫 줄과 같은 카드가 두 번 보인다. -->
-    <div class="seg" style="margin-top:4px">
+    <div class="seg">
       <button data-bseg="v1-reading" class="on">읽는 중 5</button>
       <button data-bseg="v1-done">완독 12</button>
       <button data-bseg="v1-saved">저장 12</button>
