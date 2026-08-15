@@ -1979,21 +1979,11 @@ body.clean .jumpbar{display:none;}
       </div>
     </div>
 
-    <div class="sec" style="padding-bottom:0">
-      <div class="sec-head"><span class="sec-title">최근 읽고 있는 리킷</span></div>
-      <div class="card continue-card" data-go="scr-viewer">
-        <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="continue-body">
-          <div class="continue-num">RE:KIT 41</div>
-          <div class="continue-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
-          <div class="progress-bar"><div style="width:45%"></div></div>
-          <div class="continue-meta"><span>45%</span><span>어제 읽음</span></div>
-        </div>
-        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
-      </div>
-    </div>
-    <div class="seg">
+    <!-- 이어읽기 진입점은 홈 상단 한 곳으로 모은다.
+         여기 또 두면 '읽는 중' 세그먼트 첫 줄과 같은 카드가 두 번 보인다. -->
+    <div class="seg" style="margin-top:4px">
       <button data-bseg="v1-reading" class="on">읽는 중 5</button>
+      <button data-bseg="v1-done">완독 12</button>
       <button data-bseg="v1-saved">저장 12</button>
       <button data-bseg="v1-series">시리즈 1</button>
     </div>
@@ -2038,6 +2028,19 @@ body.clean .jumpbar{display:none;}
             <div class="continue-meta"><span>3%</span><span>2주 전</span></div>
           </div>
           <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+    </div>
+    <!-- 완독 — 다 읽은 건 '언제 읽었나'가 유일한 단서라 날짜를 번호 옆에 붙인다. -->
+    <div class="bseg-view" id="bseg-v1-done">
+      <div class="sec">
+        <div class="grid2">
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>잘 만든 영상이 아니라, 말하는 사람이 이긴다</b><span>RE:KIT 84 · 2일 전</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>전문가일수록 절대 쓰면 안 되는 말</b><span>RE:KIT 76 · 5일 전</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>터지는 콘텐츠와 바이럴 — 『컨테이저스』</b><span>RE:KIT 66 · 1주 전</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>빼는 게 먼저, 더하는 게 나중</b><span>RE:KIT 57 · 1주 전</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>'OO 하면 떠오르는 브랜드'가 되는 법</b><span>RE:KIT 45 · 2주 전</span></div>
+          <div class="gcard" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><b>사람들은 당신을 0.5초 만에 판단하고 결정한다</b><span>RE:KIT 30 · 3주 전</span></div>
         </div>
       </div>
     </div>
