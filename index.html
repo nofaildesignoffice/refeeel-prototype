@@ -357,6 +357,21 @@ body.clean .jumpbar{display:none;}
 #scr-library:has(#memo-only:checked) .tl-ev:not(.has-memo){display:none;}
 #scr-library:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
 
+/* ── 나의 인사이트 ──
+   지표는 스크롤 밖에 고정한다. 어느 모드에 있든 내가 뭘 쌓았는지는 늘 보인다. */
+.ins-fixed{padding:16px 16px 0;}
+.ins-fixed .sec-head{margin-bottom:10px;}
+
+/* ── 모아보기 : 주제 타일 ──
+   누르면 그 주제의 기록만 전체화면으로 하나씩 넘겨 읽는다(리더 화면은 별도 기획).
+   전체보기의 주제 칩과 결과가 다르다 — 여기는 읽기, 저기는 목록 좁히기. */
+.collect-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ctile{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:13px 14px;cursor:pointer;}
+.ctile b{display:block;font-size:13px;font-weight:800;letter-spacing:-0.2px;}
+.ct-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.ct-foot span{font-size:11px;font-weight:700;color:var(--text-light);}
+.ct-foot i,.ct-foot svg{width:14px;height:14px;color:var(--text-muted);}
+
 /* ── 나의 인사이트 : 지표 ──
    쌓은 양이 아니라 '내가 만든 것'을 센다. 밑줄은 손가락 한 번이고 메모는 품이 든다.
    그래서 두 숫자에 위계가 생기고, 메모 쪽이 값지다는 게 설명 없이 읽힌다.
@@ -424,6 +439,8 @@ body.clean .jumpbar{display:none;}
 /* ===== 검색탭 2페이지 (검색하기 / 둘러보기) ===== */
 .sseg-view{display:none;}
 .sseg-view.on{display:block;}
+.lseg-view{display:none;}
+.lseg-view.on{display:block;}
 /* 검색바 고정 — 스크롤과 무관하게 항상 같은 자리 */
 .search-anchor{flex-shrink:0;padding:12px 16px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
 #scr-search.browsing .search-anchor{display:none;}
@@ -1697,38 +1714,31 @@ body.clean .jumpbar{display:none;}
 <section class="screen" id="scr-library">
   <div class="topbar">
     <span class="logo">인사이트</span>
+    <!-- 검색 아이콘은 뺐다 — 리킷을 찾는 건 검색탭이 하고, 여기서는 주제 칩으로 좁힌다. -->
     <div class="topbar-right">
-      <i data-lucide="search"></i>
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
     </div>
   </div>
 
-  <div class="scroll">
+  <!-- 스크롤 밖 고정 — 어느 모드에 있든 내가 뭘 쌓았는지는 늘 보인다. -->
+  <div class="ins-fixed">
+    <div class="sec-head"><span class="sec-title">나의 인사이트</span></div>
+    <div class="card ins-stat">
+      <div><b>10</b><span>밑줄</span></div>
+      <div><b>4</b><span>메모</span></div>
+    </div>
+  </div>
 
-      <!-- 이 탭은 '내 기록' 하나만 담는다 — 읽는 중·저장·시리즈는 마이페이지에 있다.
-           상단이 두 섹션이다: 나의 인사이트(쌓은 것) → 지난 나의 인사이트(다시 만날 것).
-           그 아래 주제 칩은 '누르는 것'이라 목록에 붙여 둔다. -->
-      <div class="sec" style="padding-bottom:0">
-        <div class="sec-head"><span class="sec-title">나의 인사이트</span></div>
-        <div class="card ins-stat">
-          <div><b>10</b><span>밑줄</span></div>
-          <div><b>4</b><span>메모</span></div>
-        </div>
-      </div>
+  <!-- 읽기(모아보기)와 찾기(전체보기)는 화면 문법이 반대다.
+       읽기는 한 번에 하나·스와이프, 찾기는 밀도 높은 목록·스크롤.
+       한 화면에 겹치면 서로를 방해하므로 모드를 나눈다 — 검색탭의 '검색하기 · 둘러보기'와 같은 패턴. -->
+  <div class="seg">
+    <button data-lseg="all" class="on">전체보기</button>
+    <button data-lseg="collect">모아보기</button>
+  </div>
 
-      <!-- 고르는 기준은 '공들여 쓴 것'(메모가 긴 순)이다. 길게 쓴 메모는 그때 진짜 붙잡고 있던 문제다.
-           단, 방금 쓴 건 리마인드가 필요 없으니 2주 지난 것부터 꺼내고,
-           한 번 보여준 기록은 한동안 뒤로 미룬다(기간은 기능정의에서 확정). -->
-      <div class="sec recall">
-        <div class="sec-head"><span class="sec-title">지난 나의 인사이트</span></div>
-        <!-- 버튼 줄은 뺐다. 카드를 누르면 그때 그 리킷으로 간다 — 목록 카드와 같은 동작이라
-             따로 알려줄 필요가 없고, 버튼 두 개가 카드를 무겁게 만들었다. -->
-        <div class="card recall-card" data-go="scr-viewer">
-          <div class="recall-memo"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
-          <div class="recall-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
-          <div class="recall-src">RE:KIT 34 · 2주 전 · AEO·AI검색</div>
-        </div>
-      </div>
+  <!-- ── A. 전체보기 ── -->
+  <div class="scroll lseg-view on" id="lseg-all">
 
       <div class="tagbar">
         <button class="on">전체<b>10</b></button>
@@ -1877,6 +1887,64 @@ body.clean .jumpbar{display:none;}
 
 
   </div>
+
+  <!-- ── B. 모아보기 ── -->
+  <div class="scroll lseg-view" id="lseg-collect">
+
+      <!-- 고르는 기준은 '공들여 쓴 것'(메모가 긴 순)이다. 길게 쓴 메모는 그때 진짜 붙잡고 있던 문제다.
+           단, 방금 쓴 건 리마인드가 필요 없으니 2주 지난 것부터 꺼내고,
+           한 번 보여준 기록은 한동안 뒤로 미룬다(기간은 기능정의에서 확정). -->
+      <div class="sec recall">
+        <div class="sec-head"><span class="sec-title">지난 나의 인사이트</span></div>
+        <!-- 버튼 줄은 뺐다. 카드를 누르면 그때 그 리킷으로 간다 — 목록 카드와 같은 동작이라
+             따로 알려줄 필요가 없고, 버튼 두 개가 카드를 무겁게 만들었다. -->
+        <div class="card recall-card" data-go="scr-viewer">
+          <div class="recall-memo"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
+          <div class="recall-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+          <div class="recall-src">RE:KIT 34 · 2주 전 · AEO·AI검색</div>
+        </div>
+      </div>
+
+      <!-- 기간 묶음(이번 주·이번 달)은 아직 안 넣었다.
+           발행이 주 1회라 '이번 주'는 리킷 한 편이라 리킷별 보기와 겹치고,
+           지금 데이터는 전부 2주 안이라 '이번 달'이 전체와 같아진다. 축은 리건 확정 후.
+           타일을 누르면 갈 전체화면 리더도 아직 없다 — 설계 확정 후 붙인다. -->
+      <div class="sec" style="padding-top:0">
+        <div class="sec-head"><span class="sec-title">주제로 모아보기</span></div>
+        <div class="collect-grid">
+          <div class="ctile">
+            <b>전환·매출</b>
+            <div class="ct-foot"><span>기록 3</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>콘텐츠</b>
+            <div class="ct-foot"><span>기록 3</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>소비자 심리</b>
+            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>브랜딩</b>
+            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>타겟·차별화</b>
+            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>카피·후킹</b>
+            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
+          </div>
+          <div class="ctile">
+            <b>AEO·AI검색</b>
+            <div class="ct-foot"><span>기록 1</span><i data-lucide="chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
   <nav class="bottomnav">
     <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
@@ -2300,6 +2368,15 @@ if(hsTrack){
 }
 
 /* 검색탭 세그먼트 전환 — 둘러보기에서는 고정 검색바를 숨긴다 */
+/* 인사이트 탭 모드 — 검색탭의 sseg 와 같은 꼴이지만 스코프가 달라 따로 둔다 */
+function lseg(key){
+  document.querySelectorAll("[data-lseg]").forEach(b=>b.classList.toggle("on", b.dataset.lseg===key));
+  document.querySelectorAll(".lseg-view").forEach(v=>{
+    const on = v.id==="lseg-"+key;
+    v.classList.toggle("on", on);
+    if(on) v.scrollTop = 0;
+  });
+}
 function sseg(key){
   document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b.dataset.sseg===key));
   document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+key));
@@ -2506,7 +2583,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -2546,6 +2623,7 @@ document.addEventListener("click", e=>{
   }
   if(t.dataset.goseg){ sseg(t.dataset.goseg); tab("scr-search"); return; }
   if(t.dataset.sseg){ sseg(t.dataset.sseg); return; }
+  if(t.dataset.lseg){ lseg(t.dataset.lseg); return; }
   if(t.dataset.view){
     document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".browse-view").forEach(v=>v.classList.toggle("on", v.id==="view-"+t.dataset.view));
