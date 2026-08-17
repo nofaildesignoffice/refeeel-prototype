@@ -345,7 +345,7 @@ body.clean .jumpbar{display:none;}
    메모는 밑줄 위에 얹히는 층이다(뷰어에서 하이라이트 → 메모 순).
    그래서 [밑줄|메모] 배타 분할이 아니라 '좁히기' 토글을 쓴다.
    배타 분할이면 메모 단 문장이 밑줄 목록에서 사라져 오히려 탐색이 늘어난다. */
-.note-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0;}
+.note-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 18px;}
 .nseg{display:flex;gap:2px;background:var(--bg-light);border-radius:6px;padding:2px;}
 .nseg button{font-size:11px;font-weight:700;padding:5px 11px;border:none;border-radius:4px;background:none;color:var(--text-light);font-family:inherit;cursor:pointer;}
 .nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
@@ -373,15 +373,12 @@ body.clean .jumpbar{display:none;}
 .recall{padding:0 16px 16px;}
 .recall-hd{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--text-dark);margin-bottom:9px;}
 .recall-hd i,.recall-hd svg{width:14px;height:14px;color:var(--text-gray);}
-.recall-card{padding:15px;}
+.recall-card{padding:15px;cursor:pointer;}
 .recall-memo{display:flex;gap:8px;align-items:flex-start;}
 .recall-memo i,.recall-memo svg{width:13px;height:13px;color:var(--text-muted);margin-top:5px;flex-shrink:0;}
 .recall-memo p{font-size:14px;font-weight:700;line-height:1.62;letter-spacing:-0.2px;}
 .recall-quote{margin-top:12px;border-left:3px solid var(--border-light);padding:1px 0 1px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;}
 .recall-src{margin-top:11px;font-size:11px;color:var(--text-light);}
-.recall-act{display:flex;gap:8px;margin-top:14px;}
-.recall-act button{flex:1;padding:11px 8px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--border-default);background:var(--bg-white);color:var(--text-dark);}
-.recall-act button.primary{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
 
 /* ── 주제 칩 ──
    지표이면서 필터다. 태그는 리킷에서 상속받으므로 유저가 정리할 게 없다.
@@ -394,20 +391,19 @@ body.clean .jumpbar{display:none;}
 .tagbar button.on b{color:rgba(255,255,255,.55);}
 
 /* ── 시간순 : 날짜 레일 ──
-   왼쪽 줄만 훑어도 언제 무엇을 남겼는지 보인다.
-   레일 중심 = 왼쪽에서 72px. 날짜열·점·카드 들여쓰기가 이 한 값에 묶인다.
+   날짜는 카드 바깥 왼쪽 위에 한 줄로 선다. 세로 열로 빼면 그룹 높이만큼 왼쪽이 통째로 빈다.
+   날짜가 이미 구분자 노릇을 하므로 레일은 그룹 안에서만 잇는다.
    점을 채우면 메모까지 쓴 것, 비면 밑줄만 그은 것. */
-.tl-wrap{position:relative;padding:2px 16px 8px;}
-.tl-wrap::before{content:"";position:absolute;left:72px;top:8px;bottom:24px;width:1px;
-  background:linear-gradient(180deg,var(--border-light) 0%,var(--border-light) 86%,rgba(224,224,224,0) 100%);}
-.tlgroup{display:grid;grid-template-columns:44px 1fr;column-gap:24px;}
-.tl-date{text-align:right;padding-top:3px;}
-.tl-date b{display:block;font-size:12px;font-weight:800;color:var(--text-dark);}
-.tl-date span{display:block;font-size:10px;font-weight:600;color:var(--text-light);margin-top:2px;}
-.tl-items{display:flex;flex-direction:column;gap:10px;padding-bottom:18px;}
+.tl-wrap{padding:0 16px 10px;}
+.tlgroup + .tlgroup{margin-top:22px;}
+.tl-date{display:flex;align-items:baseline;gap:6px;margin-bottom:10px;}
+.tl-date b{font-size:12.5px;font-weight:800;color:var(--text-dark);}
+.tl-date span{font-size:10.5px;font-weight:600;color:var(--text-light);}
+.tl-items{position:relative;display:flex;flex-direction:column;gap:10px;padding-left:26px;}
+.tl-items::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:var(--border-light);}
 /* .card 에 overflow:hidden 이 걸려 있어 점은 카드가 아니라 래퍼에 그린다 */
 .tl-ev{position:relative;}
-.tl-ev::before{content:"";position:absolute;left:-16.5px;top:17px;width:9px;height:9px;border-radius:50%;
+.tl-ev::before{content:"";position:absolute;left:-22px;top:17px;width:9px;height:9px;border-radius:50%;
   background:var(--bg-white);border:1.5px solid var(--border-default);z-index:1;}
 .tl-ev.has-memo::before{background:var(--text-black);border-color:var(--text-black);}
 /* 리킷별 — 기록을 바로 펼치지 않고 리킷 카드로 접는다.
@@ -1721,14 +1717,12 @@ body.clean .jumpbar{display:none;}
            한 번 보여준 기록은 한동안 뒤로 미룬다(기간은 기능정의에서 확정). -->
       <div class="recall">
         <div class="recall-hd"><i data-lucide="rotate-ccw"></i>다시 만나기</div>
-        <div class="card recall-card">
+        <!-- 버튼 줄은 뺐다. 카드를 누르면 그때 그 리킷으로 간다 — 목록 카드와 같은 동작이라
+             따로 알려줄 필요가 없고, 버튼 두 개가 카드를 무겁게 만들었다. -->
+        <div class="card recall-card" data-go="scr-viewer">
           <div class="recall-memo"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
           <div class="recall-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
           <div class="recall-src">RE:KIT 34 · 2주 전 · AEO·AI검색</div>
-          <div class="recall-act">
-            <button class="primary" data-go="scr-viewer">그때 그 리킷 열기</button>
-            <button>다음 기록</button>
-          </div>
         </div>
       </div>
 
