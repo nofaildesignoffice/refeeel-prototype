@@ -362,15 +362,19 @@ body.clean .jumpbar{display:none;}
 .ins-fixed{padding:16px 16px 0;}
 .ins-fixed .sec-head{margin-bottom:10px;}
 
-/* ── 모아보기 : 주제 타일 ──
-   누르면 그 주제의 기록만 전체화면으로 하나씩 넘겨 읽는다(리더 화면은 별도 기획).
-   전체보기의 주제 칩과 결과가 다르다 — 여기는 읽기, 저기는 목록 좁히기. */
-.collect-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.ctile{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:13px 14px;cursor:pointer;}
-.ctile b{display:block;font-size:13px;font-weight:800;letter-spacing:-0.2px;}
-.ct-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
-.ct-foot span{font-size:11px;font-weight:700;color:var(--text-light);}
-.ct-foot i,.ct-foot svg{width:14px;height:14px;color:var(--text-muted);}
+/* ── 모아보기 : 묶음 카드 ──
+   누르면 그 묶음의 기록만 전체화면으로 하나씩 넘겨 읽는다(리더 화면은 별도 기획).
+   전체보기의 주제 칩과 결과가 다르다 — 여기는 읽기, 저기는 목록 좁히기.
+   미리보기 한 줄을 넣는 이유: 제목과 개수만 있으면 누를 이유가 약하다. */
+.mcard{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:15px;cursor:pointer;}
+.mcard+.mcard{margin-top:10px;}
+.mc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.mc-title{font-size:14px;font-weight:800;letter-spacing:-0.2px;}
+.mc-head i,.mc-head svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
+.mc-cnt{font-size:11px;font-weight:700;color:var(--text-light);margin-top:6px;}
+.mc-prev{display:flex;gap:7px;align-items:flex-start;margin-top:11px;padding-top:11px;border-top:1px solid var(--border-light);}
+.mc-prev i,.mc-prev svg{width:12px;height:12px;color:var(--text-muted);margin-top:3px;flex-shrink:0;}
+.mc-prev p{font-size:12.5px;color:var(--text-gray);line-height:1.55;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 
 /* ── 나의 인사이트 : 지표 ──
    쌓은 양이 아니라 '내가 만든 것'을 센다. 밑줄은 손가락 한 번이고 메모는 품이 든다.
@@ -382,15 +386,9 @@ body.clean .jumpbar{display:none;}
 .ins-stat b{font-size:21px;font-weight:800;letter-spacing:-0.5px;}
 .ins-stat span{font-size:11.5px;font-weight:700;color:var(--text-gray);}
 
-/* ── 지난 나의 인사이트 ──
-   이 탭의 존재 이유. 내 메모가 위, 밑줄 원문이 아래.
-   순서가 바뀌면 '리필이 한 말'이 되고, 이대로면 '과거의 내가 나한테 한 말'이 된다. */
-.recall-card{padding:15px;cursor:pointer;}
-.recall-memo{display:flex;gap:8px;align-items:flex-start;}
-.recall-memo i,.recall-memo svg{width:13px;height:13px;color:var(--text-muted);margin-top:5px;flex-shrink:0;}
-.recall-memo p{font-size:14px;font-weight:700;line-height:1.62;letter-spacing:-0.2px;}
-.recall-quote{margin-top:12px;border-left:3px solid var(--border-light);padding:1px 0 1px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;}
-.recall-src{margin-top:11px;font-size:11px;color:var(--text-light);}
+/* '지난 나의 인사이트' 단일 카드 섹션은 삭제했다(리건, 2026-08-17).
+   묶음 카드(이번 주·이번 달·주제별)가 그 자리를 대신한다 — 카드 1장은 묶음 크기가 1인 브리핑이었다.
+   내 메모가 위·밑줄 원문이 아래라는 원칙은 목록 카드와 리더 화면에서 계속 지킨다. */
 
 /* ── 주제 칩 ──
    지표이면서 필터다. 태그는 리킷에서 상속받으므로 유저가 정리할 게 없다.
@@ -1889,58 +1887,31 @@ body.clean .jumpbar{display:none;}
   </div>
 
   <!-- ── B. 모아보기 ── -->
+  <!-- 묶음 카드 세로 1줄. 각 카드를 누르면 그 묶음의 기록을 전체화면에서 하나씩 넘겨 읽는다.
+       리더 화면은 아직 없다 — 설계 확정 후 붙인다.
+       '이번 주'는 최근 7일로 잡았다. 월~일로 끊으면 월요일에는 늘 0개가 된다. -->
   <div class="scroll lseg-view" id="lseg-collect">
 
-      <!-- 고르는 기준은 '공들여 쓴 것'(메모가 긴 순)이다. 길게 쓴 메모는 그때 진짜 붙잡고 있던 문제다.
-           단, 방금 쓴 건 리마인드가 필요 없으니 2주 지난 것부터 꺼내고,
-           한 번 보여준 기록은 한동안 뒤로 미룬다(기간은 기능정의에서 확정). -->
-      <div class="sec recall">
-        <div class="sec-head"><span class="sec-title">지난 나의 인사이트</span></div>
-        <!-- 버튼 줄은 뺐다. 카드를 누르면 그때 그 리킷으로 간다 — 목록 카드와 같은 동작이라
-             따로 알려줄 필요가 없고, 버튼 두 개가 카드를 무겁게 만들었다. -->
-        <div class="card recall-card" data-go="scr-viewer">
-          <div class="recall-memo"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
-          <div class="recall-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
-          <div class="recall-src">RE:KIT 34 · 2주 전 · AEO·AI검색</div>
-        </div>
-      </div>
+      <div class="sec">
 
-      <!-- 기간 묶음(이번 주·이번 달)은 아직 안 넣었다.
-           발행이 주 1회라 '이번 주'는 리킷 한 편이라 리킷별 보기와 겹치고,
-           지금 데이터는 전부 2주 안이라 '이번 달'이 전체와 같아진다. 축은 리건 확정 후.
-           타일을 누르면 갈 전체화면 리더도 아직 없다 — 설계 확정 후 붙인다. -->
-      <div class="sec" style="padding-top:0">
-        <div class="sec-head"><span class="sec-title">주제로 모아보기</span></div>
-        <div class="collect-grid">
-          <div class="ctile">
-            <b>전환·매출</b>
-            <div class="ct-foot"><span>기록 3</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>콘텐츠</b>
-            <div class="ct-foot"><span>기록 3</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>소비자 심리</b>
-            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>브랜딩</b>
-            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>타겟·차별화</b>
-            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>카피·후킹</b>
-            <div class="ct-foot"><span>기록 2</span><i data-lucide="chevron-right"></i></div>
-          </div>
-          <div class="ctile">
-            <b>AEO·AI검색</b>
-            <div class="ct-foot"><span>기록 1</span><i data-lucide="chevron-right"></i></div>
-          </div>
+        <div class="mcard">
+          <div class="mc-head"><span class="mc-title">이번 주 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
+          <div class="mc-cnt">밑줄 7 · 메모 3</div>
+          <div class="mc-prev"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
         </div>
+
+        <div class="mcard">
+          <div class="mc-head"><span class="mc-title">이번 달 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
+          <div class="mc-cnt">밑줄 10 · 메모 4</div>
+          <div class="mc-prev"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
+        </div>
+
+        <div class="mcard">
+          <div class="mc-head"><span class="mc-title">주제별 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
+          <div class="mc-cnt">주제 7개</div>
+          <div class="mc-prev"><i data-lucide="tag"></i><p>전환·매출 3 · 콘텐츠 3 · 소비자 심리 2 · 브랜딩 2 · 타겟·차별화 2 · 카피·후킹 2 · AEO·AI검색 1</p></div>
+        </div>
+
       </div>
 
   </div>
