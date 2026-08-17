@@ -39,7 +39,7 @@ body.clean .jumpbar{display:none;}
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
 .scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;}
-/* 탭바도 입력창도 없는 화면(온보딩·뷰어·완독·설정·알림·컨설팅…)은 스크롤 영역이 화면 맨 아래다.
+/* 탭바도 입력창도 없는 화면(온보딩·뷰어·완독·설정·알림…)은 스크롤 영역이 화면 맨 아래다.
    그래서 맨 끝까지 내렸을 때 마지막 버튼이 iOS 홈 인디케이터에 걸린다.
    :last-child 로 건 이유 — 탭바나 입력창이 아래에 있는 화면은 그쪽이 이미 여백을 갖고 있어
    여기서 또 주면 빈 띠가 이중으로 생긴다. */
@@ -189,7 +189,7 @@ body.clean .jumpbar{display:none;}
 .chat-rekit .cr-num{font-size:10px;font-weight:700;color:var(--text-light);}
 .chat-rekit .cr-title{font-size:13px;font-weight:700;line-height:1.4;margin-top:2px;}
 .chat-rekit>i,.chat-rekit>svg{width:16px;height:16px;color:var(--text-light);}
-/* ===== 낙타AI 첫 화면 · 미니 컨설팅 ===== */
+/* ===== 낙타AI 첫 화면 ===== */
 .nk-hero{text-align:center;padding:14px 4px 4px;}
 .nk-hero.left{text-align:left;padding:0;}
 .nk-face{width:46px;height:46px;margin:0 auto 12px;border-radius:50%;background:var(--bg-dark);display:flex;align-items:center;justify-content:center;}
@@ -203,9 +203,9 @@ body.clean .jumpbar{display:none;}
 .ask-row>i,.ask-row>svg{width:15px;height:15px;color:var(--text-light);flex-shrink:0;}
 .ask-row.hist b{display:block;font-size:13px;font-weight:700;}
 .ask-row.hist em{display:block;font-size:11px;color:var(--text-light);font-style:normal;margin-top:3px;}
-/* ── 낙타AI 첫 화면: 두 갈래 진입 카드 ──
-   같은 껍데기를 쓰되 색으로 위계를 준다. 무료 리킷 추천이 주 동선이라 검정(primary),
-   미니 컨설팅은 흰 바탕 점선 — 아직 안 산 것, 구경하는 것이라는 인상을 준다. */
+/* ── 낙타AI 첫 화면: 진입 카드 ──
+   원래 두 갈래(리킷 추천 / 미니 컨설팅)였고 색으로 위계를 줬다.
+   미니 컨설팅이 빠지면서 primary 한 장만 남는다 — .act-card+.act-card 는 다시 둘이 될 때를 위해 둔다. */
 .act-card{display:flex;gap:12px;align-items:flex-start;background:var(--bg-white);border:1px dashed var(--border-default);border-radius:var(--radius-md);padding:16px;cursor:pointer;}
 .act-card+.act-card{margin-top:10px;}
 .act-ico{width:38px;height:38px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -238,81 +238,6 @@ body.clean .jumpbar{display:none;}
 .bubble.nk-follow.on{display:block;}
 .nk-eg{display:block;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);font-size:11.5px;color:var(--text-light);line-height:1.85;}
 .ci-box.focus{border-color:var(--text-dark);color:var(--text-dark);background:var(--bg-white);}
-.consult-banner{background:var(--bg-dark);color:var(--bg-white);border-radius:var(--radius-md);padding:16px;cursor:pointer;}
-.cb-top{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
-.cb-top i,.cb-top svg{width:16px;height:16px;}
-.cb-top b{font-size:14px;font-weight:800;}
-.consult-banner p{font-size:12.5px;line-height:1.6;color:#D4D4D4;}
-.consult-banner p b{color:var(--bg-white);font-weight:700;}
-.cb-go{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;margin-top:12px;}
-.cb-go i,.cb-go svg{width:14px;height:14px;}
-.chat-consult{align-self:flex-start;width:88%;display:flex;align-items:center;gap:10px;background:var(--bg-white);border:1px dashed var(--border-default);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
-.chat-consult b{display:block;font-size:12.5px;font-weight:700;line-height:1.4;}
-.chat-consult em{display:block;font-size:11px;color:var(--text-gray);font-style:normal;margin-top:4px;line-height:1.5;}
-.chat-consult>i,.chat-consult>svg{width:16px;height:16px;color:var(--text-light);flex-shrink:0;}
-.cseg-view{display:none;}
-.cseg-view.on{display:block;}
-.cmp{border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;background:var(--bg-white);}
-.cmp-row{display:grid;grid-template-columns:56px 1fr 1fr;border-top:1px solid var(--border-light);}
-.cmp-row:first-child{border-top:none;}
-.cmp-row>span{font-size:11.5px;line-height:1.5;padding:10px 9px;color:var(--text-gray);}
-.cmp-row>span:first-child{font-weight:700;color:var(--text-light);font-size:10.5px;background:var(--bg-light);}
-.cmp-row>span.hl{background:#FAFAFA;color:var(--text-black);font-weight:700;border-left:1px solid var(--border-light);}
-.cmp-row.head>span{font-size:11px;font-weight:800;color:var(--text-black);padding:9px;}
-.step-list{display:flex;flex-direction:column;gap:2px;}
-.step-row{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--border-light);}
-.step-row:last-child{border-bottom:none;}
-.step-no{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--bg-dark);color:var(--bg-white);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-.step-row b{display:block;font-size:13px;font-weight:700;}
-.step-row em{display:block;font-size:11.5px;color:var(--text-gray);font-style:normal;margin-top:3px;line-height:1.5;}
-.lock-panel{text-align:center;background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:20px 16px;}
-.lock-panel i,.lock-panel svg{width:20px;height:20px;color:var(--text-light);}
-.lock-panel b{display:block;font-size:13.5px;font-weight:800;margin-top:9px;}
-.lock-panel p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
-.report-peek{background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;cursor:pointer;}
-.rp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.rp-head b{font-size:13.5px;font-weight:800;}
-.rp-head span{font-size:10px;font-weight:700;color:var(--text-light);border:1px solid var(--border-light);border-radius:4px;padding:2px 6px;}
-.rp-line{font-size:12px;color:var(--text-dark);line-height:1.5;padding:6px 0;border-top:1px solid var(--border-light);}
-.rp-line em{display:block;font-size:10.5px;font-weight:700;color:var(--text-light);font-style:normal;margin-bottom:2px;}
-.rp-go{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;margin-top:10px;}
-.rp-go i,.rp-go svg{width:14px;height:14px;}
-.quota-card{background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;}
-.qc-head{display:flex;align-items:baseline;justify-content:space-between;}
-.qc-head b{font-size:13px;font-weight:800;}
-.qc-head span{font-size:12px;font-weight:700;color:var(--text-dark);}
-.qc-bar{height:5px;border-radius:3px;background:var(--bg-light);margin:10px 0 7px;overflow:hidden;}
-.qc-bar span{display:block;height:100%;background:var(--bg-dark);}
-.quota-card em{font-size:11px;color:var(--text-light);font-style:normal;}
-.recheck-card{display:flex;align-items:center;gap:11px;background:var(--bg-light);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:13px;}
-.recheck-card i,.recheck-card svg{width:18px;height:18px;color:var(--text-dark);flex-shrink:0;}
-.recheck-card b{display:block;font-size:13px;font-weight:700;}
-.recheck-card em{display:block;font-size:11px;color:var(--text-gray);font-style:normal;margin-top:3px;}
-/* 진단 리포트 */
-.rep-title{font-size:20px;font-weight:800;line-height:1.35;}
-.rep-sub{font-size:12.5px;color:var(--text-gray);margin-top:7px;line-height:1.5;}
-.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.stat3>div{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:11px 8px;text-align:center;}
-.stat3 b{display:block;font-size:15px;font-weight:800;}
-.stat3 em{display:block;font-size:10px;color:var(--text-light);font-style:normal;margin-top:3px;}
-.rep-note{font-size:12.5px;color:var(--text-dark);line-height:1.7;margin-top:12px;}
-.finding{background:var(--bg-dark);color:var(--bg-white);border-radius:var(--radius-md);padding:16px;}
-.finding b{display:block;font-size:14px;font-weight:800;line-height:1.5;}
-.finding p{font-size:12.5px;line-height:1.7;color:#D4D4D4;margin-top:9px;}
-.finding.light{background:var(--bg-light);color:var(--text-dark);border:1px solid var(--border-light);}
-.finding.light p{color:var(--text-dark);margin-top:0;}
-.finding.light p b{color:var(--text-black);display:inline;font-size:inherit;}
-.todo-card{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:13px;margin-bottom:9px;}
-.todo{display:flex;align-items:flex-start;gap:9px;cursor:pointer;}
-.todo input{position:absolute;opacity:0;width:0;height:0;}
-.todo .sw{flex-shrink:0;width:17px;height:17px;border-radius:5px;border:1.5px solid var(--border-default);margin-top:1px;position:relative;transition:.15s;}
-.todo input:checked + .sw{background:var(--bg-dark);border-color:var(--bg-dark);}
-.todo input:checked + .sw::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
-.todo b{display:block;font-size:13px;font-weight:700;line-height:1.45;}
-.todo input:checked ~ div b{color:var(--text-muted);text-decoration:line-through;}
-.todo em{display:block;font-size:11.5px;color:var(--text-gray);font-style:normal;margin-top:4px;line-height:1.5;}
-.todo-kit{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:var(--radius-sm);padding:8px 10px;margin-top:10px;cursor:pointer;}
-.todo-kit i,.todo-kit svg{width:13px;height:13px;flex-shrink:0;}
 .chat-input{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--border-light);background:var(--bg-white);}
 /* 대화방·대화 시작 화면은 탭바가 없어서 입력창이 화면 맨 아래다 — 이때만 인디케이터를 피한다.
    :last-child 로 건 이유는 .scroll 쪽과 같다. 아래에 탭바가 있는 화면은 그쪽이 이미 여백을 갖는다. */
@@ -657,7 +582,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
   <button data-jump="scr-search">검색</button>
-  <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button><button data-jump="scr-consult">미니컨설팅</button><button data-jump="scr-report">진단리포트</button>
+  <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button>
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-notekit">리킷별기록</button>
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
@@ -1429,7 +1354,8 @@ body.clean .jumpbar{display:none;}
       </div>
     </div>
 
-    <!-- 두 갈래 진입 — 무료 리킷 추천(주) / 미니 컨설팅(부) -->
+    <!-- 미니 컨설팅 진입은 뺐다 — 개발 단계에서 제외(리건, 2026-08-17).
+         두 갈래였던 자리가 리킷 추천 한 갈래만 남는다. -->
     <div class="sec" style="padding-top:14px;padding-bottom:6px">
       <div class="act-card primary" data-go="scr-chatstart">
         <div class="act-ico"><i data-lucide="sparkles"></i></div>
@@ -1437,14 +1363,6 @@ body.clean .jumpbar{display:none;}
           <b>낙타AI에게 리킷 추천 받기</b>
           <p>고민을 이야기하면 지금 읽어야 할 리킷을 골라드려요.</p>
           <span class="act-go">시작하기 <i data-lucide="arrow-right"></i></span>
-        </div>
-      </div>
-      <div class="act-card" data-go="scr-consult">
-        <div class="act-ico"><i data-lucide="clipboard-check"></i></div>
-        <div class="act-body">
-          <b>낙타의 미니 컨설팅</b>
-          <p>리킷 추천을 넘어, <b>내 계정·내 페이지</b>를 직접 보고 진단받고 싶다면.</p>
-          <span class="act-go">어떤 건지 보기 <i data-lucide="chevron-right"></i></span>
         </div>
       </div>
     </div>
@@ -1528,183 +1446,11 @@ body.clean .jumpbar{display:none;}
       <div class="cr-body"><div class="cr-num">RE:KIT 03</div><div class="cr-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div></div>
       <i data-lucide="chevron-right"></i>
     </div>
-    <!-- 자연스러운 미니 컨설팅 진입 지점 -->
-    <div class="chat-consult" data-go="scr-consult">
-      <div><b>읽고 나서도 내 것에 어떻게 적용할지 막히면</b><em>낙타의 미니 컨설팅에서 계정을 직접 보고 진단해드려요</em></div>
-      <i data-lucide="chevron-right"></i>
-    </div>
   </div>
 
   <div class="chat-input">
     <div class="ci-box">이어서 물어보세요</div>
     <i data-lucide="send"></i>
-  </div>
-</section>
-
-<!-- ══════════ 미니 컨설팅 ══════════ -->
-<section class="screen" id="scr-consult">
-  <div class="gnb">
-    <i data-lucide="arrow-left" data-back></i>
-    <span class="gnb-title">미니 컨설팅</span>
-    <span style="width:20px"></span>
-  </div>
-
-  <!-- 기획 확인용 상태 전환 (실제 앱에는 없음) -->
-  <div class="seg" style="margin:12px 16px 0">
-    <button data-cseg="off" class="on">미이용 상태</button>
-    <button data-cseg="on">이용 중</button>
-  </div>
-
-  <div class="scroll">
-
-    <!-- ── 공통: 무엇인가 ── -->
-    <div class="sec" style="padding-bottom:8px">
-      <div class="nk-hero left">
-        <span class="nk-eyebrow">낙타의 미니 컨설팅</span>
-        <b>읽는 것에서 끝나지 않게.</b>
-        <p>낙타가 1:1 컨설팅에서 실제로 쓰는 진단 순서를 그대로 옮겼습니다.
-        리킷이 <b>무엇을 알아야 하는지</b>라면, 미니 컨설팅은 <b>내 것을 어디부터 고쳐야 하는지</b>입니다.</p>
-      </div>
-    </div>
-
-    <!-- ── 공통: 무료 낙타AI와 뭐가 다른가 ── -->
-    <div class="sec alt">
-      <div class="sec-head"><span class="sec-title">무료 낙타AI와 뭐가 다른가요?</span></div>
-      <div class="cmp">
-        <div class="cmp-row head"><span></span><span>낙타AI</span><span class="hl">미니 컨설팅</span></div>
-        <div class="cmp-row"><span>하는 일</span><span>고민 → 리킷 추천</span><span class="hl">내 채널·페이지 직접 진단</span></div>
-        <div class="cmp-row"><span>보는 것</span><span>대화 내용만</span><span class="hl">계정·상세페이지·최근 콘텐츠</span></div>
-        <div class="cmp-row"><span>결과물</span><span>리킷 링크</span><span class="hl">진단 리포트 + 실행안 3개</span></div>
-        <div class="cmp-row"><span>이후</span><span>대화로 끝</span><span class="hl">2주 뒤 재점검</span></div>
-      </div>
-    </div>
-
-    <!-- ── 공통: 진행 방식 ── -->
-    <div class="sec">
-      <div class="sec-head"><span class="sec-title">어떻게 진행되나요</span></div>
-      <div class="step-list">
-        <div class="step-row"><span class="step-no">1</span><div><b>내 사업 알려주기</b><em>업종 · 파는 것 · 주력 채널 · 지금 매출이 나오는 경로</em></div></div>
-        <div class="step-row"><span class="step-no">2</span><div><b>자료 연결</b><em>인스타 계정 · 상세페이지 주소 · 최근 콘텐츠 5개</em></div></div>
-        <div class="step-row"><span class="step-no">3</span><div><b>진단 리포트 받기</b><em>지금 상태 → 진짜 문제 → 2주 실행안 3개 → 근거 리킷</em></div></div>
-        <div class="step-row"><span class="step-no">4</span><div><b>2주 뒤 재점검</b><em>실행한 것 / 못 한 것 / 숫자가 어떻게 바뀌었는지</em></div></div>
-      </div>
-    </div>
-
-    <!-- ── 미이용 상태 ── -->
-    <div class="cseg-view on" id="cseg-off">
-      <div class="sec" style="padding-top:4px">
-        <div class="lock-panel">
-          <i data-lucide="lock"></i>
-          <b>아직 이용 중인 컨설팅이 없어요</b>
-          <p>미니 컨설팅은 리킷 구독과 별도로 신청한 분에게 열립니다.</p>
-        </div>
-      </div>
-      <div class="sec" style="padding-top:0">
-        <div class="sec-head"><span class="sec-title">리포트가 이렇게 나옵니다</span></div>
-        <div class="report-peek" data-go="scr-report">
-          <div class="rp-head"><b>인스타그램 전환 진단</b><span>샘플</span></div>
-          <div class="rp-line"><em>지금 상태</em>조회는 상위 10%, 문의는 하위 20%</div>
-          <div class="rp-line"><em>진짜 문제</em>콘텐츠가 아니라 조회 이후 경로가 비어 있음</div>
-          <div class="rp-line"><em>2주 실행안</em>프로필 첫 줄 · 릴스 마지막 3초 · 상세페이지 상단</div>
-          <span class="rp-go">샘플 리포트 열어보기 <i data-lucide="chevron-right"></i></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── 이용 중 상태 ── -->
-    <div class="cseg-view" id="cseg-on">
-      <div class="sec" style="padding-top:4px">
-        <div class="quota-card">
-          <div class="qc-head"><b>이번 달 진단</b><span>2 / 3회 남음</span></div>
-          <div class="qc-bar"><span style="width:66%"></span></div>
-          <em>다음 초기화 9월 1일</em>
-        </div>
-        <button class="btn btn-primary" style="width:100%;margin-top:12px">새 진단 시작하기</button>
-      </div>
-      <div class="sec" style="padding-top:6px">
-        <div class="sec-head"><span class="sec-title">예정된 재점검</span></div>
-        <div class="recheck-card">
-          <i data-lucide="calendar-check"></i>
-          <div><b>인스타그램 전환 진단 재점검</b><em>8월 26일 · 실행안 3개 중 1개 완료</em></div>
-        </div>
-      </div>
-      <div class="sec" style="padding-top:6px">
-        <div class="sec-head"><span class="sec-title">지난 리포트</span></div>
-        <div class="ask-list">
-          <div class="ask-row hist" data-go="scr-report">
-            <div><b>인스타그램 전환 진단</b><em>2026.08.12 · 실행안 3개</em></div>
-            <i data-lucide="chevron-right"></i>
-          </div>
-          <div class="ask-row hist" data-go="scr-report">
-            <div><b>상세페이지 이탈 진단</b><em>2026.07.28 · 실행안 4개</em></div>
-            <i data-lucide="chevron-right"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══════════ 진단 리포트 ══════════ -->
-<section class="screen" id="scr-report">
-  <div class="gnb">
-    <i data-lucide="arrow-left" data-back></i>
-    <span class="gnb-title">진단 리포트</span>
-    <i data-lucide="share-2"></i>
-  </div>
-
-  <div class="scroll">
-    <div class="sec" style="padding-bottom:10px">
-      <span class="nk-eyebrow">2026.08.12 진단</span>
-      <h2 class="rep-title">인스타그램 전환 진단</h2>
-      <p class="rep-sub">릴스 조회수는 나오는데 매출이 안 늘어요</p>
-    </div>
-
-    <div class="sec alt" style="padding-top:16px;padding-bottom:16px">
-      <div class="sec-head"><span class="sec-title">1 · 지금 상태</span></div>
-      <div class="stat3">
-        <div><b>3,200</b><em>팔로워</em></div>
-        <div><b>24,000</b><em>릴스 평균 조회</em></div>
-        <div><b>6건</b><em>월 문의</em></div>
-      </div>
-      <p class="rep-note">같은 업종 대비 <b>조회는 상위 10%, 문의는 하위 20%</b>입니다. 사람이 안 오는 게 아니라, 온 사람이 안 움직입니다.</p>
-    </div>
-
-    <div class="sec">
-      <div class="sec-head"><span class="sec-title">2 · 진짜 문제</span></div>
-      <div class="finding">
-        <b>콘텐츠가 아니라 '조회 이후 경로'가 비어 있습니다.</b>
-        <p>릴스를 본 사람이 갈 곳은 프로필 → 링크 → 상세페이지 3단계인데, 세 곳 모두 다음 행동이 지정돼 있지 않습니다. 릴스를 더 올려도 같은 자리에서 새 나갑니다.</p>
-      </div>
-    </div>
-
-    <div class="sec alt">
-      <div class="sec-head"><span class="sec-title">3 · 2주 안에 할 것</span></div>
-      <div class="todo-card">
-        <label class="todo"><input type="checkbox" checked><span class="sw"></span><div><b>프로필 첫 줄을 '누구의 무엇'으로 교체</b><em>지금은 브랜드명만 있어서 판단 근거가 없습니다</em></div></label>
-        <div class="todo-kit" data-go="scr-viewer"><i data-lucide="book-open"></i>RE:KIT 15 · 사업자의 인스타 프로필 설정법</div>
-      </div>
-      <div class="todo-card">
-        <label class="todo"><input type="checkbox"><span class="sw"></span><div><b>릴스 마지막 3초에 다음 행동 1개만 지정</b><em>여러 개를 제시하면 아무것도 안 합니다</em></div></label>
-        <div class="todo-kit" data-go="scr-viewer"><i data-lucide="book-open"></i>RE:KIT 49 · 요즘 전환이 잘 되는 릴스에는 ' '가 있다</div>
-      </div>
-      <div class="todo-card">
-        <label class="todo"><input type="checkbox"><span class="sw"></span><div><b>상세페이지 첫 화면에 '누가 왜 사는지' 한 문장</b><em>가격보다 먼저 나와야 할 문장이 빠져 있습니다</em></div></label>
-        <div class="todo-kit" data-go="scr-viewer"><i data-lucide="book-open"></i>RE:KIT 07 · 12억 팔린 상세페이지의 비밀</div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="sec-head"><span class="sec-title">4 · 2주 뒤 이걸 봅니다</span></div>
-      <div class="finding light">
-        <p>조회수는 보지 않습니다. <b>프로필 방문 → 링크 클릭 → 문의</b> 세 숫자만 기록해두세요. 8월 26일에 이 세 개로 다시 진단합니다.</p>
-      </div>
-    </div>
-
-    <div class="sec" style="padding-top:0">
-      <button class="btn btn-secondary" style="width:100%">내 기록에 저장</button>
-    </div>
   </div>
 </section>
 
@@ -2554,7 +2300,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-cseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -2578,11 +2324,6 @@ document.addEventListener("click", e=>{
     /* 내 기록 정렬 — 시간순 / 리킷별 */
     document.querySelectorAll("[data-nview]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".nview").forEach(v=>v.classList.toggle("on", v.id==="nview-"+t.dataset.nview));
-    return;
-  }
-  if(t.dataset.cseg){
-    document.querySelectorAll("[data-cseg]").forEach(b=>b.classList.toggle("on", b===t));
-    document.querySelectorAll(".cseg-view").forEach(v=>v.classList.toggle("on", v.id==="cseg-"+t.dataset.cseg));
     return;
   }
   if(t.dataset.search){
