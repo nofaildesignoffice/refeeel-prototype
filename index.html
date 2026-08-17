@@ -349,18 +349,67 @@ body.clean .jumpbar{display:none;}
 .nseg{display:flex;gap:2px;background:var(--bg-light);border-radius:6px;padding:2px;}
 .nseg button{font-size:11px;font-weight:700;padding:5px 11px;border:none;border-radius:4px;background:none;color:var(--text-light);font-family:inherit;cursor:pointer;}
 .nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
-.note-meta{padding:10px 16px 0;font-size:11px;color:var(--text-light);}
-.note-meta .on-filter{display:none;}
 .nview{display:none;}
 .nview.on{display:block;}
 .note-list{display:flex;flex-direction:column;gap:10px;}
-/* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다 */
-#scr-library:has(#memo-only:checked) .memo-card:not(.has-memo){display:none;}
+/* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다.
+   카드가 다 사라진 날짜 그룹은 날짜만 덩그러니 남으므로 그룹째 감춘다. */
+#scr-library:has(#memo-only:checked) .tl-ev:not(.has-memo){display:none;}
+#scr-library:has(#memo-only:checked) .tlgroup:not(:has(.tl-ev.has-memo)){display:none;}
 #scr-library:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
-#scr-library:has(#memo-only:checked) .note-meta .off-filter{display:none;}
-#scr-library:has(#memo-only:checked) .note-meta .on-filter{display:inline;}
-/* has-memo 는 '메모 쓴 것만' 필터용 표시 — 시각 강조는 주지 않는다.
-   메모 유무는 메모 문단(펜 아이콘 + 진한 본문)만으로 이미 구분된다. */
+
+/* ── 인사이트 상단 : 지표 ──
+   쌓은 양이 아니라 '내가 만든 것'을 센다. 밑줄은 손가락 한 번이고 메모는 품이 든다.
+   그래서 두 숫자에 위계가 생기고, 메모 쪽이 값지다는 게 설명 없이 읽힌다.
+   분모를 만들지 않는다 — '10개 중 4개'라고 쓰는 순간 나머지 6개가 빚이 된다. */
+.ins-stat{display:flex;gap:26px;padding:18px 16px 15px;}
+.ins-stat div{display:flex;align-items:baseline;gap:6px;}
+.ins-stat span{font-size:12.5px;font-weight:700;color:var(--text-gray);}
+.ins-stat b{font-size:21px;font-weight:800;letter-spacing:-0.5px;}
+
+/* ── 다시 만나기 ──
+   이 탭의 존재 이유. 내 메모가 위, 밑줄 원문이 아래.
+   순서가 바뀌면 '리필이 한 말'이 되고, 이대로면 '과거의 내가 나한테 한 말'이 된다. */
+.recall{padding:0 16px 16px;}
+.recall-hd{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--text-dark);margin-bottom:9px;}
+.recall-hd i,.recall-hd svg{width:14px;height:14px;color:var(--text-gray);}
+.recall-card{padding:15px;}
+.recall-memo{display:flex;gap:8px;align-items:flex-start;}
+.recall-memo i,.recall-memo svg{width:13px;height:13px;color:var(--text-muted);margin-top:5px;flex-shrink:0;}
+.recall-memo p{font-size:14px;font-weight:700;line-height:1.62;letter-spacing:-0.2px;}
+.recall-quote{margin-top:12px;border-left:3px solid var(--border-light);padding:1px 0 1px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;}
+.recall-src{margin-top:11px;font-size:11px;color:var(--text-light);}
+.recall-act{display:flex;gap:8px;margin-top:14px;}
+.recall-act button{flex:1;padding:11px 8px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--border-default);background:var(--bg-white);color:var(--text-dark);}
+.recall-act button.primary{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
+
+/* ── 주제 칩 ──
+   지표이면서 필터다. 태그는 리킷에서 상속받으므로 유저가 정리할 게 없다.
+   채널·유형 태그는 쓰지 않는다 — 내가 고민한 건 주제 축이지 형식 축이 아니다. */
+.tagbar{display:flex;gap:6px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:none;}
+.tagbar::-webkit-scrollbar{display:none;}
+.tagbar button{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;border:1px solid var(--border-light);background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
+.tagbar button b{font-weight:800;color:var(--text-muted);}
+.tagbar button.on{background:var(--bg-dark);border-color:var(--bg-dark);color:#fff;}
+.tagbar button.on b{color:rgba(255,255,255,.55);}
+
+/* ── 시간순 : 날짜 레일 ──
+   왼쪽 줄만 훑어도 언제 무엇을 남겼는지 보인다.
+   레일 중심 = 왼쪽에서 72px. 날짜열·점·카드 들여쓰기가 이 한 값에 묶인다.
+   점을 채우면 메모까지 쓴 것, 비면 밑줄만 그은 것. */
+.tl-wrap{position:relative;padding:2px 16px 8px;}
+.tl-wrap::before{content:"";position:absolute;left:72px;top:8px;bottom:24px;width:1px;
+  background:linear-gradient(180deg,var(--border-light) 0%,var(--border-light) 86%,rgba(224,224,224,0) 100%);}
+.tlgroup{display:grid;grid-template-columns:44px 1fr;column-gap:24px;}
+.tl-date{text-align:right;padding-top:3px;}
+.tl-date b{display:block;font-size:12px;font-weight:800;color:var(--text-dark);}
+.tl-date span{display:block;font-size:10px;font-weight:600;color:var(--text-light);margin-top:2px;}
+.tl-items{display:flex;flex-direction:column;gap:10px;padding-bottom:18px;}
+/* .card 에 overflow:hidden 이 걸려 있어 점은 카드가 아니라 래퍼에 그린다 */
+.tl-ev{position:relative;}
+.tl-ev::before{content:"";position:absolute;left:-16.5px;top:17px;width:9px;height:9px;border-radius:50%;
+  background:var(--bg-white);border:1.5px solid var(--border-default);z-index:1;}
+.tl-ev.has-memo::before{background:var(--text-black);border-color:var(--text-black);}
 /* 리킷별 — 기록을 바로 펼치지 않고 리킷 카드로 접는다.
    기록이 쌓일수록 평면 나열은 못 읽는다. 리킷은 이미 사람이 기억하는 단위다. */
 .kitcard{padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;}
@@ -1659,10 +1708,41 @@ body.clean .jumpbar{display:none;}
 
   <div class="scroll">
 
-      <!-- 이 탭은 이제 '내 기록' 하나만 담는다 — 읽는 중·저장·시리즈는 마이페이지로 옮겼다.
-           남은 게 하나뿐이라 세그먼트 바를 지웠고, 대신 note-bar 가 바로 첫 줄에 온다.
-           밑줄이 기본이고 메모는 그 위에 얹히는 층이라, 나누지 않고 좁힌다.
-           '밑줄' 태그는 여기 있는 전부라 정보가 없어서 뺐다. 메모 유무는 왼쪽 강조선으로 보인다. -->
+      <!-- 이 탭은 '내 기록' 하나만 담는다 — 읽는 중·저장·시리즈는 마이페이지에 있다.
+           상단이 세 덩이다: 지표 → 다시 만나기 → 주제 칩.
+           앞의 둘은 '보는 것'이고 칩은 '누르는 것'이라, 칩만 목록에 붙여 둔다. -->
+      <div class="ins-stat">
+        <div><span>밑줄</span><b>10</b></div>
+        <div><span>메모</span><b>4</b></div>
+      </div>
+
+      <!-- 고르는 기준은 '공들여 쓴 것'(메모가 긴 순)이다. 길게 쓴 메모는 그때 진짜 붙잡고 있던 문제다.
+           단, 방금 쓴 건 리마인드가 필요 없으니 2주 지난 것부터 꺼내고,
+           한 번 보여준 기록은 한동안 뒤로 미룬다(기간은 기능정의에서 확정). -->
+      <div class="recall">
+        <div class="recall-hd"><i data-lucide="rotate-ccw"></i>다시 만나기</div>
+        <div class="card recall-card">
+          <div class="recall-memo"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
+          <div class="recall-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+          <div class="recall-src">RE:KIT 34 · 2주 전 · AEO·AI검색</div>
+          <div class="recall-act">
+            <button class="primary" data-go="scr-viewer">그때 그 리킷 열기</button>
+            <button>다음 기록</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tagbar">
+        <button class="on">전체<b>10</b></button>
+        <button>전환·매출<b>3</b></button>
+        <button>콘텐츠<b>3</b></button>
+        <button>소비자 심리<b>2</b></button>
+        <button>브랜딩<b>2</b></button>
+        <button>타겟·차별화<b>2</b></button>
+        <button>카피·후킹<b>2</b></button>
+        <button>AEO·AI검색<b>1</b></button>
+      </div>
+
       <div class="note-bar">
         <label class="chkbox"><input type="checkbox" id="memo-only"><span class="sw"></span><span>메모 쓴 것만</span></label>
         <div class="nseg">
@@ -1670,56 +1750,98 @@ body.clean .jumpbar{display:none;}
           <button data-nview="kit">리킷별</button>
         </div>
       </div>
-      <div class="note-meta">
-        <span class="off-filter">기록 10개 · 그중 메모 3개</span>
-        <span class="on-filter">메모 쓴 기록 3개</span>
-      </div>
 
-      <!-- 시간순 -->
+      <!-- 시간순 — 날짜를 왼쪽 레일로 뺀다. 카드 안의 날짜는 중복이라 주제 태그로 바꿨다. -->
       <div class="nview on" id="nview-time">
-        <div class="sec note-list">
-          <div class="card memo-card has-memo" data-go="scr-viewer">
-            <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
-            <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+        <div class="tl-wrap">
+          <div class="tlgroup">
+            <div class="tl-date"><b>8/16</b><span>어제</span></div>
+            <div class="tl-items">
+            <div class="tl-ev has-memo">
+              <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드가 영업 전단이 되고 있었네. 모든 게시물에 CTA 박는 것부터 그만두자.</p></div>
+                <div class="memo-quote">"팔려는 티가 감지되면 방어가 먼저 올라온다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>전환·매출</span></div>
+              </div>
+            </div>
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>전환·매출</span></div>
+              </div>
+            </div>
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>콘텐츠</span></div>
+              </div>
+            </div>
+            </div>
           </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"먼저 도움이 된 사람만 팔 자격을 얻는다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+          <div class="tlgroup">
+            <div class="tl-date"><b>8/14</b><span>3일 전</span></div>
+            <div class="tl-items">
+            <div class="tl-ev has-memo">
+              <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
+                <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>소비자 심리</span></div>
+              </div>
+            </div>
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>소비자 심리</span></div>
+              </div>
+            </div>
+            </div>
           </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"2단계를 건너뛰면 1단계가 무의미해진다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 41</span><span>어제</span></div>
+          <div class="tlgroup">
+            <div class="tl-date"><b>8/12</b><span>5일 전</span></div>
+            <div class="tl-items">
+            <div class="tl-ev has-memo">
+              <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
+                <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>브랜딩</span></div>
+              </div>
+            </div>
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>타겟·차별화</span></div>
+              </div>
+            </div>
+            </div>
           </div>
-          <div class="card memo-card has-memo" data-go="scr-viewer">
-            <div class="memo-quote">"사람은 사실이 아니라 순서에 설득된다."</div>
-            <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있음.</p></div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
+          <div class="tlgroup">
+            <div class="tl-date"><b>8/10</b><span>1주 전</span></div>
+            <div class="tl-items">
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>카피·후킹</span></div>
+              </div>
+            </div>
+            <div class="tl-ev">
+              <div class="card memo-card" data-go="scr-viewer">
+                <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>카피·후킹</span></div>
+              </div>
+            </div>
+            </div>
           </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"선택지가 많으면 선택하지 않는다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 51</span><span>3일 전</span></div>
-          </div>
-          <div class="card memo-card has-memo" data-go="scr-viewer">
-            <div class="memo-quote">"프로필은 소개가 아니라 필터다."</div>
-            <div class="memo-mine"><i data-lucide="pen-line"></i><p>첫 줄에 '누구를 위한 계정인가'를 못 박기. 지금은 내 이름만 있음.</p></div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"첫 줄에서 걸러지지 않으면 팔로워는 늘어도 매출은 안 는다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 15</span><span>5일 전</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"더할 게 없어서가 아니라, 뺄 게 남아서 안 팔린다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"메시지가 두 개면 하나도 안 남는다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 57</span><span>1주 전</span></div>
-          </div>
-          <div class="card memo-card" data-go="scr-viewer">
-            <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
-            <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>2주 전</span></div>
+          <div class="tlgroup">
+            <div class="tl-date"><b>8/3</b><span>2주 전</span></div>
+            <div class="tl-items">
+            <div class="tl-ev has-memo">
+              <div class="card memo-card" data-go="scr-viewer">
+              <div class="memo-mine"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
+                <div class="memo-quote">"AI는 정리된 문장을 먼저 인용한다."</div>
+                <div class="memo-src"><span class="src-kit">RE:KIT 34</span><span>AEO·AI검색</span></div>
+              </div>
+            </div>
+            </div>
           </div>
         </div>
       </div>
