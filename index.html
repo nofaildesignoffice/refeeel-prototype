@@ -295,11 +295,15 @@ body.clean .jumpbar{display:none;}
 .rd-prog{flex:1;height:3px;border-radius:2px;background:rgba(0,0,0,0.08);overflow:hidden;}
 .rd-bar{height:100%;width:10%;background:var(--text-dark);border-radius:2px;transition:width .2s ease;}
 .rd-count{font-size:11px;font-weight:700;color:var(--text-light);font-variant-numeric:tabular-nums;flex-shrink:0;}
-/* 가로 스냅 — 손가락으로 밀면 한 장씩 넘어간다 */
-.rd-track{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;}
+/* 세로 스냅 — 아래에서 위로 밀어 올리면 한 장씩 넘어간다 */
+.rd-track{flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .rd-track::-webkit-scrollbar{display:none;}
-.rd-card{flex:0 0 100%;scroll-snap-align:center;display:flex;align-items:center;padding:0 30px;overflow-y:auto;}
-.rd-inner{width:100%;padding:24px 0;}
+.rd-card{flex:0 0 100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;padding:0 30px;overflow:hidden;}
+/* 장이 들어올 때 아래에서 떠오르며 나타난다. 나갈 때는 반대로 흐려진다.
+   스크롤은 브라우저가 굴리고, 우리는 안쪽 내용만 따라 붙인다 — 그래야 손가락을 따라가는 느낌이 남는다. */
+.rd-inner{width:100%;padding:24px 0;opacity:0;transform:translateY(20px);
+  transition:opacity .42s ease,transform .52s cubic-bezier(.22,1,.36,1);}
+.rd-card.in .rd-inner{opacity:1;transform:none;}
 .rd-kind{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:0.4px;color:var(--text-muted);margin-bottom:18px;}
 .rd-kind i,.rd-kind svg{width:12px;height:12px;}
 /* 내 메모가 주인공. 밑줄 원문은 그 아래 근거로 깔린다 */
@@ -2289,7 +2293,8 @@ function show(id){
   el.classList.add("active");
   const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
   if(id === "scr-chatstart") resetChatStart();
-  if(id === "scr-reader"){ const tr = document.getElementById("rd-track"); if(tr){ tr.scrollLeft = 0; rdSync(); } }
+  if(id === "scr-reader"){ const tr = document.getElementById("rd-track");
+    if(tr){ tr.scrollTop = 0; tr.querySelectorAll(".rd-card").forEach((c,k)=>c.classList.toggle("in", k===0)); rdSync(); } }
   current = id;
   document.querySelectorAll("#jumpbar button").forEach(b=>{
     b.classList.toggle("on", b.dataset.jump === id);
@@ -2615,8 +2620,8 @@ document.addEventListener("click", e=>{
 const OB_STEPS = ["scr-ob1","scr-ob2","scr-ob3","scr-ob4","scr-ob5"];
 /* 리더 — 몇 번째 장인지 스크롤 위치로 센다 */
 function rdSync(){
-  const tr = document.getElementById("rd-track"); if(!tr || !tr.clientWidth) return;
-  const n = tr.children.length, i = Math.round(tr.scrollLeft / tr.clientWidth);
+  const tr = document.getElementById("rd-track"); if(!tr || !tr.clientHeight) return;
+  const n = tr.children.length, i = Math.round(tr.scrollTop / tr.clientHeight);
   document.getElementById("rd-count").textContent = (i+1) + " / " + n;
   document.getElementById("rd-bar").style.width = ((i+1)/n*100) + "%";
   const src = tr.children[i] && tr.children[i].querySelector(".rd-src");
@@ -2625,7 +2630,13 @@ function rdSync(){
 }
 document.addEventListener("DOMContentLoaded", ()=>{
   const tr = document.getElementById("rd-track");
-  if(tr) tr.addEventListener("scroll", ()=>{ clearTimeout(tr._t); tr._t = setTimeout(rdSync, 60); });
+  if(!tr) return;
+  tr.addEventListener("scroll", ()=>{ clearTimeout(tr._t); tr._t = setTimeout(rdSync, 60); });
+  /* 화면에 들어온 장에만 .in 을 붙인다 — 지나간 장은 다시 흐려진다 */
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=> e.target.classList.toggle("in", e.isIntersecting));
+  }, {root: tr, threshold: 0.55});
+  tr.querySelectorAll(".rd-card").forEach(c=> io.observe(c));
 });
 
 function capChips(){
