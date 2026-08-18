@@ -1689,7 +1689,7 @@ body.clean .jumpbar{display:none;}
       </article>
   </div>
   <div class="rd-bottom">
-    <button class="btn btn-secondary" style="flex:1" data-go="scr-viewer">그때 그 리킷 열기</button>
+    <button class="btn btn-secondary" style="flex:1" id="rd-open" data-go="scr-viewer">리킷 41 보기</button>
     <button class="rd-share"><i data-lucide="share-2"></i></button>
   </div>
 </section>
@@ -2619,6 +2619,9 @@ function rdSync(){
   const n = tr.children.length, i = Math.round(tr.scrollLeft / tr.clientWidth);
   document.getElementById("rd-count").textContent = (i+1) + " / " + n;
   document.getElementById("rd-bar").style.width = ((i+1)/n*100) + "%";
+  const src = tr.children[i] && tr.children[i].querySelector(".rd-src");
+  const m = src && src.textContent.match(/RE:KIT\s*(\d+)/);
+  if(m) document.getElementById("rd-open").textContent = "리킷 " + m[1] + " 보기";
 }
 document.addEventListener("DOMContentLoaded", ()=>{
   const tr = document.getElementById("rd-track");
