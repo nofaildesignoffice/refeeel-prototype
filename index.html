@@ -566,6 +566,36 @@ body.clean .jumpbar{display:none;}
 .ep-meta{font-size:11px;color:var(--text-light);margin-top:2px;}
 
 /* 온보딩 */
+/* ── 로그인 ──
+   무료로 볼 수 있는 리킷도, 쓸 수 있는 낙타AI도 없다. 그래서 익명 진입을 두지 않고
+   앱을 열면 바로 로그인이다(리건, 2026-08-18).
+   ⚠ 실제 구현에서는 Google·Apple 공식 브랜드 에셋과 버튼 규격을 그대로 써야 한다.
+   ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
+.login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;}
+.login-brand{text-align:center;margin-bottom:44px;}
+.login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
+.login-brand p{font-size:13px;color:var(--text-gray);margin-top:10px;}
+.lbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--border-default);background:var(--bg-white);color:var(--text-black);}
+.lbtn+.lbtn{margin-top:9px;}
+.lbtn i,.lbtn svg{width:17px;height:17px;}
+.lbtn.apple{background:var(--text-black);border-color:var(--text-black);color:var(--bg-white);}
+.login-note{text-align:center;font-size:11.5px;color:var(--text-light);margin-top:18px;line-height:1.6;}
+
+/* ── 약관 동의 ──
+   한국은 필수·선택을 나눠 명시적으로 받아야 한다(개인정보보호법 §15, 정보통신망법 §50).
+   영어권은 이 화면을 그대로 쓰지 않는다 — 아래 주석 참고. */
+.agree-all{display:flex;align-items:center;gap:11px;padding:15px 14px;border:1px solid var(--border-default);border-radius:var(--radius-md);cursor:pointer;font-size:14.5px;font-weight:800;}
+.agree-list{margin-top:6px;}
+.agree-row{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer;}
+.agree-row .grow{flex:1;min-width:0;font-size:13px;color:var(--text-dark);}
+.agree-row .grow b{font-weight:700;color:var(--text-light);}
+.agree-row .grow b.req{color:var(--text-dark);}
+.agree-row>i,.agree-row>svg{width:15px;height:15px;color:var(--text-muted);}
+.agree-all input,.agree-row input{position:absolute;opacity:0;width:0;height:0;}
+.agree-all .box,.agree-row .box{flex-shrink:0;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border-default);position:relative;transition:.15s;}
+.agree-all input:checked+.box,.agree-row input:checked+.box{background:var(--bg-dark);border-color:var(--bg-dark);}
+.agree-all input:checked+.box::after,.agree-row input:checked+.box::after{content:"";position:absolute;left:6.5px;top:2.5px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+
 .ob-head{padding:32px 20px 8px;}
 .ob-step{display:flex;gap:6px;margin-bottom:20px;}
 .ob-step span{height:4px;flex:1;border-radius:2px;background:var(--border-light);}
@@ -579,7 +609,7 @@ body.clean .jumpbar{display:none;}
 <body>
 
 <div class="jumpbar" id="jumpbar">
-  <button data-jump="scr-ob1">온보딩</button>
+  <button data-jump="scr-login">로그인</button><button data-jump="scr-agree">약관동의</button><button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
   <button data-jump="scr-search">검색</button>
   <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button>
@@ -592,6 +622,57 @@ body.clean .jumpbar{display:none;}
 </div>
 
 <div class="phone">
+
+<!-- ══════════ 로그인 ══════════ -->
+<section class="screen" id="scr-login">
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="login-wrap">
+      <div class="login-brand">
+        <div class="login-logo">RE:FEEEL</div>
+        <p>사업의 본질을 읽는 시간</p>
+      </div>
+      <!-- 순서는 Google → Apple → 이메일. 영어권·한국 모두 이 셋이면 시작할 수 있다.
+           카카오는 한국 유입이 늘면, LINE 은 일본 진출 시 붙인다. -->
+      <button class="lbtn" data-go="scr-agree">Google로 계속하기</button>
+      <button class="lbtn apple" data-go="scr-agree">Apple로 계속하기</button>
+      <button class="lbtn" data-go="scr-agree"><i data-lucide="mail"></i>이메일로 계속하기</button>
+      <p class="login-note">처음이시면 자동으로 가입돼요</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 약관 동의 (앱에서 가입할 때만) ══════════ -->
+<!-- ⚠ 이 화면은 한국 기준이다. 영어권에서는 체크박스를 이렇게 나열하지 않고
+     가입 버튼 아래 "By continuing, you agree to Terms and Privacy Policy" 한 줄로 처리하며,
+     마케팅 수신만 별도 체크로 받는다(GDPR). 연령 기준도 다르다 — 한국 14세 / EU 13~16세 / 미국 13세.
+     즉 지역에 따라 다른 화면이 필요하다. -->
+<section class="screen" id="scr-agree">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">약관 동의</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll" style="display:flex;flex-direction:column;">
+    <div class="ob-head">
+      <h3>서비스 이용을 위해<br>동의가 필요해요</h3>
+      <p>선택 항목은 동의하지 않아도 이용할 수 있어요</p>
+    </div>
+    <div class="sec">
+      <label class="agree-all"><input type="checkbox"><span class="box"></span>전체 동의</label>
+      <div class="agree-list">
+        <label class="agree-row"><input type="checkbox"><span class="box"></span><span class="grow"><b class="req">(필수)</b> 만 14세 이상입니다</span></label>
+        <label class="agree-row"><input type="checkbox"><span class="box"></span><span class="grow"><b class="req">(필수)</b> 서비스 이용약관</span><i data-lucide="chevron-right"></i></label>
+        <label class="agree-row"><input type="checkbox"><span class="box"></span><span class="grow"><b class="req">(필수)</b> 개인정보 수집·이용</span><i data-lucide="chevron-right"></i></label>
+        <!-- 광고성 정보는 채널별로 나눠 받는다. 하나로 묶으면 '이메일은 싫은데 푸시는 좋다'는 사람이 통째로 끈다. -->
+        <label class="agree-row"><input type="checkbox"><span class="box"></span><span class="grow"><b>(선택)</b> 앱 푸시로 소식 받기</span><i data-lucide="chevron-right"></i></label>
+        <label class="agree-row"><input type="checkbox"><span class="box"></span><span class="grow"><b>(선택)</b> 이메일로 소식 받기</span><i data-lucide="chevron-right"></i></label>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ob1">동의하고 시작하기</button>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════ 온보딩 1: 하는 일 ══════════ -->
 <section class="screen" id="scr-ob1">
@@ -2078,7 +2159,7 @@ if(new URLSearchParams(location.search).has("clean")) document.body.classList.ad
 
 const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];
-let current = "scr-ob1";
+let current = "scr-login";
 
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
@@ -2403,8 +2484,16 @@ document.addEventListener("click", e=>{
   }
 });
 
+/* 전체 동의 — 하위를 따라 켜고 끄고, 하나라도 꾫히면 전체도 풀린다 */
+const agAll = document.querySelector(".agree-all input");
+const agRows = [...document.querySelectorAll(".agree-row input")];
+if(agAll){
+  agAll.addEventListener("change", ()=> agRows.forEach(c=>c.checked = agAll.checked));
+  agRows.forEach(c=>c.addEventListener("change", ()=> agAll.checked = agRows.every(r=>r.checked)));
+}
+
 initBrowse();
-show("scr-ob1");
+show("scr-login");
 </script>
 </body>
 </html>
