@@ -499,6 +499,10 @@ body.clean .jumpbar{display:none;}
    접혀 있을 때는 왜 없는지 한 줄로 알려 준다 — 그냥 없으면 기능이 빠진 줄 안다. */
 /* 접힌 블록 안에서는 라벨이 first-child 가 되어 위 여백이 0 이 된다. 되돌려 준다 */
 .ch-fold .tag-label:first-child{margin-top:14px;}
+/* 주제와 같이 붙은 적 없는 채널은 아예 빼다. 흐리게만 두면
+   '이 주제에도 블로그 이야기가 있나?' 하고 눈이 한 번 더 간다.
+   주제·유형 칩은 0 이어도 남긴다 — 거기는 '없다'는 것도 고를 때 쓰는 정보다. */
+#f-channel .chip.toggle.zero{display:none;}
 .ch-fold{display:none;}
 .ch-fold.on{display:block;animation:chfold .26s ease;}
 @keyframes chfold{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:none;}}
