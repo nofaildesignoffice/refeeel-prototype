@@ -350,19 +350,17 @@ body.clean .jumpbar{display:none;}
 .pc-wrap{padding:18px 0 2px;}
 .pc-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px 4px;}
 .pc-track::-webkit-scrollbar{display:none;}
-/* 다음 카드가 살짝 걸쳐 보이게 78% — 옆에 더 있다는 걸 화살표 없이 알린다 */
-.pcard{flex:0 0 78%;scroll-snap-align:center;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
-  background:var(--bg-white);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);cursor:pointer;}
-.pc-top{aspect-ratio:1/1;padding:18px;display:flex;flex-direction:column;background:linear-gradient(150deg,#EEECE8 0%,#DDDAD4 100%);}
+/* 다음 카드가 살짝 걸쳐 보이게 78% — 옆에 더 있다는 걸 화살표 없이 알린다.
+   정보 패널은 면 아래로 떼지 않고 면 위에 얹는다 — 떼어 놓으면 카드가 둘로 보인다. */
+.pcard{flex:0 0 78%;scroll-snap-align:center;aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:space-between;
+  padding:17px 13px 13px;border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);
+  background:linear-gradient(150deg,#EEECE8 0%,#DDDAD4 100%);}
 /* 최근일수록 진하다 — 세 장을 나란히 두면 시간 순서가 색으로도 읽힌다 */
-.pcard:nth-child(2) .pc-top{background:linear-gradient(150deg,#F3F1EE 0%,#E6E3DE 100%);}
-.pcard:nth-child(3) .pc-top{background:linear-gradient(150deg,#F7F5F3 0%,#EDEAE6 100%);}
-.pc-range{font-size:10.5px;font-weight:700;letter-spacing:0.3px;color:var(--text-gray);}
-.pc-n{margin-top:auto;font-size:42px;font-weight:800;line-height:1;letter-spacing:-2px;color:var(--text-black);}
-.pc-unit{font-size:11.5px;font-weight:700;color:var(--text-gray);margin-top:5px;}
-.pc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
-.pc-tags span{padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.72);font-size:10px;font-weight:700;color:var(--text-dark);}
-.pc-body{display:flex;align-items:center;gap:8px;padding:13px 14px;}
+.pcard:nth-child(2){background:linear-gradient(150deg,#F3F1EE 0%,#E6E3DE 100%);}
+.pcard:nth-child(3){background:linear-gradient(150deg,#F7F5F3 0%,#EDEAE6 100%);}
+.pc-range{font-size:10.5px;font-weight:700;letter-spacing:0.3px;color:var(--text-gray);padding:0 5px;}
+.pc-body{display:flex;align-items:center;gap:8px;padding:13px 12px 13px 14px;border-radius:12px;
+  background:var(--bg-white);box-shadow:0 3px 12px rgba(0,0,0,0.09);}
 .pc-body .grow{flex:1;min-width:0;}
 .pc-t{font-size:13.5px;font-weight:800;letter-spacing:-0.2px;}
 .pc-s{font-size:11px;font-weight:700;color:var(--text-light);margin-top:4px;}
@@ -1950,36 +1948,21 @@ body.clean .jumpbar{display:none;}
       <div class="pc-wrap">
         <div class="pc-track">
         <article class="pcard" data-go="scr-reader">
-          <div class="pc-top">
-            <div class="pc-range">8.10 — 8.16</div>
-            <div class="pc-n">8</div>
-            <div class="pc-unit">개의 기록</div>
-            <div class="pc-tags"><span>소비자 심리</span><span>사업 성장</span><span>전환·매출</span></div>
-          </div>
+          <div class="pc-range">8.10 — 8.16</div>
           <div class="pc-body">
             <div class="grow"><div class="pc-t">지난주 나의 인사이트</div><div class="pc-s">밑줄 3 · 메모 5</div></div>
             <i data-lucide="chevron-right"></i>
           </div>
         </article>
         <article class="pcard" data-go="scr-reader">
-          <div class="pc-top">
-            <div class="pc-range">7.1 — 7.31</div>
-            <div class="pc-n">21</div>
-            <div class="pc-unit">개의 기록</div>
-            <div class="pc-tags"><span>콘텐츠</span><span>브랜딩</span><span>카피·후킹</span></div>
-          </div>
+          <div class="pc-range">7.1 — 7.31</div>
           <div class="pc-body">
             <div class="grow"><div class="pc-t">지난달 나의 인사이트</div><div class="pc-s">밑줄 13 · 메모 8</div></div>
             <i data-lucide="chevron-right"></i>
           </div>
         </article>
         <article class="pcard" data-go="scr-reader">
-          <div class="pc-top">
-            <div class="pc-range">6.1 — 6.30</div>
-            <div class="pc-n">14</div>
-            <div class="pc-unit">개의 기록</div>
-            <div class="pc-tags"><span>사업 성장</span><span>데이터</span></div>
-          </div>
+          <div class="pc-range">6.1 — 6.30</div>
           <div class="pc-body">
             <div class="grow"><div class="pc-t">6월 나의 인사이트</div><div class="pc-s">밑줄 9 · 메모 5</div></div>
             <i data-lucide="chevron-right"></i>
