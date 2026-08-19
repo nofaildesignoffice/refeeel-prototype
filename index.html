@@ -535,6 +535,14 @@ body.clean .jumpbar{display:none;}
 .seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
 .seg button{flex:1;font-size:11.5px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
 .seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
+/* 두 단 탭 — 위는 알약, 아래는 밑줄.
+   같은 알약을 두 줄 겹치면 어느 쪽이 상위인지 알 수 없다. 생김새가 달라야 위계가 읽힌다. */
+.seg2{display:flex;gap:20px;padding:16px 16px 0;border-bottom:1px solid var(--border-light);}
+.seg2 button{position:relative;padding:0 0 10px;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-light);cursor:pointer;white-space:nowrap;}
+.seg2 button.on{color:var(--text-black);}
+.seg2 button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:1px;background:var(--text-black);}
+.myseg-view{display:none;}
+.myseg-view.on{display:block;}
 .bseg-view{display:none;}
 .bseg-view.on{display:block;}
 .utabs{display:flex;gap:20px;padding:0 16px;border-bottom:1px solid var(--border-light);}
@@ -2302,11 +2310,19 @@ body.clean .jumpbar{display:none;}
 
          이어읽기 진입점도 홈 상단 한 곳으로 모은다.
          여기 또 두면 '읽는 중' 세그먼트 첫 줄과 같은 카드가 두 번 보인다. -->
+    <!-- 리킷과 시리즈는 세는 단위가 다르다(리건, 2026-08-19).
+         리킷은 한 편씩 읽고 끝나지만 시리즈는 여러 편을 이어 듣는 묶음이라
+         '읽는 중·완독·저장'이라는 축이 애초에 걸리지 않는다. 그래서 축을 하나 위로 올렸다. -->
     <div class="seg">
+      <button data-myseg="kit" class="on">리킷</button>
+      <button data-myseg="series">시리즈</button>
+    </div>
+
+    <div class="myseg-view on" id="myseg-kit">
+    <div class="seg2">
       <button data-bseg="v1-reading" class="on">읽는 중 5</button>
       <button data-bseg="v1-done">완독 12</button>
       <button data-bseg="v1-saved">저장 12</button>
-      <button data-bseg="v1-series">시리즈 1</button>
     </div>
     <div class="bseg-view on" id="bseg-v1-reading">
       <div class="sec" style="display:flex;flex-direction:column;gap:10px">
@@ -2375,8 +2391,10 @@ body.clean .jumpbar{display:none;}
         </div>
       </div>
     </div>
-    <div class="bseg-view" id="bseg-v1-series">
-      <div class="sec">
+    </div><!-- /#myseg-kit -->
+
+    <div class="myseg-view" id="myseg-series">
+      <div class="sec" style="display:flex;flex-direction:column;gap:10px">
         <div class="card series-card" data-go="scr-series">
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="series-body">
@@ -2385,6 +2403,17 @@ body.clean .jumpbar{display:none;}
             <div class="progress-bar"><div style="width:33%"></div></div>
           </div>
           <button class="btn btn-primary" style="padding:8px 12px;font-size:12px" data-go="scr-series">이어서</button>
+        </div>
+        <!-- 담아만 두고 아직 시작 안 한 시리즈. 진행 중인 것과 한 목록에 섞어 둔다 —
+             따로 갈라 두면 '언젠가 볼 것' 칸이 생기고, 그 칸은 아무도 안 연다. -->
+        <div class="card series-card" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="series-body">
+            <div class="series-title">AI 마케팅 실전 가이드</div>
+            <div class="series-meta">6개 · 아직 시작 전</div>
+            <div class="progress-bar"><div style="width:0%"></div></div>
+          </div>
+          <button class="btn btn-secondary" style="padding:8px 12px;font-size:12px" data-go="scr-series">시작</button>
         </div>
       </div>
     </div>
@@ -3127,7 +3156,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -3180,6 +3209,12 @@ document.addEventListener("click", e=>{
   if(t.dataset.bseg){
     document.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
+    return;
+  }
+  /* 내 리킷 상위 축 — 리킷 / 시리즈 */
+  if(t.dataset.myseg){
+    document.querySelectorAll("[data-myseg]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".myseg-view").forEach(v=>v.classList.toggle("on", v.id==="myseg-"+t.dataset.myseg));
     return;
   }
   if(t.dataset.jump){ stack=[]; show(t.dataset.jump); return; }
