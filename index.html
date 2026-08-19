@@ -614,6 +614,7 @@ body.clean .jumpbar{display:none;}
 .done-ic i,.done-ic svg{width:25px;height:25px;color:var(--text-dark);}
 .done-wrap h3{font-size:19px;font-weight:800;letter-spacing:-0.3px;line-height:1.5;}
 .done-wrap p{font-size:13px;color:var(--text-gray);line-height:1.75;margin-top:13px;}
+.done-wrap p b{font-weight:800;color:var(--text-black);}
 .done-bottom{flex-shrink:0;padding:0 16px max(16px,env(safe-area-inset-bottom));}
 
 /* 되돌릴 수 없는 일은 시트에서 한 번 더 묻는다 */
@@ -2687,8 +2688,13 @@ body.clean .jumpbar{display:none;}
 
 <!-- ══════════ 회원탈퇴 ══════════
      사라지는 것을 숫자로 세어서 보여준다. '모든 데이터가 삭제됩니다'는 아무 무게가 없다.
-     ⚠ 미확정: 30일 유예(그 안에 다시 로그인하면 복구) 를 둘지. 지금 화면은 유예 없이
-        바로 파기하는 쪽으로 써 뒀다 — 유예를 두기로 하면 문구와 완료 화면을 같이 고쳐야 한다.
+     30일 유예를 둔다(리건, 2026-08-19). 그 안에 같은 계정으로 다시 로그인하면 그대로 돌아온다.
+     날짜를 못 박아 쓴다 — '30일 안에'는 세어야 알고, 세어야 아는 건 결국 아무도 안 센다.
+     ⚠ 유예 기간 동안 데이터는 서비스 DB에서 분리 보관하고 추천·통계에서 뺀다.
+        개인정보처리방침의 파기 절차에 이 30일을 반드시 명시해야 한다 — 방침에 없으면
+        '지체 없이 파기'(개인정보보호법 §21) 위반이 된다.
+     ⚠ 유예 중인 계정으로 로그인하면 곧바로 앱에 들이지 않고 '되살릴까요?' 를 한 번 묻는다.
+        그 화면은 로그인 흐름에 붙는 것이라 여기가 아니라 로그인 기획에서 함께 만든다.
      ⚠ 구독·결제 관련 안내는 앱 화면에 쓰지 않는다(리더 앱 조항). 서버에서 처리한다. -->
 <section class="screen" id="scr-leave">
   <div class="gnb">
@@ -2698,14 +2704,14 @@ body.clean .jumpbar{display:none;}
   </div>
   <div class="scroll">
     <div class="leave-hd"><h3>정말 떠나시나요?</h3></div>
-    <div class="set-note" style="padding-top:10px">탈퇴하면 아래 기록이 모두 사라져요.</div>
+    <div class="set-note" style="padding-top:10px">탈퇴하시면 아래 기록을 30일 동안 보관했다가 지워요.</div>
     <ul class="lose">
       <li><i data-lucide="highlighter"></i>밑줄 <b>10개</b>와 메모 <b>6개</b></li>
       <li><i data-lucide="bookmark"></i>저장한 리킷 <b>12편</b></li>
       <li><i data-lucide="message-circle"></i>낙타AI와 나눈 대화</li>
       <li><i data-lucide="tag"></i>관심사와 그동안 쌓인 추천 기록</li>
     </ul>
-    <p class="set-note">같은 계정으로 다시 가입하셔도 이전 기록은 되돌릴 수 없어요.</p>
+    <p class="set-note"><b>2026년 9월 18일</b>까지 같은 계정으로 다시 로그인하시면 그대로 돌아와요.<br>그 뒤에는 지워지고 되돌릴 수 없어요.</p>
 
     <div class="fld" style="padding-top:22px">
       <label>떠나시는 이유를 알려주세요 (선택)</label>
@@ -2733,7 +2739,8 @@ body.clean .jumpbar{display:none;}
     <div class="done-wrap">
       <div class="done-ic"><i data-lucide="hand"></i></div>
       <h3>탈퇴가 끝났어요</h3>
-      <p>그동안 리필을 읽어주셔서 고맙습니다.<br>언제든 다시 오셔도 좋아요.</p>
+      <p><b>2026년 9월 18일</b>까지 같은 계정으로 로그인하시면<br>밑줄과 메모가 그대로 돌아와요.</p>
+      <p style="font-size:12px">그동안 리필을 읽어주셔서 고맙습니다.</p>
     </div>
     <div class="done-bottom">
       <button class="btn btn-secondary" style="width:100%" data-jump="scr-login">확인</button>
@@ -2824,14 +2831,14 @@ body.clean .jumpbar{display:none;}
   </div>
 </div>
 
-<!-- 탈퇴 — 되돌릴 수 없는 일이라 사라지는 숫자를 한 번 더 말한다 -->
+<!-- 탈퇴 — 사라지는 숫자와 되살릴 수 있는 기한을 한 번 더 말한다 -->
 <div class="sheet-wrap" id="sheet-leave">
   <div class="sheet-bd" data-closesheet></div>
   <div class="sheet">
     <div class="sheet-grip"></div>
     <div class="sheet-msg">
       <h4>정말 탈퇴하시겠어요?</h4>
-      <p>남기신 밑줄 10개와 메모 6개가 지금 바로 지워지고, 되돌릴 수 없어요.</p>
+      <p>남기신 밑줄 10개와 메모 6개를 30일 동안 보관해요. 그 안에 다시 로그인하시면 그대로 돌아오고, 지나면 지워져요.</p>
     </div>
     <div class="sheet-act">
       <button class="btn btn-danger" data-go="scr-leave-done">탈퇴하기</button>
