@@ -738,10 +738,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    손으로 치는 게 빠른 사람도 있고 말이 먼저 나오는 사람도 있다.
    특히 읽다가 떠오른 생각은 문장으로 정리되기 전이라, 말로 쏟아 놓고 나중에 다듬는 편이 낫다.
    그래서 둘을 나란히 두고 아무 쪽으로나 쓰게 한다 — 음성은 타이핑을 대신하는 게 아니라 같이 쓴다.
-   ⚠ 웹은 Web Speech API(webkitSpeechRecognition) 를 쓴다. Chrome·Edge 는 되고 iOS Safari 는 안 된다.
-      앱(Capacitor)에서는 네이티브 음성 인식 플러그인으로 갈아 끼워야 하고,
-      마이크 권한 문구를 Info.plist(NSSpeechRecognitionUsageDescription·NSMicrophoneUsageDescription)와
-      AndroidManifest(RECORD_AUDIO)에 각각 넣어야 한다. */
+   ⚠ 지금은 모양만이다. 실제 받아쓰기(STT)는 나중에 붙인다 — 아래 JS 의 micOn()/micOff() 가 그 자리다. */
 .ta-wrap{position:relative;}
 .ta-wrap .ta{padding-bottom:48px;}
 .mic{position:absolute;right:9px;bottom:9px;width:36px;height:36px;border-radius:50%;
@@ -3649,61 +3646,35 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
-  /* ── 음성 받아쓰기 ──
-     말하는 동안 글자가 실시간으로 따라 들어온다. 확정된 말은 남고, 아직 다듬는 중인 말은
-     뒤에 붙었다가 확정되면 자리를 잡는다. 이미 쳐 둔 글이 있으면 그 뒤에 이어 붙인다. */
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let rec = null;
-
+  /* ── 음성 메모 (모양만) ──
+     STT 는 나중에 붙인다(리건, 2026-08-19). 지금은 켜고 끄는 상태만 보여준다.
+     ⚠ 붙일 자리는 여기 한 곳이다. micOn() 뒤에서 인식을 시작하고,
+        결과가 올 때마다 memo-ta 값에 이어 붙이고, 끝나면 micOff() 를 부르면 된다.
+        이미 쳐 둔 글이 있으면 지우지 말고 뒤에 이어 붙여야 한다 — 말과 타이핑은 같이 쓰는 것이다.
+     ⚠ 붙일 때 정해야 할 것: 웹은 Web Speech API(iOS Safari 미지원)를 쓸지 서버 STT 로 보낼지,
+        앱은 네이티브 인식기를 쓸지. 어느 쪽이든 마이크 권한 문구가 필요하다 —
+        iOS Info.plist(NSMicrophoneUsageDescription·NSSpeechRecognitionUsageDescription),
+        Android RECORD_AUDIO. */
+  let micRec = false;
   function micOff(){
+    micRec = false;
     document.getElementById("memo-mic").classList.remove("rec");
     document.getElementById("mic-hint").classList.remove("on");
-    rec = null;
   }
+  function micOn(){
+    micRec = true;
+    document.getElementById("memo-mic").classList.add("rec");
+    document.getElementById("mic-hint").classList.add("on");
+  }
+  document.getElementById("memo-mic").addEventListener("click", ()=>{ micRec ? micOff() : micOn(); });
 
-  document.getElementById("memo-mic").addEventListener("click", ()=>{
-    if(rec){ rec.stop(); return; }
-    if(!SR){ showToast("이 브라우저에서는 음성 입력이 안 돼요"); return; }
-
-    const ta = document.getElementById("memo-ta");
-    let base = ta.value.trim(), fixed = "";
-    if(base) base += " ";
-
-    rec = new SR();
-    rec.lang = "ko-KR";
-    rec.continuous = true;
-    rec.interimResults = true;
-
-    rec.onresult = e=>{
-      let live = "";
-      for(let i = e.resultIndex; i < e.results.length; i++){
-        const r = e.results[i];
-        if(r.isFinal) fixed += r[0].transcript;
-        else live += r[0].transcript;
-      }
-      ta.value = base + fixed + live;
-      ta.scrollTop = ta.scrollHeight;
-    };
-    rec.onerror = ev=>{
-      micOff();
-      showToast(ev.error === "not-allowed" ? "마이크 권한이 필요해요" : "소리가 잘 안 들렸어요");
-    };
-    rec.onend = ()=> micOff();
-
-    try{
-      rec.start();
-      document.getElementById("memo-mic").classList.add("rec");
-      document.getElementById("mic-hint").classList.add("on");
-    }catch(err){ micOff(); }
-  });
-
-  /* 시트를 닫을 때 듣고 있던 걸 반드시 끈다 — 안 끄면 마이크가 계속 켜져 있다 */
+  /* 시트를 닫을 때 듣고 있던 걸 반드시 끈다 — 실제 인식을 붙이고 나면 안 끄면 마이크가 계속 켜져 있다 */
   document.getElementById("sheet-memo").addEventListener("click", e=>{
-    if(e.target.closest("[data-closesheet]") && rec) rec.stop();
+    if(e.target.closest("[data-closesheet]")) micOff();
   });
 
   document.getElementById("memo-save").addEventListener("click", ()=>{
-    if(rec) rec.stop();
+    micOff();
     const v = document.getElementById("memo-ta").value.trim();
     if(curMark){
       if(v){ curMark.dataset.memo = v; curMark.classList.add("memoed"); }
