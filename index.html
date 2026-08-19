@@ -562,16 +562,35 @@ body.clean .jumpbar{display:none;}
 .my-profile .avatar-lg{width:56px;height:56px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
 .my-profile .avatar-lg i,.my-profile .avatar-lg svg{width:24px;height:24px;color:var(--placeholder-icon);}
 .my-info{flex:1;min-width:0;}
-.my-nameline{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.my-nameline{display:flex;align-items:center;gap:8px;}
 .my-name{font-size:17px;font-weight:800;}
 /* 구독 상태는 배지 줄을 따로 두지 않고 이름 옆 상태 표시로 붙인다.
    '누구 · 어떤 상태'가 한 줄에서 끝나야 프로필이 두 덩이로 안 쪼개진다. */
 .my-state{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--text-gray);flex-shrink:0;}
 .my-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--text-dark);}
 /* 관심사는 지금 뭐가 걸려 있는지 나열하지 않는다. 그건 들어가서 보면 되고,
-   여기서는 '고칠 수 있는 곳이 있다'만 알면 된다. */
-.my-interest{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:6px 12px;border:1px solid var(--border-default);border-radius:999px;background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-dark);font-family:inherit;cursor:pointer;}
+   여기서는 '고칠 수 있는 곳이 있다'만 알면 된다.
+   이름 줄 오른쪽 끝에 붙인다(리건, 2026-08-19) — 아래로 내리면 이름·계정과 세 줄이 되고,
+   그 자리는 '내가 누구인지'를 읽는 자리라 조작 버튼이 끼면 흐름이 끊긴다. */
+.my-interest{display:inline-flex;align-items:center;gap:5px;margin-left:auto;flex-shrink:0;padding:6px 12px;border:1px solid var(--border-default);border-radius:999px;background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-dark);font-family:inherit;cursor:pointer;}
 .my-interest i,.my-interest svg{width:13px;height:13px;color:var(--text-gray);}
+/* 어느 계정으로 들어와 있는지. Google·Apple·이메일 셋을 다 열어뒀으니
+   '내가 어느 걸로 가입했더라'가 실제로 헷갈린다 — 로고와 주소를 같이 보여준다.
+   ⚠ 실구현에서는 Google·Apple 공식 로고 에셋을 쓴다. 글자 G 로 대신하면 브랜드 가이드 위반이다. */
+.my-acct{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--text-gray);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.my-oauth{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--bg-white);
+  border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:var(--text-dark);}
+
+/* ── 관심사 수정 ──
+   온보딩으로 되돌리지 않는다(리건, 2026-08-19). 온보딩은 처음 한 번 훑고 지나가는 길이라
+   단계 표시와 '다음'이 붙어 있고, 고치러 온 사람은 한 항목만 만지고 바로 나가고 싶다.
+   그래서 다섯 문항을 한 화면에 펼치고 아무 데나 손대면 되게 했다.
+   칩 동작(single·data-max)은 온보딩 로직을 그대로 쓴다 — 규칙이 두 벌이 되면 반드시 어긋난다. */
+.ed-div{height:8px;background:var(--bg-light);}
+.ed-bottom{flex-shrink:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));background:var(--bg-white);border-top:1px solid var(--border-light);}
+.ed-note{padding:0 16px 22px;font-size:11.5px;color:var(--text-light);line-height:1.65;}
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .stat-tile{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px 6px;text-align:center;}
 .stat-tile b{display:block;font-size:17px;font-weight:800;}
@@ -699,7 +718,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">마이</button><button data-jump="scr-settings">설정</button>
+  <button data-jump="scr-my">마이</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -2194,8 +2213,9 @@ body.clean .jumpbar{display:none;}
         <div class="my-nameline">
           <span class="my-name">리건</span>
           <span class="my-state">구독중</span>
+          <button class="my-interest" data-go="scr-interest"><i data-lucide="tag"></i>관심사</button>
         </div>
-        <button class="my-interest" data-go="scr-ob1"><i data-lucide="tag"></i>관심사</button>
+        <div class="my-acct"><span class="my-oauth">G</span>rigeon@gmail.com</div>
       </div>
     </div>
 
@@ -2303,6 +2323,92 @@ body.clean .jumpbar{display:none;}
 </section>
 
 <!-- ══════════ 설정 (마이페이지 ⚙) ══════════ -->
+<!-- ══════════ 관심사 수정 ══════════ -->
+<section class="screen" id="scr-interest">
+  <div class="gnb">
+    <span class="gnb-side"><i data-lucide="chevron-left" data-back></i></span>
+    <span class="gnb-title">관심사</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">관심 있는 주제</span><span class="sec-more">최대 3개</span></div>
+      <div class="chip-wrap" data-max="3" style="gap:10px">
+        <span class="chip toggle on">콘텐츠</span>
+        <span class="chip toggle">카피·후킹</span>
+        <span class="chip toggle">브랜딩</span>
+        <span class="chip toggle">타겟·차별화</span>
+        <span class="chip toggle on">전환·매출</span>
+        <span class="chip toggle">소비자 심리</span>
+        <span class="chip toggle">SEO</span>
+        <span class="chip toggle">AEO·AI검색</span>
+        <span class="chip toggle">AI·프롬프트</span>
+        <span class="chip toggle">자동화</span>
+        <span class="chip toggle">데이터</span>
+        <span class="chip toggle">사업 성장</span>
+      </div>
+    </div>
+    <div class="ed-div"></div>
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">요즘 가장 큰 고민</span><span class="sec-more">최대 3개</span></div>
+      <div class="chip-wrap" data-max="3" style="gap:10px">
+        <span class="chip toggle"><i data-lucide="pencil-off"></i>뭘 올려야 할지 모르겠어요</span>
+        <span class="chip toggle on"><i data-lucide="eye-off"></i>올려도 반응이 없어요</span>
+        <span class="chip toggle on"><i data-lucide="trending-down"></i>팔로워는 있는데 매출이 안 돼요</span>
+        <span class="chip toggle"><i data-lucide="megaphone-off"></i>판매글 쓰는 게 부담스러워요</span>
+        <span class="chip toggle"><i data-lucide="palette"></i>우리 브랜드만의 색깔이 없어요</span>
+        <span class="chip toggle"><i data-lucide="brain"></i>고객 마음을 모르겠어요</span>
+        <span class="chip toggle"><i data-lucide="bot"></i>AI를 활용하고 싶어요</span>
+        <span class="chip toggle"><i data-lucide="search-x"></i>AI 검색 시대가 불안해요</span>
+        <span class="chip toggle"><i data-lucide="clock"></i>혼자 다 하느라 시간이 없어요</span>
+      </div>
+    </div>
+    <div class="ed-div"></div>
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">하는 일</span></div>
+      <div class="chip-wrap single" style="gap:10px">
+        <span class="chip toggle on"><i data-lucide="store"></i>사업을 하고 있어요</span>
+        <span class="chip toggle"><i data-lucide="clapperboard"></i>크리에이터로 활동중이에요</span>
+        <span class="chip toggle"><i data-lucide="briefcase"></i>직장에 다니고 있어요</span>
+        <span class="chip toggle"><i data-lucide="lightbulb"></i>아직은 준비중이에요</span>
+      </div>
+    </div>
+    <div class="ed-div"></div>
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">분야</span></div>
+      <div class="chip-wrap single" style="gap:10px">
+        <span class="chip toggle on"><i data-lucide="coffee"></i>음식 · 카페</span>
+        <span class="chip toggle"><i data-lucide="sparkles"></i>뷰티 · 패션</span>
+        <span class="chip toggle"><i data-lucide="dumbbell"></i>건강 · 운동</span>
+        <span class="chip toggle"><i data-lucide="graduation-cap"></i>교육 · 컨설팅</span>
+        <span class="chip toggle"><i data-lucide="flame"></i>자기계발 · 동기부여</span>
+        <span class="chip toggle"><i data-lucide="sofa"></i>인테리어 · 공간</span>
+        <span class="chip toggle"><i data-lucide="paw-print"></i>반려동물</span>
+        <span class="chip toggle"><i data-lucide="baby"></i>육아 · 가족</span>
+        <span class="chip toggle"><i data-lucide="plane"></i>여행 · 취미</span>
+        <span class="chip toggle"><i data-lucide="trending-up"></i>비즈니스 · 재테크</span>
+        <span class="chip toggle"><i data-lucide="cpu"></i>IT · AI</span>
+        <span class="chip toggle"><i data-lucide="ellipsis"></i>기타</span>
+      </div>
+    </div>
+    <div class="ed-div"></div>
+    <div class="sec">
+      <div class="sec-head"><span class="sec-title">판매하는 곳</span></div>
+      <div class="chip-wrap single" style="gap:10px">
+        <span class="chip toggle on"><i data-lucide="store"></i>주로 오프라인에서 (매장 · 현장)</span>
+        <span class="chip toggle"><i data-lucide="globe"></i>주로 온라인에서</span>
+        <span class="chip toggle"><i data-lucide="shuffle"></i>둘 다 해요</span>
+        <span class="chip toggle"><i data-lucide="lightbulb"></i>아직 준비 중이에요</span>
+      </div>
+    </div>
+    <div class="ed-div"></div>
+    <p class="ed-note">여기서 고친 내용은 홈 추천과 낙타AI 답변에 바로 반영돼요.<br>사업이 달라지면 언제든 다시 고쳐주세요.</p>
+  </div>
+  <div class="ed-bottom">
+    <button class="btn btn-primary" style="width:100%" data-back>저장하기</button>
+  </div>
+</section>
+
 <section class="screen" id="scr-settings">
   <div class="gnb">
     <i data-lucide="chevron-left" data-back></i>
