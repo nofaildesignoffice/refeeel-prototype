@@ -857,9 +857,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .eval-box b{font-size:15px;font-weight:800;display:block;margin-bottom:12px;}
 .eval-btns{display:flex;gap:8px;}
 .eval-btns .btn{flex:1;padding:11px;font-size:13px;}
-.memo-input{margin:10px 16px 0;border:1px dashed var(--border-default);border-radius:var(--radius-sm);padding:13px 14px;font-size:13px;color:var(--text-light);display:none;align-items:center;gap:8px;}
-.memo-input.show{display:flex;}
-.memo-input i,.memo-input svg{width:15px;height:15px;}
+/* 다 읽고 난 뒤 소감을 따로 받지 않는다(리건, 2026-08-19).
+   기록은 읽는 도중 문장에 붙여서 남기면 된다 — 끝나고 또 물으면 숙제가 하나 더 생긴다. */
+.eval-btns .btn.dim{opacity:0.4;pointer-events:none;}
 
 /* 시리즈 */
 .series-hero{background:var(--bg-dark);color:var(--bg-white);padding:26px 16px;}
@@ -2370,12 +2370,11 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     <div class="eval-box">
       <b>새로운 관점을 얻으셨나요?</b>
       <div class="eval-btns">
-        <button class="btn btn-primary" id="eval-yes"><i data-lucide="lightbulb"></i>네, 얻었어요</button>
+        <button class="btn btn-primary"><i data-lucide="lightbulb"></i>네, 얻었어요</button>
         <button class="btn btn-secondary">아직이요</button>
       </div>
     </div>
 
-    <div class="memo-input" id="memo-input"><i data-lucide="pen-line"></i>지금 든 생각을 한 줄로 기록해보세요 (선택)</div>
 
     <div class="sec">
       <div class="sec-head"><span class="sec-title">이 리킷을 본 분들이 함께 본 리킷</span></div>
@@ -3436,7 +3435,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,.eval-btns .btn");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -3501,7 +3500,12 @@ document.addEventListener("click", e=>{
   if(t.hasAttribute("data-back")){ back(); return; }
   if(t.dataset.tab){ tab(t.dataset.tab); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
-  if(t.id === "eval-yes"){ document.getElementById("memo-input").classList.add("show"); return; }
+  if(t.closest(".eval-btns")){
+    /* 고른 쪽만 남고 반대쪽은 흐려진다. 되돌릴 일이 아니라 한 번 누르면 끝이다 */
+    t.closest(".eval-btns").querySelectorAll(".btn").forEach(b=> b.classList.toggle("dim", b !== t));
+    showToast("알려주셔서 고맙습니다");
+    return;
+  }
   if(t.classList.contains("toggle")){
     /* .chip-wrap.single — 하나만 고르는 문항은 라디오처럼 서로를 끈다 */
     const one = t.closest(".chip-wrap.single");
