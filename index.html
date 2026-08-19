@@ -780,19 +780,18 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 #confetti{position:absolute;inset:0;z-index:200;pointer-events:none;overflow:hidden;contain:strict;}
 .cf{position:absolute;left:50%;bottom:-18px;width:9px;height:14px;border-radius:1.5px;
   backface-visibility:hidden;will-change:transform,opacity;
-  animation:cf-fly 1.9s cubic-bezier(.11,.64,.28,1) forwards;}
+  animation:cf-fly 1.8s cubic-bezier(.08,.66,.22,1) forwards;}
 .cf.r{border-radius:50%;width:9px;height:9px;}
 .cf.s{width:5px;height:17px;}
 /* 바닥 한가운데서 터져 위쪽 반원으로 뻗어 나간다.
    처음이 가장 빠르고 갈수록 느려진다 — 터진 힘이 빠지는 모양이다.
-   끝에서는 화면 밖으로 나가 버리므로 굳이 페이드로 지우지 않는다.
-   62% 지점을 정점으로 두고 그 뒤에 살짝 처지게 해 두면 던져진 것처럼 보인다. */
+   떨어뜨리지 않는다(리건, 2026-08-19). 뻗어 나간 끝에서 힘이 잦아들며 그대로 옅어져 사라진다.
+   중력을 넣으면 정점에서 아래로 꺾이는 순간이 눈에 걸린다 — 축하가 아니라 낙하로 보인다. */
 @keyframes cf-fly{
   0%  {transform:translate3d(-50%,0,0) rotate(0deg);opacity:0;}
-  4%  {opacity:1;}
-  62% {transform:translate3d(calc(-50% + var(--x) * 0.78),var(--y),0) rotate(calc(var(--r) * 0.6));}
-  88% {opacity:1;}
-  100%{transform:translate3d(calc(-50% + var(--x)),var(--y2),0) rotate(var(--r));opacity:0;}
+  5%  {opacity:1;}
+  62% {opacity:1;}
+  100%{transform:translate3d(calc(-50% + var(--x)),var(--y),0) rotate(var(--r));opacity:0;}
 }
 /* 움직임을 줄여 달라고 해 둔 기기에서는 조각을 띄우지 않는다 */
 @media (prefers-reduced-motion: reduce){
@@ -3721,7 +3720,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 /* 완독 축하 — 바닥 한가운데서 위로 터진다.
    조각마다 쏘는 각도를 준다. 수직을 0 으로 두고 좌우 82도 안에서 고르게 흩는다.
    각도와 거리를 삼각함수로 풀면 한 점에서 부채꼴로 퍼지는 모양이 그대로 나온다.
-   거리는 화면보다 크게 잡는다 — 힘이 다해 멈추는 게 아니라 화면 밖으로 나가 사라져야 한다.
+   뻗은 끝에서 그대로 옅어져 사라진다. 아래로 떨어뜨리지 않는다 —
+   떨어지는 순간이 보이면 축하가 아니라 낙하로 읽힌다.
    조각은 조각모음(fragment)에 다 만들어 두고 한 번에 붙인다 —
    하나씩 붙이면 붙일 때마다 레이아웃이 돈다. */
 function confetti(){
@@ -3741,13 +3741,12 @@ function confetti(){
     /* 위쪽을 0 으로 두고 좌우로 흩는다. 가장자리로 갈수록 뜸하게 — 가운데가 굵어야 터진 티가 난다 */
     const spread = (Math.random() + Math.random() - 1);        /* 가운데가 두꺼운 분포 */
     const rad = spread * 82 * Math.PI / 180;
-    const dist = reach * (0.62 + Math.random() * 0.68);
+    const dist = reach * (0.46 + Math.random() * 0.62);
     const x = Math.sin(rad) * dist;
     const y = -Math.cos(rad) * dist;
 
     c.style.setProperty("--x",  x.toFixed(0) + "px");
     c.style.setProperty("--y",  y.toFixed(0) + "px");
-    c.style.setProperty("--y2", (y + 150 + Math.random() * 120).toFixed(0) + "px");  /* 끝에서 살짝 처진다 */
     c.style.setProperty("--r",  (Math.random() * 1080 - 540).toFixed(0) + "deg");
     /* 여섯에 하나는 한 박자 늦게 — 두 번 터지는 것처럼 보인다 */
     c.style.animationDelay = (i % 6 === 0 ? 0.2 + Math.random() * 0.14 : Math.random() * 0.07).toFixed(2) + "s";
