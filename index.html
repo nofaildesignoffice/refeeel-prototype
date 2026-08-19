@@ -340,19 +340,43 @@ body.clean .jumpbar{display:none;}
   transition:opacity .24s ease,transform .24s ease;}
 #scr-reader.shot-done .rd-toast{opacity:1;transform:translate(-50%,0);}
 
-/* ── 모아보기 : 묶음 카드 ──
-   누르면 그 묶음의 기록만 전체화면으로 하나씩 넘겨 읽는다(리더 화면은 별도 기획).
+/* ── 모아보기 ──
+   누르면 그 묶음의 기록만 전체화면으로 하나씩 넘겨 읽는다(scr-reader).
    전체보기의 주제 칩과 결과가 다르다 — 여기는 읽기, 저기는 목록 좁히기.
-   미리보기 한 줄을 넣는 이유: 제목과 개수만 있으면 누를 이유가 약하다. */
-.mcard{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:15px;cursor:pointer;}
-.mcard+.mcard{margin-top:10px;}
-.mc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.mc-title{font-size:14px;font-weight:800;letter-spacing:-0.2px;}
-.mc-head i,.mc-head svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
-.mc-cnt{font-size:11px;font-weight:700;color:var(--text-light);margin-top:6px;}
-.mc-prev{display:flex;gap:7px;align-items:flex-start;margin-top:11px;padding-top:11px;border-top:1px solid var(--border-light);}
-.mc-prev i,.mc-prev svg{width:12px;height:12px;color:var(--text-muted);margin-top:3px;flex-shrink:0;}
-.mc-prev p{font-size:12.5px;color:var(--text-gray);line-height:1.55;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+   위는 기간, 아래는 주제. 성격이 달라 배치도 다르다 —
+   기간은 셋뿐이라 크게 넘겨 보고, 주제는 늘어나므로 한 줄씩 내려간다.
+   카드에 메모 본문은 넣지 않는다(리건, 2026-08-19) — 한 장만 미리 보여주면
+   그 한 장이 묶음을 대표해버리고, 정작 읽으러 들어갈 이유는 줄어든다. */
+.pc-wrap{padding:18px 0 2px;}
+.pc-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px 4px;}
+.pc-track::-webkit-scrollbar{display:none;}
+/* 다음 카드가 살짝 걸쳐 보이게 78% — 옆에 더 있다는 걸 화살표 없이 알린다 */
+.pcard{flex:0 0 78%;scroll-snap-align:center;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:var(--bg-white);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);cursor:pointer;}
+.pc-top{aspect-ratio:1/1;padding:18px;display:flex;flex-direction:column;background:linear-gradient(150deg,#EEECE8 0%,#DDDAD4 100%);}
+/* 최근일수록 진하다 — 세 장을 나란히 두면 시간 순서가 색으로도 읽힌다 */
+.pcard:nth-child(2) .pc-top{background:linear-gradient(150deg,#F3F1EE 0%,#E6E3DE 100%);}
+.pcard:nth-child(3) .pc-top{background:linear-gradient(150deg,#F7F5F3 0%,#EDEAE6 100%);}
+.pc-range{font-size:10.5px;font-weight:700;letter-spacing:0.3px;color:var(--text-gray);}
+.pc-n{margin-top:auto;font-size:42px;font-weight:800;line-height:1;letter-spacing:-2px;color:var(--text-black);}
+.pc-unit{font-size:11.5px;font-weight:700;color:var(--text-gray);margin-top:5px;}
+.pc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.pc-tags span{padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.72);font-size:10px;font-weight:700;color:var(--text-dark);}
+.pc-body{display:flex;align-items:center;gap:8px;padding:13px 14px;}
+.pc-body .grow{flex:1;min-width:0;}
+.pc-t{font-size:13.5px;font-weight:800;letter-spacing:-0.2px;}
+.pc-s{font-size:11px;font-weight:700;color:var(--text-light);margin-top:4px;}
+.pc-body i,.pc-body svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
+
+/* 주제 — 한 줄에 하나씩 쭉. 주제가 늘어도 무너지지 않고, 스크롤만 길어진다. */
+.tpl{display:flex;align-items:center;gap:11px;padding:9px 12px 9px 9px;border:1px solid var(--border-light);border-radius:var(--radius-md);background:var(--bg-white);cursor:pointer;}
+.tpl+.tpl{margin-top:8px;}
+.tpl-ic{width:44px;height:44px;flex-shrink:0;border-radius:10px;background:var(--bg-light);display:flex;align-items:center;justify-content:center;}
+.tpl-ic i,.tpl-ic svg{width:18px;height:18px;color:var(--text-gray);}
+.tpl .grow{flex:1;min-width:0;}
+.tpl-t{font-size:13.5px;font-weight:800;letter-spacing:-0.2px;}
+.tpl-s{font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
+.tpl>i,.tpl>svg{width:15px;height:15px;color:var(--text-muted);flex-shrink:0;}
 
 /* ── 나의 인사이트 : 지표 ──
    쌓은 양이 아니라 '내가 만든 것'을 센다. 밑줄은 손가락 한 번이고 메모는 품이 든다.
@@ -1915,31 +1939,92 @@ body.clean .jumpbar{display:none;}
   </div>
 
   <!-- ── B. 모아보기 ── -->
-  <!-- 묶음 카드 세로 1줄. 각 카드를 누르면 그 묶음의 기록을 전체화면에서 하나씩 넘겨 읽는다.
-       리더 화면은 아직 없다 — 설계 확정 후 붙인다.
-       '이번 주'는 최근 7일로 잡았다. 월~일로 끊으면 월요일에는 늘 0개가 된다. -->
+  <!-- 위는 기간, 아래는 주제.
+       기간은 '끝난 기간'만 보여준다(리건, 2026-08-19). 이번 주·이번 달은 아직 진행 중이라
+       되돌아볼 대상이 아니다 — 지금 열면 늘 덜 쌓인 상태고, 며칠 뒤 다시 오면 내용이 달라져 있다.
+       셋째 칸부터는 '지지난달' 대신 월 이름으로 부른다. 세는 말은 한 번에 안 읽힌다.
+       ⚠ 오늘을 2026-08-19(수)로 잡은 화면이다. 실제로는 지난주 = 직전 월~일,
+          지난달·전전달 = 달력 월 경계로 서버가 계산해 내려준다. -->
   <div class="scroll lseg-view" id="lseg-collect">
 
+      <div class="pc-wrap">
+        <div class="pc-track">
+        <article class="pcard" data-go="scr-reader">
+          <div class="pc-top">
+            <div class="pc-range">8.10 — 8.16</div>
+            <div class="pc-n">8</div>
+            <div class="pc-unit">개의 기록</div>
+            <div class="pc-tags"><span>소비자 심리</span><span>사업 성장</span><span>전환·매출</span></div>
+          </div>
+          <div class="pc-body">
+            <div class="grow"><div class="pc-t">지난주 나의 인사이트</div><div class="pc-s">밑줄 3 · 메모 5</div></div>
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </article>
+        <article class="pcard" data-go="scr-reader">
+          <div class="pc-top">
+            <div class="pc-range">7.1 — 7.31</div>
+            <div class="pc-n">21</div>
+            <div class="pc-unit">개의 기록</div>
+            <div class="pc-tags"><span>콘텐츠</span><span>브랜딩</span><span>카피·후킹</span></div>
+          </div>
+          <div class="pc-body">
+            <div class="grow"><div class="pc-t">지난달 나의 인사이트</div><div class="pc-s">밑줄 13 · 메모 8</div></div>
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </article>
+        <article class="pcard" data-go="scr-reader">
+          <div class="pc-top">
+            <div class="pc-range">6.1 — 6.30</div>
+            <div class="pc-n">14</div>
+            <div class="pc-unit">개의 기록</div>
+            <div class="pc-tags"><span>사업 성장</span><span>데이터</span></div>
+          </div>
+          <div class="pc-body">
+            <div class="grow"><div class="pc-t">6월 나의 인사이트</div><div class="pc-s">밑줄 9 · 메모 5</div></div>
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </article>
+        </div>
+      </div>
+
       <div class="sec">
-
-        <div class="mcard" data-go="scr-reader">
-          <div class="mc-head"><span class="mc-title">이번 주 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
-          <div class="mc-cnt">밑줄 6 · 메모 3</div>
-          <div class="mc-prev"><i data-lucide="pen-line"></i><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네.</p></div>
+        <div class="sec-head"><span class="sec-title">주제별 나의 인사이트</span></div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="brain"></i></div>
+          <div class="grow"><div class="tpl-t">소비자 심리</div><div class="tpl-s">밑줄 1 · 메모 1</div></div>
+          <i data-lucide="chevron-right"></i>
         </div>
-
-        <div class="mcard" data-go="scr-reader">
-          <div class="mc-head"><span class="mc-title">이번 달 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
-          <div class="mc-cnt">밑줄 10 · 메모 6</div>
-          <div class="mc-prev"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="trending-up"></i></div>
+          <div class="grow"><div class="tpl-t">사업 성장</div><div class="tpl-s">메모 2</div></div>
+          <i data-lucide="chevron-right"></i>
         </div>
-
-        <div class="mcard" data-go="scr-reader">
-          <div class="mc-head"><span class="mc-title">주제별 나의 인사이트</span><i data-lucide="chevron-right"></i></div>
-          <div class="mc-cnt">주제 7개</div>
-          <div class="mc-prev"><i data-lucide="tag"></i><p>전환·매출 3 · 콘텐츠 3 · 소비자 심리 2 · 브랜딩 2 · 타겟·차별화 2 · 카피·후킹 2 · AEO·AI검색 1</p></div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="search"></i></div>
+          <div class="grow"><div class="tpl-t">AEO·AI검색</div><div class="tpl-s">밑줄 1 · 메모 1</div></div>
+          <i data-lucide="chevron-right"></i>
         </div>
-
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="target"></i></div>
+          <div class="grow"><div class="tpl-t">전환·매출</div><div class="tpl-s">메모 1</div></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="pen-tool"></i></div>
+          <div class="grow"><div class="tpl-t">콘텐츠</div><div class="tpl-s">밑줄 1</div></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="gem"></i></div>
+          <div class="grow"><div class="tpl-t">브랜딩</div><div class="tpl-s">메모 1</div></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
+        <div class="tpl" data-go="scr-reader">
+          <div class="tpl-ic"><i data-lucide="crosshair"></i></div>
+          <div class="grow"><div class="tpl-t">타겟·차별화</div><div class="tpl-s">밑줄 1</div></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
       </div>
 
   </div>
