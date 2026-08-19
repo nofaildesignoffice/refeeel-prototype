@@ -700,14 +700,17 @@ body.clean .jumpbar{display:none;}
 .vcheck li+li{margin-top:9px;}
 .vcheck li i,.vcheck li svg{width:14px;height:14px;color:var(--text-muted);flex-shrink:0;margin-top:3px;}
 
-/* 밑줄 — 색을 쓰지 않고 바탕과 밑선으로만 표시한다. 본문 톤을 깨지 않는다 */
-.sen{cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:2px;transition:background .12s ease;}
-.sen.picked{background:rgba(0,0,0,0.07);}
-.sen.marked{background:#EDE9E1;box-shadow:inset 0 -2px 0 #CFC6B4;}
-.sen.memoed{box-shadow:inset 0 -2px 0 var(--text-black);}
-.sen.memoed::after{content:"✎";font-size:11px;color:var(--text-black);margin-left:3px;vertical-align:2px;}
+/* 밑줄 — 색을 쓰지 않고 바탕과 밑선으로만 표시한다. 본문 톤을 깨지 않는다.
+   끌어서 고른 만큼만 그어진다 — 문장 단위로 잡으면 정작 밑줄 치고 싶은 구절은 못 고른다. */
+.viewer-body ::selection{background:rgba(0,0,0,0.15);}
+mark.hl{background:#EDE9E1;box-shadow:inset 0 -2px 0 #CFC6B4;color:inherit;border-radius:2px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;}
+mark.hl.memoed{box-shadow:inset 0 -2px 0 var(--text-black);}
+mark.hl.memoed::after{content:"✎";font-size:11px;color:var(--text-black);margin-left:2px;vertical-align:2px;}
+/* 겹쳐 그은 자리가 더 진해지지 않게 — 안쪽은 바탕을 물려받지 않는다 */
+mark.hl mark.hl{background:none;box-shadow:none;}
 
-/* 문장을 탭하면 그 아래에 붙는다 */
+/* 고른 자리 아래에 붙는다 */
 .sel-tip{position:absolute;z-index:20;display:none;background:var(--bg-dark);border-radius:var(--radius-sm);
   overflow:hidden;width:max-content;box-shadow:var(--shadow-md);}
 .sel-tip.on{display:flex;}
@@ -716,6 +719,10 @@ body.clean .jumpbar{display:none;}
   font-family:inherit;cursor:pointer;}
 .sel-tip button:last-child{border-right:none;}
 .sel-tip i,.sel-tip svg{width:14px;height:14px;}
+/* 이미 그어 둔 밑줄을 눌렀을 때는 '밑줄' 대신 '지우기' 가 뜬다 */
+.sel-tip [data-act="unmark"]{display:none;}
+.sel-tip.editing [data-act="mark"]{display:none;}
+.sel-tip.editing [data-act="unmark"]{display:flex;}
 
 /* 다 읽으면 나타나는 마무리. 끝에 닿기 전에는 눌러도 소용없다는 걸 흐리게 보여준다 */
 .v-end{margin-top:36px;padding-top:26px;border-top:1px solid var(--border-light);text-align:center;}
@@ -2273,32 +2280,32 @@ body.clean .jumpbar{display:none;}
       <div class="viewer-num">RE:KIT 41</div>
       <div class="viewer-title">팔지 않으면 팔리는<br>3단계 콘텐츠 퍼널</div>
 
-      <p class="vp"><span class="sen">저는 계속 말했습니다.</span> <span class="sen">피드에서 팔지 마세요.</span> <span class="sen">릴스로 유입하고, 스토리에서 전환하세요.</span> <span class="sen">그런데 대부분의 사업자가 이걸 듣고도 실행하지 않았어요.</span></p>
+      <p class="vp">저는 계속 말했습니다. 피드에서 팔지 마세요. 릴스로 유입하고, 스토리에서 전환하세요. 그런데 대부분의 사업자가 이걸 듣고도 실행하지 않았어요.</p>
       <h4 class="vh">대부분의 사업자가 불안해하는 것.</h4>
-      <p class="vp"><span class="sen">이유를 들어보면 거의 비슷합니다.</span> <span class="sen">“저는 마케팅 하려고 인스타 시작한 건데, 팔아야 하는 거 아닌가요?” “스토리는 24시간이면 사라지는데, 피드에 올려야 사람들이 보죠.” 마케팅을 위해 SNS를 하는 건데 당연히 팔아야지, 라는 생각이요.</span></p>
-      <p class="vp"><span class="sen">그 생각이 틀렸다는 게 아닙니다.</span> <span class="sen">당연히 팔아야죠.</span> <span class="sen">다만 한 가지 떠올려볼 게 있어요.</span> <span class="sen">당신도 소비자잖아요.</span> <span class="sen">‘너무 팔고 싶은 사람’에게서 무언가를 사고 싶었던 적이 있나요?</span> <span class="sen">대부분은 아닐 거예요.</span></p>
-      <blockquote class="vq"><span class="sen">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</span></blockquote>
-      <p class="vp"><span class="sen">문제는 ‘파느냐 마느냐’가 아니라 ‘어디서’ 파느냐인 거예요.</span></p>
-      <p class="vp"><span class="sen">그래서 피드에 오픈 안내를 올리고, 후기를 올리고, 가격을 올리고, 상품을 올립니다.</span> <span class="sen">릴스 사이사이에 ‘사세요’가 끼어 있는 계정이 되는 거죠.</span> <span class="sen">팔기 위해 시작한 건 맞는데, 결과적으로 오히려 팔리지 않는 구조를 만들고 있는 겁니다.</span></p>
+      <p class="vp">이유를 들어보면 거의 비슷합니다. “저는 마케팅 하려고 인스타 시작한 건데, 팔아야 하는 거 아닌가요?” “스토리는 24시간이면 사라지는데, 피드에 올려야 사람들이 보죠.” 마케팅을 위해 SNS를 하는 건데 당연히 팔아야지, 라는 생각이요.</p>
+      <p class="vp">그 생각이 틀렸다는 게 아닙니다. 당연히 팔아야죠. 다만 한 가지 떠올려볼 게 있어요. 당신도 소비자잖아요. ‘너무 팔고 싶은 사람’에게서 무언가를 사고 싶었던 적이 있나요? 대부분은 아닐 거예요.</p>
+      <blockquote class="vq">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</blockquote>
+      <p class="vp">문제는 ‘파느냐 마느냐’가 아니라 ‘어디서’ 파느냐인 거예요.</p>
+      <p class="vp">그래서 피드에 오픈 안내를 올리고, 후기를 올리고, 가격을 올리고, 상품을 올립니다. 릴스 사이사이에 ‘사세요’가 끼어 있는 계정이 되는 거죠. 팔기 위해 시작한 건 맞는데, 결과적으로 오히려 팔리지 않는 구조를 만들고 있는 겁니다.</p>
       <h4 class="vh">그래서 직접 해봤다.</h4>
-      <p class="vp"><span class="sen">저는 올해 인스타그램을 다시 시작하면서 이 콘텐츠 3단계 퍼널을 그대로 따랐습니다.</span> <span class="sen">말하는 것과 직접 해서 보여주는 건 다르니까요.</span></p>
-      <p class="vp"><span class="sen">오픈 안내, 판매, 후기, 상품 소개는 전부 스토리에서만 올렸어요.</span> <span class="sen">피드에는 오직 콘텐츠만 남겼습니다.</span> <span class="sen">누군가 이 계정에 처음 들어왔을 때 ‘이 사람 뭔가 파는 사람이네’라는 느낌이 들지 않도록요.</span> <span class="sen">‘이 사람 콘텐츠가 좋네, 얻을 게 있네’가 먼저 오게끔요.</span></p>
-      <p class="vp"><span class="sen">스토리에서는 다른 이야기를 했습니다.</span> <span class="sen">클래스 오픈 소식, 수강생 후기, 작업 과정, 한정 모집.</span> <span class="sen">피드에서는 한 번도 언급하지 않은 것들이요.</span> <span class="sen">스토리를 보는 사람은 이미 팔로우를 했고 피드 콘텐츠를 통해 신뢰가 쌓인 상태이기 때문에, 판매 메시지가 전혀 다른 무게로 받아들여집니다.</span></p>
+      <p class="vp">저는 올해 인스타그램을 다시 시작하면서 이 콘텐츠 3단계 퍼널을 그대로 따랐습니다. 말하는 것과 직접 해서 보여주는 건 다르니까요.</p>
+      <p class="vp">오픈 안내, 판매, 후기, 상품 소개는 전부 스토리에서만 올렸어요. 피드에는 오직 콘텐츠만 남겼습니다. 누군가 이 계정에 처음 들어왔을 때 ‘이 사람 뭔가 파는 사람이네’라는 느낌이 들지 않도록요. ‘이 사람 콘텐츠가 좋네, 얻을 게 있네’가 먼저 오게끔요.</p>
+      <p class="vp">스토리에서는 다른 이야기를 했습니다. 클래스 오픈 소식, 수강생 후기, 작업 과정, 한정 모집. 피드에서는 한 번도 언급하지 않은 것들이요. 스토리를 보는 사람은 이미 팔로우를 했고 피드 콘텐츠를 통해 신뢰가 쌓인 상태이기 때문에, 판매 메시지가 전혀 다른 무게로 받아들여집니다.</p>
       <h4 class="vh">2주, 2300만원.</h4>
-      <p class="vp"><span class="sen">결과는 단순했습니다.</span> <span class="sen">광고는커녕 아무것도 피드에 올리지 않았는데도 오픈 2주 만에 2300만원의 수익.</span> <span class="sen">피드가 ‘파는 곳’이 아니라 ‘얻을 곳’으로 인식되니까 팔로워 전환율이 올라갑니다.</span></p>
-      <p class="vp"><span class="sen">그리고 그 신뢰가 충분히 쌓인 사람들이 보는 스토리에서 전환 콘텐츠를 올렸을 뿐이에요.</span> <span class="sen">피드에서 팔았으면 이 순서가 무너졌을 거예요.</span></p>
-      <blockquote class="vq"><span class="sen">공감하며 보다가 갑자기 ‘사세요’가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.</span></blockquote>
+      <p class="vp">결과는 단순했습니다. 광고는커녕 아무것도 피드에 올리지 않았는데도 오픈 2주 만에 2300만원의 수익. 피드가 ‘파는 곳’이 아니라 ‘얻을 곳’으로 인식되니까 팔로워 전환율이 올라갑니다.</p>
+      <p class="vp">그리고 그 신뢰가 충분히 쌓인 사람들이 보는 스토리에서 전환 콘텐츠를 올렸을 뿐이에요. 피드에서 팔았으면 이 순서가 무너졌을 거예요.</p>
+      <blockquote class="vq">공감하며 보다가 갑자기 ‘사세요’가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.</blockquote>
       <h4 class="vh">해외에서도 이미 검증된 구조.</h4>
-      <p class="vp"><span class="sen">마케팅에는 TOFU·MOFU·BOFU라는 퍼널 프레임워크가 있습니다.</span> <span class="sen">인지에서 고려로, 고려에서 전환으로.</span> <span class="sen">이걸 인스타그램에 그대로 대입하면 이렇게 됩니다.</span></p>
+      <p class="vp">마케팅에는 TOFU·MOFU·BOFU라는 퍼널 프레임워크가 있습니다. 인지에서 고려로, 고려에서 전환으로. 이걸 인스타그램에 그대로 대입하면 이렇게 됩니다.</p>
       <div class="vbox"><div class="vrow"><b>릴스 — 유입</b><span>낯선 사람을 발견하게 만드는 단계. 목표는 조회수가 아니라 프로필 방문.</span></div><div class="vrow"><b>피드 — 신뢰</b><span>프로필에 들어온 사람이 ‘이 사람 괜찮다’고 판단하는 단계.</span></div><div class="vrow"><b>스토리 — 전환</b><span>팔로워에게만 도달. 오픈·후기·한정 모집.</span></div></div>
-      <p class="vp"><span class="sen">퍼널이라는 이야기는 자주 듣지만 어렵게 느껴지죠.</span> <span class="sen">하지만 굉장히 단순합니다.</span> <span class="sen">릴스로 사람을 불러오고, 피드로 신뢰를 쌓고, 스토리에서 전환한다.</span> <span class="sen">이것뿐이니까요.</span></p>
+      <p class="vp">퍼널이라는 이야기는 자주 듣지만 어렵게 느껴지죠. 하지만 굉장히 단순합니다. 릴스로 사람을 불러오고, 피드로 신뢰를 쌓고, 스토리에서 전환한다. 이것뿐이니까요.</p>
       <h4 class="vh">역할이 섞이는 순간 퍼널은 무너진다.</h4>
-      <p class="vp"><span class="sen">릴스에서 팔면 유입이 줄고, 피드에서 팔면 신뢰가 깨지고, 스토리에서 정보만 올리면 전환이 되지 않죠.</span> <span class="sen">판매는 스토리와 DM에서, 피드는 철저히 신뢰 구축 전용으로.</span> <span class="sen">이 분리를 유지해야 유입된 사람이 이탈하지 않고 전환까지 이어집니다.</span></p>
-      <p class="vp"><span class="sen">물론 “피드에서 팔면 안 된다”가 절대적인 규칙은 아닙니다.</span> <span class="sen">핵심은 인스타그램이라는 플랫폼의 성격을 이해하는 거예요.</span> <span class="sen">사람들은 콘텐츠를 소비하는 게 아니라, 콘텐츠 뒤에 있는 사람에게 반응하고 있는 거예요.</span></p>
-      <p class="vp"><span class="sen">인스타그램은 광고판이 아니라 사람과 사람이 만나는 미디어예요.</span> <span class="sen">내 콘텐츠를 보는 사람이 “이걸 무료로 줘도 되나?”라고 느끼는 순간이 오면, 그 채널은 이미 브랜드로 기능하고 있는 겁니다.</span></p>
-      <blockquote class="vq"><span class="sen">당신의 피드는 지금 어떤 역할을 하고 있는가.</span></blockquote>
-      <p class="vp"><span class="sen">한 번 떠올려보면 됩니다.</span> <span class="sen">처음 방문한 사람이 당신의 피드를 아홉 칸쯤 훑었을 때 어떤 인상을 받을까요?</span> <span class="sen">“여기 뭔가 얻을 게 있다”인지, “여기 뭔가 팔고 있다”인지.</span> <span class="sen">이 첫인상이 팔로우 여부를 결정하고, 팔로우 여부가 스토리 도달을 결정하고, 스토리 도달이 전환을 결정합니다.</span></p>
-      <p class="vp"><span class="sen">당장 실행할 수 있는 건 이거예요.</span> <span class="sen">지금 피드에 있는 판매·오픈·후기 콘텐츠를 아카이브 처리하고, 앞으로의 판매 관련 콘텐츠는 전부 스토리로 옮기는 겁니다.</span> <span class="sen">피드에는 콘텐츠만 남기세요.</span> <span class="sen">이 구조를 한 달만 지켜보면 차이가 보이기 시작할 거예요.</span></p>
+      <p class="vp">릴스에서 팔면 유입이 줄고, 피드에서 팔면 신뢰가 깨지고, 스토리에서 정보만 올리면 전환이 되지 않죠. 판매는 스토리와 DM에서, 피드는 철저히 신뢰 구축 전용으로. 이 분리를 유지해야 유입된 사람이 이탈하지 않고 전환까지 이어집니다.</p>
+      <p class="vp">물론 “피드에서 팔면 안 된다”가 절대적인 규칙은 아닙니다. 핵심은 인스타그램이라는 플랫폼의 성격을 이해하는 거예요. 사람들은 콘텐츠를 소비하는 게 아니라, 콘텐츠 뒤에 있는 사람에게 반응하고 있는 거예요.</p>
+      <p class="vp">인스타그램은 광고판이 아니라 사람과 사람이 만나는 미디어예요. 내 콘텐츠를 보는 사람이 “이걸 무료로 줘도 되나?”라고 느끼는 순간이 오면, 그 채널은 이미 브랜드로 기능하고 있는 겁니다.</p>
+      <blockquote class="vq">당신의 피드는 지금 어떤 역할을 하고 있는가.</blockquote>
+      <p class="vp">한 번 떠올려보면 됩니다. 처음 방문한 사람이 당신의 피드를 아홉 칸쯤 훑었을 때 어떤 인상을 받을까요? “여기 뭔가 얻을 게 있다”인지, “여기 뭔가 팔고 있다”인지. 이 첫인상이 팔로우 여부를 결정하고, 팔로우 여부가 스토리 도달을 결정하고, 스토리 도달이 전환을 결정합니다.</p>
+      <p class="vp">당장 실행할 수 있는 건 이거예요. 지금 피드에 있는 판매·오픈·후기 콘텐츠를 아카이브 처리하고, 앞으로의 판매 관련 콘텐츠는 전부 스토리로 옮기는 겁니다. 피드에는 콘텐츠만 남기세요. 이 구조를 한 달만 지켜보면 차이가 보이기 시작할 거예요.</p>
       <div class="vcheck"><b>채널 역할 분리 체크리스트</b><ul><li><i data-lucide="square"></i>내 피드에 판매·오픈·후기 콘텐츠가 전체의 20% 이상인가?</li><li><i data-lucide="square"></i>처음 방문한 사람이 피드를 봤을 때 ‘파는 계정’이라는 느낌이 먼저 드는가?</li><li><i data-lucide="square"></i>릴스·피드·스토리에 각각 다른 역할을 부여하고 있는가?</li></ul></div>
 
       <div class="v-end">
@@ -2306,9 +2313,10 @@ body.clean .jumpbar{display:none;}
         <button class="btn btn-primary" data-go="scr-done">다 읽었어요</button>
       </div>
 
-      <!-- 문장을 탭하면 여기가 그 아래로 옮겨 붙는다 -->
+      <!-- 글자를 끌어서 고르면 여기가 고른 자리 아래로 옮겨 붙는다 -->
       <div class="sel-tip" id="sel-tip">
         <button data-act="mark"><i data-lucide="highlighter"></i>밑줄</button>
+        <button data-act="unmark"><i data-lucide="eraser"></i>지우기</button>
         <button data-act="memo"><i data-lucide="pen-line"></i>메모</button>
         <button data-act="copy"><i data-lucide="copy"></i>복사</button>
       </div>
@@ -3496,11 +3504,59 @@ function vSync(){
   document.getElementById("scr-viewer").classList.toggle("read-end", p > 0.985);
 }
 
-let senPicked = null;
+/* ── 밑줄·메모 ──
+   ⚠ 대상은 두 가지다. 새로 끌어서 고른 범위(selRange)이거나, 이미 그어 둔 밑줄(curMark)이거나.
+      전자는 '밑줄', 후자는 '지우기' 가 뜬다.
+   ⚠ 실기기에서는 iOS·Android 가 자기 선택 메뉴(복사·검색)를 함께 띄운다.
+      실구현에서는 본문에 user-select 를 직접 다루거나 네이티브 메뉴를 눌러 우리 항목을 끼워 넣어야 한다. */
+let selRange = null, curMark = null;
+
 function closeTip(){
-  document.getElementById("sel-tip").classList.remove("on");
-  if(senPicked) senPicked.classList.remove("picked");
-  senPicked = null;
+  const tip = document.getElementById("sel-tip");
+  if(tip){ tip.classList.remove("on","editing"); }
+  selRange = null; curMark = null;
+}
+
+/* 고른 자리(또는 누른 밑줄) 아래에 도구를 붙인다 */
+function placeTip(rect){
+  const tip = document.getElementById("sel-tip");
+  const body = document.querySelector("#scr-viewer .viewer-body");
+  const br = body.getBoundingClientRect();
+  tip.classList.add("on");
+  const left = Math.max(8, Math.min(rect.left - br.left, body.clientWidth - tip.offsetWidth - 8));
+  tip.style.left = left + "px";
+  tip.style.top  = (rect.bottom - br.top + 8) + "px";
+}
+
+/* 손을 뗀 뒤 무엇이 골라졌는지 본다 */
+function onSelDone(){
+  const body = document.querySelector("#scr-viewer .viewer-body");
+  const sel = window.getSelection();
+  if(!body || !sel || sel.rangeCount === 0 || sel.isCollapsed || !sel.toString().trim()) return;
+  const r = sel.getRangeAt(0);
+  const host = r.commonAncestorContainer.nodeType === 1 ? r.commonAncestorContainer : r.commonAncestorContainer.parentNode;
+  if(!body.contains(host)) return;          /* 본문 밖에서 고른 건 우리 일이 아니다 */
+  selRange = r.cloneRange(); curMark = null;
+  document.getElementById("sel-tip").classList.remove("editing");
+  placeTip(r.getBoundingClientRect());
+}
+
+/* 고른 범위를 mark 로 감싼다. 여러 문단에 걸쳐도 통째로 들어낸 뒤 다시 넣으면 살아남는다 */
+function wrapRange(range){
+  const m = document.createElement("mark");
+  m.className = "hl";
+  m.appendChild(range.extractContents());
+  range.insertNode(m);
+  const s = window.getSelection(); if(s) s.removeAllRanges();
+  return m;
+}
+
+/* 밑줄을 걷어내고 글자만 제자리에 남긴다 */
+function unwrap(m){
+  const p = m.parentNode;
+  while(m.firstChild) p.insertBefore(m.firstChild, m);
+  p.removeChild(m);
+  p.normalize();
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -3508,49 +3564,65 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(!sc) return;
   sc.addEventListener("scroll", ()=>{ vSync(); closeTip(); });
 
-  /* 문장 탭 → 그 문장 바로 아래에 도구를 붙인다.
-     ⚠ 실구현은 window.getSelection() 으로 잡은 범위에 붙인다. 여기서는 문장이 단위다. */
+  /* 브라우저가 선택을 확정한 뒤에 봐야 해서 한 박자 늦춘다 */
+  ["mouseup","touchend"].forEach(ev=> sc.addEventListener(ev, ()=> setTimeout(onSelDone, 10)));
+
   sc.addEventListener("click", e=>{
-    const s = e.target.closest(".sen");
-    const tip = document.getElementById("sel-tip");
-    if(!s){ if(!e.target.closest(".sel-tip")) closeTip(); return; }
-    if(senPicked === s){ closeTip(); return; }
-    if(senPicked) senPicked.classList.remove("picked");
-    senPicked = s; s.classList.add("picked");
-    const body = s.closest(".viewer-body");
-    const r = s.getBoundingClientRect(), br = body.getBoundingClientRect();
-    tip.classList.add("on");
-    const left = Math.max(8, Math.min(r.left - br.left, body.clientWidth - tip.offsetWidth - 8));
-    tip.style.left = left + "px";
-    tip.style.top  = (r.bottom - br.top + 7) + "px";
+    if(e.target.closest(".sel-tip")) return;
+    const m = e.target.closest("mark.hl");
+    if(m){
+      selRange = null; curMark = m;
+      document.getElementById("sel-tip").classList.add("editing");
+      placeTip(m.getBoundingClientRect());
+      return;
+    }
+    const s = window.getSelection();
+    if(!s || s.isCollapsed || !s.toString().trim()) closeTip();
   });
 
+  function picked(){ return curMark ? curMark.textContent.trim() : (selRange ? selRange.toString().trim() : ""); }
+
   document.getElementById("sel-tip").addEventListener("click", e=>{
-    const b = e.target.closest("[data-act]"); if(!b || !senPicked) return;
+    const b = e.target.closest("[data-act]"); if(!b) return;
     const act = b.dataset.act;
+
     if(act === "mark"){
-      senPicked.classList.toggle("marked");
-      showToast(senPicked.classList.contains("marked") ? "밑줄을 그었어요" : "밑줄을 지웠어요");
+      if(selRange) wrapRange(selRange);
+      showToast("밑줄을 그었어요");
       closeTip();
+
+    } else if(act === "unmark"){
+      if(curMark) unwrap(curMark);
+      showToast("밑줄을 지웠어요");
+      closeTip();
+
     } else if(act === "copy"){
-      showToast("문장을 복사했어요");
+      const txt = picked();
+      if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(()=>{});
+      showToast("복사했어요");
       closeTip();
+
     } else if(act === "memo"){
-      document.getElementById("memo-src").textContent = senPicked.textContent.trim();
-      document.getElementById("memo-ta").value = senPicked.dataset.memo || "";
+      /* 메모는 밑줄이 있어야 붙일 데가 생긴다 — 없으면 여기서 같이 긋는다 */
+      if(!curMark && selRange) curMark = wrapRange(selRange);
+      if(!curMark) return;
+      selRange = null;
+      document.getElementById("memo-src").textContent = curMark.textContent.trim();
+      document.getElementById("memo-ta").value = curMark.dataset.memo || "";
       document.getElementById("sheet-memo").classList.add("on");
     }
   });
 
   document.getElementById("memo-save").addEventListener("click", ()=>{
     const v = document.getElementById("memo-ta").value.trim();
-    if(senPicked){
-      if(v){ senPicked.dataset.memo = v; senPicked.classList.add("memoed","marked"); }
-      else { delete senPicked.dataset.memo; senPicked.classList.remove("memoed"); }
+    if(curMark){
+      if(v){ curMark.dataset.memo = v; curMark.classList.add("memoed"); }
+      else { delete curMark.dataset.memo; curMark.classList.remove("memoed"); }
     }
     document.getElementById("sheet-memo").classList.remove("on");
+    const had = !!v;
     closeTip();
-    showToast(v ? "메모를 남겼어요" : "메모를 지웠어요");
+    showToast(had ? "메모를 남겼어요" : "메모를 지웠어요");
   });
 
   /* 저장 — 채워진 북마크로 상태를 보인다 */
