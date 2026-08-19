@@ -1791,7 +1791,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
           <span class="chip toggle">인스타그램 <em>20</em></span><span class="chip toggle">릴스 <em>9</em></span><span class="chip toggle">블로그 <em>3</em></span><span class="chip toggle">네이버 플레이스 <em>2</em></span><span class="chip toggle">상세페이지 <em>1</em></span>
         </div>
       </div>
-      <p class="ch-note" id="ch-note"><i data-lucide="info"></i>콘텐츠 · 카피·후킹을 고르시면 어느 채널 이야기인지도 좁힐 수 있어요</p>
+      <p class="ch-note" id="ch-note"><i data-lucide="info"></i>주제를 고르시면 그 주제를 다룬 채널로 더 좁힐 수 있어요</p>
     </div>
 
     <div class="browse-bar">
@@ -3435,8 +3435,8 @@ function initBrowse(){
   const rows  = [...document.querySelectorAll("#view-list .ex-row")];
   const cards = [...document.querySelectorAll("#view-grid .gcard")];
   KITS.forEach((k,i)=>BITEMS.push({list:rows[i], card:cards[i], read:!!k.r, tags:k.g}));
-  document.getElementById("unread-browse").addEventListener("change", recount);
-  recount();
+  document.getElementById("unread-browse").addEventListener("change", refreshBrowse);
+  refreshBrowse();
   lucide.createIcons();
 }
 
@@ -3570,7 +3570,7 @@ document.addEventListener("click", e=>{
        && cap.querySelectorAll(".chip.toggle.on").length >= +cap.dataset.max) return;
     t.classList.toggle("on");
     obGate(); capChips();
-    if(t.closest("#sseg-browse")){ chFold(); recount(); }   /* 온보딩 칩은 제외 */
+    if(t.closest("#sseg-browse")) refreshBrowse();   /* 온보딩 칩은 제외 */
     return;
   }
 });
@@ -4042,17 +4042,32 @@ async function rdShareImage(){
   }
 }
 
-/* 채널 줄은 콘텐츠·카피·후킹을 고른 사람에게만 보인다.
-   접을 때 골라 둔 채널도 함께 푼다 — 보이지 않는 필터가 걸려 있으면 결과를 이해할 수 없다. */
+/* 채널 줄은 '고른 주제와 실제로 같이 붙어 있는 채널이 있을 때' 만 펼친다(리건, 2026-08-19).
+   어떤 주제에 채널이 걸리는지를 코드에 적어 두지 않는다 — 태깅이 바뀌면 그 목록이 먼저 낡는다.
+   recount() 가 방금 세어 둔 채널 칸의 숫자를 그대로 읽는다. 하나라도 0 이 아니면 교집합이 있는 것이다.
+   접을 때 골라 둔 채널도 함께 푼다 — 보이지 않는 필터가 걸려 있으면 결과를 이해할 수 없다.
+   푼 게 있으면 true 를 돌려준다. 부른 쪽에서 숫자를 다시 세라는 뜻이다. */
 function chFold(){
   const topic = document.getElementById("f-topic"), fold = document.getElementById("ch-fold");
-  if(!topic || !fold) return;
-  const on = Array.prototype.some.call(
-    topic.querySelectorAll(".chip.toggle.on"),
-    c => /콘텐츠|카피·후킹/.test(c.textContent));
+  if(!topic || !fold) return false;
+  const picked = topic.querySelectorAll(".chip.toggle.on").length > 0;
+  const hasPair = Array.prototype.some.call(
+    document.querySelectorAll("#f-channel .chip.toggle em"),
+    em => +em.textContent > 0);
+  const on = picked && hasPair;
+
   fold.classList.toggle("on", on);
   document.getElementById("ch-note").classList.toggle("off", on);
-  if(!on) document.querySelectorAll("#f-channel .chip.toggle.on").forEach(c => c.classList.remove("on"));
+
+  const stuck = document.querySelectorAll("#f-channel .chip.toggle.on");
+  if(!on && stuck.length){ stuck.forEach(c => c.classList.remove("on")); return true; }
+  return false;
+}
+
+/* 세고 → 채널 줄을 여닫고 → 그 바람에 선택이 풀렸으면 한 번 더 센다 */
+function refreshBrowse(){
+  recount();
+  if(chFold()) recount();
 }
 
 function capChips(){
