@@ -2044,7 +2044,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   <div class="rd-bottom">
     <button class="rd-btn" id="rd-shot" aria-label="이 화면 저장"><i data-lucide="camera"></i></button>
     <span style="flex:1"></span>
-    <button class="rd-btn" aria-label="공유"><i data-lucide="share-2"></i></button>
+    <button class="rd-btn" id="rd-share" aria-label="공유"><i data-lucide="share-2"></i></button>
     <button class="rd-btn exit" data-back aria-label="나가기"><i data-lucide="x"></i></button>
   </div>
 </section>
@@ -3830,7 +3830,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 
   /* 저장 — 껍데기를 걷고, 셔터를 치고, 다시 올린다.
-     걷는 데 .18s 를 주는 건 사람이 '아 이건 안 찍히는구나'를 볼 시간이다. */
+     걷는 데 .18s 를 주는 건 사람이 '아 이건 안 찍히는구나'를 볼 시간이다.
+     연출이 끝나는 시점에 맞춰 실제 이미지를 만들어 내려받는다. */
   const shot = document.getElementById("rd-shot"), rd = document.getElementById("scr-reader");
   if(shot) shot.addEventListener("click", ()=>{
     if(rd.classList.contains("shooting")) return;
@@ -3839,8 +3840,155 @@ document.addEventListener("DOMContentLoaded", ()=>{
     setTimeout(()=> rd.classList.add("flash"), 260);
     setTimeout(()=>{ rd.classList.remove("flash","shooting"); rd.classList.add("shot-done"); }, 580);
     setTimeout(()=> rd.classList.remove("shot-done"), 2400);
+    rdSaveImage();
   });
+
+  const shareBtn = document.getElementById("rd-share");
+  if(shareBtn) shareBtn.addEventListener("click", rdShareImage);
 });
+
+/* ══════════ 기록 이미지 ══════════
+   화면을 그대로 뜨지 않고 공유용으로 다시 그린다.
+   화면에는 진행바와 버튼이 있고 세로 비율도 공유에 맞지 않는다.
+   여기서 만드는 건 1080×1350(4:5) — 인스타 피드와 카톡 어디에 올려도 잘리지 않는 비율이다.
+   ⚠ 앱(Capacitor)에서는 이 Blob 을 Filesystem 으로 사진첩에 저장하고 Share 플러그인으로 넘긴다.
+      웹에서 쓰는 <a download> 와 navigator.share 는 웹 전용 경로다. */
+function rdCurrentCard(){
+  const tr = document.getElementById("rd-track");
+  if(!tr || !tr.clientHeight) return null;
+  return tr.children[Math.round(tr.scrollTop / tr.clientHeight)] || null;
+}
+
+/* 한글은 단어 경계가 없어 글자 단위로 접는다. 영문·숫자만 공백에서 끊어 준다 */
+function wrapText(g, text, maxW){
+  const out = [];
+  let line = "";
+  for(const ch of text){
+    const test = line + ch;
+    if(g.measureText(test).width > maxW && line){
+      /* 공백 뒤에 끊을 수 있으면 그 자리로 물린다 — 영문 단어가 잘리지 않게 */
+      const sp = line.lastIndexOf(" ");
+      if(sp > 0 && /[A-Za-z0-9]/.test(ch)){
+        out.push(line.slice(0, sp));
+        line = line.slice(sp + 1) + ch;
+      }else{
+        out.push(line);
+        line = ch;
+      }
+    }else line = test;
+  }
+  if(line) out.push(line);
+  return out;
+}
+
+async function rdRender(){
+  const card = rdCurrentCard();
+  if(!card) return null;
+  const q = s => { const el = card.querySelector(s); return el ? el.textContent.trim() : ""; };
+  const kind  = q(".rd-kind");
+  const body  = q(".rd-memo") || q(".rd-line");
+  const quote = q(".rd-quote");
+  const src   = q(".rd-src");
+
+  /* 웹폰트가 실제로 준비된 뒤에 그려야 한다. 안 그러면 대체 글꼴로 찍힌다 */
+  if(document.fonts && document.fonts.ready){
+    try{ await document.fonts.load("700 54px Pretendard"); await document.fonts.ready; }catch(e){}
+  }
+
+  const W = 1080, H = 1350, PAD = 96;
+  const cv = document.createElement("canvas");
+  cv.width = W; cv.height = H;
+  const g = cv.getContext("2d");
+
+  const grad = g.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, "#FBFAF8");
+  grad.addColorStop(1, "#F1EFEA");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, W, H);
+
+  const maxW = W - PAD * 2;
+  const bodyIsMemo = !!q(".rd-memo");
+
+  /* 본문 덩어리를 먼저 재서 세로 가운데에 앉힌다 */
+  g.font = (bodyIsMemo ? "700 " : "600 ") + "54px Pretendard, sans-serif";
+  const bodyLines = wrapText(g, body, maxW);
+  const bodyLH = 88;
+  let quoteLines = [];
+  const quoteLH = 56;
+  if(quote){
+    g.font = "400 34px Pretendard, sans-serif";
+    quoteLines = wrapText(g, quote, maxW - 34);
+  }
+  const blockH = 44 + bodyLines.length * bodyLH + (quote ? 52 + quoteLines.length * quoteLH : 0);
+  let y = Math.max(300, (H - blockH) / 2);
+
+  /* 종류 */
+  g.font = "800 26px Pretendard, sans-serif";
+  g.fillStyle = "#BCBCBC";
+  g.fillText(kind, PAD, y);
+  y += 74;
+
+  /* 본문 */
+  g.font = (bodyIsMemo ? "700 " : "600 ") + "54px Pretendard, sans-serif";
+  g.fillStyle = bodyIsMemo ? "#1A1A1A" : "#333333";
+  bodyLines.forEach(l => { g.fillText(l, PAD, y); y += bodyLH; });
+
+  /* 밑줄 원문 */
+  if(quote){
+    y += 30;
+    const top = y - 40;
+    g.font = "400 34px Pretendard, sans-serif";
+    g.fillStyle = "#666666";
+    quoteLines.forEach(l => { g.fillText(l, PAD + 34, y); y += quoteLH; });
+    g.fillStyle = "#D0D0D0";
+    g.fillRect(PAD, top, 5, y - quoteLH + 14 - top);
+  }
+
+  /* 출처와 워드마크 */
+  g.font = "700 28px Pretendard, sans-serif";
+  g.fillStyle = "#999999";
+  g.fillText(src, PAD, H - PAD - 54);
+
+  g.font = "800 30px Pretendard, sans-serif";
+  g.fillStyle = "#1A1A1A";
+  g.fillText("RE:FEEEL", PAD, H - PAD);
+
+  return new Promise(res => cv.toBlob(res, "image/png"));
+}
+
+async function rdSaveImage(){
+  try{
+    const blob = await rdRender();
+    if(!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "refeeel-" + Date.now() + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+  }catch(e){ showToast("사진으로 만들지 못했어요"); }
+}
+
+async function rdShareImage(){
+  const card = rdCurrentCard();
+  const txt = card ? (card.querySelector(".rd-memo") || card.querySelector(".rd-line") || {}).textContent : "";
+  try{
+    const blob = await rdRender();
+    const file = blob && new File([blob], "refeeel.png", {type: "image/png"});
+    /* 이미지째 넘길 수 있으면 그게 가장 낫다. 안 되면 글로, 그것도 안 되면 복사해 둔다 */
+    if(file && navigator.canShare && navigator.canShare({files: [file]})){
+      await navigator.share({files: [file], title: "RE:FEEEL"});
+    }else if(navigator.share){
+      await navigator.share({title: "RE:FEEEL", text: (txt || "").trim()});
+    }else{
+      if(navigator.clipboard) await navigator.clipboard.writeText((txt || "").trim());
+      showToast("공유를 지원하지 않아 글을 복사했어요");
+    }
+  }catch(e){
+    if(e && e.name === "AbortError") return;   /* 사용자가 공유창을 닫은 것뿐이다 */
+    showToast("공유하지 못했어요");
+  }
+}
 
 function capChips(){
   document.querySelectorAll(".chip-wrap[data-max]").forEach(w=>{
