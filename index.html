@@ -642,6 +642,43 @@ body.clean .jumpbar{display:none;}
 .lose li i,.lose li svg{width:15px;height:15px;color:var(--text-muted);flex-shrink:0;}
 .lose li b{font-weight:800;}
 
+
+/* ── 읽기 설정 ──
+   고른 결과를 바로 밑에서 보여준다. '보통 / 크게' 라는 말만으로는 아무도 못 고른다.
+   실제 본문과 같은 글꼴·줄간격을 쓴 미리보기라야 고르는 의미가 있다. */
+.fs-pick{display:flex;gap:6px;padding:0 16px;}
+.fs-pick label{flex:1;cursor:pointer;}
+.fs-pick input{position:absolute;opacity:0;width:0;height:0;}
+.fs-pick span{display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--border-light);border-radius:var(--radius-sm);background:var(--bg-white);font-weight:700;color:var(--text-gray);transition:.15s;}
+.fs-pick label:nth-child(1) span{font-size:11px;}
+.fs-pick label:nth-child(2) span{font-size:12.5px;}
+.fs-pick label:nth-child(3) span{font-size:14px;}
+.fs-pick label:nth-child(4) span{font-size:15.5px;}
+.fs-pick input:checked+span{border-color:var(--text-black);background:var(--bg-black);color:var(--bg-white);}
+.fs-prev{margin:14px 16px 0;padding:18px 16px;border:1px solid var(--border-light);border-radius:var(--radius-md);background:var(--bg-white);}
+.fs-prev .lbl{font-size:10px;font-weight:800;letter-spacing:0.4px;color:var(--text-muted);margin-bottom:10px;}
+.fs-prev p{color:var(--text-dark);letter-spacing:-0.2px;transition:font-size .16s ease,line-height .16s ease;font-size:14.5px;line-height:1.8;}
+#scr-read:has(#fs-s:checked) .fs-prev p{font-size:13px;line-height:1.75;}
+#scr-read:has(#fs-l:checked) .fs-prev p{font-size:16.5px;line-height:1.85;}
+#scr-read:has(#fs-xl:checked) .fs-prev p{font-size:18.5px;line-height:1.9;}
+
+/* 테마는 이름만 늘어놓지 않고 색을 같이 보여준다 */
+.th-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:1px solid var(--border-default);}
+.th-dot.light{background:#FFFFFF;}
+.th-dot.dark{background:#1A1A1A;}
+.th-dot.auto{background:linear-gradient(90deg,#FFFFFF 50%,#1A1A1A 50%);}
+
+/* ── 계정 ── */
+.acct-hd{display:flex;align-items:center;gap:12px;padding:20px 16px;}
+.acct-hd .avatar-lg{width:48px;height:48px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.acct-hd .avatar-lg i,.acct-hd .avatar-lg svg{width:21px;height:21px;color:var(--placeholder-icon);}
+.acct-hd .grow{flex:1;min-width:0;}
+.acct-hd b{display:block;font-size:14.5px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.acct-hd em{display:block;font-style:normal;font-size:11.5px;color:var(--text-light);margin-top:4px;}
+.oauth-ic{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:var(--bg-white);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text-dark);}
+.oauth-ic i,.oauth-ic svg{width:13px;height:13px;color:var(--text-dark);}
+.set-row .tail.on{color:var(--text-dark);}
+
 /* 마이 */
 .my-profile{display:flex;align-items:center;gap:14px;padding:20px 16px 12px;}
 .my-profile .avatar-lg{width:56px;height:56px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
@@ -803,7 +840,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-noti">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
+  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-noti">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -2777,6 +2814,79 @@ body.clean .jumpbar{display:none;}
   </div>
 </section>
 
+<!-- ══════════ 읽기 설정 ══════════
+     리더 앱인데 읽기를 조절할 데가 없었다(리건 지적, 2026-08-19).
+     타깃이 소상공인·대표라 40~50대가 상당수다. 13px 본문을 그대로 읽으라는 건 무리다.
+     테마를 넣는 이유는 발행이 화요일 저녁 7시라서다 — 저녁과 밤에 읽는 서비스다.
+     ⚠ 여기서 고른 값은 리킷 본문(scr-viewer)과 모아보기 리더(scr-reader)에 함께 걸린다.
+        기기 글꼴 크기 설정과 곱해지지 않도록 실구현에서 한쪽 기준을 정해야 한다. -->
+<section class="screen" id="scr-read">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">읽기</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-group">글자 크기</div>
+    <div class="fs-pick">
+      <label><input type="radio" name="fs" id="fs-s"><span>가</span></label>
+      <label><input type="radio" name="fs" id="fs-m" checked><span>가</span></label>
+      <label><input type="radio" name="fs" id="fs-l"><span>가</span></label>
+      <label><input type="radio" name="fs" id="fs-xl"><span>가</span></label>
+    </div>
+    <div class="fs-prev">
+      <div class="lbl">미리보기</div>
+      <p>사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다. 공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.</p>
+    </div>
+
+    <div class="set-group">화면 테마</div>
+    <div class="set-list">
+      <label class="set-row pick"><input type="radio" name="th"><span class="th-dot light"></span><span class="grow"><b>밝게</b></span><i data-lucide="check"></i></label>
+      <label class="set-row pick"><input type="radio" name="th"><span class="th-dot dark"></span><span class="grow"><b>어둡게</b></span><i data-lucide="check"></i></label>
+      <label class="set-row pick"><input type="radio" name="th" checked><span class="th-dot auto"></span><span class="grow"><b>기기 설정을 따라요</b></span><i data-lucide="check"></i></label>
+    </div>
+    <p class="set-note">리킷 본문과 모아보기에 함께 적용돼요.</p>
+  </div>
+</section>
+
+<!-- ══════════ 계정 ══════════
+     Google·Apple·이메일 셋을 다 열어 뒀으니 이 화면이 없으면 사고가 난다:
+     Google 로 가입한 사람이 아이폰에서 무심코 'Apple 로 계속하기' 를 누르면
+     계정이 하나 더 생기고 밑줄·메모가 통째로 안 보인다. 그때 되돌릴 방법이 없다.
+     ⚠ 연결 수단이 하나뿐일 때는 그 하나를 끊지 못하게 막는다. 끊는 순간 들어올 문이 사라진다.
+     ⚠ 이메일 연결은 매직 링크 / 비밀번호 중 무엇으로 할지 아직 미정. -->
+<section class="screen" id="scr-account">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">계정</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="acct-hd">
+      <div class="avatar-lg"><i data-lucide="user"></i></div>
+      <div class="grow">
+        <b>rigeon@gmail.com</b>
+        <em>2026.08.18 가입 · Google로 로그인 중</em>
+      </div>
+    </div>
+
+    <div class="set-group">로그인 수단</div>
+    <div class="set-list">
+      <div class="set-row"><span class="oauth-ic">G</span><span class="grow"><b>Google</b><em>rigeon@gmail.com</em></span><span class="tail on">연결됨</span></div>
+      <div class="set-row"><span class="oauth-ic"><i data-lucide="apple"></i></span><span class="grow"><b>Apple</b></span><span class="tail">연결하기</span><i data-lucide="chevron-right"></i></div>
+      <div class="set-row"><span class="oauth-ic"><i data-lucide="mail"></i></span><span class="grow"><b>이메일</b></span><span class="tail">연결하기</span><i data-lucide="chevron-right"></i></div>
+    </div>
+    <p class="set-note">여러 수단을 한 계정에 붙여두면 <b>어느 것으로 열어도 밑줄과 메모가 그대로 따라와요.</b><br>붙여두지 않고 다른 방식으로 로그인하면 계정이 새로 만들어져요.</p>
+
+    <div class="set-group">기기</div>
+    <div class="set-list">
+      <div class="set-row"><span class="grow"><b>iPhone 15 Pro</b><em>지금 이 기기 · 방금 전</em></span></div>
+      <div class="set-row"><span class="grow"><b>Chrome · Windows</b><em>2026.08.17</em></span><span class="tail">로그아웃</span></div>
+    </div>
+    <p class="set-note">모르는 기기가 있으면 로그아웃하고 문의해 주세요.</p>
+  </div>
+</section>
+
 <section class="screen" id="scr-settings">
   <div class="gnb">
     <i data-lucide="chevron-left" data-back></i>
@@ -2784,19 +2894,35 @@ body.clean .jumpbar{display:none;}
     <span class="gnb-side"></span>
   </div>
   <div class="scroll">
-    <div class="sec alt" style="padding:0">
-      <div class="menu-list">
-        <!-- 이용내역은 앱 안에서 열지 않고 웹으로 빠진다. 그래서 화살표 대신 외부링크 아이콘. -->
-        <div class="menu-row"><i data-lucide="receipt-text"></i><span class="grow">이용내역</span><i data-lucide="external-link"></i></div>
-        <div class="menu-row" data-go="scr-noti"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row" data-go="scr-lang"><i data-lucide="globe"></i><span class="grow">언어</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row" data-go="scr-legal"><i data-lucide="file-text"></i><span class="grow">이용약관 · 개인정보처리방침</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row" data-go="scr-help"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
-        <!-- 로그아웃과 탈퇴는 화면을 넘기기 전에 시트로 한 번 붙잡는다 -->
-        <div class="menu-row" data-open="sheet-logout"><i data-lucide="log-out"></i><span class="grow">로그아웃</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row danger" data-go="scr-leave"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
-      </div>
+    <!-- 읽기를 맨 위에 둔다. 읽으려고 들어온 앱에서 첫 줄이 결제 내역일 이유가 없다. -->
+    <div class="set-group">읽기</div>
+    <div class="menu-list">
+      <div class="menu-row" data-go="scr-read"><i data-lucide="type"></i><span class="grow">글자 크기 · 화면 테마</span><i data-lucide="chevron-right"></i></div>
     </div>
+
+    <div class="set-group">계정</div>
+    <div class="menu-list">
+      <div class="menu-row" data-go="scr-account"><i data-lucide="user-round-cog"></i><span class="grow">계정</span><i data-lucide="chevron-right"></i></div>
+      <div class="menu-row" data-go="scr-noti"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
+      <div class="menu-row" data-go="scr-lang"><i data-lucide="globe"></i><span class="grow">언어</span><i data-lucide="chevron-right"></i></div>
+    </div>
+
+    <div class="set-group">서비스</div>
+    <div class="menu-list">
+      <!-- 이용내역은 앱 안에서 열지 않고 웹으로 빠진다. 그래서 화살표 대신 외부링크 아이콘. -->
+      <div class="menu-row"><i data-lucide="receipt-text"></i><span class="grow">이용내역</span><i data-lucide="external-link"></i></div>
+      <div class="menu-row" data-go="scr-legal"><i data-lucide="file-text"></i><span class="grow">약관 및 정책</span><i data-lucide="chevron-right"></i></div>
+      <div class="menu-row" data-go="scr-help"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
+    </div>
+
+    <div class="set-group"></div>
+    <div class="menu-list">
+      <!-- 로그아웃과 탈퇴는 화면을 넘기기 전에 시트로 한 번 붙잡는다 -->
+      <div class="menu-row" data-open="sheet-logout"><i data-lucide="log-out"></i><span class="grow">로그아웃</span><i data-lucide="chevron-right"></i></div>
+      <div class="menu-row danger" data-go="scr-leave"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
+    </div>
+    <!-- 버전은 맨 아래. 문의를 받으면 제일 먼저 물어보는 값이라 찾기 쉬워야 한다. -->
+    <p class="set-note" style="padding-bottom:24px">앱 버전 1.0.0 (100)</p>
   </div>
 </section>
 
