@@ -489,11 +489,10 @@ body.clean .jumpbar{display:none;}
 #scr-search:has(#unread-find:checked) .find-results .on-unread{display:inline;}
 /* 둘러보기의 읽음 필터는 태그 필터와 함께 계산해야 해서 JS(recount)가 맡는다 */
 .ex-desc mark{background:none;color:var(--text-black);font-weight:700;}
-.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.ch-card{display:flex;align-items:center;gap:9px;background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;cursor:pointer;}
-.ch-card i,.ch-card svg{width:15px;height:15px;color:var(--text-dark);}
-.ch-card b{font-size:12.5px;font-weight:700;}
-.ch-card span{margin-left:auto;font-size:11px;color:var(--text-muted);font-weight:600;}
+/* '어디에 올리시나요?' 채널 진입 섹션은 삭제했다(리건, 2026-08-19).
+   온보딩에서 채널 문항을 뺀 이유가 여기에도 그대로 걸린다 —
+   채널을 앞세우면 '그 채널에 잘 올리는 법'을 알려주는 서비스로 읽힌다.
+   리킷은 노출 치트키가 아니라 본질을 다룬다. 채널 태그는 둘러보기 필터에만 남긴다. */
 .tag-label{font-size:11px;font-weight:800;color:var(--text-light);letter-spacing:0.3px;margin:14px 0 8px;}
 .tag-label:first-child{margin-top:0;}
 .chip em{font-style:normal;color:var(--text-muted);font-size:10px;margin-left:2px;}
@@ -1747,17 +1746,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
             <div class="continue-meta" style="margin-top:6px"><span>6개 회차</span></div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="sec-head"><span class="sec-title">어디에 올리시나요?</span></div>
-      <div class="ch-grid">
-        <div class="ch-card" data-goseg="browse"><i data-lucide="clapperboard"></i><b>릴스</b><span>9</span></div>
-        <div class="ch-card" data-goseg="browse"><i data-lucide="instagram"></i><b>인스타그램</b><span>20</span></div>
-        <div class="ch-card" data-goseg="browse"><i data-lucide="map-pin"></i><b>네이버 플레이스</b><span>2</span></div>
-        <div class="ch-card" data-goseg="browse"><i data-lucide="pen-tool"></i><b>블로그</b><span>3</span></div>
-        <div class="ch-card" data-goseg="browse"><i data-lucide="layout-template"></i><b>상세페이지</b><span>1</span></div>
       </div>
     </div>
 
