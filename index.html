@@ -771,22 +771,33 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    다 읽었다는 건 이 앱에서 가장 기분 좋은 순간이다. 화면 맨 앞에서, 바닥에서 위로 터진다.
    조각 하나는 두 겹이다 — 바깥은 옆으로 흐르고, 안쪽은 솟았다가 떨어진다.
    한 겹으로는 포물선이 안 나온다. 위로 쏘고 아래로 당기는 힘을 각각 맡겨야 던진 것처럼 보인다. */
-#confetti{position:absolute;inset:0;z-index:200;pointer-events:none;overflow:hidden;}
-.cf{position:absolute;bottom:-26px;width:9px;height:14px;animation:cf-x 2.3s linear forwards;}
-.cf>b{display:block;width:100%;height:100%;border-radius:1.5px;animation:cf-y 2.3s forwards;}
+/* 성능 — 조각이 많으면 바로 버벅인다(리건, 2026-08-19). 세 가지로 잡았다.
+   ① contain:strict — 이 상자 안에서 벌어지는 일이 뒤 화면 다시 그리기를 부르지 않는다.
+   ② translate3d + will-change — 조각마다 GPU 레이어를 잡아 매 프레임 다시 칠하지 않는다.
+   ③ 수를 줄였다. 70개는 눈으로 셀 수 없고 기기만 힘들다 — 44개도 똑같이 화려하다. */
+#confetti{position:absolute;inset:0;z-index:200;pointer-events:none;overflow:hidden;contain:strict;}
+.cf{position:absolute;bottom:-26px;width:9px;height:14px;will-change:transform,opacity;
+  animation:cf-x 2.2s linear forwards;}
+.cf>b{display:block;width:100%;height:100%;border-radius:1.5px;backface-visibility:hidden;
+  will-change:transform;animation:cf-y 2.2s forwards;}
 .cf.r>b{border-radius:50%;}
 .cf.s{width:5px;height:18px;}
 @keyframes cf-x{
-  0%{transform:translateX(0);opacity:0;}
+  0%{transform:translate3d(0,0,0);opacity:0;}
   5%{opacity:1;}
-  82%{opacity:1;}
-  100%{transform:translateX(var(--x));opacity:0;}
+  80%{opacity:1;}
+  100%{transform:translate3d(var(--x),0,0);opacity:0;}
 }
 @keyframes cf-y{
   /* 솟을 때는 힘이 빠지고, 떨어질 때는 붙는다 */
-  0%{transform:translateY(0) rotate(0deg);animation-timing-function:cubic-bezier(.14,.7,.4,1);}
-  42%{transform:translateY(var(--up)) rotate(calc(var(--r) * 0.45));animation-timing-function:cubic-bezier(.55,0,.9,.6);}
-  100%{transform:translateY(24px) rotate(var(--r));}
+  0%{transform:translate3d(0,0,0) rotate(0deg);animation-timing-function:cubic-bezier(.14,.7,.4,1);}
+  42%{transform:translate3d(0,var(--up),0) rotate(calc(var(--r) * 0.45));animation-timing-function:cubic-bezier(.55,0,.9,.6);}
+  100%{transform:translate3d(0,24px,0) rotate(var(--r));}
+}
+/* 움직임을 줄여 달라고 해 둔 기기에서는 조각을 띄우지 않는다 */
+@media (prefers-reduced-motion: reduce){
+  .cf{display:none;}
+  .done-hero .done-ic{animation:none;}
 }
 .done-hero .done-ic{animation:ic-pop .5s cubic-bezier(.2,1.4,.4,1) both;}
 @keyframes ic-pop{0%{transform:scale(.3);opacity:0;}60%{transform:scale(1.14);opacity:1;}100%{transform:scale(1);}}
@@ -3708,29 +3719,37 @@ document.addEventListener("DOMContentLoaded", ()=>{
 });
 
 /* 완독 축하 — 바닥에서 위로 쏟아 올린다.
-   70개를 한꺼번에 쏘지 않고 0.4초에 걸쳐 흩어 쏜다. 동시에 쏘면 한 뭉치로 보인다. */
+   한꺼번에 쏘지 않고 0.36초에 걸쳐 흩어 쏜다. 동시에 쏘면 한 뭉치로 보인다.
+   조각은 조각모음(fragment)에 다 만들어 두고 한 번에 붙인다 —
+   하나씩 붙이면 붙일 때마다 레이아웃이 돈다. */
 function confetti(){
   const box = document.getElementById("confetti"); if(!box) return;
   box.innerHTML = "";
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
   const cols = ["#1A1A1A","#C6B78E","#D9A441","#B23B32","#2F6F62","#E4DFD4","#8C8C8C"];
-  const h = box.clientHeight || 720;
-  for(let i=0;i<70;i++){
+  const h = box.clientHeight || 720;          /* 높이는 한 번만 잰다 */
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<44;i++){
     const c = document.createElement("span");
     const shape = i % 5;
     c.className = "cf" + (shape === 0 ? " r" : shape === 3 ? " s" : "");
     /* 바닥 전체에서 올라온다. 가운데서만 쏘면 부채꼴 하나로 끝난다 */
+    const d = (Math.random() * 0.36).toFixed(2) + "s";
     c.style.left = (4 + Math.random() * 92).toFixed(1) + "%";
     c.style.setProperty("--x",  ((Math.random() * 2 - 1) * 130).toFixed(0) + "px");
     c.style.setProperty("--up", "-" + (h * (0.52 + Math.random() * 0.45)).toFixed(0) + "px");
     c.style.setProperty("--r",  (Math.random() * 1080 - 540).toFixed(0) + "deg");
-    c.style.animationDelay = (Math.random() * 0.4).toFixed(2) + "s";
+    c.style.animationDelay = d;
     const b = document.createElement("b");
     b.style.background = cols[i % cols.length];
-    b.style.animationDelay = c.style.animationDelay;
+    b.style.animationDelay = d;
     c.appendChild(b);
-    box.appendChild(c);
+    frag.appendChild(c);
   }
-  setTimeout(()=>{ box.innerHTML = ""; }, 3000);
+  box.appendChild(frag);
+  /* 다 떨어지면 지운다. 남겨 두면 will-change 가 걸린 레이어가 계속 붙어 있는다 */
+  setTimeout(()=>{ box.innerHTML = ""; }, 2700);
 }
 
 /* 완독을 닫으면 리킷을 열기 직전 화면으로 돌아간다.
