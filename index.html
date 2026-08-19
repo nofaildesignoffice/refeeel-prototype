@@ -768,21 +768,28 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 #toast.on{opacity:1;transform:translate(-50%,0);}
 
 /* ── 완독 축하 ──
-   다 읽었다는 건 이 앱에서 가장 기분 좋은 순간이다. 조각이 아이콘에서 터져 나가 흩어진다.
-   조각은 화면 밖으로 나가며 사라지고, 애니메이션이 끝나면 DOM 에서도 지운다. */
-.done-hero{position:relative;overflow:hidden;}
-#confetti{position:absolute;left:0;right:0;top:0;height:100%;pointer-events:none;z-index:1;}
-.cf{position:absolute;left:50%;top:34px;width:7px;height:11px;border-radius:1px;opacity:0;
-  animation:cf-burst 1.45s cubic-bezier(.2,.7,.35,1) forwards;}
-.cf.r{border-radius:50%;width:8px;height:8px;}
-@keyframes cf-burst{
-  0%{transform:translate(-50%,0) rotate(0deg) scale(.3);opacity:0;}
-  12%{opacity:1;}
-  100%{transform:translate(calc(-50% + var(--x)),var(--y)) rotate(var(--r)) scale(1);opacity:0;}
+   다 읽었다는 건 이 앱에서 가장 기분 좋은 순간이다. 화면 맨 앞에서, 바닥에서 위로 터진다.
+   조각 하나는 두 겹이다 — 바깥은 옆으로 흐르고, 안쪽은 솟았다가 떨어진다.
+   한 겹으로는 포물선이 안 나온다. 위로 쏘고 아래로 당기는 힘을 각각 맡겨야 던진 것처럼 보인다. */
+#confetti{position:absolute;inset:0;z-index:200;pointer-events:none;overflow:hidden;}
+.cf{position:absolute;bottom:-26px;width:9px;height:14px;animation:cf-x 2.3s linear forwards;}
+.cf>b{display:block;width:100%;height:100%;border-radius:1.5px;animation:cf-y 2.3s forwards;}
+.cf.r>b{border-radius:50%;}
+.cf.s{width:5px;height:18px;}
+@keyframes cf-x{
+  0%{transform:translateX(0);opacity:0;}
+  5%{opacity:1;}
+  82%{opacity:1;}
+  100%{transform:translateX(var(--x));opacity:0;}
+}
+@keyframes cf-y{
+  /* 솟을 때는 힘이 빠지고, 떨어질 때는 붙는다 */
+  0%{transform:translateY(0) rotate(0deg);animation-timing-function:cubic-bezier(.14,.7,.4,1);}
+  42%{transform:translateY(var(--up)) rotate(calc(var(--r) * 0.45));animation-timing-function:cubic-bezier(.55,0,.9,.6);}
+  100%{transform:translateY(24px) rotate(var(--r));}
 }
 .done-hero .done-ic{animation:ic-pop .5s cubic-bezier(.2,1.4,.4,1) both;}
 @keyframes ic-pop{0%{transform:scale(.3);opacity:0;}60%{transform:scale(1.14);opacity:1;}100%{transform:scale(1);}}
-.done-hero b,.done-hero span{position:relative;z-index:2;}
 
 /* 마이 */
 .my-profile{display:flex;align-items:center;gap:14px;padding:20px 16px 12px;}
@@ -854,12 +861,12 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .done-hero b{font-size:18px;font-weight:800;display:block;}
 .done-hero span{font-size:12px;color:var(--text-light);display:block;margin-top:4px;}
 .eval-box{margin:0 16px;background:var(--bg-light);border-radius:var(--radius-md);padding:18px 16px;text-align:center;}
-.eval-box b{font-size:15px;font-weight:800;display:block;margin-bottom:12px;}
-.eval-btns{display:flex;gap:8px;}
-.eval-btns .btn{flex:1;padding:11px;font-size:13px;}
-/* 다 읽고 난 뒤 소감을 따로 받지 않는다(리건, 2026-08-19).
-   기록은 읽는 도중 문장에 붙여서 남기면 된다 — 끝나고 또 물으면 숙제가 하나 더 생긴다. */
-.eval-btns .btn.dim{opacity:0.4;pointer-events:none;}
+.eval-box b{font-size:15px;font-weight:800;display:block;}
+.eval-box p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:7px;}
+.eval-box .btn{width:100%;margin-top:14px;padding:11px;font-size:13px;}
+/* 저장하고 나면 되돌릴 일이 아니라 눌린 채로 둔다 — 해제는 내 리킷에서 한다 */
+.eval-box .btn.done{background:var(--bg-black);color:var(--bg-white);border-color:var(--bg-black);pointer-events:none;}
+.eval-box .btn.done i,.eval-box .btn.done svg{fill:var(--bg-white);}
 
 /* 시리즈 */
 .series-hero{background:var(--bg-dark);color:var(--bg-white);padding:26px 16px;}
@@ -2356,23 +2363,22 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   <div class="gnb">
     <span style="width:20px"></span>
     <span class="gnb-title">완독</span>
-    <div class="gnb-side"><i data-lucide="x" data-tab="scr-home"></i></div>
+    <div class="gnb-side"><i data-lucide="x" data-doneclose></i></div>
   </div>
   <div class="scroll">
 
     <div class="done-hero">
-      <div id="confetti"></div>
       <div class="done-ic"><i data-lucide="check"></i></div>
       <b>완독했어요</b>
       <span>RE:KIT 41 · 팔지 않으면 팔리는 3단계 콘텐츠 퍼널</span>
     </div>
 
+    <!-- 다 읽고 나서 물을 건 하나뿐이다: 이걸 또 볼 것인가.
+         '도움이 됐나요' 같은 평가는 우리가 궁금한 것이지 읽은 사람이 답하고 싶은 게 아니다. -->
     <div class="eval-box">
-      <b>새로운 관점을 얻으셨나요?</b>
-      <div class="eval-btns">
-        <button class="btn btn-primary"><i data-lucide="lightbulb"></i>네, 얻었어요</button>
-        <button class="btn btn-secondary">아직이요</button>
-      </div>
+      <b>다시 읽고 싶은 리킷인가요?</b>
+      <p>저장해두면 내 리킷에서 언제든 꺼내 읽을 수 있어요</p>
+      <button class="btn btn-secondary" id="done-save"><i data-lucide="bookmark"></i>저장하기</button>
     </div>
 
 
@@ -3151,6 +3157,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   </div>
 </div>
 
+<div id="confetti"></div>
 <div id="toast"></div>
 
 <div class="sheet-wrap" id="sortsheet">
@@ -3435,7 +3442,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,.eval-btns .btn");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -3497,15 +3504,10 @@ document.addEventListener("click", e=>{
     return;
   }
   if(t.dataset.jump){ stack=[]; show(t.dataset.jump); return; }
+  if(t.hasAttribute("data-doneclose")){ doneClose(); return; }
   if(t.hasAttribute("data-back")){ back(); return; }
   if(t.dataset.tab){ tab(t.dataset.tab); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
-  if(t.closest(".eval-btns")){
-    /* 고른 쪽만 남고 반대쪽은 흐려진다. 되돌릴 일이 아니라 한 번 누르면 끝이다 */
-    t.closest(".eval-btns").querySelectorAll(".btn").forEach(b=> b.classList.toggle("dim", b !== t));
-    showToast("알려주셔서 고맙습니다");
-    return;
-  }
   if(t.classList.contains("toggle")){
     /* .chip-wrap.single — 하나만 고르는 문항은 라디오처럼 서로를 끈다 */
     const one = t.closest(".chip-wrap.single");
@@ -3690,6 +3692,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
     showToast(had ? "메모를 남겼어요" : "메모를 지웠어요");
   });
 
+  /* 완독 화면의 저장 — 뷰어 상단 북마크와 같은 일을 한다 */
+  document.getElementById("done-save").addEventListener("click", function(){
+    this.classList.add("done");
+    this.lastChild.textContent = "저장했어요";
+    document.getElementById("v-bm").classList.add("on");
+    showToast("내 리킷에 저장했어요");
+  });
+
   /* 저장 — 채워진 북마크로 상태를 보인다 */
   document.getElementById("v-bm").addEventListener("click", function(){
     this.classList.toggle("on");
@@ -3697,23 +3707,38 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-/* 완독 축하 — 조각이 아이콘에서 터져 나간다 */
+/* 완독 축하 — 바닥에서 위로 쏟아 올린다.
+   70개를 한꺼번에 쏘지 않고 0.4초에 걸쳐 흩어 쏜다. 동시에 쏘면 한 뭉치로 보인다. */
 function confetti(){
   const box = document.getElementById("confetti"); if(!box) return;
   box.innerHTML = "";
-  const cols = ["#1A1A1A","#C6B78E","#E4DFD4","#8C8C8C","#B23B32"];
-  for(let i=0;i<40;i++){
-    const c = document.createElement("i");
-    c.className = "cf" + (i % 3 === 0 ? " r" : "");
-    const ang = (Math.random() * 2 - 1) * 165;          /* 좌우로 퍼지는 폭 */
-    c.style.setProperty("--x", ang.toFixed(0) + "px");
-    c.style.setProperty("--y", (110 + Math.random() * 190).toFixed(0) + "px");
-    c.style.setProperty("--r", (Math.random() * 900 - 450).toFixed(0) + "deg");
-    c.style.background = cols[i % cols.length];
-    c.style.animationDelay = (Math.random() * 0.22).toFixed(2) + "s";
+  const cols = ["#1A1A1A","#C6B78E","#D9A441","#B23B32","#2F6F62","#E4DFD4","#8C8C8C"];
+  const h = box.clientHeight || 720;
+  for(let i=0;i<70;i++){
+    const c = document.createElement("span");
+    const shape = i % 5;
+    c.className = "cf" + (shape === 0 ? " r" : shape === 3 ? " s" : "");
+    /* 바닥 전체에서 올라온다. 가운데서만 쏘면 부채꼴 하나로 끝난다 */
+    c.style.left = (4 + Math.random() * 92).toFixed(1) + "%";
+    c.style.setProperty("--x",  ((Math.random() * 2 - 1) * 130).toFixed(0) + "px");
+    c.style.setProperty("--up", "-" + (h * (0.52 + Math.random() * 0.45)).toFixed(0) + "px");
+    c.style.setProperty("--r",  (Math.random() * 1080 - 540).toFixed(0) + "deg");
+    c.style.animationDelay = (Math.random() * 0.4).toFixed(2) + "s";
+    const b = document.createElement("b");
+    b.style.background = cols[i % cols.length];
+    b.style.animationDelay = c.style.animationDelay;
+    c.appendChild(b);
     box.appendChild(c);
   }
-  setTimeout(()=>{ box.innerHTML = ""; }, 2200);
+  setTimeout(()=>{ box.innerHTML = ""; }, 3000);
+}
+
+/* 완독을 닫으면 리킷을 열기 직전 화면으로 돌아간다.
+   방금 다 읽은 글로 되돌아갈 이유가 없으니 뷰어는 건너뛴다. */
+function doneClose(){
+  document.getElementById("confetti").innerHTML = "";
+  while(stack.length && stack[stack.length-1] === "scr-viewer") stack.pop();
+  show(stack.pop() || "scr-home");
 }
 
 /* 리더 — 몇 번째 장인지 스크롤 위치로 센다 */
