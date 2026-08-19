@@ -497,6 +497,8 @@ body.clean .jumpbar{display:none;}
 .tag-label:first-child{margin-top:0;}
 /* 채널 필터는 콘텐츠·카피·후킹을 고른 사람에게만 펼친다.
    접혀 있을 때는 왜 없는지 한 줄로 알려 준다 — 그냥 없으면 기능이 빠진 줄 안다. */
+/* 접힌 블록 안에서는 라벨이 first-child 가 되어 위 여백이 0 이 된다. 되돌려 준다 */
+.ch-fold .tag-label:first-child{margin-top:14px;}
 .ch-fold{display:none;}
 .ch-fold.on{display:block;animation:chfold .26s ease;}
 @keyframes chfold{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:none;}}
@@ -1784,7 +1786,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
         <span class="chip toggle">3분컷 <em>15</em></span><span class="chip toggle">심화기획 <em>51</em></span><span class="chip toggle">템플릿 <em>19</em></span><span class="chip toggle">책 요약 <em>4</em></span>
       </div>
       <div class="ch-fold" id="ch-fold">
-        <p class="tag-label">어느 채널 이야기인지</p>
+        <p class="tag-label">채널</p>
         <div class="chip-wrap" id="f-channel">
           <span class="chip toggle">인스타그램 <em>20</em></span><span class="chip toggle">릴스 <em>9</em></span><span class="chip toggle">블로그 <em>3</em></span><span class="chip toggle">네이버 플레이스 <em>2</em></span><span class="chip toggle">상세페이지 <em>1</em></span>
         </div>
