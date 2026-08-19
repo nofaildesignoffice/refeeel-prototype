@@ -557,6 +557,82 @@ body.clean .jumpbar{display:none;}
 .week-card b{font-size:14px;font-weight:800;display:block;}
 .week-card p{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.5;margin-top:2px;}
 
+
+/* ══════════ 설정 하위 화면 ══════════
+   설정은 '읽는 화면'이 아니라 '고치는 화면'이다. 그래서 여백을 줄이고 줄을 촘촘히 세운다.
+   대신 켜고 끄는 항목에는 반드시 한 줄 설명을 붙인다 —
+   '이어 읽기'만 써두면 뭐가 오는 건지 모르고, 모르면 그냥 다 끈다. */
+.set-group{padding:20px 16px 8px;font-size:11px;font-weight:800;letter-spacing:0.3px;color:var(--text-light);}
+.set-list{background:var(--bg-white);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);}
+.set-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border-light);cursor:pointer;}
+.set-row:last-child{border-bottom:none;}
+.set-row .grow{flex:1;min-width:0;}
+.set-row b{display:block;font-size:13.5px;font-weight:700;color:var(--text-dark);}
+.set-row em{display:block;font-style:normal;font-size:11.5px;color:var(--text-light);line-height:1.5;margin-top:3px;}
+.set-row>i:last-child,.set-row>svg:last-child{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
+.set-row .tail{font-size:12px;font-weight:700;color:var(--text-light);flex-shrink:0;}
+/* 고른 것 하나만 체크가 뜬다 — 라디오라 JS 없이 CSS로 끝난다 */
+.set-row.pick input{position:absolute;opacity:0;width:0;height:0;}
+.set-row.pick>i,.set-row.pick>svg{width:17px;height:17px;color:var(--text-black);opacity:0;flex-shrink:0;}
+.set-row.pick:has(input:checked)>i,.set-row.pick:has(input:checked)>svg{opacity:1;}
+.set-row.off{opacity:0.45;cursor:default;}
+.set-note{padding:12px 16px 0;font-size:11.5px;color:var(--text-light);line-height:1.7;}
+.set-note+.set-note{padding-top:10px;}
+.set-note b{font-weight:800;color:var(--text-gray);}
+.set-btn{margin:14px 16px 0;}
+
+/* 자주 묻는 질문 — details/summary 를 쓰면 열고 닫는 데 스크립트가 필요 없다 */
+.faq{border-bottom:1px solid var(--border-light);background:var(--bg-white);}
+.faq:last-child{border-bottom:none;}
+.faq summary{list-style:none;display:flex;align-items:center;gap:10px;padding:14px 16px;font-size:13.5px;font-weight:700;color:var(--text-dark);cursor:pointer;}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:"";width:7px;height:7px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(45deg);margin-left:auto;flex-shrink:0;transition:transform .18s ease;}
+.faq[open] summary::after{transform:rotate(-135deg);}
+.faq p{padding:0 16px 15px;font-size:12.5px;color:var(--text-gray);line-height:1.75;}
+
+/* 문의 작성 */
+.fld{padding:16px 16px 0;}
+.fld>label{display:block;font-size:12px;font-weight:800;color:var(--text-dark);margin-bottom:9px;}
+.inp,.ta{width:100%;padding:12px 13px;border:1px solid var(--border-default);border-radius:var(--radius-sm);background:var(--bg-white);font-family:inherit;font-size:13px;color:var(--text-dark);}
+.ta{min-height:132px;line-height:1.65;resize:none;}
+.inp::placeholder,.ta::placeholder{color:var(--text-muted);}
+.file-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1px dashed var(--border-default);border-radius:var(--radius-sm);background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-gray);cursor:pointer;}
+.file-btn i,.file-btn svg{width:15px;height:15px;}
+
+/* 약관 본문 — 실제 조문은 법무 검토 후 채운다 */
+.doc-head{padding:20px 16px 14px;border-bottom:1px solid var(--border-light);}
+.doc-head h3{font-size:17px;font-weight:800;letter-spacing:-0.3px;}
+.doc-head p{font-size:11.5px;color:var(--text-light);margin-top:7px;}
+.doc-body{padding:18px 16px 28px;}
+.doc-body h4{font-size:13.5px;font-weight:800;margin:20px 0 8px;}
+.doc-body h4:first-child{margin-top:0;}
+.doc-body p{font-size:12.5px;color:var(--text-gray);line-height:1.85;}
+
+/* 마무리 화면 — 문의 접수·탈퇴 완료가 같은 뼈대를 쓴다 */
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;}
+.done-ic{width:56px;height:56px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
+.done-ic i,.done-ic svg{width:25px;height:25px;color:var(--text-dark);}
+.done-wrap h3{font-size:19px;font-weight:800;letter-spacing:-0.3px;line-height:1.5;}
+.done-wrap p{font-size:13px;color:var(--text-gray);line-height:1.75;margin-top:13px;}
+.done-bottom{flex-shrink:0;padding:0 16px max(16px,env(safe-area-inset-bottom));}
+
+/* 되돌릴 수 없는 일은 시트에서 한 번 더 묻는다 */
+.sheet-msg{padding:2px 20px 4px;}
+.sheet-msg h4{font-size:15.5px;font-weight:800;letter-spacing:-0.2px;}
+.sheet-msg p{font-size:12.5px;color:var(--text-gray);line-height:1.7;margin-top:9px;}
+.sheet-act{display:flex;flex-direction:column;gap:8px;padding:16px 20px 0;}
+.btn-danger{background:#B23B32;color:var(--bg-white);}
+.btn-ghost{background:none;color:var(--text-gray);border:none;}
+
+/* 탈퇴 — 사라지는 것을 세어서 보여준다. 숫자가 있어야 무게가 전달된다 */
+.leave-hd{padding:24px 16px 4px;}
+.leave-hd h3{font-size:19px;font-weight:800;letter-spacing:-0.3px;line-height:1.5;}
+.lose{margin:14px 16px 0;padding:15px 16px;border:1px solid var(--border-light);border-radius:var(--radius-md);background:var(--bg-white);}
+.lose li{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text-dark);line-height:1.5;}
+.lose li+li{margin-top:11px;}
+.lose li i,.lose li svg{width:15px;height:15px;color:var(--text-muted);flex-shrink:0;}
+.lose li b{font-weight:800;}
+
 /* 마이 */
 .my-profile{display:flex;align-items:center;gap:14px;padding:20px 16px 12px;}
 .my-profile .avatar-lg{width:56px;height:56px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
@@ -718,7 +794,7 @@ body.clean .jumpbar{display:none;}
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button>
+  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-noti">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -2409,6 +2485,262 @@ body.clean .jumpbar{display:none;}
   </div>
 </section>
 
+
+<!-- ══════════ 알림 설정 ══════════
+     ⚠ 광고성 정보(마케팅) 수신은 서비스 알림과 반드시 갈라 둔다. 정보통신망법 제50조:
+        광고성 정보는 사전 동의가 있어야 하고, 21~08시 야간 발송은 그와 별도로 또 동의를 받아야 한다.
+        동의·철회 처리 결과는 통지 의무가 있어 화면 아래에 안내를 붙였다.
+     ⚠ 서비스 알림(발행·이어읽기·답변)은 광고가 아니라 계약 이행 안내라 동의 대상이 아니다.
+        그래도 끌 수 있어야 한다 — 못 끄는 알림이 있으면 앱 알림을 통째로 꺼버린다. -->
+<section class="screen" id="scr-noti">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">알림 설정</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-group">서비스 알림</div>
+    <div class="set-list">
+      <label class="set-row"><span class="grow"><b>새 리킷 발행</b><em>화요일 저녁 7시, 새 글이 올라오면</em></span><span class="chkbox"><input type="checkbox" checked><span class="sw"></span></span></label>
+      <label class="set-row"><span class="grow"><b>이어 읽기</b><em>읽다 만 리킷이 있으면 다음 날 한 번</em></span><span class="chkbox"><input type="checkbox" checked><span class="sw"></span></span></label>
+      <label class="set-row"><span class="grow"><b>내 기록 다시 만나기</b><em>2주 지난 밑줄과 메모를 다시 꺼내드려요</em></span><span class="chkbox"><input type="checkbox" checked><span class="sw"></span></span></label>
+      <label class="set-row"><span class="grow"><b>낙타AI 답변</b><em>물어본 내용에 답이 오면</em></span><span class="chkbox"><input type="checkbox" checked><span class="sw"></span></span></label>
+    </div>
+
+    <div class="set-group">마케팅 정보 수신 (선택)</div>
+    <div class="set-list">
+      <label class="set-row"><span class="grow"><b>앱 푸시</b><em>2026.08.18 동의함</em></span><span class="chkbox"><input type="checkbox" checked><span class="sw"></span></span></label>
+      <label class="set-row"><span class="grow"><b>이메일</b><em>2026.08.18 동의 안 함</em></span><span class="chkbox"><input type="checkbox"><span class="sw"></span></span></label>
+      <label class="set-row"><span class="grow"><b>야간 수신 (21시~08시)</b><em>광고성 알림을 밤에도 받을지</em></span><span class="chkbox"><input type="checkbox"><span class="sw"></span></span></label>
+    </div>
+    <p class="set-note">마케팅 정보 수신을 켜거나 끄면 처리 결과를 알림으로 알려드려요.</p>
+
+    <div class="set-group">기기 설정</div>
+    <div class="set-list">
+      <div class="set-row"><span class="grow"><b>기기 알림 권한</b><em>지금 허용됨</em></span><i data-lucide="external-link"></i></div>
+    </div>
+    <p class="set-note">기기에서 리필 알림을 끄면 위 설정과 관계없이 아무 알림도 오지 않아요.</p>
+  </div>
+</section>
+
+<!-- ══════════ 언어 ══════════
+     글로벌은 한국 버전 완료 후다(리건). 화면은 지금 만들어 두되 English 는 잠가 뒀다 —
+     자리를 비워 두면 나중에 붙일 때 설정 구조를 다시 흔들게 된다. -->
+<section class="screen" id="scr-lang">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">언어</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-list" style="border-top:none">
+      <label class="set-row pick"><input type="radio" name="lang" checked><span class="grow"><b>한국어</b></span><i data-lucide="check"></i></label>
+      <label class="set-row pick off"><input type="radio" name="lang" disabled><span class="grow"><b>English</b></span><span class="tail">준비 중</span></label>
+    </div>
+    <p class="set-note">앱을 다시 열면 바뀐 언어로 보여요.</p>
+    <p class="set-note">리킷 본문은 지금 한국어로만 제공돼요. 영어판은 준비되는 대로 알려드릴게요.</p>
+  </div>
+</section>
+
+<!-- ══════════ 약관 및 정책 ══════════
+     위탁·국외이전은 동의가 아니라 '고지' 사항이라 동의 화면이 아니라 여기에 둔다.
+     조문 본문은 법무 검토 후 채운다 — 지금 것은 자리를 잡기 위한 더미다. -->
+<section class="screen" id="scr-legal">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">약관 및 정책</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-list" style="border-top:none">
+      <div class="set-row" data-go="scr-doc"><span class="grow"><b>서비스 이용약관</b></span><i data-lucide="chevron-right"></i></div>
+      <div class="set-row" data-go="scr-doc"><span class="grow"><b>개인정보처리방침</b></span><i data-lucide="chevron-right"></i></div>
+      <div class="set-row" data-go="scr-doc"><span class="grow"><b>개인정보 처리 위탁 · 국외 이전 안내</b></span><i data-lucide="chevron-right"></i></div>
+      <div class="set-row" data-go="scr-doc"><span class="grow"><b>오픈소스 라이선스</b></span><i data-lucide="chevron-right"></i></div>
+    </div>
+    <p class="set-note">앱 버전 <b>1.0.0 (100)</b><br>약관 최종 개정일 2026.08.01</p>
+  </div>
+</section>
+
+<!-- ══════════ 약관 본문 (공용) ══════════
+     실제로는 문서 종류에 따라 본문만 갈아 끼운다. 프로토타입이라 한 벌만 뒀다. -->
+<section class="screen" id="scr-doc">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">서비스 이용약관</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="doc-head">
+      <h3>서비스 이용약관</h3>
+      <p>시행일 2026.08.01 · 이전 버전 보기</p>
+    </div>
+    <div class="doc-body">
+      <h4>제1조 (목적)</h4>
+      <p>이 약관은 리필(RE:FEEEL)이 제공하는 서비스의 이용 조건과 절차, 회사와 이용자의 권리·의무·책임사항을 정하는 것을 목적으로 합니다.</p>
+      <h4>제2조 (용어의 정의)</h4>
+      <p>'서비스'란 회사가 제공하는 읽기 콘텐츠와 이에 딸린 기능 일체를 말합니다. '회원'이란 이 약관에 동의하고 계정을 만든 사람을 말합니다.</p>
+      <h4>제3조 (약관의 효력과 변경)</h4>
+      <p>이 약관은 앱 안에 게시함으로써 효력이 생깁니다. 회사는 필요한 경우 관련 법령을 어기지 않는 범위에서 약관을 바꿀 수 있으며, 바꾼 내용은 시행일 7일 전(회원에게 불리한 변경은 30일 전)부터 알려드립니다.</p>
+      <h4>제4조 (회원의 기록)</h4>
+      <p>회원이 남긴 밑줄과 메모는 회원 본인의 것입니다. 회사는 서비스 제공에 필요한 범위에서만 이를 처리하며, 회원이 탈퇴하면 관련 법령이 정한 경우를 빼고 지체 없이 파기합니다.</p>
+      <p style="margin-top:22px;color:var(--text-muted)">※ 실제 조문은 법무 검토 후 확정합니다. 지금 내용은 화면 확인용입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 문의하기 ══════════
+     ⚠ 결제·구독·해지에 관한 질문은 앱 안에 두지 않는다. 앱 빌드에서 결제 관련 문구를
+        노출하거나 외부 결제 경로를 안내하면 스토어 심사(리더 앱 조항)에 걸린다.
+        해당 문의는 웹과 고객센터에서 받는다. -->
+<section class="screen" id="scr-help">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">문의하기</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-group">자주 묻는 질문</div>
+    <div class="set-list">
+      <details class="faq"><summary>리킷은 언제 올라오나요?</summary>
+        <p>매주 화요일 저녁 7시에 새 리킷이 올라와요. 알림을 켜두시면 올라오는 즉시 알려드릴게요.</p></details>
+      <details class="faq"><summary>밑줄이랑 메모는 어디서 다시 보나요?</summary>
+        <p>인사이트 탭에 모여 있어요. 시간순으로 쭉 보거나 리킷별로 묶어서 볼 수 있고, 모아보기에서는 지난주·지난달 기록을 한 장씩 넘겨 읽을 수 있어요.</p></details>
+      <details class="faq"><summary>낙타AI는 뭘 도와주나요?</summary>
+        <p>읽은 리킷을 바탕으로 내 상황에 맞게 다시 풀어 설명해줘요. 무엇부터 해야 할지 막힐 때 물어보시면 좋아요.</p></details>
+      <details class="faq"><summary>알림이 오지 않아요</summary>
+        <p>설정 → 알림 설정에서 항목이 켜져 있는지 확인해 주세요. 기기 자체에서 리필 알림이 꺼져 있으면 앱 설정과 관계없이 알림이 오지 않아요.</p></details>
+      <details class="faq"><summary>기기를 바꾸면 기록은 어떻게 되나요?</summary>
+        <p>같은 계정으로 로그인하시면 밑줄·메모·저장한 리킷이 그대로 따라와요.</p></details>
+      <details class="faq"><summary>로그인한 계정을 바꾸고 싶어요</summary>
+        <p>계정을 옮기면 기존 기록은 함께 넘어가지 않아요. 바꾸기 전에 문의를 남겨주시면 도와드릴게요.</p></details>
+    </div>
+
+    <div class="set-group">내 문의</div>
+    <div class="set-list">
+      <div class="set-row"><span class="grow"><b>알림이 안 와요</b><em>2026.08.12 접수</em></span><span class="tail">답변 완료</span><i data-lucide="chevron-right"></i></div>
+    </div>
+
+    <div class="set-btn">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-ask"><i data-lucide="pen-line"></i>문의 남기기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 문의 남기기 ══════════ -->
+<section class="screen" id="scr-ask">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">문의 남기기</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="fld">
+      <label>무엇에 대한 문의인가요?</label>
+      <!-- 유형을 먼저 받으면 담당자에게 바로 넘어가고, 되묻는 왕복이 한 번 줄어든다 -->
+      <div class="chip-wrap single" style="gap:8px">
+        <span class="chip toggle on">앱이 잘 안 돼요</span>
+        <span class="chip toggle">계정 · 로그인</span>
+        <span class="chip toggle">알림</span>
+        <span class="chip toggle">리킷 내용</span>
+        <span class="chip toggle">낙타AI</span>
+        <span class="chip toggle">그 밖에</span>
+      </div>
+    </div>
+    <div class="fld">
+      <label>어떤 일이 있었나요?</label>
+      <textarea class="ta" placeholder="언제, 어느 화면에서 생긴 일인지 적어주시면 더 빨리 도와드릴 수 있어요."></textarea>
+    </div>
+    <div class="fld">
+      <label>화면 사진 (선택)</label>
+      <button class="file-btn"><i data-lucide="image-plus"></i>사진 고르기</button>
+    </div>
+    <div class="fld">
+      <label>답변받을 이메일</label>
+      <input class="inp" value="rigeon@gmail.com">
+    </div>
+    <p class="set-note" style="padding-top:16px">보내주신 화면 사진은 문의 처리가 끝나면 지워요.</p>
+  </div>
+  <div class="ed-bottom">
+    <button class="btn btn-primary" style="width:100%" data-go="scr-ask-done">보내기</button>
+  </div>
+</section>
+
+<!-- ══════════ 문의 접수 완료 ══════════ -->
+<section class="screen" id="scr-ask-done">
+  <div class="gnb">
+    <span class="gnb-side"></span>
+    <span class="gnb-title"></span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll" style="display:flex;flex-direction:column">
+    <div class="done-wrap">
+      <div class="done-ic"><i data-lucide="check"></i></div>
+      <h3>문의를 받았어요</h3>
+      <p>영업일 기준 1~2일 안에 답변드릴게요.<br>답변은 앱 알림과 이메일로 함께 보내드려요.</p>
+    </div>
+    <div class="done-bottom">
+      <button class="btn btn-primary" style="width:100%" data-go="scr-help">확인</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 회원탈퇴 ══════════
+     사라지는 것을 숫자로 세어서 보여준다. '모든 데이터가 삭제됩니다'는 아무 무게가 없다.
+     ⚠ 미확정: 30일 유예(그 안에 다시 로그인하면 복구) 를 둘지. 지금 화면은 유예 없이
+        바로 파기하는 쪽으로 써 뒀다 — 유예를 두기로 하면 문구와 완료 화면을 같이 고쳐야 한다.
+     ⚠ 구독·결제 관련 안내는 앱 화면에 쓰지 않는다(리더 앱 조항). 서버에서 처리한다. -->
+<section class="screen" id="scr-leave">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">회원탈퇴</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="leave-hd"><h3>정말 떠나시나요?</h3></div>
+    <div class="set-note" style="padding-top:10px">탈퇴하면 아래 기록이 모두 사라져요.</div>
+    <ul class="lose">
+      <li><i data-lucide="highlighter"></i>밑줄 <b>10개</b>와 메모 <b>6개</b></li>
+      <li><i data-lucide="bookmark"></i>저장한 리킷 <b>12편</b></li>
+      <li><i data-lucide="message-circle"></i>낙타AI와 나눈 대화</li>
+      <li><i data-lucide="tag"></i>관심사와 그동안 쌓인 추천 기록</li>
+    </ul>
+    <p class="set-note">같은 계정으로 다시 가입하셔도 이전 기록은 되돌릴 수 없어요.</p>
+
+    <div class="fld" style="padding-top:22px">
+      <label>떠나시는 이유를 알려주세요 (선택)</label>
+      <div class="chip-wrap single" style="gap:8px">
+        <span class="chip toggle">읽을 시간이 없어요</span>
+        <span class="chip toggle">내용이 제 상황과 안 맞아요</span>
+        <span class="chip toggle">앱이 쓰기 불편해요</span>
+        <span class="chip toggle">알림이 많아요</span>
+        <span class="chip toggle">다른 곳을 쓰기로 했어요</span>
+        <span class="chip toggle">그 밖에</span>
+      </div>
+    </div>
+    <div class="fld">
+      <textarea class="ta" style="min-height:96px" placeholder="더 하고 싶은 말씀이 있다면 적어주세요."></textarea>
+    </div>
+  </div>
+  <div class="ed-bottom">
+    <button class="btn btn-danger" style="width:100%" data-open="sheet-leave">탈퇴하기</button>
+  </div>
+</section>
+
+<!-- ══════════ 탈퇴 완료 ══════════ -->
+<section class="screen" id="scr-leave-done">
+  <div class="scroll" style="display:flex;flex-direction:column">
+    <div class="done-wrap">
+      <div class="done-ic"><i data-lucide="hand"></i></div>
+      <h3>탈퇴가 끝났어요</h3>
+      <p>그동안 리필을 읽어주셔서 고맙습니다.<br>언제든 다시 오셔도 좋아요.</p>
+    </div>
+    <div class="done-bottom">
+      <button class="btn btn-secondary" style="width:100%" data-jump="scr-login">확인</button>
+    </div>
+  </div>
+</section>
+
 <section class="screen" id="scr-settings">
   <div class="gnb">
     <i data-lucide="chevron-left" data-back></i>
@@ -2420,12 +2752,13 @@ body.clean .jumpbar{display:none;}
       <div class="menu-list">
         <!-- 이용내역은 앱 안에서 열지 않고 웹으로 빠진다. 그래서 화살표 대신 외부링크 아이콘. -->
         <div class="menu-row"><i data-lucide="receipt-text"></i><span class="grow">이용내역</span><i data-lucide="external-link"></i></div>
-        <div class="menu-row"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row"><i data-lucide="globe"></i><span class="grow">언어</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row"><i data-lucide="file-text"></i><span class="grow">이용약관 · 개인정보처리방침</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row"><i data-lucide="log-out"></i><span class="grow">로그아웃</span><i data-lucide="chevron-right"></i></div>
-        <div class="menu-row danger"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row" data-go="scr-noti"><i data-lucide="bell"></i><span class="grow">알림 설정</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row" data-go="scr-lang"><i data-lucide="globe"></i><span class="grow">언어</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row" data-go="scr-legal"><i data-lucide="file-text"></i><span class="grow">이용약관 · 개인정보처리방침</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row" data-go="scr-help"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
+        <!-- 로그아웃과 탈퇴는 화면을 넘기기 전에 시트로 한 번 붙잡는다 -->
+        <div class="menu-row" data-open="sheet-logout"><i data-lucide="log-out"></i><span class="grow">로그아웃</span><i data-lucide="chevron-right"></i></div>
+        <div class="menu-row danger" data-go="scr-leave"><i data-lucide="user-x"></i><span class="grow">회원탈퇴</span><i data-lucide="chevron-right"></i></div>
       </div>
     </div>
   </div>
@@ -2475,6 +2808,38 @@ body.clean .jumpbar{display:none;}
 </section>
 
 <!-- ══════════ 정렬 시트 ══════════ -->
+<!-- 로그아웃 — 되돌릴 수 있는 일이라 짧게 묻고 끝낸다 -->
+<div class="sheet-wrap" id="sheet-logout">
+  <div class="sheet-bd" data-closesheet></div>
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-msg">
+      <h4>로그아웃할까요?</h4>
+      <p>다시 로그인하시면 밑줄과 메모는 그대로 있어요.</p>
+    </div>
+    <div class="sheet-act">
+      <button class="btn btn-primary" data-jump="scr-login">로그아웃</button>
+      <button class="btn btn-ghost" data-closesheet>취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 탈퇴 — 되돌릴 수 없는 일이라 사라지는 숫자를 한 번 더 말한다 -->
+<div class="sheet-wrap" id="sheet-leave">
+  <div class="sheet-bd" data-closesheet></div>
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-msg">
+      <h4>정말 탈퇴하시겠어요?</h4>
+      <p>남기신 밑줄 10개와 메모 6개가 지금 바로 지워지고, 되돌릴 수 없어요.</p>
+    </div>
+    <div class="sheet-act">
+      <button class="btn btn-danger" data-go="scr-leave-done">탈퇴하기</button>
+      <button class="btn btn-ghost" data-closesheet>취소</button>
+    </div>
+  </div>
+</div>
+
 <div class="sheet-wrap" id="sortsheet">
   <div class="sheet-bd" data-sheet="close"></div>
   <div class="sheet">
@@ -2502,6 +2867,7 @@ function show(id){
   if(!el) return;
   el.classList.add("active");
   const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
+  document.querySelectorAll(".sheet-wrap.on").forEach(s=>s.classList.remove("on"));
   if(id === "scr-chatstart") resetChatStart();
   if(id === "scr-reader"){ const tr = document.getElementById("rd-track");
     if(tr){ tr.scrollTop = 0; tr.querySelectorAll(".rd-card").forEach((c,k)=>c.classList.toggle("in", k===0)); rdSync(); } }
@@ -2754,7 +3120,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-optnone],[data-open],[data-closesheet],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle,#eval-yes");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -2774,6 +3140,9 @@ document.addEventListener("click", e=>{
     return;
   }
   if(t.dataset.sheet){ document.getElementById("sortsheet").classList.remove("on"); return; }
+  /* 확인 시트 — 여는 쪽은 대상을 지목하고, 닫는 쪽은 자기가 속한 시트만 닫는다 */
+  if(t.dataset.open){ const s = document.getElementById(t.dataset.open); if(s) s.classList.add("on"); return; }
+  if(t.hasAttribute("data-closesheet")){ t.closest(".sheet-wrap").classList.remove("on"); return; }
   if(t.dataset.nview){
     /* 내 기록 정렬 — 시간순 / 리킷별 */
     document.querySelectorAll("[data-nview]").forEach(b=>b.classList.toggle("on", b===t));
