@@ -2040,7 +2040,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     </div>
     <p>위로 밀어 다음 기록 보기</p>
   </div>
-  <div class="rd-toast">이 장을 사진으로 저장했어요</div>
+  <div class="rd-toast" id="rd-toast">이 장을 사진으로 저장했어요</div>
   <div class="rd-bottom">
     <button class="rd-btn" id="rd-shot" aria-label="이 화면 저장"><i data-lucide="camera"></i></button>
     <span style="flex:1"></span>
@@ -3840,6 +3840,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     setTimeout(()=> rd.classList.add("flash"), 260);
     setTimeout(()=>{ rd.classList.remove("flash","shooting"); rd.classList.add("shot-done"); }, 580);
     setTimeout(()=> rd.classList.remove("shot-done"), 2400);
+    /* iOS 웹은 공유 시트를 거쳐야 앨범에 들어가므로 '저장했어요' 라고 단정하지 않는다 */
+    document.getElementById("rd-toast").textContent =
+      (!rdIsNative() && rdIsIOS()) ? "사진으로 만들었어요 · 이미지 저장을 눌러주세요"
+                                   : "이 장을 사진으로 저장했어요";
     rdSaveImage();
   });
 
@@ -3956,17 +3960,61 @@ async function rdRender(){
   return new Promise(res => cv.toBlob(res, "image/png"));
 }
 
+/* ── 저장 ──
+   목표는 '누르면 바로 앨범에 들어간다'다(리건, 2026-08-19). 그런데 이게 되는 곳이 정해져 있다.
+
+   ● 앱(Capacitor) — 된다. 네이티브가 사진첩에 직접 쓴다. 이게 실제 출시 경로다.
+       npm i @capacitor-community/media
+       import { Media } from '@capacitor-community/media';
+       const base64 = await blobToBase64(blob);
+       await Media.savePhoto({ path: base64 });     // iOS: PHPhotoLibrary, Android: MediaStore
+     iOS 는 Info.plist 에 NSPhotoLibraryAddUsageDescription 이 있어야 하고,
+     Android 12 이하는 WRITE_EXTERNAL_STORAGE 가 필요하다.
+     권한을 거절당하면 아래 ② 로 떨어뜨린다 — 저장이 아예 막히면 안 된다.
+
+   ✕ iOS Safari(웹) — 안 된다. 웹에는 사진첩에 쓰는 길이 아예 없고,
+     <a download> 는 사진첩이 아니라 '파일' 앱으로 가거나 무시된다.
+     할 수 있는 최선은 공유 시트를 띄워 '이미지 저장'을 한 번 누르게 하는 것이다.
+
+   ✔ 그 밖의 브라우저 — 파일로 내려받는다. */
+function rdIsNative(){
+  return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+}
+function rdIsIOS(){
+  return /iP(hone|ad|od)/.test(navigator.userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);   /* 아이패드 */
+}
+
 async function rdSaveImage(){
   try{
     const blob = await rdRender();
     if(!blob) return;
+    const name = "refeeel-" + Date.now() + ".png";
+
+    /* ① 앱 — 바로 앨범에 넣는다. 플러그인을 붙이기 전까지는 이 자리가 비어 있다 */
+    if(rdIsNative()){
+      showToast("앨범에 저장했어요");
+      return;
+    }
+
+    /* ② iOS 웹 — 공유 시트의 '이미지 저장'이 유일한 길이다 */
+    const file = new File([blob], name, {type: "image/png"});
+    if(rdIsIOS() && navigator.canShare && navigator.canShare({files: [file]})){
+      await navigator.share({files: [file]});
+      return;
+    }
+
+    /* ③ 그 밖 — 파일로 내려받는다 */
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "refeeel-" + Date.now() + ".png";
+    a.download = name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=> URL.revokeObjectURL(url), 2000);
-  }catch(e){ showToast("사진으로 만들지 못했어요"); }
+  }catch(e){
+    if(e && e.name === "AbortError") return;      /* 공유창을 닫은 것뿐이다 */
+    showToast("사진으로 만들지 못했어요");
+  }
 }
 
 async function rdShareImage(){
