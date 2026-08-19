@@ -734,6 +734,36 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 /* 저장(북마크)은 채워지는 것으로 상태를 보인다 */
 .bm.on i,.bm.on svg{fill:var(--text-black);color:var(--text-black);}
 
+/* ── 음성 메모 ──
+   손으로 치는 게 빠른 사람도 있고 말이 먼저 나오는 사람도 있다.
+   특히 읽다가 떠오른 생각은 문장으로 정리되기 전이라, 말로 쏟아 놓고 나중에 다듬는 편이 낫다.
+   그래서 둘을 나란히 두고 아무 쪽으로나 쓰게 한다 — 음성은 타이핑을 대신하는 게 아니라 같이 쓴다.
+   ⚠ 웹은 Web Speech API(webkitSpeechRecognition) 를 쓴다. Chrome·Edge 는 되고 iOS Safari 는 안 된다.
+      앱(Capacitor)에서는 네이티브 음성 인식 플러그인으로 갈아 끼워야 하고,
+      마이크 권한 문구를 Info.plist(NSSpeechRecognitionUsageDescription·NSMicrophoneUsageDescription)와
+      AndroidManifest(RECORD_AUDIO)에 각각 넣어야 한다. */
+.ta-wrap{position:relative;}
+.ta-wrap .ta{padding-bottom:48px;}
+.mic{position:absolute;right:9px;bottom:9px;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border-default);background:var(--bg-white);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+.mic i,.mic svg{width:16px;height:16px;color:var(--text-gray);}
+.mic.rec{background:var(--text-black);border-color:var(--text-black);}
+.mic.rec i,.mic.rec svg{color:var(--bg-white);}
+/* 듣는 중에는 테두리가 번져 나간다 — 켜져 있다는 걸 글자 없이 알린다 */
+.mic.rec::before{content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:2px solid rgba(26,26,26,0.3);animation:mic-pulse 1.3s ease-out infinite;}
+@keyframes mic-pulse{0%{transform:scale(.88);opacity:.85;}100%{transform:scale(1.4);opacity:0;}}
+.mic-hint{display:none;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--text-dark);}
+.mic-hint.on{display:flex;}
+.mic-wave{display:flex;align-items:flex-end;gap:2px;height:12px;}
+.mic-wave i{width:2.5px;border-radius:2px;background:var(--text-black);animation:wv .9s ease-in-out infinite;}
+.mic-wave i:nth-child(1){height:5px;animation-delay:0s;}
+.mic-wave i:nth-child(2){height:11px;animation-delay:.15s;}
+.mic-wave i:nth-child(3){height:7px;animation-delay:.3s;}
+.mic-wave i:nth-child(4){height:12px;animation-delay:.45s;}
+@keyframes wv{0%,100%{transform:scaleY(.4);}50%{transform:scaleY(1);}}
+
 /* 공용 토스트 */
 #toast{position:absolute;left:50%;bottom:88px;transform:translate(-50%,10px);z-index:60;opacity:0;pointer-events:none;
   padding:10px 17px;border-radius:999px;background:rgba(26,26,26,0.92);color:#fff;font-size:12px;font-weight:700;
@@ -3110,7 +3140,13 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     <div class="sheet-grip"></div>
     <div class="sheet-msg"><p id="memo-src" style="margin-top:0;padding-left:11px;border-left:2px solid var(--border-default)"></p></div>
     <div style="padding:14px 20px 0">
-      <textarea class="ta" id="memo-ta" style="min-height:112px" placeholder="이 문장을 보고 든 생각을 적어보세요."></textarea>
+      <div class="ta-wrap">
+        <textarea class="ta" id="memo-ta" style="min-height:118px" placeholder="이 문장을 보고 든 생각을 적어보세요. 말로 남기셔도 돼요."></textarea>
+        <button class="mic" id="memo-mic" aria-label="음성으로 메모"><i data-lucide="mic"></i></button>
+      </div>
+      <div class="mic-hint" id="mic-hint">
+        <span class="mic-wave"><i></i><i></i><i></i><i></i></span>듣고 있어요 · 다시 누르면 멈춰요
+      </div>
     </div>
     <div class="sheet-act">
       <button class="btn btn-primary" id="memo-save">저장</button>
@@ -3613,7 +3649,61 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
+  /* ── 음성 받아쓰기 ──
+     말하는 동안 글자가 실시간으로 따라 들어온다. 확정된 말은 남고, 아직 다듬는 중인 말은
+     뒤에 붙었다가 확정되면 자리를 잡는다. 이미 쳐 둔 글이 있으면 그 뒤에 이어 붙인다. */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null;
+
+  function micOff(){
+    document.getElementById("memo-mic").classList.remove("rec");
+    document.getElementById("mic-hint").classList.remove("on");
+    rec = null;
+  }
+
+  document.getElementById("memo-mic").addEventListener("click", ()=>{
+    if(rec){ rec.stop(); return; }
+    if(!SR){ showToast("이 브라우저에서는 음성 입력이 안 돼요"); return; }
+
+    const ta = document.getElementById("memo-ta");
+    let base = ta.value.trim(), fixed = "";
+    if(base) base += " ";
+
+    rec = new SR();
+    rec.lang = "ko-KR";
+    rec.continuous = true;
+    rec.interimResults = true;
+
+    rec.onresult = e=>{
+      let live = "";
+      for(let i = e.resultIndex; i < e.results.length; i++){
+        const r = e.results[i];
+        if(r.isFinal) fixed += r[0].transcript;
+        else live += r[0].transcript;
+      }
+      ta.value = base + fixed + live;
+      ta.scrollTop = ta.scrollHeight;
+    };
+    rec.onerror = ev=>{
+      micOff();
+      showToast(ev.error === "not-allowed" ? "마이크 권한이 필요해요" : "소리가 잘 안 들렸어요");
+    };
+    rec.onend = ()=> micOff();
+
+    try{
+      rec.start();
+      document.getElementById("memo-mic").classList.add("rec");
+      document.getElementById("mic-hint").classList.add("on");
+    }catch(err){ micOff(); }
+  });
+
+  /* 시트를 닫을 때 듣고 있던 걸 반드시 끈다 — 안 끄면 마이크가 계속 켜져 있다 */
+  document.getElementById("sheet-memo").addEventListener("click", e=>{
+    if(e.target.closest("[data-closesheet]") && rec) rec.stop();
+  });
+
   document.getElementById("memo-save").addEventListener("click", ()=>{
+    if(rec) rec.stop();
     const v = document.getElementById("memo-ta").value.trim();
     if(curMark){
       if(v){ curMark.dataset.memo = v; curMark.classList.add("memoed"); }
