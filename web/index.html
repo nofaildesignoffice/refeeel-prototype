@@ -1020,7 +1020,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .wnav,.wfoot{display:none;}
 /* 좁은 화면에서는 감싸개가 없는 셈 친다 — 안의 화면들이 앱처럼 그대로 동작한다 */
 .nk-widget,.noti-pop{display:contents;}
-.nk-fab,.noti-bd{display:none;}
+.noti-bd{display:none;}
+.nk-home-input{display:none;}
 .stage{display:flex;flex-direction:column;height:100%;flex:1;min-height:0;min-width:0;position:relative;}
 
 /* --- 태블릿 : 짜임새는 그대로, 폭만 넓힌다 --- */
@@ -1110,8 +1111,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   /* ── 읽는 중 ──
      리킷을 펴면 사이트 껍데기를 걷는다. 위 네비도 푸터도 오른쪽 창도 없다.
      글 하나만 남기는 것이 이 화면의 일이다. 대신 진행률만 화면 맨 위에 얇게 남긴다. */
-  body.reading .wnav,body.reading .wfoot,body.reading .nk-fab{display:none;}
-  body.reading .nk-widget{display:none;}
+  body.reading .wnav,body.reading .wfoot{display:none;}
   #scr-viewer .gnb{position:sticky;top:0;z-index:150;background:var(--bg-white);border-bottom:none;}
   #scr-viewer .progress-thin{position:sticky;top:60px;z-index:150;padding-inline:0;}
   #scr-viewer .gnb-title{max-width:520px;font-size:14px;}
@@ -1192,50 +1192,52 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .noti-bd{display:block;position:fixed;inset:0;z-index:370;opacity:0;pointer-events:none;}
   body.noti-open .noti-bd{pointer-events:auto;}
 
-  /* ── 낙타AI : 오른쪽 아래 떠 있는 창 ── */
-  .nk-widget{display:block;position:fixed;right:24px;bottom:100px;z-index:390;
-    width:404px;height:min(660px,calc(100vh - 148px));
-    background:var(--bg-white);border:1px solid var(--border-light);border-radius:16px;
-    overflow:hidden;box-shadow:var(--shadow-md);
-    opacity:0;pointer-events:none;transform:translateY(14px);
-    transition:opacity .2s ease,transform .24s cubic-bezier(.22,1,.36,1);}
-  body.nk-open .nk-widget{opacity:1;pointer-events:auto;transform:none;}
-  .nk-widget .screen{height:100%;overflow:hidden;}
-  .nk-widget .bottomnav{display:none;}
+  /* ══════════════ 낙타AI ══════════════
+     LLM 앱들과 같은 짜임이다. 화면은 두 덩이뿐 —
+     ① 위: 대화가 쌓이며 스크롤되는 자리
+     ② 아래: 늘 같은 자리에 붙어 있는 입력창
+     대화는 세로로 길어지지만 입력창은 움직이지 않는다.
+     쓰려고 할 때마다 입력창을 찾아 내려가야 하면 대화가 끊긴다. */
+  #scr-chat,#scr-chatstart,#scr-chatroom{height:calc(100vh - 73px);overflow:hidden;}
+  #scr-chat .topbar{display:none;}          /* 위 네비에 낙타AI 가 이미 켜져 있다 */
+  #scr-chat .scroll,#scr-chatstart .chat-area,#scr-chatroom .chat-area{
+    flex:1;min-height:0;overflow-y:auto;padding-inline:0;max-width:none;width:100%;}
 
-  .nk-fab{display:flex;position:fixed;right:24px;bottom:24px;z-index:400;
-    width:60px;height:60px;border-radius:50%;border:none;padding:0;cursor:pointer;
-    background:var(--bg-black);align-items:center;justify-content:center;
-    box-shadow:var(--shadow-md);transition:transform .18s ease;}
-  .nk-fab:hover{transform:translateY(-2px);}
-  .nk-fab i,.nk-fab svg{width:26px;height:26px;color:var(--bg-white);}
-  .nk-fab .ic-close,body.nk-open .nk-fab .ic-open{display:none;}
-  body.nk-open .nk-fab .ic-close{display:flex;}
+  /* 대화와 입력창은 같은 세로선 위에 선다 */
+  #scr-chat .sec,#scr-chatstart .chat-area,#scr-chatroom .chat-area,
+  #scr-chat .chat-input,#scr-chatstart .chat-input,#scr-chatroom .chat-input{
+    padding-inline:max(24px,calc((100% - 768px) / 2));}
+  #scr-chatstart .chat-area,#scr-chatroom .chat-area{padding-block:32px 24px;background:var(--bg-white);}
+  #scr-chatstart .gnb,#scr-chatroom .gnb{padding-block:26px 0;}
+  #scr-chatstart .gnb-title,#scr-chatroom .gnb-title{font-size:22px;}
 
-  /* ── 창 안쪽 ──
-     화면 높이에 꽉 채우면 입력창이 브라우저 맨 아래 유리창에 붙어 버린다.
-     대화를 상자에 담아 가운데 띄우고, 입력창은 그 상자 바닥에 붙인다 —
-     메신저 웹들이 다 이렇게 하는 이유는 창 크기가 제각각이기 때문이다.
-     상자 위아래로 여백을 남겨야 '대화 중'이라는 게 화면 안에서 끝난다. */
-     창은 404px 라 좁다. 본문 규칙(1280 컨테이너·큰 글씨)이 그대로 오면 다 터진다.
-     그래서 창 안쪽은 앱 크기를 거의 그대로 쓴다. */
-  .nk-widget .scroll,.nk-widget .chat-area{
-    width:100%;max-width:none;padding-inline:0;overflow-y:auto;flex:1;min-height:0;}
-  .nk-widget .sec,.nk-widget .gnb,.nk-widget .chat-input{padding-inline:16px;}
-  .nk-widget .sec{padding-block:18px;}
-  .nk-widget .sec-title{font-size:14px;letter-spacing:-0.2px;}
-  .nk-widget .chat-area{padding:18px 16px;}
-  .nk-widget .gnb{height:52px;}
-  .nk-widget .topbar{display:flex;padding-inline:16px;}
-  .nk-widget .bubble{max-width:86%;font-size:13.5px;padding:12px 15px;}
-  .nk-widget .chat-input{padding-block:12px;}
-  .nk-widget .nk-hero{padding:18px 4px 4px;}
-  .nk-widget .nk-face{width:52px;height:52px;margin-bottom:14px;}
-  .nk-widget .nk-face i,.nk-widget .nk-face svg{width:24px;height:24px;}
-  .nk-widget .nk-hero b{font-size:18px;}
-  .nk-widget .nk-hero p{font-size:13px;}
-  .nk-widget .ask-row{padding:13px 14px;}
-  .nk-widget .ask-row>span{font-size:13px;}
+  /* 입력창 — 늘 아래에 붙어 있다 */
+  #scr-chat .chat-input,#scr-chatstart .chat-input,#scr-chatroom .chat-input{
+    flex-shrink:0;padding-block:14px 28px;border-top:none;background:var(--bg-white);}
+  #scr-chat .ci-box,#scr-chatstart .ci-box,#scr-chatroom .ci-box{
+    padding:17px 22px;font-size:15px;border-radius:24px;border-color:var(--border-default);background:var(--bg-white);}
+  #scr-chat .chat-input>i,#scr-chat .chat-input>svg,
+  #scr-chatstart .chat-input>i,#scr-chatstart .chat-input>svg,
+  #scr-chatroom .chat-input>i,#scr-chatroom .chat-input>svg{width:24px;height:24px;}
+  .nk-home-input{display:flex;cursor:pointer;}
+
+  /* 첫 화면 — 가운데에 인사말, 그 아래 갈래 */
+  #scr-chat .scroll{display:flex;flex-direction:column;justify-content:center;}
+  #scr-chat .nk-hero{padding:0 0 8px;}
+  #scr-chat .nk-face{width:64px;height:64px;margin-bottom:20px;}
+  #scr-chat .nk-face i,#scr-chat .nk-face svg{width:30px;height:30px;}
+  #scr-chat .nk-hero b{font-size:30px;letter-spacing:-0.8px;}
+  #scr-chat .nk-hero p{font-size:15.5px;margin-top:14px;}
+  #scr-chat .sec{padding-block:16px;}
+  #scr-chat .act-card{padding:22px 24px;}
+  #scr-chat .ask-row{padding:15px 18px;}
+  #scr-chat .ask-row>span{font-size:14px;}
+  #scr-chat .sec-title{font-size:15px;}
+
+  /* 말풍선 */
+  .bubble{max-width:80%;font-size:15px;line-height:1.75;padding:14px 18px;}
+  .opt-row{font-size:14.5px;padding:15px 16px;}
+  .chat-rekit{width:auto;max-width:80%;}
 
   /* ── 로그인 · 온보딩 ──
      네비도 푸터도 없다. 아직 들어오지 않은 사람이다.
@@ -1476,6 +1478,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     <nav class="wnav-links">
       <button data-tab="scr-home">홈</button>
       <button data-tab="scr-search">리킷 찾기</button>
+      <button data-tab="scr-chat">낙타AI</button>
       <button data-tab="scr-library">인사이트</button>
     </nav>
     <div class="wnav-actions">
@@ -3529,9 +3532,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 </main><!-- /.stage -->
 
 <!-- ══════════ 낙타AI ══════════
-     좁은 화면에서는 display:contents 로 감싸개가 사라져 앱과 똑같이 한 화면을 차지한다.
-     넓은 화면에서는 오른쪽 아래 떠 있는 창이 된다 — 읽던 화면을 덮지 않고 옆에서 거든다.
-     사이트맵은 그대로다. 위 네비의 '낙타AI' 를 눌러도 같은 창이 열린다. -->
+     감싸개는 display:contents 라 있으나 마나다 — 안의 화면들이 그대로 한 화면을 차지한다.
+     넓은 화면에서는 LLM 앱과 같은 짜임이 된다: 위는 대화, 아래는 붙박이 입력창. -->
 <div class="nk-widget" id="nk-widget">
 <section class="screen" id="scr-chat">
   <div class="topbar">
@@ -3578,6 +3580,11 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     </div>
   </div>
 
+  <!-- 넓은 화면에서는 여기가 대화의 시작점이다. 좁은 화면에서는 갈래를 눌러 들어간다. -->
+  <div class="chat-input nk-home-input" data-go="scr-chatstart">
+    <div class="ci-box">무엇이든 물어보세요</div>
+    <i data-lucide="send"></i>
+  </div>
   <nav class="bottomnav">
     <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
@@ -3701,11 +3708,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 </div>
 <div class="noti-bd" id="noti-bd"></div>
 
-<button class="nk-fab" id="nk-fab" aria-label="낙타AI">
-  <span class="ic-open"><i data-lucide="message-circle"></i></span>
-  <span class="ic-close"><i data-lucide="x"></i></span>
-</button>
-
 
 
 <!-- ══════════ 푸터 (데스크톱) ══════════
@@ -3721,6 +3723,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
         <p class="wfoot-col-title">서비스</p>
         <button data-tab="scr-home">홈</button>
         <button data-tab="scr-search">리킷 찾기</button>
+        <button data-tab="scr-chat">낙타AI</button>
         <button data-tab="scr-library">인사이트</button>
         <button data-tab="scr-my">내 리킷</button>
       </div>
@@ -3823,25 +3826,10 @@ const PRE_AUTH = ["scr-login","scr-agree","scr-ob1","scr-ob2","scr-ob3","scr-ob4
 let stack = [];
 let current = "scr-login";
 
-/* 넓은 화면에서 낙타AI 는 화면을 갈아치우지 않고 오른쪽 아래 창으로 뜬다.
-   그래서 무대(.stage)의 화면들과 창 안의 화면들을 따로 끈다. */
-const NK_SCREENS = ["scr-chat","scr-chatstart","scr-chatroom"];
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
-let nkCurrent = "scr-chat";
-
-function nkShow(id){
-  document.querySelectorAll("#nk-widget .screen").forEach(s=>s.classList.remove("active"));
-  const el = document.getElementById(id); if(!el) return;
-  el.classList.add("active");
-  const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
-  if(id === "scr-chatstart") resetChatStart();
-  nkCurrent = id;
-  document.body.classList.add("nk-open");
-}
 
 function show(id){
-  if(isWide() && NK_SCREENS.indexOf(id) >= 0){ nkShow(id); return; }
-  /* 알림도 화면을 갈아치우지 않고 종 아래 창으로 뜬다 */
+  /* 알림만 화면을 갈아치우지 않고 종 아래 창으로 뜬다 */
   if(isWide() && id === "scr-noti"){
     document.getElementById("scr-noti").classList.add("active");
     document.body.classList.add("noti-open");
@@ -3887,14 +3875,7 @@ function resetChatStart(){
 
 function go(id){ if(id===current) return; stack.push(current); show(id); }
 function tab(id){ stack = []; show(id); }
-function back(){
-  /* 창 안에서 뒤로 가면 창 안에서 끝난다. 무대 화면으로 튀어나오지 않는다 */
-  if(isWide() && NK_SCREENS.indexOf(nkCurrent) >= 0 && document.body.classList.contains("nk-open")){
-    if(nkCurrent !== "scr-chat"){ nkShow("scr-chat"); return; }
-    document.body.classList.remove("nk-open"); return;
-  }
-  const prev = stack.pop(); show(prev || "scr-home");
-}
+function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
 
 // 히어로 슬라이더
 const hsTrack = document.getElementById("hs-track");
@@ -4400,14 +4381,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-/* 낙타AI 창 · 알림 창 여닫기 */
+/* 알림 창 닫기 — 창 밖을 누르면 닫힌다 */
 document.addEventListener("DOMContentLoaded", ()=>{
-  const fab = document.getElementById("nk-fab");
-  if(fab) fab.addEventListener("click", ()=>{
-    if(document.body.classList.contains("nk-open")){ document.body.classList.remove("nk-open"); return; }
-    nkShow(nkCurrent || "scr-chat");
-  });
-  /* 창 밖을 누르면 닫힌다 — 작은 창은 그렇게 닫는 게 몸에 배어 있다 */
   const bd = document.getElementById("noti-bd");
   if(bd) bd.addEventListener("click", ()=> document.body.classList.remove("noti-open"));
 });
