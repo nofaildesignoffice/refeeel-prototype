@@ -1015,6 +1015,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    페이지 1440px · 섹션 컨테이너 1280px · 카드 격자 총폭 1280px · 그레이스케일
    ══════════════════════════════════════════════════════════════════ */
 .wnav,.wfoot{display:none;}
+/* 좁은 화면에서는 감싸개가 없는 셈 친다 — 안의 화면들이 앱처럼 그대로 동작한다 */
+.nk-widget{display:contents;}
+.nk-fab{display:none;}
 .stage{display:flex;flex-direction:column;height:100%;flex:1;min-height:0;min-width:0;position:relative;}
 
 /* --- 태블릿 : 짜임새는 그대로, 폭만 넓힌다 --- */
@@ -1103,47 +1106,50 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-reader .rd-card{padding-inline:max(40px,calc((100% - 680px) / 2));}
   #scr-reader .rd-top,#scr-reader .rd-bottom{padding-inline:max(24px,calc((100% - 760px) / 2));}
   .rd-memo,.rd-line{font-size:23px;}
-  /* ── 낙타AI ──
+  /* ── 낙타AI : 오른쪽 아래 떠 있는 창 ── */
+  .nk-widget{display:block;position:fixed;right:24px;bottom:100px;z-index:390;
+    width:404px;height:min(660px,calc(100vh - 148px));
+    background:var(--bg-white);border:1px solid var(--border-light);border-radius:16px;
+    overflow:hidden;box-shadow:var(--shadow-md);
+    opacity:0;pointer-events:none;transform:translateY(14px);
+    transition:opacity .2s ease,transform .24s cubic-bezier(.22,1,.36,1);}
+  body.nk-open .nk-widget{opacity:1;pointer-events:auto;transform:none;}
+  .nk-widget .screen{height:100%;overflow:hidden;}
+  .nk-widget .bottomnav{display:none;}
+
+  .nk-fab{display:flex;position:fixed;right:24px;bottom:24px;z-index:400;
+    width:60px;height:60px;border-radius:50%;border:none;padding:0;cursor:pointer;
+    background:var(--bg-black);align-items:center;justify-content:center;
+    box-shadow:var(--shadow-md);transition:transform .18s ease;}
+  .nk-fab:hover{transform:translateY(-2px);}
+  .nk-fab i,.nk-fab svg{width:26px;height:26px;color:var(--bg-white);}
+  .nk-fab .ic-close,body.nk-open .nk-fab .ic-open{display:none;}
+  body.nk-open .nk-fab .ic-close{display:flex;}
+
+  /* ── 창 안쪽 ──
      화면 높이에 꽉 채우면 입력창이 브라우저 맨 아래 유리창에 붙어 버린다.
      대화를 상자에 담아 가운데 띄우고, 입력창은 그 상자 바닥에 붙인다 —
      메신저 웹들이 다 이렇게 하는 이유는 창 크기가 제각각이기 때문이다.
      상자 위아래로 여백을 남겨야 '대화 중'이라는 게 화면 안에서 끝난다. */
-  #scr-chat{height:auto;overflow:visible;}
-
-  #scr-chatroom,#scr-chatstart{
-    height:calc(100vh - 73px);overflow:hidden;padding:32px 24px;}
-  /* ⚠ display 는 .active 에만 준다. id 로 그냥 주면 .screen{display:none} 을 이겨
-     숨어 있어야 할 화면이 모든 페이지 위에 겹쳐 보인다. */
-  #scr-chatroom.active,#scr-chatstart.active{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  #scr-chatroom .gnb,#scr-chatstart .gnb{
-    width:min(900px,100%);max-width:900px;padding-inline:22px;flex-shrink:0;
-    border:1px solid var(--border-light);border-bottom:none;
-    border-radius:var(--radius-md) var(--radius-md) 0 0;background:var(--bg-white);}
-  #scr-chatroom .chat-area,#scr-chatstart .chat-area{
-    width:min(900px,100%);max-width:900px;flex:1;min-height:0;overflow-y:auto;
-    padding:28px 32px;border-inline:1px solid var(--border-light);background:var(--bg-light);}
-  #scr-chatroom .chat-input,#scr-chatstart .chat-input{
-    width:min(900px,100%);max-width:900px;flex-shrink:0;padding:16px 24px;
-    border:1px solid var(--border-light);border-top:none;
-    border-radius:0 0 var(--radius-md) var(--radius-md);}
-
-  /* 말풍선도 데스크톱 크기로 */
-  .bubble{max-width:74%;font-size:14.5px;line-height:1.7;padding:14px 18px;}
-  .chat-input .ci-box{padding:13px 18px;font-size:14px;}
-  .opt-row{font-size:14px;}
-  .chat-rekit{width:auto;max-width:74%;}
-
-  /* 낙타AI 첫 화면 — 소개와 갈래를 넓게 편다 */
-  #scr-chat .nk-hero{padding:24px 4px 8px;}
-  #scr-chat .nk-face{width:64px;height:64px;margin-bottom:18px;}
-  #scr-chat .nk-face i,#scr-chat .nk-face svg{width:30px;height:30px;}
-  #scr-chat .nk-hero b{font-size:26px;}
-  #scr-chat .nk-hero p{font-size:15px;margin-top:12px;}
-  #scr-chat .act-card{padding:26px 24px;}
-  #scr-chat .ask-list{max-width:900px;margin-inline:auto;}
-  #scr-chat .ask-row{padding:18px 20px;}
-  #scr-chat .ask-row>span{font-size:14.5px;}
+     창은 404px 라 좁다. 본문 규칙(1280 컨테이너·큰 글씨)이 그대로 오면 다 터진다.
+     그래서 창 안쪽은 앱 크기를 거의 그대로 쓴다. */
+  .nk-widget .scroll,.nk-widget .chat-area{
+    width:100%;max-width:none;padding-inline:0;overflow-y:auto;flex:1;min-height:0;}
+  .nk-widget .sec,.nk-widget .gnb,.nk-widget .chat-input{padding-inline:16px;}
+  .nk-widget .sec{padding-block:18px;}
+  .nk-widget .sec-title{font-size:14px;}
+  .nk-widget .chat-area{padding:18px 16px;}
+  .nk-widget .gnb{height:52px;}
+  .nk-widget .topbar{display:flex;padding-inline:16px;}
+  .nk-widget .bubble{max-width:86%;font-size:13.5px;padding:12px 15px;}
+  .nk-widget .chat-input{padding-block:12px;}
+  .nk-widget .nk-hero{padding:18px 4px 4px;}
+  .nk-widget .nk-face{width:52px;height:52px;margin-bottom:14px;}
+  .nk-widget .nk-face i,.nk-widget .nk-face svg{width:24px;height:24px;}
+  .nk-widget .nk-hero b{font-size:18px;}
+  .nk-widget .nk-hero p{font-size:13px;}
+  .nk-widget .ask-row{padding:13px 14px;}
+  .nk-widget .ask-row>span{font-size:13px;}
 
   /* ── 로그인 · 온보딩 ──
      네비도 푸터도 없다. 아직 들어오지 않은 사람이다.
@@ -2237,123 +2243,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 </section>
 
 <!-- ══════════ 낙타AI — 탭 첫 화면 (무료) ══════════ -->
-<section class="screen" id="scr-chat">
-  <div class="topbar">
-    <span class="logo">낙타AI</span>
-    <div class="topbar-right">
-      <i data-lucide="history"></i>
-    </div>
-  </div>
-
-  <div class="scroll">
-    <div class="sec" style="padding-bottom:2px">
-      <div class="nk-hero">
-        <div class="nk-face"><i data-lucide="message-circle"></i></div>
-        <b>지금 뭐가 막혀 있나요?</b>
-        <p>상황을 이야기하면 89개 리킷 중에서<br>지금 필요한 걸 찾아드릴게요.</p>
-      </div>
-    </div>
-
-    <!-- 미니 컨설팅 진입은 뺐다 — 개발 단계에서 제외(리건, 2026-08-17).
-         두 갈래였던 자리가 리킷 추천 한 갈래만 남는다. -->
-    <div class="sec" style="padding-top:14px;padding-bottom:6px">
-      <div class="act-card primary" data-go="scr-chatstart">
-        <div class="act-ico"><i data-lucide="sparkles"></i></div>
-        <div class="act-body">
-          <b>낙타AI에게 리킷 추천 받기</b>
-          <p>고민을 이야기하면 지금 읽어야 할 리킷을 골라드려요.</p>
-          <span class="act-go">시작하기 <i data-lucide="arrow-right"></i></span>
-        </div>
-      </div>
-    </div>
-
-    <div class="sec" style="padding-top:16px">
-      <div class="sec-head"><span class="sec-title">최근 대화</span><span class="sec-more">전체보기</span></div>
-      <div class="ask-list">
-        <div class="ask-row hist" data-go="scr-chatroom">
-          <div><b>릴스 조회수 vs 매출</b><em>리킷 2개 추천받음 · 3일 전</em></div>
-          <i data-lucide="chevron-right"></i>
-        </div>
-        <div class="ask-row hist" data-go="scr-chatroom">
-          <div><b>프로필 첫 줄 다시 쓰기</b><em>리킷 3개 추천받음 · 지난주</em></div>
-          <i data-lucide="chevron-right"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <nav class="bottomnav">
-    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
-    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
-    <button class="nav-item on" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
-    <button class="nav-item" data-tab="scr-library"><i data-lucide="lightbulb"></i><span>인사이트</span></button>
-    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>내 리킷</span></button>
-  </nav>
-</section>
-
-<!-- ══════════ 낙타AI — 대화 시작 (AI가 건네는 선택지) ══════════ -->
-<section class="screen" id="scr-chatstart">
-  <div class="gnb">
-    <i data-lucide="arrow-left" data-back></i>
-    <span class="gnb-title">낙타AI</span>
-    <i data-lucide="more-horizontal"></i>
-  </div>
-
-  <div class="chat-area">
-    <div class="bubble ai">안녕하세요 리건님. 지금 어떤 게 막혀 있나요?<br><br>비슷한 게 있으면 아래에서 골라주세요. 없으면 직접 이야기해주셔도 좋아요.</div>
-
-    <div class="opt-list">
-      <div class="opt-row" data-go="scr-chatroom"><span>릴스 조회수는 나오는데 매출이 안 늘어요</span><i data-lucide="arrow-up-right"></i></div>
-      <div class="opt-row" data-go="scr-chatroom"><span>뭘 올려야 할지 매번 막막해요</span><i data-lucide="arrow-up-right"></i></div>
-      <div class="opt-row" data-go="scr-chatroom"><span>상세페이지까지 오는데 결제가 안 돼요</span><i data-lucide="arrow-up-right"></i></div>
-      <div class="opt-row" data-go="scr-chatroom"><span>내 계정이 남들 눈에 어떻게 보일까요?</span><i data-lucide="arrow-up-right"></i></div>
-      <div class="opt-row opt-none" data-optnone><i data-lucide="pencil-line"></i><span>이 중에 없어요 · 직접 이야기할게요</span></div>
-    </div>
-
-    <!-- "이 중에 없어요"를 눌렀을 때만 나온다 -->
-    <div class="bubble ai nk-follow" id="nk-follow">
-      좋아요. <b>정리해서 쓰지 않으셔도 괜찮아요.</b><br>지금 상황을 그대로 적어주시면 제가 되물어가며 정리해드릴게요.
-      <span class="nk-eg">예) 오픈 3개월인데 재방문이 없어요<br>예) DM은 오는데 결제까지 안 이어져요</span>
-    </div>
-  </div>
-
-  <div class="chat-input">
-    <div class="ci-box" id="nk-ci" data-go="scr-chatroom">고민을 이야기해보세요</div>
-    <i data-lucide="send"></i>
-  </div>
-</section>
-
-<!-- ══════════ 낙타AI — 대화 화면 ══════════ -->
-<section class="screen" id="scr-chatroom">
-  <div class="gnb">
-    <i data-lucide="arrow-left" data-back></i>
-    <span class="gnb-title">낙타AI</span>
-    <i data-lucide="more-horizontal"></i>
-  </div>
-
-  <div class="chat-area">
-    <div class="bubble user">릴스 조회수는 잘 나오는데 매출이 안 늘어요. 릴스를 더 올려야 할까요?</div>
-    <div class="bubble ai">조회수가 나오는데 매출이 안 는다면, 문제는 릴스의 양이 아니라 <b>조회 이후의 전환 구조</b>일 가능성이 높아요.<br><br>지금 릴스를 본 사람이 그다음에 하게 되는 행동이 뭔가요?</div>
-    <div class="bubble user">음... 딱히 없는 것 같아요. 프로필 링크 정도?</div>
-    <div class="bubble ai">그게 진짜 문제예요. <b>조회수가 아니라 전환 설계가 비어있는 것.</b> 이 리킷 두 개가 정확히 그 문제를 다룹니다.</div>
-    <div class="chat-rekit" data-go="scr-viewer">
-      <div class="img-ph"><i data-lucide="image"></i></div>
-      <div class="cr-body"><div class="cr-num">RE:KIT 41</div><div class="cr-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div></div>
-      <i data-lucide="chevron-right"></i>
-    </div>
-    <div class="chat-rekit" data-go="scr-viewer">
-      <div class="img-ph"><i data-lucide="image"></i></div>
-      <div class="cr-body"><div class="cr-num">RE:KIT 03</div><div class="cr-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div></div>
-      <i data-lucide="chevron-right"></i>
-    </div>
-  </div>
-
-  <div class="chat-input">
-    <div class="ci-box">이어서 물어보세요</div>
-    <i data-lucide="send"></i>
-  </div>
-</section>
-
 <!-- ══════════ 모아보기 리더 (전체화면) ══════════ -->
 <!-- 목록이 아니라 '읽는' 화면이다. 한 장에 하나만 놓고 옆으로 넘긴다.
      명언 앱과 다르게 배경 사진을 깔지 않는다 — 메모는 두세 줄짜리 문장이라 사진 위에서 안 읽히고,
@@ -3580,6 +3469,137 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
 </main><!-- /.stage -->
 
+<!-- ══════════ 낙타AI ══════════
+     좁은 화면에서는 display:contents 로 감싸개가 사라져 앱과 똑같이 한 화면을 차지한다.
+     넓은 화면에서는 오른쪽 아래 떠 있는 창이 된다 — 읽던 화면을 덮지 않고 옆에서 거든다.
+     사이트맵은 그대로다. 위 네비의 '낙타AI' 를 눌러도 같은 창이 열린다. -->
+<div class="nk-widget" id="nk-widget">
+<section class="screen" id="scr-chat">
+  <div class="topbar">
+    <span class="logo">낙타AI</span>
+    <div class="topbar-right">
+      <i data-lucide="history"></i>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <div class="sec" style="padding-bottom:2px">
+      <div class="nk-hero">
+        <div class="nk-face"><i data-lucide="message-circle"></i></div>
+        <b>지금 뭐가 막혀 있나요?</b>
+        <p>상황을 이야기하면 89개 리킷 중에서<br>지금 필요한 걸 찾아드릴게요.</p>
+      </div>
+    </div>
+
+    <!-- 미니 컨설팅 진입은 뺐다 — 개발 단계에서 제외(리건, 2026-08-17).
+         두 갈래였던 자리가 리킷 추천 한 갈래만 남는다. -->
+    <div class="sec" style="padding-top:14px;padding-bottom:6px">
+      <div class="act-card primary" data-go="scr-chatstart">
+        <div class="act-ico"><i data-lucide="sparkles"></i></div>
+        <div class="act-body">
+          <b>낙타AI에게 리킷 추천 받기</b>
+          <p>고민을 이야기하면 지금 읽어야 할 리킷을 골라드려요.</p>
+          <span class="act-go">시작하기 <i data-lucide="arrow-right"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" style="padding-top:16px">
+      <div class="sec-head"><span class="sec-title">최근 대화</span><span class="sec-more">전체보기</span></div>
+      <div class="ask-list">
+        <div class="ask-row hist" data-go="scr-chatroom">
+          <div><b>릴스 조회수 vs 매출</b><em>리킷 2개 추천받음 · 3일 전</em></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
+        <div class="ask-row hist" data-go="scr-chatroom">
+          <div><b>프로필 첫 줄 다시 쓰기</b><em>리킷 3개 추천받음 · 지난주</em></div>
+          <i data-lucide="chevron-right"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
+    <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
+    <button class="nav-item on" data-tab="scr-chat"><i data-lucide="message-circle"></i><span>낙타AI</span></button>
+    <button class="nav-item" data-tab="scr-library"><i data-lucide="lightbulb"></i><span>인사이트</span></button>
+    <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>내 리킷</span></button>
+  </nav>
+</section>
+
+<!-- ══════════ 낙타AI — 대화 시작 (AI가 건네는 선택지) ══════════ -->
+<section class="screen" id="scr-chatstart">
+  <div class="gnb">
+    <i data-lucide="arrow-left" data-back></i>
+    <span class="gnb-title">낙타AI</span>
+    <i data-lucide="more-horizontal"></i>
+  </div>
+
+  <div class="chat-area">
+    <div class="bubble ai">안녕하세요 리건님. 지금 어떤 게 막혀 있나요?<br><br>비슷한 게 있으면 아래에서 골라주세요. 없으면 직접 이야기해주셔도 좋아요.</div>
+
+    <div class="opt-list">
+      <div class="opt-row" data-go="scr-chatroom"><span>릴스 조회수는 나오는데 매출이 안 늘어요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>뭘 올려야 할지 매번 막막해요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>상세페이지까지 오는데 결제가 안 돼요</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row" data-go="scr-chatroom"><span>내 계정이 남들 눈에 어떻게 보일까요?</span><i data-lucide="arrow-up-right"></i></div>
+      <div class="opt-row opt-none" data-optnone><i data-lucide="pencil-line"></i><span>이 중에 없어요 · 직접 이야기할게요</span></div>
+    </div>
+
+    <!-- "이 중에 없어요"를 눌렀을 때만 나온다 -->
+    <div class="bubble ai nk-follow" id="nk-follow">
+      좋아요. <b>정리해서 쓰지 않으셔도 괜찮아요.</b><br>지금 상황을 그대로 적어주시면 제가 되물어가며 정리해드릴게요.
+      <span class="nk-eg">예) 오픈 3개월인데 재방문이 없어요<br>예) DM은 오는데 결제까지 안 이어져요</span>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="ci-box" id="nk-ci" data-go="scr-chatroom">고민을 이야기해보세요</div>
+    <i data-lucide="send"></i>
+  </div>
+</section>
+
+<!-- ══════════ 낙타AI — 대화 화면 ══════════ -->
+<section class="screen" id="scr-chatroom">
+  <div class="gnb">
+    <i data-lucide="arrow-left" data-back></i>
+    <span class="gnb-title">낙타AI</span>
+    <i data-lucide="more-horizontal"></i>
+  </div>
+
+  <div class="chat-area">
+    <div class="bubble user">릴스 조회수는 잘 나오는데 매출이 안 늘어요. 릴스를 더 올려야 할까요?</div>
+    <div class="bubble ai">조회수가 나오는데 매출이 안 는다면, 문제는 릴스의 양이 아니라 <b>조회 이후의 전환 구조</b>일 가능성이 높아요.<br><br>지금 릴스를 본 사람이 그다음에 하게 되는 행동이 뭔가요?</div>
+    <div class="bubble user">음... 딱히 없는 것 같아요. 프로필 링크 정도?</div>
+    <div class="bubble ai">그게 진짜 문제예요. <b>조회수가 아니라 전환 설계가 비어있는 것.</b> 이 리킷 두 개가 정확히 그 문제를 다룹니다.</div>
+    <div class="chat-rekit" data-go="scr-viewer">
+      <div class="img-ph"><i data-lucide="image"></i></div>
+      <div class="cr-body"><div class="cr-num">RE:KIT 41</div><div class="cr-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div></div>
+      <i data-lucide="chevron-right"></i>
+    </div>
+    <div class="chat-rekit" data-go="scr-viewer">
+      <div class="img-ph"><i data-lucide="image"></i></div>
+      <div class="cr-body"><div class="cr-num">RE:KIT 03</div><div class="cr-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div></div>
+      <i data-lucide="chevron-right"></i>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="ci-box">이어서 물어보세요</div>
+    <i data-lucide="send"></i>
+  </div>
+</section>
+
+</div>
+
+<button class="nk-fab" id="nk-fab" aria-label="낙타AI">
+  <span class="ic-open"><i data-lucide="message-circle"></i></span>
+  <span class="ic-close"><i data-lucide="x"></i></span>
+</button>
+
+
+
 <!-- ══════════ 푸터 (데스크톱) ══════════
      링크는 앱에 실제로 있는 화면만 가리킨다. 웹에서만 갈 수 있는 곳을 만들지 않는다. -->
 <footer class="wfoot">
@@ -3696,7 +3716,27 @@ const PRE_AUTH = ["scr-login","scr-agree","scr-ob1","scr-ob2","scr-ob3","scr-ob4
 let stack = [];
 let current = "scr-login";
 
+/* 넓은 화면에서 낙타AI 는 화면을 갈아치우지 않고 오른쪽 아래 창으로 뜬다.
+   그래서 무대(.stage)의 화면들과 창 안의 화면들을 따로 끈다. */
+const NK_SCREENS = ["scr-chat","scr-chatstart","scr-chatroom"];
+function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
+let nkCurrent = "scr-chat";
+
+function nkShow(id){
+  document.querySelectorAll("#nk-widget .screen").forEach(s=>s.classList.remove("active"));
+  const el = document.getElementById(id); if(!el) return;
+  el.classList.add("active");
+  const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
+  if(id === "scr-chatstart") resetChatStart();
+  nkCurrent = id;
+  document.body.classList.add("nk-open");
+  document.querySelectorAll(".wnav-links button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.tab === "scr-chat");
+  });
+}
+
 function show(id){
+  if(isWide() && NK_SCREENS.indexOf(id) >= 0){ nkShow(id); return; }
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   const el = document.getElementById(id);
   if(!el) return;
@@ -3733,7 +3773,14 @@ function resetChatStart(){
 
 function go(id){ if(id===current) return; stack.push(current); show(id); }
 function tab(id){ stack = []; show(id); }
-function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
+function back(){
+  /* 창 안에서 뒤로 가면 창 안에서 끝난다. 무대 화면으로 튀어나오지 않는다 */
+  if(isWide() && NK_SCREENS.indexOf(nkCurrent) >= 0 && document.body.classList.contains("nk-open")){
+    if(nkCurrent !== "scr-chat"){ nkShow("scr-chat"); return; }
+    document.body.classList.remove("nk-open"); return;
+  }
+  const prev = stack.pop(); show(prev || "scr-home");
+}
 
 // 히어로 슬라이더
 const hsTrack = document.getElementById("hs-track");
@@ -4226,6 +4273,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.getElementById("v-bm").addEventListener("click", function(){
     this.classList.toggle("on");
     showToast(this.classList.contains("on") ? "내 리킷에 저장했어요" : "저장을 해제했어요");
+  });
+});
+
+/* 낙타AI 창 여닫기 */
+document.addEventListener("DOMContentLoaded", ()=>{
+  const fab = document.getElementById("nk-fab");
+  if(!fab) return;
+  fab.addEventListener("click", ()=>{
+    if(document.body.classList.contains("nk-open")){ document.body.classList.remove("nk-open"); return; }
+    nkShow(nkCurrent || "scr-chat");
   });
 });
 
