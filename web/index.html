@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>RE:FEEEL 웹 클릭 프로토타입 v1</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
@@ -921,6 +922,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 /* 뷰어 */
 .viewer-body{padding:24px 20px;}
 .viewer-num{font-size:11px;font-weight:700;letter-spacing:0.8px;color:var(--text-light);margin-bottom:8px;}
+/* 웹 리킷의 머리말은 넓은 화면에서만 붙는다. 좁은 화면은 앱 그대로 번호와 제목만 */
+.art-kicker,.art-subdesc,.art-byline,.art-hero{display:none;}
 .viewer-title{font-size:21px;font-weight:800;line-height:1.45;margin-bottom:20px;}
 
 /* 완독 직후 */
@@ -1092,12 +1095,53 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .pcard{flex:0 0 280px;}
   .hcard{min-width:280px;}
 
+  /* ══════════════ 리킷 본문 — 웹 리킷과 같은 짜임 ══════════════
+     머리말(키커·큰 제목·부제·바이라인·표지)이 붙고, 본문은 720 으로 좁아진다.
+     제목만 폭을 넓게 쓰는 이유 — 큰 글씨는 줄이 짧으면 토막 나 보인다. */
+  #scr-viewer .art-kicker,#scr-viewer .art-subdesc,#scr-viewer .art-byline,#scr-viewer .art-hero{display:block;}
+  #scr-viewer .viewer-num{display:none;}      /* 키커가 같은 말을 한다 */
+
+  #scr-viewer .viewer-body{max-width:960px;margin-inline:auto;padding:40px 0 72px;}
+  #scr-viewer .art-kicker{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;
+    letter-spacing:.02em;color:var(--text-gray);margin-bottom:20px;}
+  #scr-viewer .art-dot{width:8px;height:8px;border-radius:50%;background:var(--text-black);flex-shrink:0;}
+  #scr-viewer .viewer-title{font-size:clamp(38px,4.6vw,64px);font-weight:800;line-height:1.12;
+    letter-spacing:-.03em;word-break:keep-all;margin-bottom:0;}
+  #scr-viewer .art-subdesc{font-size:19px;font-weight:300;line-height:1.6;color:var(--text-gray);
+    max-width:52ch;margin-top:22px;}
+  #scr-viewer .art-byline{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:28px;
+    font-size:14px;color:var(--text-light);}
+  #scr-viewer .art-avatar{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+    border-radius:50%;background:var(--bg-light);border:1px solid var(--border-light);
+    font-size:12px;font-weight:800;color:var(--text-black);}
+  #scr-viewer .art-by-name{color:var(--text-black);font-weight:500;}
+  #scr-viewer .art-chip{display:inline-flex;align-items:center;height:26px;padding-inline:10px;
+    border-radius:6px;border:1px solid var(--border-default);font-size:13px;font-weight:500;color:var(--text-gray);}
+  #scr-viewer .art-hero{margin:44px 0 clamp(40px,6vh,72px);border-radius:10px;overflow:hidden;}
+  #scr-viewer .art-hero .img-ph{width:100%;height:clamp(220px,30vw,420px);border-radius:0;}
+
+  /* 본문만 720 으로 물린다 */
+  #scr-viewer .vp,#scr-viewer .vh,#scr-viewer .vq,#scr-viewer .vbox,
+  #scr-viewer .vcheck,#scr-viewer .v-end{max-width:720px;margin-inline:auto;}
+  #scr-viewer .vp{font-size:17.5px;line-height:1.7;color:rgba(20,20,24,.88);margin-bottom:1.8em;}
+  #scr-viewer .vp:first-of-type{font-size:22px;font-weight:500;line-height:1.6;color:var(--text-black);margin-bottom:40px;}
+  #scr-viewer .vh{font-size:clamp(26px,3vw,40px);font-weight:700;line-height:1.32;letter-spacing:-.02em;
+    margin:clamp(40px,6vw,64px) auto 24px;}
+  /* 인용은 세리프 이탤릭 — 본문과 목소리가 다르다는 걸 글꼴로 알린다 */
+  #scr-viewer .vq{font-family:'Instrument Serif','Pretendard',serif;font-style:italic;font-weight:400;
+    font-size:clamp(20px,2.4vw,27px);line-height:1.5;color:var(--text-black);
+    margin:34px auto;padding:0 0 0 22px;border-left:2px solid rgba(20,20,24,.2);}
+  #scr-viewer .vbox{margin:32px auto 40px;}
+  #scr-viewer .vrow b{font-size:15px;}
+  #scr-viewer .vrow span{font-size:14px;}
+  #scr-viewer .vcheck{margin:clamp(40px,6vw,60px) auto 8px;padding:28px;}
+  #scr-viewer .vcheck b{font-size:14px;}
+  #scr-viewer .vcheck li{font-size:15.5px;padding:2px 0;}
+  #scr-viewer .v-end{margin-top:clamp(52px,7vw,80px);padding-top:32px;}
+
   /* 읽는 화면은 더 좁게 — 글줄이 길면 눈이 다음 줄을 못 찾는다 */
-  #scr-viewer .viewer-body,#scr-viewer .gnb,#scr-viewer .progress-thin{padding-inline:max(24px,calc((100% - 800px) / 2));}
-  #scr-viewer .viewer-body{padding:44px 0 64px;}
-  .vp{font-size:16px;line-height:1.95;}
-  .vh{font-size:20px;}
-  .vq{font-size:19px;}
+  #scr-viewer .gnb,#scr-viewer .progress-thin{padding-inline:max(24px,calc((100% - 960px) / 2));}
+  #scr-viewer .scroll{padding-inline:24px;}
 
   /* ── 안쪽 스크롤이 남아야 하는 화면 ── */
   /* 리더는 한 장씩 넘겨 읽는 화면이라 높이를 붙잡아 둔다 */
@@ -2669,8 +2713,19 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   <div class="progress-thin"><div id="v-bar" style="width:0%"></div></div>
   <div class="scroll" id="v-scroll">
     <div class="viewer-body" style="position:relative">
+      <!-- 넓은 화면에서는 웹 리킷과 같은 머리말이 붙는다. 좁은 화면에서는 앱처럼 번호와 제목만 남는다. -->
       <div class="viewer-num">RE:KIT 41</div>
+      <div class="art-kicker"><span class="art-dot"></span>전환·매출 · KIT 41 · 2026.08.16</div>
       <div class="viewer-title">팔지 않으면 팔리는<br>3단계 콘텐츠 퍼널</div>
+      <p class="art-subdesc">피드는 유입, 스토리는 전환. 이 분리를 지키면 매출이 따라옵니다.</p>
+      <div class="art-byline">
+        <span class="art-avatar">낙</span>
+        <span class="art-by-name">by 낙타</span>
+        <span class="art-by-dot">·</span><span>6 MIN READ</span>
+        <span class="art-by-dot">·</span>
+        <span class="art-chip">인스타그램</span><span class="art-chip">퍼널</span>
+      </div>
+      <figure class="art-hero"><div class="img-ph"><i data-lucide="image"></i></div></figure>
 
       <p class="vp">저는 계속 말했습니다. 피드에서 팔지 마세요. 릴스로 유입하고, 스토리에서 전환하세요. 그런데 대부분의 사업자가 이걸 듣고도 실행하지 않았어요.</p>
       <h4 class="vh">대부분의 사업자가 불안해하는 것.</h4>
