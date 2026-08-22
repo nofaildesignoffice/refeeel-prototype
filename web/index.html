@@ -949,6 +949,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    ⚠ 실제 구현에서는 Google·Apple 공식 브랜드 에셋과 버튼 규격을 그대로 써야 한다.
    ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
 .login-side{display:none;}
+.login-scroll{display:flex;flex-direction:column;}
 .login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;}
 .login-brand{text-align:center;margin-bottom:44px;}
 .login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
@@ -1312,7 +1313,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
 <!-- ══════════ 로그인 ══════════ -->
 <section class="screen" id="scr-login">
-  <div class="scroll" style="display:flex;flex-direction:column;">
+  <!-- ⚠ 여기에 인라인 style 을 쓰지 않는다. 인라인은 CSS 를 이기므로
+       데스크톱에서 좌우로 나누는 display:grid 가 먹지 않는다. -->
+  <div class="scroll login-scroll">
     <!-- 왼쪽 판은 데스크톱에서만 보인다. 좁은 화면에서는 아래 login-brand 가 그 역할을 한다 -->
     <div class="login-side">
       <div>
