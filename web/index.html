@@ -948,6 +948,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    앱을 열면 바로 로그인이다(리건, 2026-08-18).
    ⚠ 실제 구현에서는 Google·Apple 공식 브랜드 에셋과 버튼 규격을 그대로 써야 한다.
    ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
+.login-side{display:none;}
 .login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;}
 .login-brand{text-align:center;margin-bottom:44px;}
 .login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
@@ -1082,11 +1083,40 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-chat,#scr-chatroom,#scr-chatstart{height:calc(100vh - 73px);overflow:hidden;}
   #scr-chat .scroll,#scr-chatroom .chat-area,#scr-chatstart .chat-area{overflow-y:auto;flex:1;}
 
-  /* ── 로그인 · 온보딩 : 네비도 푸터도 없다. 아직 들어오지 않은 사람이다 ── */
+  /* ── 로그인 · 온보딩 ──
+     네비도 푸터도 없다. 아직 들어오지 않은 사람이다.
+     그렇다고 좁은 기둥 하나로 세우면 화면이 텅 빈다 — 가운데 카드로 앉힌다.
+     로그인만 좌우로 나눈다. 첫 화면은 '무엇을 하는 곳인지' 를 먼저 말해야 한다. */
   body.pre-auth .wnav,body.pre-auth .wfoot{display:none;}
-  body.pre-auth .stage{max-width:520px;margin:0 auto;}
-  body.pre-auth .screen{min-height:100vh;}
-  body.pre-auth .scroll{padding-inline:24px;}
+  body.pre-auth .stage{max-width:none;margin:0;}
+  body.pre-auth .screen{min-height:100vh;background:var(--bg-light);}
+  body.pre-auth .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;}
+  body.pre-auth .gnb{width:min(720px,100%);border:none;background:none;padding:0;margin-bottom:14px;height:auto;}
+  body.pre-auth .scroll{width:min(720px,100%);flex:none;overflow:visible;
+    background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);
+    padding:52px 48px;}
+  body.pre-auth .ob-head{padding:0 0 8px;}
+  body.pre-auth .ob-head h3{font-size:26px;}
+  body.pre-auth .ob-head p{font-size:14px;margin-top:12px;}
+  body.pre-auth .sec{padding:24px 0 0;}
+  body.pre-auth .ob-bottom{margin-top:36px;padding:0;}
+  body.pre-auth .agree-all{padding:17px 16px;}
+  body.pre-auth .agree-row{padding:15px 16px;}
+
+  /* 로그인 — 좌우 분할. 왼쪽은 무엇을 하는 곳인지, 오른쪽은 들어가는 문 */
+  #scr-login.screen.active{padding:0;background:var(--bg-white);}
+  #scr-login .scroll{width:100%;min-height:100vh;border:none;border-radius:0;padding:0;
+    display:grid;grid-template-columns:1fr 1fr;background:none;}
+  .login-side{display:flex;flex-direction:column;justify-content:center;padding:72px 64px;
+    background:var(--bg-dark);color:var(--bg-white);}
+  .login-side-logo{font-size:20px;font-weight:800;letter-spacing:1px;margin-bottom:40px;}
+  .login-side-copy{font-size:44px;font-weight:800;line-height:1.35;letter-spacing:-1px;color:var(--bg-white);}
+  .login-side-sub{font-size:15px;line-height:1.7;color:var(--text-muted);margin-top:20px;}
+  #scr-login .login-wrap{padding:72px 64px;max-width:520px;}
+  #scr-login .login-brand{display:none;}   /* 왼쪽 판이 같은 말을 이미 하고 있다 */
+  #scr-login .lbtn{padding:16px;font-size:15px;}
+  #scr-login .lbtn+.lbtn{margin-top:11px;}
+  #scr-login .login-note{font-size:13px;margin-top:22px;}
 
   /* ── 시트는 가운데 창으로 ── */
   .sheet-wrap{position:fixed;z-index:400;}
@@ -1262,6 +1292,14 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 <!-- ══════════ 로그인 ══════════ -->
 <section class="screen" id="scr-login">
   <div class="scroll" style="display:flex;flex-direction:column;">
+    <!-- 왼쪽 판은 데스크톱에서만 보인다. 좁은 화면에서는 아래 login-brand 가 그 역할을 한다 -->
+    <div class="login-side">
+      <div>
+        <div class="login-side-logo">RE:FEEEL</div>
+        <p class="login-side-copy">사업의 본질을<br>읽는 시간</p>
+        <p class="login-side-sub">매주 한 편, 소상공인과 크리에이터를 위한 읽을거리</p>
+      </div>
+    </div>
     <div class="login-wrap">
       <div class="login-brand">
         <div class="login-logo">RE:FEEEL</div>
