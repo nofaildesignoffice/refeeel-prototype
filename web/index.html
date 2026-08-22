@@ -1089,12 +1089,14 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
   /* 하단 탭바와 홈 상단바는 위 네비가 대신한다 */
   .bottomnav,.topbar{display:none;}
-  /* 넓은 화면에서 상단바는 '페이지 제목' 이다. 되돌아가는 길은 위 네비가 맡는다.
-     ⚠ 설정 하위 화면은 목록으로 돌아갈 길이 여기뿐이라 뒤로가기를 남긴다. */
+  /* 넓은 화면에서 상단바는 '페이지 제목' 일 뿐이다(리건, 2026-08-22).
+     되돌아가는 길은 위 네비와 브라우저 뒤로가기가 맡는다.
+     ⚠ 리킷 본문(scr-viewer)만 예외다 — 거기는 상단 네비까지 걷어낸 화면이라 나갈 문이 필요하다. */
   .gnb{height:auto;padding-block:70px 0;border-bottom:none;background:none;justify-content:flex-start;gap:14px;}
   .gnb-title{font-size:32px;font-weight:800;letter-spacing:-1px;max-width:none;color:var(--text-black);}
+  .gnb>i[data-back],.gnb>svg[data-back],.gnb>.gnb-side>i[data-back],.gnb>.gnb-side>svg[data-back]{display:none;}
+  #scr-viewer .gnb>i[data-back],#scr-viewer .gnb>svg[data-back]{display:block;}
   #scr-done .gnb>span:first-child,#scr-done .gnb-side{display:none;}
-  #scr-noti .gnb>i[data-back],#scr-notekit .gnb>i[data-back],#scr-series .gnb>i[data-back]{display:none;}
   #scr-done .gnb{padding-bottom:0;}
 
   /* 넓어진 만큼 한 줄에 더 놓는다 */
