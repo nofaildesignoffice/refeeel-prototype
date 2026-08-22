@@ -1258,7 +1258,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .seg2 button{font-size:14px;}
 
   /* --- 인사이트 : 지표와 목록을 한 줄에 세우지 않고, 지표만 넓게 --- */
-  .ins-fixed{padding-block:36px 0;}
+  /* 지표는 가운데. 아래 세그먼트도 가운데라 세로로 한 줄이 된다 */
+  #scr-library .ins-fixed .sec-head{justify-content:center;}
+  #scr-library .ins-stat{margin-inline:auto;}
   .ins-stat{max-width:620px;}
   .tl-wrap{padding-top:8px;}
   .tl-ev+.tl-ev{margin-top:18px;}
