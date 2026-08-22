@@ -135,6 +135,13 @@ body.clean .jumpbar{display:none;}
 .thumbrow-item .img-ph{width:118px;height:78px;}
 .thumbrow-item p{font-size:12px;font-weight:600;line-height:1.4;margin-top:6px;}
 .new-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+/* 시리즈 배너 — 좁은 화면에서는 세로로 접힌다 */
+.series-banner{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;cursor:pointer;}
+.series-banner .img-ph{width:100%;aspect-ratio:16/9;border-radius:0;}
+.sb-body{padding:14px;}
+.sb-title{font-size:16px;font-weight:800;line-height:1.4;}
+.sb-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
+.sb-cta{display:none;}
 .bigcard{cursor:pointer;}
 .bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:0;}
 .bigcard-body{padding:14px;}
@@ -1204,6 +1211,13 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .hcard-title{font-size:15px;}
   .hcard-num{font-size:11px;}
   .new-grid{grid-template-columns:repeat(2,1fr);gap:24px;}
+  /* 시리즈 — 왼쪽 그림, 오른쪽 이야기 */
+  .series-banner{display:grid;grid-template-columns:5fr 7fr;align-items:stretch;}
+  .series-banner .img-ph{height:100%;aspect-ratio:auto;min-height:340px;}
+  .sb-body{padding:48px 52px;display:flex;flex-direction:column;justify-content:center;}
+  .sb-title{font-size:30px;letter-spacing:-0.8px;margin-top:14px;}
+  .sb-desc{font-size:15.5px;line-height:1.75;margin-top:14px;max-width:440px;}
+  .sb-cta{display:inline-flex;align-self:flex-start;margin-top:28px;}
   .bigcard-body{padding:22px;}
   .bigcard-title{font-size:20px;}
   .bigcard-desc{font-size:14px;margin-top:10px;}
@@ -1671,12 +1685,16 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">시리즈</span></div>
-      <div class="card bigcard" data-go="scr-series">
+      <!-- 한 장짜리 섹션이라 카드로 두면 이미지가 폭을 다 먹고 섹션이 1000px 을 넘는다.
+           좌우로 나누면 높이가 절반이 되고 이미지도 글도 제자리를 찾는다.
+           좁은 화면에서는 세로로 접혀 앱의 큰 카드와 같은 모양이 된다. -->
+      <div class="series-banner" data-go="scr-series">
         <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="bigcard-body">
+        <div class="sb-body">
           <div class="bigcard-kicker"><span class="k">Series · 9개 회차</span><span class="lock-badge"><i data-lucide="lock"></i>구매 회원 전용</span></div>
-          <div class="bigcard-title">브랜딩 클래스</div>
-          <div class="bigcard-desc">마케팅의 순서부터 가이드라인까지, 브랜딩의 전 과정을 순서대로.</div>
+          <div class="sb-title">브랜딩 클래스</div>
+          <div class="sb-desc">마케팅의 순서부터 가이드라인까지, 브랜딩의 전 과정을 순서대로.</div>
+          <button class="btn btn-secondary sb-cta">시리즈 보기<i data-lucide="arrow-right"></i></button>
         </div>
       </div>
     </div>
