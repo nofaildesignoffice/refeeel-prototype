@@ -107,8 +107,10 @@ body.clean .jumpbar{display:none;}
 .hs-slide{position:relative;min-width:100%;flex-shrink:0;scroll-snap-align:start;aspect-ratio:4/3;background:var(--bg-dark);cursor:pointer;overflow:hidden;}
 .hs-img{position:absolute;inset:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
 .hs-img i,.hs-img svg{width:28px;height:28px;color:var(--placeholder-icon);}
-/* 이미지 위 반투명 덮개를 쓰지 않는다(지침 v4). 글자는 아래 다크 판 위에 얹는다 */
-.hs-body{background:var(--bg-dark);}
+/* 히어로는 앱과 똑같이 둔다(리건, 2026-08-22).
+   와이어프레임 지침 v4 는 이미지 위 반투명 덮개를 금하지만, 여기서는 지시가 앞선다 —
+   사진 위에 흰 글씨를 얹으려면 아래로 갈수록 짙어지는 덮개가 있어야 글이 읽힌다. */
+.hs-slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:75%;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0.45) 45%,rgba(0,0,0,0.82) 100%);pointer-events:none;}
 .hs-body{position:absolute;left:0;right:0;bottom:0;padding:20px 20px 46px;z-index:1;}
 .hs-label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.72);font-weight:700;margin-bottom:7px;}
 .hs-title{font-size:20px;font-weight:800;line-height:1.4;color:var(--bg-white);}
@@ -1188,7 +1190,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
   /* --- 홈 히어로 : 4:3 은 데스크톱에서 너무 높다 --- */
   .hs-slide{aspect-ratio:21/9;}
-  .hs-body{padding:36px 40px 56px;}
+  /* 판은 화면 끝까지 깔리되 글자는 1280 안쪽 — 아래 섹션들과 같은 세로선에 선다 */
+  .hs-body{padding:36px max(24px,calc((100% - 1280px) / 2)) 56px;}
   .hs-title{font-size:34px;line-height:1.3;}
   .hs-sub{font-size:15px;margin-top:12px;}
   .hs-label{font-size:12px;}
