@@ -1019,8 +1019,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    ══════════════════════════════════════════════════════════════════ */
 .wnav,.wfoot{display:none;}
 /* 좁은 화면에서는 감싸개가 없는 셈 친다 — 안의 화면들이 앱처럼 그대로 동작한다 */
-.nk-widget{display:contents;}
-.nk-fab{display:none;}
+.nk-widget,.noti-pop{display:contents;}
+.nk-fab,.noti-bd{display:none;}
 .stage{display:flex;flex-direction:column;height:100%;flex:1;min-height:0;min-width:0;position:relative;}
 
 /* --- 태블릿 : 짜임새는 그대로, 폭만 넓힌다 --- */
@@ -1089,7 +1089,13 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
   /* 하단 탭바와 홈 상단바는 위 네비가 대신한다 */
   .bottomnav,.topbar{display:none;}
-  .gnb{height:60px;}
+  /* 넓은 화면에서 상단바는 '페이지 제목' 이다. 되돌아가는 길은 위 네비가 맡는다.
+     ⚠ 설정 하위 화면은 목록으로 돌아갈 길이 여기뿐이라 뒤로가기를 남긴다. */
+  .gnb{height:auto;padding-block:70px 0;border-bottom:none;background:none;justify-content:flex-start;gap:14px;}
+  .gnb-title{font-size:32px;font-weight:800;letter-spacing:-1px;max-width:none;color:var(--text-black);}
+  #scr-done .gnb>span:first-child,#scr-done .gnb-side{display:none;}
+  #scr-noti .gnb>i[data-back],#scr-notekit .gnb>i[data-back],#scr-series .gnb>i[data-back]{display:none;}
+  #scr-done .gnb{padding-bottom:0;}
 
   /* 넓어진 만큼 한 줄에 더 놓는다 */
   .grid2{grid-template-columns:repeat(4,1fr);gap:24px;}
@@ -1163,6 +1169,26 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-reader .rd-card{padding-inline:max(40px,calc((100% - 680px) / 2));}
   #scr-reader .rd-top,#scr-reader .rd-bottom{padding-inline:max(24px,calc((100% - 760px) / 2));}
   .rd-memo,.rd-line{font-size:23px;}
+  /* ── 알림 : 종 아래 붙는 창 ── */
+  .noti-pop{display:block;position:fixed;top:66px;right:24px;z-index:380;
+    width:384px;max-height:min(560px,calc(100vh - 110px));
+    background:var(--bg-white);border:1px solid var(--border-light);border-radius:14px;
+    overflow:hidden;box-shadow:var(--shadow-md);
+    opacity:0;pointer-events:none;transform:translateY(-8px);
+    transition:opacity .18s ease,transform .2s cubic-bezier(.22,1,.36,1);}
+  body.noti-open .noti-pop{opacity:1;pointer-events:auto;transform:none;}
+  .noti-pop .screen{height:auto;max-height:inherit;display:flex;flex-direction:column;}
+  .noti-pop .screen.active{display:flex;}
+  .noti-pop .gnb{position:static;height:52px;padding:0 18px;border-bottom:1px solid var(--border-light);
+    background:var(--bg-white);justify-content:space-between;}
+  .noti-pop .gnb-title{font-size:14px;font-weight:800;}
+  .noti-pop .gnb>i{display:none;}          /* 창이라 뒤로 갈 데가 없다 */
+  .noti-pop .scroll{overflow-y:auto;flex:1;min-height:0;padding-inline:0;max-width:none;}
+  .noti-pop .noti-date{padding:14px 18px 6px;}
+  .noti-pop .noti-row{padding:14px 18px;}
+  .noti-bd{display:block;position:fixed;inset:0;z-index:370;opacity:0;pointer-events:none;}
+  body.noti-open .noti-bd{pointer-events:auto;}
+
   /* ── 낙타AI : 오른쪽 아래 떠 있는 창 ── */
   .nk-widget{display:block;position:fixed;right:24px;bottom:100px;z-index:390;
     width:404px;height:min(660px,calc(100vh - 148px));
@@ -3492,48 +3518,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   </div>
 </section>
 
-<!-- ══════════ 알림 센터 ══════════ -->
-<section class="screen" id="scr-noti">
-  <div class="gnb">
-    <i data-lucide="chevron-left" data-back></i>
-    <span class="gnb-title">알림</span>
-    <span style="font-size:11px;color:var(--text-light)">모두 읽음</span>
-  </div>
-  <div class="scroll">
-    <div class="noti-row" data-go="scr-viewer">
-      <div class="noti-ic"><i data-lucide="mail"></i><span class="dot"></span></div>
-      <div class="noti-body">
-        <div class="noti-title">새 리킷이 도착했어요</div>
-        <div class="noti-desc">RE:KIT 89 · 프롬프트 대신, 마케터의 기준을 넣었습니다</div>
-        <div class="noti-time">2시간 전</div>
-      </div>
-    </div>
-    <div class="noti-row" data-go="scr-series">
-      <div class="noti-ic"><i data-lucide="layers"></i><span class="dot"></span></div>
-      <div class="noti-body">
-        <div class="noti-title">브랜딩 클래스 4강이 기다리고 있어요</div>
-        <div class="noti-desc">3강 완독 후 2주가 지났어요. 이어서 읽어볼까요?</div>
-        <div class="noti-time">어제</div>
-      </div>
-    </div>
-    <div class="noti-row read" data-go="scr-library">
-      <div class="noti-ic"><i data-lucide="pen-line"></i></div>
-      <div class="noti-body">
-        <div class="noti-title">지난주 남긴 기록을 다시 볼까요?</div>
-        <div class="noti-desc">"내 피드 9칸이 전부 오픈 안내랑 후기다…"</div>
-        <div class="noti-time">3일 전</div>
-      </div>
-    </div>
-    <div class="noti-row read">
-      <div class="noti-ic"><i data-lucide="megaphone"></i></div>
-      <div class="noti-body">
-        <div class="noti-title">공지사항</div>
-        <div class="noti-desc">서비스 업데이트 안내</div>
-        <div class="noti-time">1주 전</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 </main><!-- /.stage -->
 
@@ -3660,6 +3644,55 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 </section>
 
 </div>
+
+<!-- 알림 — 넓은 화면에서는 종 바로 아래 작은 창으로 뜬다.
+     알림 하나 보려고 보던 화면을 통째로 갈아치울 이유가 없다.
+     좁은 화면에서는 display:contents 라 앱처럼 한 화면을 차지한다. -->
+<div class="noti-pop" id="noti-pop">
+<!-- ══════════ 알림 센터 ══════════ -->
+<section class="screen" id="scr-noti">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">알림</span>
+    <span style="font-size:11px;color:var(--text-light)">모두 읽음</span>
+  </div>
+  <div class="scroll">
+    <div class="noti-row" data-go="scr-viewer">
+      <div class="noti-ic"><i data-lucide="mail"></i><span class="dot"></span></div>
+      <div class="noti-body">
+        <div class="noti-title">새 리킷이 도착했어요</div>
+        <div class="noti-desc">RE:KIT 89 · 프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+        <div class="noti-time">2시간 전</div>
+      </div>
+    </div>
+    <div class="noti-row" data-go="scr-series">
+      <div class="noti-ic"><i data-lucide="layers"></i><span class="dot"></span></div>
+      <div class="noti-body">
+        <div class="noti-title">브랜딩 클래스 4강이 기다리고 있어요</div>
+        <div class="noti-desc">3강 완독 후 2주가 지났어요. 이어서 읽어볼까요?</div>
+        <div class="noti-time">어제</div>
+      </div>
+    </div>
+    <div class="noti-row read" data-go="scr-library">
+      <div class="noti-ic"><i data-lucide="pen-line"></i></div>
+      <div class="noti-body">
+        <div class="noti-title">지난주 남긴 기록을 다시 볼까요?</div>
+        <div class="noti-desc">"내 피드 9칸이 전부 오픈 안내랑 후기다…"</div>
+        <div class="noti-time">3일 전</div>
+      </div>
+    </div>
+    <div class="noti-row read">
+      <div class="noti-ic"><i data-lucide="megaphone"></i></div>
+      <div class="noti-body">
+        <div class="noti-title">공지사항</div>
+        <div class="noti-desc">서비스 업데이트 안내</div>
+        <div class="noti-time">1주 전</div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<div class="noti-bd" id="noti-bd"></div>
 
 <button class="nk-fab" id="nk-fab" aria-label="낙타AI">
   <span class="ic-open"><i data-lucide="message-circle"></i></span>
@@ -3801,6 +3834,12 @@ function nkShow(id){
 
 function show(id){
   if(isWide() && NK_SCREENS.indexOf(id) >= 0){ nkShow(id); return; }
+  /* 알림도 화면을 갈아치우지 않고 종 아래 창으로 뜬다 */
+  if(isWide() && id === "scr-noti"){
+    document.getElementById("scr-noti").classList.add("active");
+    document.body.classList.add("noti-open");
+    return;
+  }
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   const el = document.getElementById(id);
   if(!el) return;
@@ -4354,14 +4393,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-/* 낙타AI 창 여닫기 */
+/* 낙타AI 창 · 알림 창 여닫기 */
 document.addEventListener("DOMContentLoaded", ()=>{
   const fab = document.getElementById("nk-fab");
-  if(!fab) return;
-  fab.addEventListener("click", ()=>{
+  if(fab) fab.addEventListener("click", ()=>{
     if(document.body.classList.contains("nk-open")){ document.body.classList.remove("nk-open"); return; }
     nkShow(nkCurrent || "scr-chat");
   });
+  /* 창 밖을 누르면 닫힌다 — 작은 창은 그렇게 닫는 게 몸에 배어 있다 */
+  const bd = document.getElementById("noti-bd");
+  if(bd) bd.addEventListener("click", ()=> document.body.classList.remove("noti-open"));
 });
 
 /* 완독 축하 — 바닥 한가운데서 위로 터진다.
