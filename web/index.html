@@ -1104,7 +1104,18 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   /* 넓어진 만큼 한 줄에 더 놓는다 */
   .grid2{grid-template-columns:repeat(4,1fr);gap:24px;}
   .pain-grid{grid-template-columns:repeat(3,1fr);}
-  .stat-grid,.tpl,.mcard{max-width:620px;}
+  .stat-grid,.mcard{max-width:620px;}
+  /* 주제별 인사이트 — 줄로 쌓으면 한 줄에 하나씩이라 화면이 세로로 늘어진다.
+     주제는 서로 비교하며 고르는 것이라 한눈에 들어와야 한다. 네 열 격자로 바꿈. */
+  #lseg-collect .sec{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:stretch;}
+  #lseg-collect .sec-head{grid-column:1 / -1;margin-bottom:0;}
+  #lseg-collect .tpl{flex-direction:column;align-items:flex-start;gap:18px;padding:26px 24px;max-width:none;}
+  #lseg-collect .tpl+.tpl{margin-top:0;}
+  #lseg-collect .tpl-ic{width:54px;height:54px;border-radius:12px;}
+  #lseg-collect .tpl-ic i,#lseg-collect .tpl-ic svg{width:22px;height:22px;}
+  #lseg-collect .tpl-t{font-size:16px;}
+  #lseg-collect .tpl-s{font-size:12.5px;margin-top:6px;}
+  #lseg-collect .tpl>i:last-child,#lseg-collect .tpl>svg:last-child{display:none;}
   .pcard{flex:0 0 280px;}
   .hcard{min-width:280px;}
 
