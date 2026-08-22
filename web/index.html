@@ -132,6 +132,7 @@ body.clean .jumpbar{display:none;}
 .thumbrow-item{min-width:118px;cursor:pointer;}
 .thumbrow-item .img-ph{width:118px;height:78px;}
 .thumbrow-item p{font-size:12px;font-weight:600;line-height:1.4;margin-top:6px;}
+.new-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 .bigcard{cursor:pointer;}
 .bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:0;}
 .bigcard-body{padding:14px;}
@@ -1199,6 +1200,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .hcard-body{padding:18px;}
   .hcard-title{font-size:15px;}
   .hcard-num{font-size:11px;}
+  .new-grid{grid-template-columns:repeat(2,1fr);gap:24px;}
   .bigcard-body{padding:22px;}
   .bigcard-title{font-size:20px;}
   .bigcard-desc{font-size:14px;margin-top:10px;}
@@ -1594,12 +1596,23 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">이번 주 새 리킷</span></div>
-      <div class="card bigcard" data-go="scr-viewer">
-        <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="bigcard-body">
-          <div class="bigcard-kicker"><span class="k">RE:KIT 89 · NEW</span></div>
-          <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
-          <div class="bigcard-desc">AI는 배우는 게 아니라 시키는 것. 마케터의 판단 기준을 AI에 심는 법.</div>
+      <!-- 한 장을 폭 전체로 늘리면 이미지 높이가 700px 을 넘는다. 두 장으로 나눠 담는다 -->
+      <div class="new-grid">
+        <div class="card bigcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="bigcard-body">
+            <div class="bigcard-kicker"><span class="k">RE:KIT 89 · NEW</span></div>
+            <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+            <div class="bigcard-desc">AI는 배우는 게 아니라 시키는 것. 마케터의 판단 기준을 AI에 심는 법.</div>
+          </div>
+        </div>
+        <div class="card bigcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="bigcard-body">
+            <div class="bigcard-kicker"><span class="k">RE:KIT 88 · NEW</span></div>
+            <div class="bigcard-title">인스타랑 밀당하는 법</div>
+            <div class="bigcard-desc">조회수는 터지는데 매출은 그대로. 알고리즘을 쫓을수록 계정만 크는 이유.</div>
+          </div>
         </div>
       </div>
     </div>
