@@ -1071,8 +1071,10 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .search-anchor,.recall-hd,.acct-hd,.fs-pick,.fs-prev,.ed-note,.noti-date{
     padding-inline:max(24px,calc((100% - 1280px) / 2));margin-inline:0;}
   .pc-track{padding-inline:0;}
-  /* 두 갈래 전환은 화면 가운데 — 넓은 화면에서 왼쪽 끝에 붙어 있으면 짝이 안 맞아 보인다 */
-  .seg{max-width:420px;margin-inline:auto;}
+  /* 두 갈래 전환은 화면 가운데 — 넓은 화면에서 왼쪽 끝에 붙어 있으면 짝이 안 맞아 보인다.
+     .seg.seg-top 까지 적는 이유 — 클래스가 둘인 선택자가 더 세서 하나만 적으면 지지 않는다.
+     미디어쿼리라고 붙지 않는다 — 명시도는 미디어쿼리와 무관하다. */
+  .seg,.seg.seg-top{max-width:420px;margin:14px auto 0;}
 
   /* 하단 탭바와 홈 상단바는 위 네비가 대신한다 */
   .bottomnav,.topbar{display:none;}
