@@ -1269,9 +1269,12 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      그러면 톱니도 함께 사라지므로, 설정을 관심사 아래에 세워 프로필 상자 안에 넣는다. */
   #scr-my .gnb{display:none;}
   #scr-my .my-profile{
-    margin:70px max(24px,calc((100% - 1280px) / 2)) 0;
-    padding:32px 36px;gap:24px;align-items:center;
+    display:flex;justify-content:flex-start;align-items:center;gap:24px;
+    margin:70px max(24px,calc((100% - 1280px) / 2)) 0;padding:32px 36px;
     background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);}
+  /* 사람은 왼쪽 끝, 조작 버튼은 오른쪽 끝. 가운데는 비워 둔다 */
+  #scr-my .my-info{flex:1;min-width:0;}
+  #scr-my .my-actions{margin-left:auto;flex-shrink:0;}
   .my-profile .avatar-lg{width:76px;height:76px;}
   .my-profile .avatar-lg i,.my-profile .avatar-lg svg{width:32px;height:32px;}
   .my-name{font-size:22px;}
@@ -1293,7 +1296,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-interest .sec,#scr-interest .ed-note,#scr-interest .ed-bottom,
   #scr-leave .leave-hd,#scr-leave .set-note,#scr-leave .lose,#scr-leave .fld,#scr-leave .ed-bottom,
   #scr-noti .noti-row,#scr-noti .noti-date,
-  #scr-my .my-profile,#scr-settings .gnb,#scr-notiset .gnb,#scr-lang .gnb,#scr-legal .gnb,
+  #scr-settings .gnb,#scr-notiset .gnb,#scr-lang .gnb,#scr-legal .gnb,
   #scr-doc .gnb,#scr-help .gnb,#scr-ask .gnb,#scr-account .gnb,#scr-read .gnb,
   #scr-interest .gnb,#scr-leave .gnb,#scr-noti .gnb{
     padding-inline:max(24px,calc((100% - 760px) / 2));}
