@@ -1077,6 +1077,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     border:1px solid var(--border-light);background:var(--bg-white);font-family:inherit;
     font-size:14px;font-weight:600;color:var(--text-dark);cursor:pointer;}
   .wnav-me:hover{background:var(--bg-light);}
+  .wnav-me.on{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+  .wnav-me.on .avatar{background:rgba(255,255,255,0.2);}
+  .wnav-me.on .avatar i,.wnav-me.on .avatar svg{color:var(--bg-white);}
 
   /* ── 섹션 컨테이너 : 1280px ──
      감싸는 상자는 화면 전체 폭을 그대로 쓰고, 좌우 패딩으로 안쪽을 1280 에 앉힌다.
@@ -1103,6 +1106,15 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .stat-grid,.tpl,.mcard{max-width:620px;}
   .pcard{flex:0 0 280px;}
   .hcard{min-width:280px;}
+
+  /* ── 읽는 중 ──
+     리킷을 펴면 사이트 껍데기를 걷는다. 위 네비도 푸터도 오른쪽 창도 없다.
+     글 하나만 남기는 것이 이 화면의 일이다. 대신 진행률만 화면 맨 위에 얇게 남긴다. */
+  body.reading .wnav,body.reading .wfoot,body.reading .nk-fab{display:none;}
+  body.reading .nk-widget{display:none;}
+  #scr-viewer .gnb{position:sticky;top:0;z-index:150;background:var(--bg-white);border-bottom:none;}
+  #scr-viewer .progress-thin{position:sticky;top:60px;z-index:150;padding-inline:0;}
+  #scr-viewer .gnb-title{max-width:520px;font-size:14px;}
 
   /* ══════════════ 리킷 본문 — 웹 리킷과 같은 짜임 ══════════════
      머리말(키커·큰 제목·부제·바이라인·표지)이 붙고, 본문은 720 으로 좁아진다.
@@ -1441,16 +1453,16 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 <header class="wnav">
   <div class="wnav-inner">
     <span class="wnav-logo" data-tab="scr-home">RE:FEEEL</span>
+    <!-- 한 곳으로 가는 길은 하나만 둔다(리건, 2026-08-22).
+         내 리킷은 오른쪽 프로필 버튼으로만, 낙타AI 는 오른쪽 아래 창으로만 간다. -->
     <nav class="wnav-links">
       <button data-tab="scr-home">홈</button>
-      <button data-tab="scr-search">검색</button>
-      <button data-tab="scr-chat">낙타AI</button>
+      <button data-tab="scr-search">리킷 찾기</button>
       <button data-tab="scr-library">인사이트</button>
-      <button data-tab="scr-my">내 리킷</button>
     </nav>
     <div class="wnav-actions">
       <button class="wnav-ic" data-go="scr-noti" aria-label="알림"><i data-lucide="bell"></i><span class="wnav-dot"></span></button>
-      <button class="wnav-me" data-tab="scr-my"><span class="avatar"><i data-lucide="user"></i></span>리건</button>
+      <button class="wnav-me" data-tab="scr-my"><span class="avatar"><i data-lucide="user"></i></span>내 리킷</button>
     </div>
   </div>
 </header>
@@ -3699,8 +3711,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
       <div class="wfoot-col">
         <p class="wfoot-col-title">서비스</p>
         <button data-tab="scr-home">홈</button>
-        <button data-tab="scr-search">검색</button>
-        <button data-tab="scr-chat">낙타AI</button>
+        <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-library">인사이트</button>
         <button data-tab="scr-my">내 리킷</button>
       </div>
@@ -3817,9 +3828,6 @@ function nkShow(id){
   if(id === "scr-chatstart") resetChatStart();
   nkCurrent = id;
   document.body.classList.add("nk-open");
-  document.querySelectorAll(".wnav-links button").forEach(b=>{
-    b.classList.toggle("on", b.dataset.tab === "scr-chat");
-  });
 }
 
 function show(id){
@@ -3843,8 +3851,12 @@ function show(id){
   document.querySelectorAll(".wnav-links button").forEach(b=>{
     b.classList.toggle("on", b.dataset.tab === id);
   });
+  const me = document.querySelector(".wnav-me");
+  if(me) me.classList.toggle("on", id === "scr-my");
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
+  /* 리킷을 펴면 사이트 껍데기를 걷는다 */
+  document.body.classList.toggle("reading", id === "scr-viewer");
   window.scrollTo(0, 0);
 }
 
@@ -4193,8 +4205,17 @@ function showToast(msg){
 /* 진행률 — 스크롤한 만큼 찬다. 끝에 닿으면 완독 버튼이 살아난다. */
 function vSync(){
   const sc = document.getElementById("v-scroll"); if(!sc) return;
-  const max = sc.scrollHeight - sc.clientHeight;
-  const p = max > 0 ? Math.min(1, sc.scrollTop / max) : 0;
+  /* 좁은 화면은 이 상자가 스크롤되고, 넓은 화면은 페이지가 통째로 스크롤된다.
+     재는 대상이 다르므로 갈라 놓는다 — 한쪽 기준만 쓰면 다른 쪽에서 0 에 멈춘다. */
+  let max, cur;
+  if(isWide()){
+    max = document.documentElement.scrollHeight - window.innerHeight;
+    cur = window.scrollY || document.documentElement.scrollTop;
+  }else{
+    max = sc.scrollHeight - sc.clientHeight;
+    cur = sc.scrollTop;
+  }
+  const p = max > 0 ? Math.min(1, cur / max) : 0;
   document.getElementById("v-bar").style.width = (p*100).toFixed(1) + "%";
   document.getElementById("scr-viewer").classList.toggle("read-end", p > 0.985);
 }
@@ -4258,6 +4279,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const sc = document.getElementById("v-scroll");
   if(!sc) return;
   sc.addEventListener("scroll", ()=>{ vSync(); closeTip(); });
+  window.addEventListener("scroll", ()=>{ if(document.body.classList.contains("reading")){ vSync(); closeTip(); } });
 
   /* 브라우저가 선택을 확정한 뒤에 봐야 해서 한 박자 늦춘다 */
   ["mouseup","touchend"].forEach(ev=> sc.addEventListener(ev, ()=> setTimeout(onSelDone, 10)));
