@@ -783,15 +783,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .sel-tip.editing [data-act="unmark"]{display:flex;}
 
 /* 다 읽으면 나타나는 마무리. 끝에 닿기 전에는 눌러도 소용없다는 걸 흐리게 보여준다 */
-/* ── 구독 안내 (웹 전용) ──
-   본문이 끝난 자리에만 둔다. 다크 판으로 한 번 끊어 '읽기는 여기까지' 를 알린다. */
-.sub-cta{background:#0B0B0A;color:#F0EDE6;border-radius:var(--radius-md);padding:32px 24px;margin-top:40px;}
-.sub-cta h3{font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#F0EDE6;word-break:keep-all;}
-.sub-cta p{font-size:13px;font-weight:300;line-height:1.7;color:rgba(240,237,230,0.66);margin:14px 0 20px;}
-.sub-cta-btns{display:flex;flex-direction:column;gap:9px;}
-.sub-cta .btn-primary{background:#F0EDE6;color:#0B0B0A;}
-.sub-cta .btn-secondary{background:none;color:#F0EDE6;border:1px solid rgba(240,237,230,0.4);}
-.sub-cta .btn-secondary:hover{background:rgba(240,237,230,0.1);}
 .v-end{margin-top:36px;padding-top:26px;border-top:1px solid var(--border-light);text-align:center;}
 .v-end p{font-size:12px;color:var(--text-light);line-height:1.7;margin-bottom:14px;}
 .v-end .btn{width:100%;opacity:0.35;pointer-events:none;transition:opacity .3s ease;}
@@ -1158,14 +1149,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-viewer .vcheck{margin:clamp(40px,6vw,60px) auto 8px;padding:28px;}
   #scr-viewer .vcheck b{font-size:14px;}
   #scr-viewer .vcheck li{font-size:15.5px;padding:2px 0;}
-  #scr-viewer .v-end{margin-top:44px;padding-top:32px;}
-  /* 넓은 화면에서는 왼쪽에 말, 오른쪽에 문 */
-  #scr-viewer .sub-cta{max-width:960px;margin:clamp(52px,7vw,80px) auto 0;padding:48px 44px;border-radius:14px;}
-  #scr-viewer .sub-cta-in{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:end;}
-  #scr-viewer .sub-cta h3{font-size:clamp(24px,2.6vw,34px);line-height:1.32;letter-spacing:-0.8px;}
-  #scr-viewer .sub-cta p{font-size:15px;margin:0 0 20px;}
-  #scr-viewer .sub-cta-btns{flex-direction:row;flex-wrap:wrap;}
-  #scr-viewer .sub-cta .btn{height:52px;padding-inline:24px;font-size:15px;}
+  #scr-viewer .v-end{margin-top:clamp(52px,7vw,80px);padding-top:32px;}
+
 
   /* 읽는 화면은 더 좁게 — 글줄이 길면 눈이 다음 줄을 못 찾는다 */
   #scr-viewer .gnb,#scr-viewer .progress-thin{padding-inline:max(24px,calc((100% - 960px) / 2));}
@@ -2782,22 +2767,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
       <p class="vp">한 번 떠올려보면 됩니다. 처음 방문한 사람이 당신의 피드를 아홉 칸쯤 훑었을 때 어떤 인상을 받을까요? “여기 뭔가 얻을 게 있다”인지, “여기 뭔가 팔고 있다”인지. 이 첫인상이 팔로우 여부를 결정하고, 팔로우 여부가 스토리 도달을 결정하고, 스토리 도달이 전환을 결정합니다.</p>
       <p class="vp">당장 실행할 수 있는 건 이거예요. 지금 피드에 있는 판매·오픈·후기 콘텐츠를 아카이브 처리하고, 앞으로의 판매 관련 콘텐츠는 전부 스토리로 옮기는 겁니다. 피드에는 콘텐츠만 남기세요. 이 구조를 한 달만 지켜보면 차이가 보이기 시작할 거예요.</p>
       <div class="vcheck"><b>채널 역할 분리 체크리스트</b><ul><li><i data-lucide="square"></i>내 피드에 판매·오픈·후기 콘텐츠가 전체의 20% 이상인가?</li><li><i data-lucide="square"></i>처음 방문한 사람이 피드를 봤을 때 ‘파는 계정’이라는 느낌이 먼저 드는가?</li><li><i data-lucide="square"></i>릴스·피드·스토리에 각각 다른 역할을 부여하고 있는가?</li></ul></div>
-
-      <!-- ⚠ 웹 전용이다. 앱 빌드에는 결제·가격 문구를 넣지 않는다(스토어 리더 앱 조항).
-           무료로 열어 둔 편을 끝까지 읽은 사람에게만 말을 건다 —
-           읽기 전에 막아서면 무료로 연 뜻이 없어진다. -->
-      <div class="sub-cta">
-        <div class="sub-cta-in">
-          <h3>여기까지 무료로 읽으셨어요.<br>나머지 88편도 이어서 읽어보세요.</h3>
-          <div class="sub-cta-side">
-            <p>구독하면 지난 편 전부와 매주 새로 발행되는 편을 함께 읽을 수 있어요.</p>
-            <div class="sub-cta-btns">
-              <button class="btn btn-primary">구독하고 전부 읽기 — 월 9,900원</button>
-              <button class="btn btn-secondary" data-tab="scr-search">무료편 더 보기</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="v-end">
         <p>끝까지 내리면 완독으로 넘어갈 수 있어요</p>
