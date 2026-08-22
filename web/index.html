@@ -873,7 +873,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    여기서는 '고칠 수 있는 곳이 있다'만 알면 된다.
    이름 줄 오른쪽 끝에 붙인다(리건, 2026-08-19) — 아래로 내리면 이름·계정과 세 줄이 되고,
    그 자리는 '내가 누구인지'를 읽는 자리라 조작 버튼이 끼면 흐름이 끊긴다. */
-.my-interest{display:inline-flex;align-items:center;gap:5px;margin-left:auto;flex-shrink:0;padding:6px 12px;border:1px solid var(--border-default);border-radius:999px;background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-dark);font-family:inherit;cursor:pointer;}
+.my-actions{margin-left:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px;align-self:flex-start;}
+.my-setting{display:none;}   /* 좁은 화면에는 상단바 톱니가 있다 */
+.my-interest{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;padding:6px 12px;border:1px solid var(--border-default);border-radius:999px;background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-dark);font-family:inherit;cursor:pointer;}
 .my-interest i,.my-interest svg{width:13px;height:13px;color:var(--text-gray);}
 /* 어느 계정으로 들어와 있는지. Google·Apple·이메일 셋을 다 열어뒀으니
    '내가 어느 걸로 가입했더라'가 실제로 헷갈린다 — 로고와 주소를 같이 보여준다.
@@ -1262,12 +1264,21 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .tl-ev+.tl-ev{margin-top:18px;}
   .tl-ev+.tl-ev:has(.tl-when){margin-top:32px;}
 
-  /* --- 내 리킷 : 프로필을 크게 --- */
-  .my-profile{padding:40px 0 24px;gap:20px;}
+  /* --- 내 리킷 ---
+     상단바를 없앤다. 위 네비에 '내 리킷' 이 이미 켜져 있어 제목이 두 번 나온다.
+     그러면 톱니도 함께 사라지므로, 설정을 관심사 아래에 세워 프로필 상자 안에 넣는다. */
+  #scr-my .gnb{display:none;}
+  #scr-my .my-profile{
+    margin:70px max(24px,calc((100% - 1280px) / 2)) 0;
+    padding:32px 36px;gap:24px;align-items:center;
+    background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);}
   .my-profile .avatar-lg{width:76px;height:76px;}
   .my-profile .avatar-lg i,.my-profile .avatar-lg svg{width:32px;height:32px;}
   .my-name{font-size:22px;}
   .my-acct{font-size:13.5px;}
+  .my-actions{align-self:center;gap:9px;}
+  .my-actions .my-interest{justify-content:flex-start;min-width:104px;padding:9px 15px;font-size:12.5px;}
+  .my-setting{display:inline-flex;}
 
   /* --- 설정·문의·약관처럼 읽고 고르는 화면은 넓힐 이유가 없다 --- */
   /* 고르고 읽는 화면은 760 으로 좁힌다. 넓히면 눈이 좌우로 흔들린다 */
@@ -2880,9 +2891,13 @@ mark.hl mark.hl{background:none;box-shadow:none;}
         <div class="my-nameline">
           <span class="my-name">리건</span>
           <span class="my-state">구독중</span>
-          <button class="my-interest" data-go="scr-interest"><i data-lucide="tag"></i>관심사</button>
         </div>
         <div class="my-acct"><span class="my-oauth">G</span>rigeon@gmail.com</div>
+      </div>
+      <!-- 설정은 데스크톱에서만 여기 붙는다. 좁은 화면에서는 위 상단바의 톱니가 그 자리다 -->
+      <div class="my-actions">
+        <button class="my-interest" data-go="scr-interest"><i data-lucide="tag"></i>관심사</button>
+        <button class="my-interest my-setting" data-go="scr-settings"><i data-lucide="settings"></i>설정</button>
       </div>
     </div>
 
