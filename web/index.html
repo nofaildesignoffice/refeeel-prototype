@@ -1065,10 +1065,12 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .scroll,.chat-area{width:100%;max-width:none;padding-inline:0;}
   .sec,.gnb,.topbar,.chat-input,.ed-bottom,.ins-fixed,.seg2,.browse-bar,.browse-meta,
   .tl-wrap,.pc-wrap,.tagbar,.note-bar,.v-end,.fld,.set-group,.set-note,.leave-hd,
-  .doc-head,.doc-body,.menu-list,.set-list,.lose,.set-btn,.ch-note,.my-profile,.done-hero{
+  .doc-head,.doc-body,.menu-list,.set-list,.lose,.set-btn,.ch-note,.my-profile,.done-hero,
+  .search-anchor,.recall-hd,.acct-hd,.fs-pick,.fs-prev,.ed-note,.noti-date{
     padding-inline:max(24px,calc((100% - 1280px) / 2));margin-inline:0;}
   .pc-track{padding-inline:0;}
-  .seg{max-width:420px;margin-inline:max(24px,calc((100% - 1280px) / 2));}
+  /* 두 갈래 전환은 화면 가운데 — 넓은 화면에서 왼쪽 끝에 붙어 있으면 짝이 안 맞아 보인다 */
+  .seg{max-width:420px;margin-inline:auto;}
 
   /* 하단 탭바와 홈 상단바는 위 네비가 대신한다 */
   .bottomnav,.topbar{display:none;}
@@ -1173,9 +1175,10 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      ② 가로 스크롤을 없앤다 — 손가락으로 미는 동작은 마우스에 없다.
      ③ 글자와 여백을 키운다 — 보는 거리가 30cm 가 아니라 60cm 다. */
 
-  /* --- 섹션이 숨 쉴 자리 --- */
-  .sec{padding-block:48px;}
-  .sec.alt{padding-block:56px;}
+  /* --- 섹션이 숨 쉴 자리 : 위아래 70px 로 통일(리건, 2026-08-22) --- */
+  .sec,.sec.alt{padding-block:70px;}
+  .ins-fixed,.doc-head,.acct-hd,.leave-hd,.my-profile{padding-block:70px 0;}
+  .done-hero{padding-block:70px 40px;}
   .sec-head{margin-bottom:24px;align-items:center;}
   .sec-title{font-size:24px;letter-spacing:-0.5px;}
   .sec-more{font-size:14px;}
@@ -1187,7 +1190,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
        3열 : (1280 - 48) / 3 = 410.7px    4열 : (1280 - 72) / 4 = 302px */
   .hscroll{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;overflow:visible;padding-bottom:0;}
   .hscroll>*{min-width:0!important;}
-  .pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;overflow:visible;}
+  .pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;overflow:visible;}
   .pain-card{flex:0 0 auto;min-width:0;white-space:normal;padding:20px 18px;}
   .pain-card i,.pain-card svg{width:20px;height:20px;margin-bottom:12px;}
   .pain-card b{font-size:14.5px;}
