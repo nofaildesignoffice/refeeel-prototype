@@ -1003,7 +1003,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 /* 온보딩은 전부 필수다(리건, 2026-08-18) — 건너뛰기 줄을 없앴다.
    로그인이 필수인데 온보딩만 건너뛸 수 있으면 프로필이 빈 계정이 생기고,
    그 사람은 첫 화면부터 보여줄 게 없다. */
-.ob-bottom{margin-top:auto;padding:0 16px 24px;}
+.ob-bottom{margin-top:auto;padding:0 16px 28px;}
 .btn:disabled{opacity:0.35;cursor:default;}
 
 
@@ -1246,7 +1246,10 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   body.pre-auth .screen{min-height:100vh;background:var(--bg-light);}
   body.pre-auth .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;}
   body.pre-auth .gnb{width:min(720px,100%);border:none;background:none;padding:0;margin-bottom:14px;height:auto;}
-  body.pre-auth .scroll{width:min(720px,100%);flex:none;overflow:visible;
+  /* ⚠ .screen>.scroll:last-child 가 앞쪽에도 있고(safe-area 여백용) 그쪽 명시도가 더 세다.
+     같은 꼴로 적어야 카드 아래 여백이 긎이지 않는다. */
+  body.pre-auth .scroll,
+  body.pre-auth .screen>.scroll:last-child{width:min(720px,100%);flex:none;overflow:visible;
     background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);
     padding:52px 48px;}
   body.pre-auth .ob-head{padding:0 0 8px;}
