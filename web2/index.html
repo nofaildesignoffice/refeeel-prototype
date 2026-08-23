@@ -763,6 +763,29 @@ body.clean .jumpbar{display:none;}
 .prod-card:hover .prod-go i,.prod-card:hover .prod-go svg{transform:translateX(3px);}
 
 
+/* ── 페이월 ──
+   평소에는 없는 것처럼 있다가 body.free 일 때만 나타난다.
+   나타나면 자기 뒤의 형제를 전부 덮는다 — 벽 뒤는 보이지 않아야 벽이다.
+   ⚠ 밑줄 도구(#sel-tip)만은 예외로 남긴다. 무료 회원도 밑줄을 긋는다. */
+.pw{display:none;position:relative;padding-top:110px;}
+body.free .pw{display:block;}
+body.free .pw ~ *:not(#sel-tip){display:none;}
+/* 글이 끊기는 게 아니라 잦아든다 */
+.pw-fade{position:absolute;left:0;right:0;top:0;height:110px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),var(--bg-white) 82%);}
+.pw-card{text-align:center;padding:28px 22px 26px;background:var(--bg-light);
+  border-radius:var(--radius-lg);}
+.pw-card>i,.pw-card>svg{width:22px;height:22px;color:var(--text-gray);}
+.pw-t{font-size:16px;font-weight:800;color:var(--text-black);letter-spacing:-0.4px;margin-top:12px;}
+.pw-d{font-size:13px;line-height:1.7;color:var(--text-gray);word-break:keep-all;
+  max-width:420px;margin:10px auto 0;}
+.pw-btn{width:100%;max-width:280px;margin:20px auto 0;border-radius:var(--radius-full);}
+.pw-alt{display:block;margin:12px auto 0;background:none;border:none;font-family:inherit;
+  font-size:12.5px;font-weight:600;color:var(--text-light);text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer;}
+/* 두 문단만 남은 글에서 진행률은 셀 것이 없다 */
+body.free #scr-viewer .progress-thin{display:none;}
+
 /* ══════════════════ 브랜딩 클래스 랜딩 ══════════════════
    원본(랜딩페이지/브랜딩 클래스 랜딩 v3.html)은 검은 바탕에 주황 강조였다.
    여기서는 색을 걷고 굵기·크기·회색 바탕으로만 강조를 만든다 — 와이어프레임의 문법이다.
@@ -1086,6 +1109,16 @@ body.clean .jumpbar{display:none;}
 .keep-foot i,.keep-foot svg{width:13px;height:13px;flex-shrink:0;}
 /* 탈퇴 쪽 꼬리말만 붉다 — 거기서는 정말 없어지기 때문이다. 해지 버튼과 같은 붉은색 */
 .keep-foot.warn{color:#B23B32;}
+
+/* ── 좁은 화면 꼬리말 ──
+   홈 본문 맨 끝에만 붙는다. 다른 탭에는 두지 않는다 —
+   같은 줄이 다섯 번 나오면 그건 꼬리말이 아니라 잡음이다. */
+.mfoot{margin-top:28px;padding:24px 16px calc(20px + env(safe-area-inset-bottom));
+  background:var(--bg-light);}
+.mfoot-links{display:flex;flex-wrap:wrap;gap:8px 18px;}
+.mfoot-links button{background:none;border:none;padding:0;font-family:inherit;
+  font-size:12.5px;font-weight:700;color:var(--text-dark);cursor:pointer;}
+.mfoot-copy{font-size:11px;color:var(--text-muted);margin-top:14px;}
 
 .myseg-view{display:none;}
 .myseg-view.on{display:block;}
@@ -1612,8 +1645,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      미디어쿼리라고 붙지 않는다 — 명시도는 미디어쿼리와 무관하다. */
   .seg,.seg.seg-top{max-width:420px;margin:14px auto 0;}
 
-  /* 하단 탭바와 홈 상단바는 위 네비가 대신한다 */
-  .bottomnav,.topbar{display:none;}
+  /* 하단 탭바와 홈 상단바는 위 네비가 대신한다. 좁은 화면 꼬리말도 여기서는 아래 푸터가 맡는다 */
+  .bottomnav,.topbar,.mfoot{display:none;}
   /* 넓은 화면에서 상단바는 '페이지 제목' 일 뿐이다(리건, 2026-08-22).
      되돌아가는 길은 위 네비와 브라우저 뒤로가기가 맡는다.
      ⚠ 리킷 본문(scr-viewer)만 예외다 — 거기는 상단 네비까지 걷어낸 화면이라 나갈 문이 필요하다. */
@@ -2478,6 +2511,16 @@ body.modal-open #scr-interest .ord-sub,
   .keep-foot{font-size:12.5px;margin-top:20px;}
 
 
+  /* 페이월도 본문 폭을 따라간다 */
+  .pw{padding-top:150px;}
+  .pw-fade{height:150px;}
+  .pw-card{padding:44px 40px 40px;border-radius:var(--radius-xl);}
+  .pw-card>i,.pw-card>svg{width:26px;height:26px;}
+  .pw-t{font-size:22px;letter-spacing:-0.7px;margin-top:16px;}
+  .pw-d{font-size:15px;margin-top:12px;}
+  .pw-btn{margin-top:26px;padding-block:15px;}
+  .pw-alt{font-size:13.5px;margin-top:16px;}
+
   /* ══════ 브랜딩 클래스 랜딩 — 넓은 화면 ══════
      섹션 여백(70px)과 안쪽 폭(1280px)은 위 .sec 규칙이 이미 준다.
      여기서는 격자를 펼치고 글자를 키우는 것만 한다. */
@@ -2738,6 +2781,8 @@ body.modal-open #scr-interest .ord-sub,
   .my-actions{align-self:center;gap:9px;}
   .my-actions .my-interest{justify-content:flex-start;min-width:104px;padding:9px 15px;font-size:12.5px;}
   .my-setting{display:inline-flex;}
+  /* 넓은 화면에는 위 네비에 멤버십이 있다. 같은 길을 두 번 두지 않는다 */
+  .my-mem{display:none;}
 
   /* --- 설정·문의·약관처럼 읽고 고르는 화면은 넓힐 이유가 없다 --- */
   /* 고르고 읽는 화면은 760 으로 좁힌다. 넓히면 눈이 좌우로 흔들린다 */
@@ -2776,7 +2821,7 @@ body.modal-open #scr-interest .ord-sub,
   <button data-jump="scr-search">검색</button>
   <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button>
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-reader">모아보기리더</button><button data-jump="scr-notekit">리킷별기록</button>
-  <button data-jump="scr-viewer">뷰어</button>
+  <button data-jump="scr-viewer">뷰어</button><button data-jump="scr-viewer" data-free="1">뷰어(무료)</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
   <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-orders">이용내역</button><button data-jump="scr-sub">구독관리</button><button data-jump="scr-pay">결제수단</button><button data-jump="scr-unsub">해지</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
@@ -3190,7 +3235,17 @@ body.modal-open #scr-interest .ord-sub,
       </div>
     </div>
 
-  </div>
+  
+      <!-- 좁은 화면 전용 꼬리말. 넓은 화면에서는 아래 .wfoot 가 그 자리다 -->
+      <footer class="mfoot">
+        <div class="mfoot-links">
+          <button data-tab="scr-price">멤버십</button>
+          <button data-go="scr-help">문의하기</button>
+          <button data-go="scr-legal">약관 및 정책</button>
+        </div>
+        <p class="mfoot-copy">© 2026 RE:FEEEL · help@refeeel.co</p>
+      </footer>
+</div>
   <nav class="bottomnav">
     <button class="nav-item on" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
     <button class="nav-item" data-tab="scr-search"><i data-lucide="search"></i><span>검색</span></button>
@@ -4679,6 +4734,23 @@ body.modal-open #scr-interest .ord-sub,
       <p class="vp">저는 계속 말했습니다. 피드에서 팔지 마세요. 릴스로 유입하고, 스토리에서 전환하세요. 그런데 대부분의 사업자가 이걸 듣고도 실행하지 않았어요.</p>
       <h4 class="vh">대부분의 사업자가 불안해하는 것.</h4>
       <p class="vp">이유를 들어보면 거의 비슷합니다. “저는 마케팅 하려고 인스타 시작한 건데, 팔아야 하는 거 아닌가요?” “스토리는 24시간이면 사라지는데, 피드에 올려야 사람들이 보죠.” 마케팅을 위해 SNS를 하는 건데 당연히 팔아야지, 라는 생각이요.</p>
+
+        <!-- ── 여기서 막힌다 ──
+             무료 회원은 유료편의 상단 1~2문단까지 읽는다(참고 문서).
+             글이 뚝 끊기지 않고 서서히 흐려지다 멈춰야 '더 있다'는 게 읽힌다.
+             ⚠ 밑줄·메모는 무료 회원도 쓴다. 그러니 여기서 파는 건 '읽을 것' 이지 기능이 아니다.
+             ⚠ 앱 빌드에는 이 카드를 옮기지 않는다. 잠금까지는 같아도
+                값을 보이거나 바깥 결제로 이끄는 버튼은 스토어 조항에 걸린다. -->
+        <div class="pw">
+          <div class="pw-fade"></div>
+          <div class="pw-card">
+            <i data-lucide="lock"></i>
+            <p class="pw-t">여기부터는 멤버십으로 이어집니다</p>
+            <p class="pw-d">RE:KIT 41은 유료편이에요. 멤버십을 시작하시면 이 편의 남은 이야기와 지난 편들이 모두 열려요.</p>
+            <button class="btn btn-primary pw-btn" data-tab="scr-price">멤버십 보기</button>
+            <button class="pw-alt" data-tab="scr-search">무료로 열린 리킷 먼저 보기</button>
+          </div>
+        </div>
       <p class="vp">그 생각이 틀렸다는 게 아닙니다. 당연히 팔아야죠. 다만 한 가지 떠올려볼 게 있어요. 당신도 소비자잖아요. ‘너무 팔고 싶은 사람’에게서 무언가를 사고 싶었던 적이 있나요? 대부분은 아닐 거예요.</p>
       <blockquote class="vq">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</blockquote>
       <p class="vp">문제는 ‘파느냐 마느냐’가 아니라 ‘어디서’ 파느냐인 거예요.</p>
@@ -4834,6 +4906,8 @@ body.modal-open #scr-interest .ord-sub,
       <div class="my-actions">
         <button class="my-interest" data-go="scr-interest"><i data-lucide="tag"></i>관심사</button>
         <button class="my-interest my-setting" data-go="scr-settings"><i data-lucide="settings"></i>설정</button>
+        <!-- 좁은 화면 전용. 넓은 화면에서는 위 네비의 '멤버십' 이 그 자리다 -->
+        <button class="my-interest my-mem" data-tab="scr-price"><i data-lucide="gem"></i>멤버십</button>
       </div>
     </div>
 
@@ -6445,7 +6519,11 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".myseg-view").forEach(v=>v.classList.toggle("on", v.id==="myseg-"+t.dataset.myseg));
     return;
   }
-  if(t.dataset.jump){ stack=[]; show(t.dataset.jump); return; }
+  /* 무료 회원 시점 — 이 버튼으로 들어올 때만 켜고, 다른 데로 뛰면 꺼진다 */
+  if(t.dataset.jump){
+    document.body.classList.toggle("free", t.dataset.free === "1");
+    stack=[]; show(t.dataset.jump); return;
+  }
   if(t.hasAttribute("data-doneclose")){ doneClose(); return; }
   if(t.hasAttribute("data-back")){ back(); return; }
   if(t.dataset.tab){ tab(t.dataset.tab); return; }
