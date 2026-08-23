@@ -675,11 +675,28 @@ body.clean .jumpbar{display:none;}
 .gcard.read b{color:var(--text-muted);}
 .gcard .img-ph{position:relative;}
 
-.seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
+/* ── 두 갈래 전환 ──
+   위 네비의 알약 통과 같은 꼴이다. 잉크 하나가 좌우로 옮겨 다니며 지금 있는 곳을 가리킨다.
+   회색 홈에 흰 조각을 얹던 예전 방식은 '켜짐/꺼짐' 두 상태뿐이라 옮겨 간 방향이 안 보였다. */
+.seg{position:relative;display:flex;align-items:center;gap:2px;padding:5px;margin:14px 16px 0;
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-full);
+  box-shadow:var(--shadow-sm);}
+.seg-ink{position:absolute;top:5px;bottom:5px;left:0;width:0;z-index:0;
+  background:var(--bg-black);border-radius:var(--radius-full);opacity:0;
+  transition:transform var(--dur-medium) var(--ease),
+             width var(--dur-medium) var(--ease),
+             opacity var(--dur-short) var(--ease);}
+.seg-ink.no-anim{transition:none;}
 /* ⚠ 여기에 인라인 style 을 쓰지 않는다 — 인라인은 CSS 를 이겨서 데스크톱 가운데 정렬이 먹지 않는다 */
 .seg.seg-top{margin:12px 16px 0;}
-.seg button{flex:1;font-size:11.5px;font-weight:700;padding:8px 0;border:none;border-radius:var(--radius-xs);background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
-.seg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
+.seg button{position:relative;z-index:1;flex:1;font-size:12.5px;font-weight:700;padding:10px 0;
+  border:none;border-radius:var(--radius-full);background:none;color:var(--text-gray);
+  font-family:inherit;cursor:pointer;white-space:nowrap;
+  transition:color var(--dur-short) var(--ease),background-color var(--dur-short) var(--ease);}
+.seg button:hover{background-color:rgba(var(--state-ink), var(--state-hover));}
+/* 잉크가 도착할 즈음 글자가 밝아진다 */
+.seg button.on{color:var(--bg-white);background:none;box-shadow:none;transition-delay:90ms;}
+.seg button.on:hover{background:none;}
 /* 두 단 탭 — 위는 알약, 아래는 밑줄.
    같은 알약을 두 줄 겹치면 어느 쪽이 상위인지 알 수 없다. 생김새가 달라야 위계가 읽힌다. */
 .seg2{display:flex;gap:20px;padding:16px 16px 0;border-bottom:1px solid var(--border-light);}
@@ -2597,6 +2614,7 @@ body.modal-open #scr-interest .ord-sub,
     </div>
   </div>
   <div class="seg seg-top">
+    <span class="seg-ink"></span>
     <button data-sseg="find" class="on">검색하기</button>
     <button data-sseg="browse">둘러보기</button>
   </div>
@@ -3186,6 +3204,7 @@ body.modal-open #scr-interest .ord-sub,
        읽기는 한 번에 하나·스와이프, 찾기는 밀도 높은 목록·스크롤.
        한 화면에 겹치면 서로를 방해하므로 모드를 나눈다 — 검색탭의 '검색하기 · 둘러보기'와 같은 패턴. -->
   <div class="seg">
+    <span class="seg-ink"></span>
     <button data-lseg="all" class="on">전체보기</button>
     <button data-lseg="collect">모아보기</button>
   </div>
@@ -3658,6 +3677,7 @@ body.modal-open #scr-interest .ord-sub,
          리킷은 한 편씩 읽고 끝나지만 시리즈는 여러 편을 이어 듣는 묶음이라
          '읽는 중·완독·저장'이라는 축이 애초에 걸리지 않는다. 그래서 축을 하나 위로 올렸다. -->
     <div class="seg">
+      <span class="seg-ink"></span>
       <button data-myseg="kit" class="on">리킷</button>
       <button data-myseg="series">시리즈</button>
     </div>
@@ -4745,6 +4765,19 @@ let current = "scr-login";
 
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
 
+/* 두 갈래 전환의 잉크도 같은 방식으로 옮긴다 */
+function moveSegInk(seg){
+  const ink = seg.querySelector(".seg-ink");
+  const on = seg.querySelector("button.on");
+  if(!ink) return;
+  if(!on){ ink.style.opacity = 0; return; }
+  if(!on.offsetWidth) return;          /* 아직 안 보이면 재지 않는다 */
+  ink.style.opacity = 1;
+  ink.style.width = on.offsetWidth + "px";
+  ink.style.transform = "translateX(" + on.offsetLeft + "px)";
+}
+function moveAllSegInk(){ document.querySelectorAll(".seg").forEach(moveSegInk); }
+
 /* 잉크를 지금 켜진 버튼 위로 옮긴다.
    버튼의 실제 위치·폭을 읽어서 옮기므로 글자 길이가 달라도 알아서 맞는다. */
 function movePillInk(){
@@ -4812,6 +4845,7 @@ function show(id){
   document.body.classList.toggle("chatting",
     id === "scr-chat" || id === "scr-chatstart" || id === "scr-chatroom");
   movePillInk();
+  moveAllSegInk();
   window.scrollTo(0, 0);
 }
 
@@ -5353,8 +5387,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
     requestAnimationFrame(()=> ink.classList.remove("no-anim"));
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(movePillInk);
   }
+  /* 두 갈래 전환도 첫 그림에서는 미끄러지지 않는다 */
+  document.querySelectorAll(".seg-ink").forEach(s=> s.classList.add("no-anim"));
+  moveAllSegInk();
+  requestAnimationFrame(()=>{
+    document.querySelectorAll(".seg-ink").forEach(s=> s.classList.remove("no-anim"));
+  });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveAllSegInk);
+
+  /* 갈래를 누르면 잉크가 따라간다. 기존 클릭 처리를 건드리지 않고 뒤에서 한 번 더 본다 */
+  document.addEventListener("click", e=>{
+    if(e.target.closest(".seg")) requestAnimationFrame(moveAllSegInk);
+  });
+
   /* 창 폭이 바뀌면 버튼 자리도 바뀐다 */
-  window.addEventListener("resize", movePillInk);
+  window.addEventListener("resize", ()=>{ movePillInk(); moveAllSegInk(); });
   const bd = document.getElementById("noti-bd");
   if(bd) bd.addEventListener("click", ()=> document.body.classList.remove("noti-open"));
   /* 창 닫기 — 배경을 누르든 X 를 누르든 보던 자리로 돌아간다 */
