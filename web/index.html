@@ -1228,8 +1228,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   #scr-chat .chat-input,#scr-chatstart .chat-input,#scr-chatroom .chat-input{
     padding-inline:max(24px,calc((100% - 768px) / 2));}
   #scr-chatstart .chat-area,#scr-chatroom .chat-area{padding-block:32px 8px;background:var(--bg-white);}
-  #scr-chatstart .gnb,#scr-chatroom .gnb{padding-block:26px 0;}
-  #scr-chatstart .gnb-title,#scr-chatroom .gnb-title{font-size:22px;}
+  /* 대화 화면의 자체 상단바는 지운다 — 위 네비의 '낙타AI' 가 이미 켜져 있어
+     같은 말을 두 번 하고 방 높이만 잡아먹는다 */
+  #scr-chatstart .gnb,#scr-chatroom .gnb{display:none;}
 
   /* 입력창 — 늘 아래에 붙어 있다 */
   /* 입력창은 방 바닥에 붙어 있다. 대화가 길어져도 움직이지 않는다.
