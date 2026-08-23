@@ -226,6 +226,15 @@ body.clean .jumpbar{display:none;}
 .hcard-num{font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:4px;letter-spacing:0.5px;}
 .hcard-title{font-size:13px;font-weight:700;line-height:1.45;}
 .hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+/* ── 마우스로 끄는 동안 ──
+   ⚠ 붙는 자리(scroll-snap)를 잠시 끈다. 켜 둔 채로 끌면 손을 떼기도 전에
+      카드에 달라붙어 덜컥거린다. 놓으면 다시 켜져서 가까운 카드에 앉는다.
+   ⚠ 끄는 동안 글자가 잡히면 드래그가 아니라 선택이 된다.
+   ⚠ 자식의 pointer-events 를 끊어 끌던 손이 카드 위에서 멈춰도 눌린 티가 안 나게 한다. */
+.dragging{scroll-snap-type:none!important;cursor:grabbing;
+  user-select:none;-webkit-user-select:none;}
+.dragging *{pointer-events:none;}
+
 /* ── 카드 슬라이더 ── */
 .slider{position:relative;}
 /* 한 줄에 선 카드는 크기가 같아야 한다(리건, 2026-08-23).
@@ -6363,6 +6372,45 @@ function back(){
 }
 
 
+
+/* ── 마우스로도 밀 수 있게 ──
+   손가락이 없는 자리에서는 가로 목록을 스크롤바로만 넘길 수 있었다.
+   데스크톱 브라우저에서 살펴보기 편하도록 마우스로도 끌 수 있게 한다(리건, 2026-08-23).
+   ⚠ 끌다 놓았을 때 카드가 열리면 안 된다. 4px 넘게 움직였으면 그 클릭은 삼킨다.
+      삼키는 자리는 캡처 단계다 — 아래로 내려가기 전에 잡아야 카드가 못 받는다. */
+function dragScroll(el){
+  if(el.dataset.drag) return;
+  el.dataset.drag = "1";
+  let down = false, sx = 0, sl = 0, moved = 0;
+
+  el.addEventListener("mousedown", e=>{
+    if(e.button !== 0) return;
+    down = true; sx = e.clientX; sl = el.scrollLeft; moved = 0;
+  });
+  window.addEventListener("mousemove", e=>{
+    if(!down) return;
+    const dx = e.clientX - sx;
+    if(moved <= 4 && Math.abs(dx) > 4) el.classList.add("dragging");
+    if(Math.abs(dx) > moved) moved = Math.abs(dx);
+    if(moved > 4){ el.scrollLeft = sl - dx; e.preventDefault(); }
+  });
+  window.addEventListener("mouseup", ()=>{
+    if(!down) return;
+    down = false;
+    el.classList.remove("dragging");
+    /* 아래 click 이 먼저 지나간 뒤에 지운다. 안 그러면 다음 클릭까지 삼킨다 */
+    setTimeout(()=>{ moved = 0; }, 0);
+  });
+  el.addEventListener("click", e=>{
+    if(moved > 4){ e.stopPropagation(); e.preventDefault(); }
+  }, true);
+}
+
+function startDragScroll(){
+  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.pain-grid,.jumpbar")
+    .forEach(dragScroll);
+}
+
 /* ── 카드 슬라이더 ──
    data-auto 를 단 가로 목록을 한 방향으로 계속 도는 슬라이더로 만든다.
 
@@ -6459,6 +6507,7 @@ function makeSlider(el){
   el.addEventListener("touchstart", ()=> rest(6e5), {passive:true});
   el.addEventListener("touchend",   ()=>{ rest(6000); syncSoon(); }, {passive:true});
   el.addEventListener("wheel",      ()=>{ rest(6000); syncSoon(); }, {passive:true});
+  el.addEventListener("mouseup",    ()=>{ rest(6000); syncSoon(); });
 
   /* 창 폭이 바뀌면 칸 너비도 바뀐다. 서 있던 칸 그대로 다시 앉힌다 */
   window.addEventListener("resize", ()=>{
@@ -6907,6 +6956,7 @@ function unwrap(m){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
+  startDragScroll();
   startAutoSlides();
   const sc = document.getElementById("v-scroll");
   if(!sc) return;
