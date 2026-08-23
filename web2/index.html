@@ -3299,7 +3299,7 @@ body.modal-open #scr-interest .ord-sub,
     <div class="seg seg-top">
       <span class="seg-ink"></span>
       <button data-pseg="sub" class="on">리킷 구독</button>
-      <button data-pseg="store">리필 스토어</button>
+      <button data-pseg="store">리필 시리즈</button>
     </div>
 
     <!-- ── 리킷 구독 ── -->
@@ -3362,7 +3362,10 @@ body.modal-open #scr-interest .ord-sub,
       </div>
     </div>
 
-    <!-- ── 리필 스토어 ── -->
+    <!-- ── 리필 시리즈 ──
+         ⚠ 속이름은 store 다. series 로 바꾸면 리킷 묶음 쪽과 섞인다 —
+            scr-series · myseg-series · series-card 에서 말하는 시리즈는 '읽는 묶음' 이고
+            여기는 '파는 묶음' 이다. 겉이름만 같고 가리키는 것이 다르다. -->
     <div class="pseg-view" id="pseg-store">
       <div class="sec">
         <div class="price-lead">
@@ -6539,7 +6542,7 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
     return;
   }
-  /* 멤버십 축 — 리킷 구독 / 리필 스토어 */
+  /* 멤버십 축 — 리킷 구독 / 리필 시리즈 (속이름은 store — 읽는 시리즈와 섞이지 않게) */
   if(t.dataset.pseg){
     document.querySelectorAll("[data-pseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".pseg-view").forEach(v=>v.classList.toggle("on", v.id==="pseg-"+t.dataset.pseg));
