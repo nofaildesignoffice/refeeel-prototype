@@ -3299,7 +3299,7 @@ body.modal-open #scr-interest .ord-sub,
     <div class="seg seg-top">
       <span class="seg-ink"></span>
       <button data-pseg="sub" class="on">리킷 구독</button>
-      <button data-pseg="etc">이외 서비스</button>
+      <button data-pseg="store">리필 스토어</button>
     </div>
 
     <!-- ── 리킷 구독 ── -->
@@ -3362,8 +3362,8 @@ body.modal-open #scr-interest .ord-sub,
       </div>
     </div>
 
-    <!-- ── 이외 서비스 ── -->
-    <div class="pseg-view" id="pseg-etc">
+    <!-- ── 리필 스토어 ── -->
+    <div class="pseg-view" id="pseg-store">
       <div class="sec">
         <div class="price-lead">
           <h3>구독과 별개로 필요한 것</h3>
@@ -6539,7 +6539,7 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
     return;
   }
-  /* 멤버십 축 — 리킷 구독 / 이외 서비스 */
+  /* 멤버십 축 — 리킷 구독 / 리필 스토어 */
   if(t.dataset.pseg){
     document.querySelectorAll("[data-pseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".pseg-view").forEach(v=>v.classList.toggle("on", v.id==="pseg-"+t.dataset.pseg));
