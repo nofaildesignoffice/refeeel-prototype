@@ -2847,7 +2847,7 @@ body.modal-open #scr-interest .ord-sub,
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-reader">모아보기리더</button><button data-jump="scr-notekit">리킷별기록</button>
   <button data-jump="scr-viewer">뷰어</button><button data-jump="scr-viewer" data-free="1">뷰어(무료)</button>
   <button data-jump="scr-done">완독직후</button>
-  <button data-jump="scr-series">시리즈</button>
+  <button data-jump="scr-series" data-owns="1">시리즈(보유)</button><button data-jump="scr-lp-class" data-owns="0">클래스(미보유)</button>
   <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-orders">이용내역</button><button data-jump="scr-sub">구독관리</button><button data-jump="scr-pay">결제수단</button><button data-jump="scr-unsub">해지</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
@@ -3126,7 +3126,7 @@ body.modal-open #scr-interest .ord-sub,
             <p class="hs-sub">AI는 배우는 게 아니라 시키는 것. RE:KIT 89</p>
           </div>
         </div>
-        <div class="hs-slide" data-go="scr-series">
+        <div class="hs-slide" data-goclass>
           <div class="hs-img"><i data-lucide="image"></i></div>
           <div class="hs-body">
             <p class="hs-label">Series</p>
@@ -3241,7 +3241,7 @@ body.modal-open #scr-interest .ord-sub,
       <!-- 한 장짜리 섹션이라 카드로 두면 이미지가 폭을 다 먹고 섹션이 1000px 을 넘는다.
            좌우로 나누면 높이가 절반이 되고 이미지도 글도 제자리를 찾는다.
            좁은 화면에서는 세로로 접혀 앱의 큰 카드와 같은 모양이 된다. -->
-      <div class="series-banner" data-go="scr-series">
+      <div class="series-banner" data-goclass>
         <div class="img-ph"><i data-lucide="image"></i></div>
         <div class="sb-body">
           <div class="bigcard-kicker"><span class="k">Series · 9개 회차</span><span class="lock-badge"><i data-lucide="lock"></i>구매 회원 전용</span></div>
@@ -3374,7 +3374,7 @@ body.modal-open #scr-interest .ord-sub,
         </div>
 
         <div class="prod-grid">
-          <div class="prod-card" data-go="scr-lp-class">
+          <div class="prod-card" data-goclass>
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="prod-body">
               <span class="prod-kicker">클래스</span>
@@ -3463,7 +3463,7 @@ body.modal-open #scr-interest .ord-sub,
       <p class="lp-hero-sub">광고를 끊으면 문의도 끊기고, 할인하면 남는 게 없죠. 더 많은 강의·공식을 따라가도 제자리인 건, 실력이 아니라 <b>방향</b>이 없어서예요. 9개의 질문으로 그 방향을 잡습니다.</p>
       <div class="lp-cta">
         <button class="btn btn-primary lp-btn">구매하기<i data-lucide="arrow-right"></i></button>
-        <button class="btn btn-secondary lp-btn" data-go="scr-series">Class 00 무료로 읽기<i data-lucide="arrow-right"></i></button>
+        <button class="btn btn-secondary lp-btn" data-go="scr-viewer">Class 00 무료로 읽기<i data-lucide="arrow-right"></i></button>
       </div>
     </div>
 
@@ -3841,7 +3841,7 @@ body.modal-open #scr-interest .ord-sub,
       <p class="lp-final-price">99,000<span>원</span></p>
       <div class="lp-cta">
         <button class="btn btn-primary lp-btn">구매하기<i data-lucide="arrow-right"></i></button>
-        <button class="btn btn-secondary lp-btn" data-go="scr-series">Class 00 무료로 읽기<i data-lucide="arrow-right"></i></button>
+        <button class="btn btn-secondary lp-btn" data-go="scr-viewer">Class 00 무료로 읽기<i data-lucide="arrow-right"></i></button>
       </div>
       <p class="lp-final-risk">구매가 망설여진다면, Class 00을 무료로 먼저 읽어보세요.</p>
     </div>
@@ -4239,7 +4239,7 @@ body.modal-open #scr-interest .ord-sub,
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
       <div class="hscroll">
-        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+        <div class="card hcard" style="min-width:210px" data-goclass>
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
@@ -6487,7 +6487,7 @@ document.addEventListener("click", e=>{
   /* 자가 진단 — 눌러서 켜고 끈다 */
   const lpcq = e.target.closest("#scr-lp-class .lp-cq");
   if(lpcq){ lpcq.classList.toggle("on"); lpCheckUpdate(); return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-pseg],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-pseg],[data-goclass],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -6554,9 +6554,20 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".myseg-view").forEach(v=>v.classList.toggle("on", v.id==="myseg-"+t.dataset.myseg));
     return;
   }
-  /* 무료 회원 시점 — 이 버튼으로 들어올 때만 켜고, 다른 데로 뛰면 꺼진다 */
+  /* ── 브랜딩 클래스는 산 사람과 안 산 사람이 다른 곳으로 간다(리건, 2026-08-23) ──
+     산 사람은 회차와 진행률이 있는 상세로, 안 산 사람은 파는 자리로.
+     어디서 눌렀는지는 상관없다 — 홈이든 리킷 찾기든 멤버십이든 같은 문이다.
+     그래서 진입점마다 목적지를 박아 두지 않고 여기 한 곳에서 정한다. */
+  if(t.hasAttribute("data-goclass")){
+    go(document.body.classList.contains("owns-class") ? "scr-series" : "scr-lp-class");
+    return;
+  }
+
+  /* 무료 회원 시점 — 이 버튼으로 들어올 때만 켜고, 다른 데로 뛰면 꺼진다.
+     보유 여부는 data-owns 를 단 버튼으로만 바꾼다. 안 달린 점프는 지금 상태를 그대로 둔다. */
   if(t.dataset.jump){
     document.body.classList.toggle("free", t.dataset.free === "1");
+    if(t.dataset.owns) document.body.classList.toggle("owns-class", t.dataset.owns === "1");
     stack=[]; show(t.dataset.jump); return;
   }
   if(t.hasAttribute("data-doneclose")){ doneClose(); return; }
@@ -6774,6 +6785,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 /* 알림 창 닫기 — 창 밖을 누르면 닫힌다 */
 document.addEventListener("DOMContentLoaded", ()=>{
+  /* 시연용 기본 사용자는 브랜딩 클래스를 가진 사람이다 —
+     프로필이 '구독중' 이고 내 리킷에 진행률 33% 가 이미 찍혀 있다.
+     안 산 사람의 길은 점프바의 '클래스(미보유)' 로 본다. */
+  document.body.classList.add("owns-class");
   /* 첫 그림에서는 잉크가 미끄러져 오지 않게 붙였다 뗀다.
      글꼴이 늦게 오면 버튼 폭이 달라지므로 폰트가 준비된 뒤 한 번 더 잰다. */
   const ink = document.getElementById("pill-ink");
