@@ -1163,13 +1163,29 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   /* ── 알약 통 (pill navigation) ──
      메뉴 다섯을 한 통에 담고, 지금 있는 곳만 검게 채운다.
      밑줄로 표시하던 것보다 '지금 여기' 가 멀리서도 보인다. */
-  .wnav-pill{display:flex;align-items:center;gap:2px;padding:5px;border-radius:var(--radius-full);
+  .wnav-pill{position:relative;display:flex;align-items:center;gap:2px;padding:5px;border-radius:var(--radius-full);
     background:var(--bg-white);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);}
-  .wnav-pill button{padding:10px 18px;border-radius:var(--radius-full);border:none;background:none;
-    font-family:inherit;font-size:14px;font-weight:600;color:var(--text-dark);cursor:pointer;
-    white-space:nowrap;transition:background var(--dur-short) var(--ease),color var(--dur-short) var(--ease);}
-  .wnav-pill button:hover{background:var(--bg-light);}
-  .wnav-pill button.on{background:var(--bg-black);color:var(--bg-white);}
+
+  /* ── 옮겨 다니는 잉크 ──
+     M3 탭 인디케이터와 같은 방식이다(250ms · emphasized).
+     버튼마다 배경을 칠했다 지웠다 하면 '켜짐/꺼짐' 두 상태뿐이라 어디서 어디로 갔는지 안 보인다.
+     하나가 미끄러져 가면 눈이 그걸 따라가고, 그 자체가 '여기서 저기로 옮겼다' 는 설명이 된다. */
+  .pill-ink{position:absolute;top:5px;bottom:5px;left:0;width:0;z-index:0;
+    background:var(--bg-black);border-radius:var(--radius-full);opacity:0;
+    transition:transform var(--dur-medium) var(--ease),
+               width var(--dur-medium) var(--ease),
+               opacity var(--dur-short) var(--ease);}
+  /* 첫 그림에서는 미끄러져 오지 않는다 — 처음부터 거기 있었던 것처럼 놓는다 */
+  .pill-ink.no-anim{transition:none;}
+
+  .wnav-pill button{position:relative;z-index:1;padding:10px 18px;border-radius:var(--radius-full);
+    border:none;background:none;font-family:inherit;font-size:14px;font-weight:600;
+    color:var(--text-dark);cursor:pointer;white-space:nowrap;
+    transition:color var(--dur-short) var(--ease),background-color var(--dur-short) var(--ease);}
+  .wnav-pill button:hover{background-color:rgba(var(--state-ink), var(--state-hover));}
+  /* 잉크가 도착할 즈음 글자가 밝아진다. 먼저 밝아지면 흰 바탕에 흰 글씨가 된다 */
+  .wnav-pill button.on{color:var(--bg-white);background:none;transition-delay:90ms;}
+  .wnav-pill button.on:hover{background:none;}
 
   /* 알림은 통 밖에 따로 둔다 — 이동이 아니라 알림이라 성격이 다르다 */
   .wnav-ic{position:relative;width:46px;height:46px;border-radius:50%;
@@ -2170,6 +2186,8 @@ body.modal-open #scr-interest .ord-sub,
     <div class="wnav-right">
       <!-- 메뉴는 알약 통 하나에 담는다. 지금 있는 곳만 검게 채워 표시한다. -->
       <nav class="wnav-pill">
+        <!-- 활성 표시는 버튼마다 칠하는 게 아니라 잉크 하나가 옮겨 다닌다 -->
+        <span class="pill-ink" id="pill-ink"></span>
         <button data-tab="scr-home">홈</button>
         <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-chat">낙타AI</button>
@@ -4727,6 +4745,19 @@ let current = "scr-login";
 
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
 
+/* 잉크를 지금 켜진 버튼 위로 옮긴다.
+   버튼의 실제 위치·폭을 읽어서 옮기므로 글자 길이가 달라도 알아서 맞는다. */
+function movePillInk(){
+  const nav = document.querySelector(".wnav-pill");
+  const ink = document.getElementById("pill-ink");
+  if(!nav || !ink) return;
+  const on = nav.querySelector("button.on");
+  if(!on){ ink.style.opacity = 0; return; }   /* 어느 메뉴에도 없는 화면이면 숨긴다 */
+  ink.style.opacity = 1;
+  ink.style.width = on.offsetWidth + "px";
+  ink.style.transform = "translateX(" + on.offsetLeft + "px)";
+}
+
 /* 데스크톱에서 가운데 창으로 뜨는 화면들 */
 const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave","scr-orders","scr-sub","scr-pay","scr-unsub","scr-unsub-done"];
 
@@ -4769,6 +4800,7 @@ function show(id){
   document.querySelectorAll(".wnav-pill button").forEach(b=>{
     b.classList.toggle("on", b.dataset.tab === (NAV_HOME[id] || id));
   });
+  movePillInk();
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
   /* 리킷을 펴면 사이트 껍데기를 걷는다 */
@@ -5308,6 +5340,17 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 /* 알림 창 닫기 — 창 밖을 누르면 닫힌다 */
 document.addEventListener("DOMContentLoaded", ()=>{
+  /* 첫 그림에서는 잉크가 미끄러져 오지 않게 붙였다 뗀다.
+     글꼴이 늦게 오면 버튼 폭이 달라지므로 폰트가 준비된 뒤 한 번 더 잰다. */
+  const ink = document.getElementById("pill-ink");
+  if(ink){
+    ink.classList.add("no-anim");
+    movePillInk();
+    requestAnimationFrame(()=> ink.classList.remove("no-anim"));
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(movePillInk);
+  }
+  /* 창 폭이 바뀌면 버튼 자리도 바뀐다 */
+  window.addEventListener("resize", movePillInk);
   const bd = document.getElementById("noti-bd");
   if(bd) bd.addEventListener("click", ()=> document.body.classList.remove("noti-open"));
   /* 창 닫기 — 배경을 누르든 X 를 누르든 보던 자리로 돌아간다 */
