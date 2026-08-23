@@ -2101,12 +2101,19 @@ body.modal-open #scr-interest .ord-sub,
   .price-lead p{font-size:15px;margin-top:12px;}
   .price-note{font-size:12.5px;margin-top:28px;padding:20px 24px;text-align:center;}
 
-  /* 상품은 넷이 아니라 셋이다. 넷으로 두면 빈 칸이 남는다 */
-  .prod-grid{grid-template-columns:repeat(3,1fr);gap:24px;}
+  /* 상품 넷을 한 줄에 놓는다(리건, 2026-08-23).
+     셋으로 두면 넷째가 혼자 다음 줄에 남아 짝이 안 맞는다.
+     1280 안에서 한 칸은 296px — 세로형 카드가 버티는 폭이다. */
+  .prod-grid{grid-template-columns:repeat(4,1fr);gap:24px;align-items:stretch;}
+  /* 칸이 좁아진 만큼 글이 한 줄 더 내려갈 수 있다.
+     설명 높이를 두 줄로 잡아 두고 '자세히 보기' 는 바닥에 붙여 한 줄로 세운다. */
+  .prod-card{display:flex;flex-direction:column;}
+  .prod-body{display:flex;flex-direction:column;flex:1;}
+  .prod-go{margin-top:auto;padding-top:18px;}
   .prod-body{padding:24px 24px 26px;}
-  .prod-name{font-size:19px;margin-top:9px;}
-  .prod-desc{font-size:13.5px;margin-top:10px;min-height:44px;}
-  .prod-go{font-size:13.5px;margin-top:18px;}
+  .prod-name{font-size:18px;margin-top:9px;}
+  .prod-desc{font-size:13px;margin-top:10px;min-height:42px;}
+  .prod-go{font-size:13.5px;}
 
   /* --- 섹션이 숨 쉴 자리 : 위아래 70px 로 통일(리건, 2026-08-22) --- */
   .sec,.sec.alt{padding-block:70px;}
@@ -2688,8 +2695,8 @@ body.modal-open #scr-interest .ord-sub,
      ⚠ 크레딧(월 400 · 종합 300)은 아직 가설이다. 참고 문서에 그렇게 적혀 있다.
         수가 정해지면 Plus 카드부터 고친다.
      ⚠ 네이버플레이스 분석진단 리포트는 판매를 접는다 — 여기 넣지 않는다.
-     ⚠ 브랜드 전략 클래스는 이 그리드에 없다. 앱 안에 시리즈로 이미 살아 있어서
-        파는 물건 목록과 자리가 겹친다. 넣을지는 리건에게 물어볼 것. -->
+     ⚠ 브랜드 전략 클래스는 앱 안에 브랜딩 클래스 시리즈로도 있다.
+        읽는 자리와 파는 자리가 다를 뿐 같은 물건이다 — 이름이 갈리지 않게 볼 것. -->
 <section class="screen" id="scr-price">
   <div class="gnb">
     <i data-lucide="chevron-left" data-back></i>
@@ -2776,6 +2783,16 @@ body.modal-open #scr-interest .ord-sub,
           <div class="prod-card" data-go="scr-price">
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="prod-body">
+              <span class="prod-kicker">클래스</span>
+              <p class="prod-name">브랜드 전략 클래스</p>
+              <p class="prod-desc">브랜드를 세우는 기준을 처음부터 끝까지 함께 짚는 수업.</p>
+              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+            </div>
+          </div>
+
+          <div class="prod-card" data-go="scr-price">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="prod-body">
               <span class="prod-kicker">노션 템플릿</span>
               <p class="prod-name">RE:노션</p>
               <p class="prod-desc">콘텐츠와 데이터를 한 판에서 굴리는 노션 작업대.</p>
@@ -2804,7 +2821,7 @@ body.modal-open #scr-interest .ord-sub,
           </div>
         </div>
         <!-- ⚠ 지금은 눌러도 제자리다. 각 상품의 랜딩페이지는 따로 기획해 붙인다(리건, 2026-08-23).
-             그때 data-go 를 scr-lp-notion / scr-lp-consult / scr-lp-guide 로 바꾼다. -->
+             그때 data-go 를 scr-lp-class / scr-lp-notion / scr-lp-consult / scr-lp-guide 로 바꾼다. -->
       </div>
     </div>
 
