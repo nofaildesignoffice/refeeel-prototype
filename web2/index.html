@@ -74,6 +74,14 @@ svg.lucide{flex-shrink:0;}   /* 굵기는 lucide 기본값 2 유지 */
 .jumpbar button.on{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
 /* ?clean — 점프바 없이 실제 앱처럼 보는 모드 */
 body.clean .jumpbar{display:none;}
+
+/* ── 화면 이동 목록을 담는 껍데기 ──
+   좁은 화면에서는 없는 것처럼 둔다. 지금처럼 맨 위에 가로로 깔린다.
+   display:contents 는 상자를 지우고 자식만 부모의 자리에 남긴다 —
+   마크업을 한 겹 감싸면서도 있던 배치를 건드리지 않는 방법이다. */
+.jumpwrap{display:contents;}
+.jumptoggle{display:none;}
+body.clean .jumptoggle{display:none!important;}
 @media (max-width:430px){body.clean .phone{border:none;border-radius:0;box-shadow:none;}}
 
 /* ===== 폰 프레임 ===== */
@@ -1637,7 +1645,25 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 @media(min-width:1024px){
   html,body{height:auto;}
   body{display:block;background:var(--bg-white);}
-  .jumpbar{max-width:none;padding:9px 24px;}
+  /* ── 넓은 화면에서는 접어 둔다(리건, 2026-08-24) ──
+     서른일곱 칸이 맨 위를 가로질러 깔려 있으면 그게 먼저 보인다.
+     시연 도구가 시연하려는 화면보다 앞서면 안 된다.
+     왼쪽 아래 한 칸으로 접고, 누르면 위로 펼친다. */
+  .jumpwrap{display:flex;flex-direction:column-reverse;align-items:flex-start;gap:8px;
+    position:fixed;left:20px;bottom:20px;z-index:200;}
+  .jumptoggle{display:inline-flex;align-items:center;gap:7px;font-family:inherit;
+    font-size:12.5px;font-weight:700;color:var(--text-black);background:var(--bg-white);
+    border:1px solid var(--border-default);border-radius:var(--radius-full);
+    padding:10px 16px;cursor:pointer;box-shadow:var(--shadow-md);
+    transition:background-color var(--dur-short) var(--ease);}
+  .jumptoggle:hover{background:var(--bg-light);}
+  .jumptoggle i,.jumptoggle svg{width:15px;height:15px;color:var(--text-gray);}
+  /* 펼쳐진 목록 — 서른일곱 칸이라 한 줄로는 안 된다. 접어서 쌓고 넘치면 세로로 굴린다 */
+  .jumpbar{display:none;max-width:520px;max-height:58vh;overflow-x:hidden;overflow-y:auto;
+    flex-wrap:wrap;gap:6px;padding:14px;background:var(--bg-white);
+    border:1px solid var(--border-light);border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);}
+  .jumpwrap.open .jumpbar{display:flex;animation:scr-in var(--dur-short) var(--ease-enter);}
 
   /* 폰 프레임을 풀고 문서 흐름으로 되돌린다. 페이지가 통째로 스크롤되고 네비가 따라붙는다 */
   /* 규격(리건, 2026-08-22) — 기준 화면 1440 / 섹션 컨테이너 1280 / 카드 격자 총폭도 1280.
@@ -6422,6 +6448,45 @@ function back(){
 
 
 
+/* ── 화면 이동 목록을 접었다 펴기 ──
+   넓은 화면에서만 접힌다. 좁은 화면에서는 .jumpwrap 이 display:contents 라
+   껍데기가 없는 것처럼 지나가고, 목록은 원래 자리에 그대로 깔린다.
+   ⚠ 껍데기는 여기서 만든다. 마크업을 건드리지 않으려는 것이다. */
+function setupJumpbar(){
+  const bar = document.getElementById("jumpbar");
+  if(!bar || document.getElementById("jumpwrap")) return;
+
+  const wrap = document.createElement("div");
+  wrap.className = "jumpwrap";
+  wrap.id = "jumpwrap";
+  bar.parentNode.insertBefore(wrap, bar);
+  wrap.appendChild(bar);
+
+  const btn = document.createElement("button");
+  btn.className = "jumptoggle";
+  btn.type = "button";
+  btn.innerHTML = '<i data-lucide="layout-grid"></i>화면 이동';
+  /* column-reverse 라 먼저 넣은 것이 아래에 선다 */
+  wrap.insertBefore(btn, bar);
+  if(window.lucide) lucide.createIcons();
+
+  btn.addEventListener("click", e=>{
+    e.stopPropagation();
+    wrap.classList.toggle("open");
+  });
+  /* 화면을 하나 고르면 닫는다. 열어 둔 채로 두면 고른 화면을 가린다 */
+  bar.addEventListener("click", e=>{
+    if(e.target.closest("[data-jump]")) wrap.classList.remove("open");
+  });
+  /* 밖을 누르거나 Esc 를 눌러도 닫는다 */
+  document.addEventListener("click", e=>{
+    if(!wrap.contains(e.target)) wrap.classList.remove("open");
+  });
+  document.addEventListener("keydown", e=>{
+    if(e.key === "Escape") wrap.classList.remove("open");
+  });
+}
+
 /* ── 마우스로도 밀 수 있게 ──
    손가락이 없는 자리에서는 가로 목록을 스크롤바로만 넘길 수 있었다.
    데스크톱 브라우저에서 살펴보기 편하도록 마우스로도 끌 수 있게 한다(리건, 2026-08-23).
@@ -7022,6 +7087,7 @@ function unwrap(m){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
+  setupJumpbar();
   startDragScroll();
   startAutoSlides();
   const sc = document.getElementById("v-scroll");
