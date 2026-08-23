@@ -764,15 +764,22 @@ body.clean .jumpbar{display:none;}
 
 
 /* ── 페이월 ──
-   평소에는 없는 것처럼 있다가 body.free 일 때만 나타난다.
-   나타나면 자기 뒤의 형제를 전부 덮는다 — 벽 뒤는 보이지 않아야 벽이다.
-   ⚠ 밑줄 도구(#sel-tip)만은 예외로 남긴다. 무료 회원도 밑줄을 긋는다. */
-.pw{display:none;position:relative;padding-top:110px;}
-body.free .pw{display:block;}
-body.free .pw ~ *:not(#sel-tip){display:none;}
-/* 글이 끊기는 게 아니라 잦아든다 */
-.pw-fade{position:absolute;left:0;right:0;top:0;height:110px;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(255,255,255,0),var(--bg-white) 82%);}
+   벽 뒤를 지우지 않는다. 남겨 두고 그라디언트로 덮는다(리건, 2026-08-23).
+   지워 버리면 거기서 글이 끝난 것처럼 보이지만, 덮으면 '아직 남았다' 가 눈에 보인다.
+   ⚠ .pw-rest 는 구독 회원에게는 아무 일도 하지 않는 껍데기다.
+      body.free 일 때만 높이를 자르고 덮개를 씌운다.
+   ⚠ 가려진 글은 못 만지고 못 고른다 — 드래그해서 읽어 가는 길을 막는다. */
+.pw{display:none;}
+body.free .pw{display:block;position:relative;z-index:1;margin-top:-52px;}
+body.free .pw-rest{position:relative;max-height:300px;overflow:hidden;
+  pointer-events:none;user-select:none;-webkit-user-select:none;}
+/* 위는 그대로 읽히다가 아래로 갈수록 흰 바탕에 잠긴다 */
+body.free .pw-rest::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.55) 38%,
+    rgba(255,255,255,0.92) 70%,
+    var(--bg-white) 92%);}
 .pw-card{text-align:center;padding:28px 22px 26px;background:var(--bg-light);
   border-radius:var(--radius-lg);}
 .pw-card>i,.pw-card>svg{width:22px;height:22px;color:var(--text-gray);}
@@ -2511,9 +2518,9 @@ body.modal-open #scr-interest .ord-sub,
   .keep-foot{font-size:12.5px;margin-top:20px;}
 
 
-  /* 페이월도 본문 폭을 따라간다 */
-  .pw{padding-top:150px;}
-  .pw-fade{height:150px;}
+  /* 본문이 넓어지면 한 문단이 차지하는 높이가 줄어든다. 그만큼 더 보여 준다 */
+  body.free .pw-rest{max-height:420px;}
+  body.free .pw{margin-top:-72px;}
   .pw-card{padding:44px 40px 40px;border-radius:var(--radius-xl);}
   .pw-card>i,.pw-card>svg{width:26px;height:26px;}
   .pw-t{font-size:22px;letter-spacing:-0.7px;margin-top:16px;}
@@ -4737,20 +4744,10 @@ body.modal-open #scr-interest .ord-sub,
 
         <!-- ── 여기서 막힌다 ──
              무료 회원은 유료편의 상단 1~2문단까지 읽는다(참고 문서).
-             글이 뚝 끊기지 않고 서서히 흐려지다 멈춰야 '더 있다'는 게 읽힌다.
-             ⚠ 밑줄·메모는 무료 회원도 쓴다. 그러니 여기서 파는 건 '읽을 것' 이지 기능이 아니다.
-             ⚠ 앱 빌드에는 이 카드를 옮기지 않는다. 잠금까지는 같아도
-                값을 보이거나 바깥 결제로 이끄는 버튼은 스토어 조항에 걸린다. -->
-        <div class="pw">
-          <div class="pw-fade"></div>
-          <div class="pw-card">
-            <i data-lucide="lock"></i>
-            <p class="pw-t">여기부터는 멤버십으로 이어집니다</p>
-            <p class="pw-d">RE:KIT 41은 유료편이에요. 멤버십을 시작하시면 이 편의 남은 이야기와 지난 편들이 모두 열려요.</p>
-            <button class="btn btn-primary pw-btn" data-tab="scr-price">멤버십 보기</button>
-            <button class="pw-alt" data-tab="scr-search">무료로 열린 리킷 먼저 보기</button>
-          </div>
-        </div>
+             아래 .pw-rest 는 나머지 본문을 그대로 담고 있다. 지우지 않는다 —
+             무료일 때만 높이를 자르고 그라디언트로 덮는다(리건, 2026-08-23).
+             글이 몇 줄 더 이어지다 흰 바탕에 잠겨야 '더 있다' 가 눈에 보인다. -->
+        <div class="pw-rest">
       <p class="vp">그 생각이 틀렸다는 게 아닙니다. 당연히 팔아야죠. 다만 한 가지 떠올려볼 게 있어요. 당신도 소비자잖아요. ‘너무 팔고 싶은 사람’에게서 무언가를 사고 싶었던 적이 있나요? 대부분은 아닐 거예요.</p>
       <blockquote class="vq">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</blockquote>
       <p class="vp">문제는 ‘파느냐 마느냐’가 아니라 ‘어디서’ 파느냐인 거예요.</p>
@@ -4780,6 +4777,21 @@ body.modal-open #scr-interest .ord-sub,
         <p>끝까지 내리면 완독으로 넘어갈 수 있어요</p>
         <button class="btn btn-primary" data-go="scr-done">다 읽었어요</button>
       </div>
+
+        </div>
+
+        <!-- ⚠ 밑줄·메모는 무료 회원도 쓴다. 그러니 여기서 파는 건 '읽을 것' 이지 기능이 아니다.
+             ⚠ 앱 빌드에는 이 카드를 옮기지 않는다. 잠금까지는 같아도
+                값을 보이거나 바깥 결제로 이끄는 버튼은 스토어 조항에 걸린다. -->
+        <div class="pw">
+          <div class="pw-card">
+            <i data-lucide="lock"></i>
+            <p class="pw-t">여기부터는 멤버십으로 이어집니다</p>
+            <p class="pw-d">RE:KIT 41은 유료편이에요. 멤버십을 시작하시면 이 편의 남은 이야기와 지난 편들이 모두 열려요.</p>
+            <button class="btn btn-primary pw-btn" data-tab="scr-price">멤버십 보기</button>
+            <button class="pw-alt" data-tab="scr-search">무료로 열린 리킷 먼저 보기</button>
+          </div>
+        </div>
 
       <!-- 글자를 끌어서 고르면 여기가 고른 자리 아래로 옮겨 붙는다 -->
       <div class="sel-tip" id="sel-tip">
