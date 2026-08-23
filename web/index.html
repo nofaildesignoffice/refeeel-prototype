@@ -3858,6 +3858,16 @@ if(new URLSearchParams(location.search).has("clean")) document.body.classList.ad
 const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 /* 아직 로그인하지 않은 사람이 보는 화면들 */
 const PRE_AUTH = ["scr-login","scr-agree","scr-ob1","scr-ob2","scr-ob3","scr-ob4","scr-ob5","scr-ob6"];
+/* 하위 화면 → 위 네비에서 켜져야 할 메뉴 */
+const NAV_HOME = {
+  "scr-chatstart":"scr-chat", "scr-chatroom":"scr-chat",
+  "scr-notekit":"scr-library", "scr-reader":"scr-library",
+  "scr-settings":"scr-my", "scr-notiset":"scr-my", "scr-lang":"scr-my",
+  "scr-legal":"scr-my", "scr-doc":"scr-my", "scr-help":"scr-my",
+  "scr-ask":"scr-my", "scr-ask-done":"scr-my", "scr-account":"scr-my",
+  "scr-read":"scr-my", "scr-interest":"scr-my", "scr-leave":"scr-my",
+  "scr-series":"scr-search"
+};
 let stack = [];
 let current = "scr-login";
 
@@ -3886,8 +3896,10 @@ function show(id){
     b.classList.toggle("on", b.dataset.jump === id);
   });
   /* 위 네비도 아래 탭바와 같은 곳을 가리킨다 */
+  /* 하위 화면에서도 원래 속한 메뉴가 켜져 있어야 한다.
+     대화 중인데 아무 메뉴도 안 켜져 있으면 내가 어디에 있는지 알 길이 없다. */
   document.querySelectorAll(".wnav-pill button").forEach(b=>{
-    b.classList.toggle("on", b.dataset.tab === id);
+    b.classList.toggle("on", b.dataset.tab === (NAV_HOME[id] || id));
   });
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
