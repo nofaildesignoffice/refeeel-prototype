@@ -78,7 +78,11 @@ body.clean .jumpbar{display:none;}
 
 /* ===== 폰 프레임 ===== */
 .phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;padding-top:env(safe-area-inset-top);}
-@media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:var(--radius-full);} }
+/* ⚠ 480px 위에서는 기기 틀이 바닥에서 떨어져 보이므로 모서리를 둥글린다.
+      v2 로 토큰을 옮길 때 24px 을 --radius-full(9999px) 로 잘못 바꿔서
+      480~1023px 구간의 화면이 통째로 캡슐이 됐다. 좌우가 깎여 글자가 잘렸다.
+      사다리에서 24px 에 맞닿는 칸은 xl(28px) 이다. 시트·창과도 같은 값이 된다. */
+@media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:var(--radius-xl);} }
 
 
 /* ===== 화면 ===== */
