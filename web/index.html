@@ -1360,7 +1360,11 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .pc-track{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;overflow:visible;}
   .pcard{flex:none;}
 
-  /* --- 홈 히어로 : 4:3 은 데스크톱에서 너무 높다 --- */
+  /* --- 홈 히어로 --- 
+     머리말에 배경이 없으므로 히어로를 그 뒤로 올린다. 첫 화면은 그림으로 시작해야 한다.
+     홈에서만 그런다 — 다른 화면은 제목이 먼저 오므로 머리말 자리를 비워 둔다. */
+  #scr-home .hero-slider{margin-top:-72px;}
+  /* --- 히어로 비율 : 4:3 은 데스크톱에서 너무 높다 --- */
   .hs-slide{aspect-ratio:21/9;}
   /* 판은 화면 끝까지 깔리되 글자는 1280 안쪽 — 아래 섹션들과 같은 세로선에 선다 */
   .hs-body{padding:36px max(24px,calc((100% - 1280px) / 2)) 56px;}
