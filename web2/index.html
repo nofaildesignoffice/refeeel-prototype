@@ -2500,6 +2500,15 @@ body.modal-open #scr-interest .ord-sub,
   /* 창 안에서 화면을 갈아 끼울 때도 스며들게 */
   .noti-pop .screen.active,.nk-widget .screen.active{animation:fade-in var(--dur-medium) var(--ease-enter);}
 
+  /* 멤버십은 제목을 두 번 말할 자리가 없다(리건, 2026-08-23).
+     바로 아래 두 갈래 탭과 '먼저 읽어 보고 정하세요' 가 그 일을 한다.
+     ⚠ 좁은 화면에서는 남겨 둔다. 이 화면에는 하단 탭바가 없어서
+        gnb 의 뒤로가기가 거기서는 유일한 출구다.
+     ⚠ 제목이 사라지면 그 자리의 위 여백(70px)도 같이 사라진다.
+        첫 요소인 두 갈래 탭이 위 네비에 달라붙지 않게 그만큼 다시 준다. */
+  #scr-price .gnb{display:none;}
+  #scr-price .seg,#scr-price .seg.seg-top{margin-top:70px;}
+
   /* ── 멤버십 : 세 칸 나란히 ──
      세 값은 서로 견주어 보는 것이라 한눈에 같이 들어와야 한다. 쌓으면 비교가 안 된다.
      칸 높이는 stretch 로 맞춰 버튼이 아래에서 한 줄로 선다. */
