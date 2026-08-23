@@ -1496,9 +1496,10 @@ mark.hl mark.hl{background:none;box-shadow:none;}
       <button data-tab="scr-home">홈</button>
       <button data-tab="scr-search">리킷 찾기</button>
       <button data-tab="scr-chat">낙타AI</button>
-      <button data-tab="scr-library">인사이트</button>
     </nav>
     <div class="wnav-actions">
+      <!-- 인사이트와 내 리킷은 '내 것' 이다. 둘러보는 메뉴와 같은 줄에 두지 않는다 -->
+      <button class="wnav-me" data-tab="scr-library"><span class="avatar"><i data-lucide="lightbulb"></i></span>인사이트</button>
       <button class="wnav-me" data-tab="scr-my"><span class="avatar"><i data-lucide="user"></i></span>내 리킷</button>
       <button class="wnav-ic" data-go="scr-noti" aria-label="알림"><i data-lucide="bell"></i><span class="wnav-dot"></span></button>
     </div>
@@ -3871,8 +3872,9 @@ function show(id){
   document.querySelectorAll(".wnav-links button").forEach(b=>{
     b.classList.toggle("on", b.dataset.tab === id);
   });
-  const me = document.querySelector(".wnav-me");
-  if(me) me.classList.toggle("on", id === "scr-my");
+  document.querySelectorAll(".wnav-me").forEach(b=>{
+    b.classList.toggle("on", b.dataset.tab === id);
+  });
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
   /* 리킷을 펴면 사이트 껍데기를 걷는다 */
