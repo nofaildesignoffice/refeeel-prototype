@@ -3241,15 +3241,52 @@ body.modal-open #scr-interest .ord-sub,
       <!-- 한 장짜리 섹션이라 카드로 두면 이미지가 폭을 다 먹고 섹션이 1000px 을 넘는다.
            좌우로 나누면 높이가 절반이 되고 이미지도 글도 제자리를 찾는다.
            좁은 화면에서는 세로로 접혀 앱의 큰 카드와 같은 모양이 된다. -->
-      <div class="series-banner" data-goclass>
-        <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="sb-body">
-          <div class="bigcard-kicker"><span class="k">Series · 9개 회차</span><span class="lock-badge"><i data-lucide="lock"></i>구매 회원 전용</span></div>
-          <div class="sb-title">브랜딩 클래스</div>
-          <div class="sb-desc">마케팅의 순서부터 가이드라인까지, 브랜딩의 전 과정을 순서대로.</div>
-          <button class="btn btn-secondary sb-cta">시리즈 보기<i data-lucide="arrow-right"></i></button>
+      <!-- 파는 묶음을 전부 늘어놓는다(리건, 2026-08-23).
+           한 장짜리 배너로는 브랜딩 클래스 하나만 보였다. 고를 수 있으려면 같이 보여야 한다.
+           ⚠ 값은 여기 쓰지 않는다. 앱에도 그대로 들어가는 마크업이다. -->
+      <div class="hscroll">
+        <div class="card hcard" style="min-width:210px" data-goclass>
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">브랜딩 클래스</div>
+            <div class="continue-meta" style="margin-top:6px"><span>9개 회차</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">RE:노션</div>
+            <div class="continue-meta" style="margin-top:6px"><span>노션 템플릿</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">1:1 컨설팅</div>
+            <div class="continue-meta" style="margin-top:6px"><span>1:1 진행</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">브랜드 전략 가이드라인</div>
+            <div class="continue-meta" style="margin-top:6px"><span>맞춤 제작</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">AI 마케팅 실전 가이드</div>
+            <div class="continue-meta" style="margin-top:6px"><span>6개 회차</span></div>
+          </div>
         </div>
       </div>
+
     </div>
 
     <div class="sec">
@@ -4245,6 +4282,30 @@ body.modal-open #scr-interest .ord-sub,
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">브랜딩 클래스</div>
             <div class="continue-meta" style="margin-top:6px"><span>9개 회차</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">RE:노션</div>
+            <div class="continue-meta" style="margin-top:6px"><span>노션 템플릿</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">1:1 컨설팅</div>
+            <div class="continue-meta" style="margin-top:6px"><span>1:1 진행</span></div>
+          </div>
+        </div>
+        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="hcard-body">
+            <div class="hcard-num">SERIES</div>
+            <div class="hcard-title">브랜드 전략 가이드라인</div>
+            <div class="continue-meta" style="margin-top:6px"><span>맞춤 제작</span></div>
           </div>
         </div>
         <div class="card hcard" style="min-width:210px" data-go="scr-series">
