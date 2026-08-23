@@ -1212,28 +1212,30 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      ② 아래: 늘 같은 자리에 붙어 있는 입력창
      대화는 세로로 길어지지만 입력창은 움직이지 않는다.
      쓰려고 할 때마다 입력창을 찾아 내려가야 하면 대화가 끊긴다. */
-  /* 화면 높이를 붙잡지 않는다. 페이지가 통째로 스크롤되고 입력창만 브라우저에 박힌다.
-     안쪽 상자를 스크롤시키면 입력창이 그 상자 바닥에 붙어 화면 중간에 뜬다. */
+  /* 여기는 페이지가 아니라 '방' 이다(리건, 2026-08-23).
+     화면은 머리말 아래를 꽉 채운 채 그대로 있고, 대화만 그 안에서 흐른다.
+     페이지가 통째로 스크롤되면 머리말도 입력창도 같이 밀려 '문서를 읽는' 느낌이 된다.
+     그래서 푸터도 여기서는 감춘다 — 방 안에 푸터가 있을 자리가 없다. */
+  body.chatting .wfoot{display:none;}
   #scr-chat,#scr-chatstart,#scr-chatroom{
-    height:auto;overflow:visible;min-height:calc(100vh - 73px);padding-bottom:112px;}
+    height:calc(100vh - 72px);overflow:hidden;padding-bottom:0;}
   #scr-chat .topbar{display:none;}          /* 위 네비에 낙타AI 가 이미 켜져 있다 */
   #scr-chat .scroll,#scr-chatstart .chat-area,#scr-chatroom .chat-area{
-    flex:1;min-height:0;overflow:visible;padding-inline:0;max-width:none;width:100%;}
+    flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-inline:0;max-width:none;width:100%;}
 
   /* 대화와 입력창은 같은 세로선 위에 선다 */
   #scr-chat .sec,#scr-chatstart .chat-area,#scr-chatroom .chat-area,
   #scr-chat .chat-input,#scr-chatstart .chat-input,#scr-chatroom .chat-input{
     padding-inline:max(24px,calc((100% - 768px) / 2));}
-  #scr-chatstart .chat-area,#scr-chatroom .chat-area{padding-block:32px 0;background:var(--bg-white);}
+  #scr-chatstart .chat-area,#scr-chatroom .chat-area{padding-block:32px 8px;background:var(--bg-white);}
   #scr-chatstart .gnb,#scr-chatroom .gnb{padding-block:26px 0;}
   #scr-chatstart .gnb-title,#scr-chatroom .gnb-title{font-size:22px;}
 
   /* 입력창 — 늘 아래에 붙어 있다 */
-  /* 입력창은 브라우저 바닥에 박는다. 대화가 아무리 길어져도 여기 그대로 있다.
-     배경을 바닥까지 깔아 두는 이유 — 20px 틈으로 지나가는 글이 비치면 지저분하다. */
+  /* 입력창은 방 바닥에 붙어 있다. 대화가 길어져도 움직이지 않는다.
+     화면 높이를 붙잡아 뒀으니 fixed 를 쓸 필요가 없다 — 방 바닥이 곧 화면 바닥이다. */
   #scr-chat .chat-input,#scr-chatstart .chat-input,#scr-chatroom .chat-input{
-    position:fixed;left:0;right:0;bottom:0;z-index:100;
-    padding-block:16px 20px;border-top:none;background:var(--bg-white);}
+    flex-shrink:0;padding-block:16px 20px;border-top:none;background:var(--bg-white);}
   #scr-chat .ci-box,#scr-chatstart .ci-box,#scr-chatroom .ci-box{
     padding:17px 22px;font-size:15px;border-radius:24px;border-color:var(--border-default);background:var(--bg-white);}
   /* 보내기도 종 버튼과 같은 원형 — 누를 수 있는 것끼리 생김새를 맞춘다 */
@@ -3890,6 +3892,9 @@ function show(id){
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
   /* 리킷을 펴면 사이트 껍데기를 걷는다 */
   document.body.classList.toggle("reading", id === "scr-viewer");
+  /* 낙타AI 는 방이라 푸터가 없다 */
+  document.body.classList.toggle("chatting",
+    id === "scr-chat" || id === "scr-chatstart" || id === "scr-chatroom");
   window.scrollTo(0, 0);
 }
 
