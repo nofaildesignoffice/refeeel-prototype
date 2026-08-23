@@ -4753,6 +4753,7 @@ function movePillInk(){
   if(!nav || !ink) return;
   const on = nav.querySelector("button.on");
   if(!on){ ink.style.opacity = 0; return; }   /* 어느 메뉴에도 없는 화면이면 숨긴다 */
+  if(!on.offsetWidth) return;                 /* 네비가 아직 안 보이면 재지 않고 물러난다 */
   ink.style.opacity = 1;
   ink.style.width = on.offsetWidth + "px";
   ink.style.transform = "translateX(" + on.offsetLeft + "px)";
@@ -4800,7 +4801,9 @@ function show(id){
   document.querySelectorAll(".wnav-pill button").forEach(b=>{
     b.classList.toggle("on", b.dataset.tab === (NAV_HOME[id] || id));
   });
-  movePillInk();
+  /* ⚠ 쟉크는 반드시 pre-auth 를 떼어낸 뒤에 율긴다.
+     네비가 숨겨 있는 동안에 재면 버튼 폭이 0 이라
+     쟉크가 폭 0 으로 깔리고, 그 위에 흰 글씨만 남아 글자가 사라진다. */
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
   document.body.classList.toggle("pre-auth", PRE_AUTH.indexOf(id) >= 0);
   /* 리킷을 펴면 사이트 껍데기를 걷는다 */
@@ -4808,6 +4811,7 @@ function show(id){
   /* 낙타AI 는 방이라 푸터가 없다 */
   document.body.classList.toggle("chatting",
     id === "scr-chat" || id === "scr-chatstart" || id === "scr-chatroom");
+  movePillInk();
   window.scrollTo(0, 0);
 }
 
