@@ -1330,7 +1330,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 
     <div class="sec">
       <div class="sec-head"><span class="sec-title">리건님을 위한 추천</span><span class="sec-more" data-go="scr-search">더보기</span></div>
-      <div class="hscroll">
+      <div class="hscroll" data-auto>
         <div class="card hcard" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
@@ -1355,15 +1355,42 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
           </div>
         </div>
+          <div class="card hcard" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="hcard-body">
+              <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 리킷</div>
+              <div class="hcard-num">RE:KIT 81<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+              <div class="hcard-title">제품 말고 '두 사람'을 파세요</div>
+            </div>
+          </div>
+          <div class="card hcard" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="hcard-body">
+              <div class="reason"><i data-lucide="book-open-check"></i>'콘텐츠 소재가 떨어졌어요'에 맞는 리킷</div>
+              <div class="hcard-num">RE:KIT 80<span class="kit-free">무료</span></div>
+              <div class="hcard-title">콘텐츠는 만드는 게 아니라, 포착하는 것</div>
+            </div>
+          </div>
+          <div class="card hcard" data-go="scr-viewer">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="hcard-body">
+              <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
+              <div class="hcard-num">RE:KIT 87<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+              <div class="hcard-title">95 대 5 법칙</div>
+            </div>
+          </div>
       </div>
     </div>
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span><span class="sec-more" data-go="scr-search">더보기</span></div>
-      <div class="hscroll">
+      <div class="hscroll" data-auto>
         <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>빼는 게 먼저, 더하는 게 나중</p></div>
         <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>'OO 하면 떠오르는 브랜드'가 되는 법</p></div>
         <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>사람은 타겟이 아니다</p></div>
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>한 명에게 말하듯 써야 1만 명에게 닿는다</p></div>
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>전문가일수록 절대 쓰면 안 되는 말</p></div>
+          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>할 말이 없는 게 아니라, 있는데 모르는 것뿐</p></div>
       </div>
     </div>
 
@@ -3373,6 +3400,44 @@ function go(id){ if(id===current) return; stack.push(current); show(id); }
 function tab(id){ stack = []; show(id); }
 function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
 
+
+/* ── 저절로 넘어가는 가로 목록 ──
+   data-auto 를 단 목록은 몇 초에 한 칸씩 스스로 넘어간다.
+   ⚠ 손이 닿으면 멈춘다. 읽는 중에 글이 움직이면 그건 도움이 아니라 방해다.
+      마우스가 얹혀 있는 동안은 계속 멈추고, 떼면 한 박자 쉬었다 다시 간다.
+   ⚠ 숨은 화면에서는 돌지 않는다. 다른 탭에 가 있는 동안 끝까지 흘러가 버리면
+      돌아왔을 때 첫 장이 사라져 있다.
+   ⚠ 넘칠 것이 없으면 아무 일도 하지 않는다. 넓은 화면에서 카드가 다 보이면
+      옮길 자리가 없다 — 그때 억지로 움직이면 덜컥거리기만 한다.
+   ⚠ 움직임을 줄여 달라고 해 둔 기기에서는 아예 켜지 않는다. */
+const AUTO_MS = 3800;
+function startAutoSlides(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelectorAll("[data-auto]").forEach(el=>{
+    if(el.dataset.autoOn) return;
+    el.dataset.autoOn = "1";
+    let hold = 0;                                   /* 이 시각까지는 쉰다 */
+    const rest = ms => hold = Date.now() + ms;
+    el.addEventListener("mouseenter", ()=> rest(6e5));
+    el.addEventListener("mouseleave", ()=> rest(AUTO_MS));
+    el.addEventListener("touchstart", ()=> rest(6e5), {passive:true});
+    el.addEventListener("touchend",   ()=> rest(6000), {passive:true});
+    el.addEventListener("wheel",      ()=> rest(6000), {passive:true});
+    setInterval(()=>{
+      if(Date.now() < hold) return;
+      if(!el.offsetParent) return;
+      const first = el.firstElementChild;
+      if(!first) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if(max < 4) return;
+      const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+      const step = first.offsetWidth + gap;
+      const next = el.scrollLeft >= max - 4 ? 0 : el.scrollLeft + step;
+      el.scrollTo({left: next, behavior:"smooth"});
+    }, AUTO_MS);
+  });
+}
+
 // 히어로 슬라이더
 const hsTrack = document.getElementById("hs-track");
 const hsDots = document.querySelectorAll(".hs-dot");
@@ -3763,6 +3828,7 @@ function unwrap(m){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
+  startAutoSlides();
   const sc = document.getElementById("v-scroll");
   if(!sc) return;
   sc.addEventListener("scroll", ()=>{ vSync(); closeTip(); });
