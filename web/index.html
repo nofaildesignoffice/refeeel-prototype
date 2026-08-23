@@ -1444,7 +1444,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   /* 날짜 레일 — 점과 선이 같은 세로선 위에 서야 한다.
      레일은 left:20px 로 박혀 있었고 점은 컨테이너 여백을 따라가서 둘이 어기새 있었다.
      점 지름 9px 이니 중심은 여백+4.5, 레일 굵기 1px 이므로 시작은 여백+4. */
-  .tl-wrap{padding-top:8px;}
+  .tl-wrap{padding-top:8px;padding-bottom:80px;}
+  #scr-library .tl-wrap::before{bottom:102px;}
   #scr-library .tl-wrap::before{left:calc(max(24px, (100% - 1280px) / 2) + 4px);}
   .tl-ev+.tl-ev{margin-top:18px;}
   .tl-ev+.tl-ev:has(.tl-when){margin-top:32px;}
