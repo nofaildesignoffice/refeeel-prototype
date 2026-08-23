@@ -1126,7 +1126,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      리킷을 펴면 사이트 껍데기를 걷는다. 위 네비도 푸터도 오른쪽 창도 없다.
      글 하나만 남기는 것이 이 화면의 일이다. 대신 진행률만 화면 맨 위에 얇게 남긴다. */
   body.reading .wnav,body.reading .wfoot{display:none;}
-  #scr-viewer .gnb{position:sticky;top:0;z-index:150;background:var(--bg-white);border-bottom:none;}
+  #scr-viewer .gnb{position:sticky;top:0;z-index:150;background:var(--bg-white);
+    height:60px;padding-block:0;align-items:center;justify-content:space-between;gap:12px;
+    border-bottom:1px solid var(--border-light);}
   #scr-viewer .progress-thin{position:sticky;top:60px;z-index:150;padding-inline:0;}
   #scr-viewer .gnb-title{max-width:520px;font-size:14px;}
 
