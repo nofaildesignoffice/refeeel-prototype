@@ -751,6 +751,30 @@ body.clean .jumpbar{display:none;}
   transition:transform var(--dur-short) var(--ease);}
 .prod-card:hover .prod-go i,.prod-card:hover .prod-go svg{transform:translateX(3px);}
 
+/* ── 그동안 쌓으신 것 ──
+   구독 해지와 회원 탈퇴에서 같이 쓴다. 다섯 칸이 좁은 화면에서는 저절로 접힌다. */
+.keep-box{margin:18px 16px 0;background:var(--bg-light);border-radius:var(--radius-lg);padding:20px 18px;}
+.keep-hd{font-size:13.5px;font-weight:800;color:var(--text-black);letter-spacing:-0.3px;}
+.keep-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(58px,1fr));
+  gap:12px 6px;margin-top:16px;}
+.keep-nums div{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.keep-nums b{font-size:21px;font-weight:800;color:var(--text-black);letter-spacing:-0.8px;line-height:1;}
+.keep-nums span{font-size:10.5px;color:var(--text-light);white-space:nowrap;}
+.keep-peek{display:flex;flex-direction:column;gap:8px;margin-top:18px;
+  padding-top:16px;border-top:1px solid var(--border-light);}
+/* 그은 문장은 밑줄 꼴로, 적은 메모는 인사이트 탭에서 보던 흰 칸 그대로 */
+.keep-q{font-size:12.5px;color:var(--text-dark);line-height:1.6;
+  border-left:2px solid var(--text-black);padding-left:10px;}
+.keep-q span{display:block;font-size:10.5px;color:var(--text-muted);font-weight:700;margin-top:5px;}
+.keep-m{display:flex;gap:7px;background:var(--bg-white);border-radius:var(--radius-sm);padding:11px 12px;}
+.keep-m i,.keep-m svg{width:13px;height:13px;flex-shrink:0;margin-top:2px;color:var(--text-light);}
+.keep-m p{font-size:12px;color:var(--text-gray);line-height:1.6;}
+.keep-foot{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;
+  color:var(--text-gray);margin-top:16px;}
+.keep-foot i,.keep-foot svg{width:13px;height:13px;flex-shrink:0;}
+/* 탈퇴 쪽 꼬리말만 붉다 — 거기서는 정말 없어지기 때문이다. 해지 버튼과 같은 붉은색 */
+.keep-foot.warn{color:#B23B32;}
+
 .myseg-view{display:none;}
 .myseg-view.on{display:block;}
 .bseg-view{display:none;}
@@ -1863,6 +1887,17 @@ body.modal-open #scr-interest .sec,
   body.modal-open #scr-pay .sec,
   body.modal-open #scr-unsub .sec,
   body.modal-open #scr-unsub-done .sec{padding-block:24px;}
+  /* 창 안에서는 1280 정렬이 아니라 창 안쪽 여백이 기준이다 */
+  body.modal-open #scr-unsub .keep-box,
+  body.modal-open #scr-leave .keep-box{margin:18px 24px 0;max-width:none;
+    padding:20px 18px;border-radius:var(--radius-lg);}
+  body.modal-open #scr-unsub .keep-nums,
+  body.modal-open #scr-leave .keep-nums{gap:12px 8px;}
+  body.modal-open #scr-unsub .keep-nums b,
+  body.modal-open #scr-leave .keep-nums b{font-size:23px;}
+  /* 창은 좁다 — 미리보기 둘을 나란히 두면 글이 뭉갠다 */
+  body.modal-open #scr-unsub .keep-peek,
+  body.modal-open #scr-leave .keep-peek{flex-direction:column;}
 body.modal-open #scr-interest .set-group,
   body.modal-open #scr-settings .set-group,
   body.modal-open #scr-notiset .set-group,
@@ -2114,6 +2149,20 @@ body.modal-open #scr-interest .ord-sub,
   .prod-name{font-size:18px;margin-top:9px;}
   .prod-desc{font-size:13px;margin-top:10px;min-height:42px;}
   .prod-go{font-size:13.5px;}
+
+  /* 쌓은 기록 — 넓은 화면에서는 다섯 칸이 한 줄에 다 선다.
+     회색 상자라 화면 끝까지 늘이지 않는다. 왼쪽만 1280 정렬에 맞추고 폭은 760 으로 묶는다. */
+  .keep-box{margin:24px max(24px,calc((100% - 1280px) / 2)) 0;max-width:760px;
+    padding:28px 30px;border-radius:var(--radius-xl);}
+  .keep-hd{font-size:16px;}
+  .keep-nums{grid-template-columns:repeat(5,1fr);gap:16px;margin-top:20px;}
+  .keep-nums b{font-size:28px;letter-spacing:-1.1px;}
+  .keep-nums span{font-size:12px;}
+  .keep-peek{flex-direction:row;gap:12px;margin-top:22px;padding-top:20px;}
+  .keep-peek>*{flex:1;}
+  .keep-q{font-size:13.5px;}
+  .keep-m p{font-size:13px;}
+  .keep-foot{font-size:12.5px;margin-top:20px;}
 
   /* --- 섹션이 숨 쉴 자리 : 위아래 70px 로 통일(리건, 2026-08-22) --- */
   .sec,.sec.alt{padding-block:70px;}
@@ -4141,6 +4190,28 @@ body.modal-open #scr-interest .ord-sub,
   </div>
   <div class="scroll">
     <div class="leave-hd"><h3>구독을 멈추시겠어요?</h3></div>
+
+    <!-- ── 그동안 쌓으신 것(리건, 2026-08-22) ──
+         숫자만 세면 남의 통계처럼 읽힌다. 실제로 그은 문장과 적은 메모를 한 조각씩 같이 보여야
+         '내 것' 이 된다.
+         ⚠ 여기까지가 선이다. 죄책감을 주는 문구를 얹거나 해지 버튼을 작게·흐리게 만들지 않는다.
+            사실을 보여 주는 것과 못 나가게 붙드는 것은 다르다. -->
+    <div class="keep-box">
+      <p class="keep-hd">지금까지 이만큼 읽으셨어요</p>
+    <div class="keep-nums">
+      <div><b>17</b><span>읽은 리킷</span></div>
+      <div><b>12</b><span>완독</span></div>
+      <div><b>10</b><span>밑줄</span></div>
+      <div><b>6</b><span>메모</span></div>
+      <div><b>12</b><span>저장</span></div>
+    </div>
+    <div class="keep-peek">
+      <div class="keep-q">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.<span>RE:KIT 41</span></div>
+      <div class="keep-m"><i data-lucide="pen-line"></i><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네.</p></div>
+    </div>
+      <p class="keep-foot"><i data-lucide="check"></i>해지하셔도 이 기록은 그대로 남아요.</p>
+    </div>
+
     <div class="set-note" style="padding-top:10px">해지하시면 이렇게 돼요.</div>
     <ul class="lose">
       <li><i data-lucide="calendar-check"></i><b>2026년 9월 7일</b>까지는 그대로 읽으실 수 있어요</li>
@@ -4499,6 +4570,24 @@ body.modal-open #scr-interest .ord-sub,
   </div>
   <div class="scroll">
     <div class="leave-hd"><h3>정말 떠나시나요?</h3></div>
+
+    <!-- 해지 화면과 같은 블록이다. 꼬리말만 다르다 — 여기서는 정말 없어지기 때문이다. -->
+    <div class="keep-box">
+      <p class="keep-hd">지금까지 이만큼 쌓으셨어요</p>
+    <div class="keep-nums">
+      <div><b>17</b><span>읽은 리킷</span></div>
+      <div><b>12</b><span>완독</span></div>
+      <div><b>10</b><span>밑줄</span></div>
+      <div><b>6</b><span>메모</span></div>
+      <div><b>12</b><span>저장</span></div>
+    </div>
+    <div class="keep-peek">
+      <div class="keep-q">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.<span>RE:KIT 41</span></div>
+      <div class="keep-m"><i data-lucide="pen-line"></i><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네.</p></div>
+    </div>
+      <p class="keep-foot warn"><i data-lucide="alert-circle"></i>탈퇴하시면 30일 뒤 모두 지워져요.</p>
+    </div>
+
     <div class="set-note" style="padding-top:10px">탈퇴하시면 아래 기록을 30일 동안 보관했다가 지워요.</div>
     <ul class="lose">
       <li><i data-lucide="highlighter"></i>밑줄 <b>10개</b>와 메모 <b>6개</b></li>
