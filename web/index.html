@@ -1215,6 +1215,303 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      ② 아래: 늘 같은 자리에 붙어 있는 입력창
      대화는 세로로 길어지지만 입력창은 움직이지 않는다.
      쓰려고 할 때마다 입력창을 찾아 내려가야 하면 대화가 끊긴다. */
+  /* ── 관심사 · 설정 : 가운데 창 ──
+     화면을 통째로 바꾸지 않고 보던 자리 위에 띄운다.
+     안에서 하위 화면(알림 설정·약관·문의…)으로 들어가도 창 안에서 끝난다. */
+  .modal-bd{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.32);}
+  .modal-x{display:none;position:fixed;z-index:420;width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--border-light);background:var(--bg-white);box-shadow:var(--shadow-sm);
+    align-items:center;justify-content:center;cursor:pointer;}
+  .modal-x i,.modal-x svg{width:20px;height:20px;color:var(--text-dark);}
+  body.modal-open .modal-bd{display:block;}
+  body.modal-open .modal-x{display:flex;
+    top:calc(50% - min(380px, (100vh - 96px) / 2) - 22px);
+    left:calc(50% + min(360px, (100vw - 48px) / 2) - 22px);}
+
+  body.modal-open #scr-interest.active,
+  body.modal-open #scr-settings.active,
+  body.modal-open #scr-notiset.active,
+  body.modal-open #scr-lang.active,
+  body.modal-open #scr-legal.active,
+  body.modal-open #scr-doc.active,
+  body.modal-open #scr-help.active,
+  body.modal-open #scr-ask.active,
+  body.modal-open #scr-ask-done.active,
+  body.modal-open #scr-account.active,
+  body.modal-open #scr-read.active,
+  body.modal-open #scr-leave.active{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:410;
+    width:min(720px,calc(100vw - 48px));height:min(760px,calc(100vh - 96px));
+    background:var(--bg-white);border-radius:16px;box-shadow:var(--shadow-md);
+    overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .scroll{flex:1;min-height:0;overflow-y:auto;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .gnb{height:56px;padding:0 24px;border-bottom:1px solid var(--border-light);
+    justify-content:flex-start;gap:12px;flex-shrink:0;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .gnb-title{font-size:17px;letter-spacing:-0.3px;}
+  /* 창 안에서는 뒤로가기가 살아 있어야 목록으로 돌아갈 수 있다 */
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .gnb>i[data-back],body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .gnb>svg[data-back]{display:block;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .sec,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .set-group,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .set-note,
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .menu-list,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .set-list,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .fld,
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .doc-head,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .doc-body,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .acct-hd,
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .leave-hd,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .lose,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .set-btn,
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .ed-note,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .ed-bottom,body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .fs-pick,
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .fs-prev{padding-inline:24px;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .sec{padding-block:24px;}
+  body.modal-open #scr-interest,
+  body.modal-open #scr-settings,
+  body.modal-open #scr-notiset,
+  body.modal-open #scr-lang,
+  body.modal-open #scr-legal,
+  body.modal-open #scr-doc,
+  body.modal-open #scr-help,
+  body.modal-open #scr-ask,
+  body.modal-open #scr-ask-done,
+  body.modal-open #scr-account,
+  body.modal-open #scr-read,
+  body.modal-open #scr-leave .set-group{padding-block:22px 8px;}
+
   /* 여기는 페이지가 아니라 '방' 이다(리건, 2026-08-23).
      화면은 머리말 아래를 꽉 채운 채 그대로 있고, 대화만 그 안에서 흐른다.
      페이지가 통째로 스크롤되면 머리말도 입력창도 같이 밀려 '문서를 읽는' 느낌이 된다.
@@ -3758,6 +4055,11 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 </div>
 <div class="noti-bd" id="noti-bd"></div>
 
+<!-- 데스크톱에서 관심사·설정은 화면을 갈아치우지 않고 가운데 창으로 뜬다.
+     보던 '내 리킷' 을 뒤에 두고 잠깐 다녀오는 곳이기 때문이다. -->
+<div class="modal-bd" id="modal-bd"></div>
+<button class="modal-x" id="modal-x" aria-label="닫기"><i data-lucide="x"></i></button>
+
 
 
 <!-- ══════════ 푸터 (데스크톱) ══════════
@@ -3888,7 +4190,21 @@ let current = "scr-login";
 
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
 
+/* 데스크톱에서 가운데 창으로 뜨는 화면들 */
+const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave"];
+
 function show(id){
+  /* 관심사·설정은 보던 화면을 두고 그 위에 창으로 뜬다 */
+  if(isWide() && MODAL_SCREENS.indexOf(id) >= 0){
+    MODAL_SCREENS.forEach(m=>{ const e = document.getElementById(m); if(e) e.classList.remove("active"); });
+    const el = document.getElementById(id); if(!el) return;
+    el.classList.add("active");
+    const sc = el.querySelector(".scroll"); if(sc) sc.scrollTop = 0;
+    document.body.classList.add("modal-open");
+    current = id;
+    return;
+  }
+  document.body.classList.remove("modal-open");
   /* 알림만 화면을 갈아치우지 않고 종 아래 창으로 뜬다 */
   if(isWide() && id === "scr-noti"){
     document.getElementById("scr-noti").classList.add("active");
@@ -3938,7 +4254,16 @@ function resetChatStart(){
 
 function go(id){ if(id===current) return; stack.push(current); show(id); }
 function tab(id){ stack = []; show(id); }
-function back(){ const prev = stack.pop(); show(prev || "scr-home"); }
+function back(){
+  const prev = stack.pop();
+  /* 창 안에서 창 밖으로 나가는 뒤로가기는 곧 창을 닫는 일이다 */
+  if(isWide() && document.body.classList.contains("modal-open") && MODAL_SCREENS.indexOf(prev) < 0){
+    document.body.classList.remove("modal-open");
+    show(prev || "scr-my");
+    return;
+  }
+  show(prev || "scr-home");
+}
 
 // 히어로 슬라이더
 const hsTrack = document.getElementById("hs-track");
@@ -4448,6 +4773,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
 document.addEventListener("DOMContentLoaded", ()=>{
   const bd = document.getElementById("noti-bd");
   if(bd) bd.addEventListener("click", ()=> document.body.classList.remove("noti-open"));
+  /* 창 닫기 — 배경을 누르든 X 를 누르든 보던 자리로 돌아간다 */
+  function closeModal(){
+    document.body.classList.remove("modal-open");
+    MODAL_SCREENS.forEach(m=>{ const e = document.getElementById(m); if(e) e.classList.remove("active"); });
+    show("scr-my");
+  }
+  const mbd = document.getElementById("modal-bd");
+  if(mbd) mbd.addEventListener("click", closeModal);
+  const mx = document.getElementById("modal-x");
+  if(mx) mx.addEventListener("click", closeModal);
 });
 
 /* 완독 축하 — 바닥 한가운데서 위로 터진다.
