@@ -1053,26 +1053,29 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     border-bottom:1px solid var(--border-light);}
   .wnav-inner{max-width:1280px;margin:0 auto;padding-inline:24px;height:72px;
     display:flex;align-items:center;justify-content:space-between;gap:32px;}
+  /* 로고는 배경 없이 글자만. 통에 담지 않는다 */
   .wnav-logo{font-size:18px;font-weight:800;letter-spacing:0.4px;color:var(--text-black);cursor:pointer;}
-  /* 메뉴는 오른쪽에 모은다 — 로고와 멘 끝에서 마주 보지 않고 손이 가는 쪽으로 붙는다 */
-  .wnav-links{display:flex;gap:32px;margin-left:auto;}
-  .wnav-links button{font-family:inherit;font-size:15px;font-weight:500;color:var(--text-dark);
-    background:none;border:none;padding:6px 0;cursor:pointer;border-bottom:2px solid transparent;}
-  .wnav-links button:hover{color:var(--text-black);}
-  .wnav-links button.on{font-weight:700;color:var(--text-black);border-bottom-color:var(--text-black);}
-  .wnav-actions{display:flex;align-items:center;gap:8px;}
-  .wnav-ic{position:relative;width:40px;height:40px;border-radius:var(--radius-sm);border:none;background:none;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .wnav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+
+  /* ── 알약 통 (pill navigation) ──
+     메뉴 다섯을 한 통에 담고, 지금 있는 곳만 검게 채운다.
+     밑줄로 표시하던 것보다 '지금 여기' 가 멀리서도 보인다. */
+  .wnav-pill{display:flex;align-items:center;gap:2px;padding:5px;border-radius:999px;
+    background:var(--bg-white);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);}
+  .wnav-pill button{padding:10px 18px;border-radius:999px;border:none;background:none;
+    font-family:inherit;font-size:14px;font-weight:600;color:var(--text-dark);cursor:pointer;
+    white-space:nowrap;transition:background .15s ease,color .15s ease;}
+  .wnav-pill button:hover{background:var(--bg-light);}
+  .wnav-pill button.on{background:var(--bg-black);color:var(--bg-white);}
+
+  /* 알림은 통 밖에 따로 둔다 — 이동이 아니라 알림이라 성격이 다르다 */
+  .wnav-ic{position:relative;width:46px;height:46px;border-radius:50%;
+    border:1px solid var(--border-light);background:var(--bg-white);box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:background .15s ease;}
   .wnav-ic:hover{background:var(--bg-light);}
   .wnav-ic i,.wnav-ic svg{width:20px;height:20px;color:var(--text-dark);}
-  .wnav-dot{position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--text-black);}
-  .wnav-me{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;
-    border:1px solid var(--border-light);background:var(--bg-white);font-family:inherit;
-    font-size:14px;font-weight:600;color:var(--text-dark);cursor:pointer;}
-  .wnav-me:hover{background:var(--bg-light);}
-  .wnav-me.on{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
-  .wnav-me.on .avatar{background:rgba(255,255,255,0.2);}
-  .wnav-me.on .avatar i,.wnav-me.on .avatar svg{color:var(--bg-white);}
+  .wnav-dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--text-black);}
 
   /* ── 섹션 컨테이너 : 1280px ──
      감싸는 상자는 화면 전체 폭을 그대로 쓰고, 좌우 패딩으로 안쪽을 1280 에 앉힌다.
@@ -1492,15 +1495,15 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     <span class="wnav-logo" data-tab="scr-home">RE:FEEEL</span>
     <!-- 한 곳으로 가는 길은 하나만 둔다(리건, 2026-08-22).
          내 리킷은 오른쪽 프로필 버튼으로만, 낙타AI 는 오른쪽 아래 창으로만 간다. -->
-    <nav class="wnav-links">
-      <button data-tab="scr-home">홈</button>
-      <button data-tab="scr-search">리킷 찾기</button>
-      <button data-tab="scr-chat">낙타AI</button>
-    </nav>
-    <div class="wnav-actions">
-      <!-- 인사이트와 내 리킷은 '내 것' 이다. 둘러보는 메뉴와 같은 줄에 두지 않는다 -->
-      <button class="wnav-me" data-tab="scr-library"><span class="avatar"><i data-lucide="lightbulb"></i></span>인사이트</button>
-      <button class="wnav-me" data-tab="scr-my"><span class="avatar"><i data-lucide="user"></i></span>내 리킷</button>
+    <div class="wnav-right">
+      <!-- 메뉴는 알약 통 하나에 담는다. 지금 있는 곳만 검게 채워 표시한다. -->
+      <nav class="wnav-pill">
+        <button data-tab="scr-home">홈</button>
+        <button data-tab="scr-search">리킷 찾기</button>
+        <button data-tab="scr-chat">낙타AI</button>
+        <button data-tab="scr-library">인사이트</button>
+        <button data-tab="scr-my">내 리킷</button>
+      </nav>
       <button class="wnav-ic" data-go="scr-noti" aria-label="알림"><i data-lucide="bell"></i><span class="wnav-dot"></span></button>
     </div>
   </div>
@@ -3869,10 +3872,7 @@ function show(id){
     b.classList.toggle("on", b.dataset.jump === id);
   });
   /* 위 네비도 아래 탭바와 같은 곳을 가리킨다 */
-  document.querySelectorAll(".wnav-links button").forEach(b=>{
-    b.classList.toggle("on", b.dataset.tab === id);
-  });
-  document.querySelectorAll(".wnav-me").forEach(b=>{
+  document.querySelectorAll(".wnav-pill button").forEach(b=>{
     b.classList.toggle("on", b.dataset.tab === id);
   });
   /* 로그인·약관·온보딩에서는 네비와 푸터를 감춘다 */
