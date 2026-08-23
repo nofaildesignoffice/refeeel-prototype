@@ -7445,7 +7445,16 @@ if(agAll){
 }
 
 initBrowse();
-show("scr-login");
+/* 앱에서 넘어올 때는 그 화면을 바로 연다(리건, 2026-08-23).
+   앱에는 파는 자리가 없어서 미보유자를 여기로 보낸다.
+   ⚠ 아무 id 나 열어 주지 않는다. 실제로 있는 화면일 때만 연다. */
+const goParam = new URLSearchParams(location.search).get("go");
+if(goParam && document.getElementById(goParam)){
+  document.body.classList.remove("pre-auth");
+  show(goParam);
+}else{
+  show("scr-login");
+}
 </script>
 </body>
 </html>

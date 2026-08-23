@@ -1062,7 +1062,7 @@ body.free #scr-viewer .progress-thin{display:none;}
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-reader">모아보기리더</button><button data-jump="scr-notekit">리킷별기록</button>
   <button data-jump="scr-viewer">뷰어</button><button data-jump="scr-viewer" data-free="1">뷰어(무료)</button>
   <button data-jump="scr-done">완독직후</button>
-  <button data-jump="scr-series">시리즈</button>
+  <button data-jump="scr-series" data-owns="1">시리즈(보유)</button><button data-jump="scr-series" data-owns="0">클래스(미보유)</button>
   <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
@@ -1302,7 +1302,7 @@ body.free #scr-viewer .progress-thin{display:none;}
             <p class="hs-sub">AI는 배우는 게 아니라 시키는 것. RE:KIT 89</p>
           </div>
         </div>
-        <div class="hs-slide" data-go="scr-series">
+        <div class="hs-slide" data-goclass>
           <div class="hs-img"><i data-lucide="image"></i></div>
           <div class="hs-body">
             <p class="hs-label">Series</p>
@@ -1424,7 +1424,7 @@ body.free #scr-viewer .progress-thin{display:none;}
            한 장짜리 배너로는 브랜딩 클래스 하나만 보였다. 고를 수 있으려면 같이 보여야 한다.
            ⚠ 값은 여기 쓰지 않는다. 앱에도 그대로 들어가는 마크업이다. -->
       <div class="hscroll">
-        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+        <div class="card hcard" style="min-width:210px" data-goclass>
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
@@ -1867,7 +1867,7 @@ body.free #scr-viewer .progress-thin{display:none;}
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
       <div class="hscroll">
-        <div class="card hcard" style="min-width:210px" data-go="scr-series">
+        <div class="card hcard" style="min-width:210px" data-goclass>
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
@@ -3392,6 +3392,10 @@ const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];
 let current = "scr-login";
 
+/* 안 산 사람을 보낼 자리. 앱에는 파는 화면이 없다.
+   ⚠ 진짜 주소가 정해지면 여기만 고치면 된다. */
+const WEB_LANDING = "https://nofaildesignoffice.github.io/refeeel-prototype/web2/?go=scr-lp-class";
+
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   const el = document.getElementById(id);
@@ -3811,7 +3815,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-goclass],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -3873,8 +3877,22 @@ document.addEventListener("click", e=>{
     return;
   }
   /* 무료 회원 시점 — 이 버튼으로 들어올 때만 켜고, 다른 데로 뛰면 꺼진다 */
+  /* ── 브랜딩 클래스는 산 사람과 안 산 사람이 다른 곳으로 간다(리건, 2026-08-23) ──
+     산 사람은 앱 안의 회차 목록으로, 안 산 사람은 리필 웹의 소개 페이지로.
+     ⚠ 앱 안에는 파는 자리를 두지 않는다. 값과 결제 화면을 앱에 담으면
+        스토어 조항에 걸린다. 그래서 사는 일은 웹에서만 일어난다.
+     ⚠ 이 링크는 한국 앱마켓 기준이다(전기통신사업법상 외부 결제 안내가 보장된다).
+        해외 스토어에 낼 때는 지역별 정책을 다시 볼 것.
+     ⚠ 새 창은 누른 그 순간에 연다. 한 박자라도 미루면 팝업으로 막힌다. */
+  if(t.hasAttribute("data-goclass")){
+    if(document.body.classList.contains("owns-class")) go("scr-series");
+    else window.open(WEB_LANDING, "_blank", "noopener");
+    return;
+  }
+
   if(t.dataset.jump){
     document.body.classList.toggle("free", t.dataset.free === "1");
+    if(t.dataset.owns) document.body.classList.toggle("owns-class", t.dataset.owns === "1");
     stack=[]; show(t.dataset.jump); return;
   }
   if(t.hasAttribute("data-doneclose")){ doneClose(); return; }
@@ -4423,6 +4441,10 @@ if(agAll){
 }
 
 initBrowse();
+/* 시연용 기본 사용자는 브랜딩 클래스를 가진 사람이다 —
+   내 리킷에 진행률 33% 가 이미 찍혀 있다.
+   안 산 사람의 길은 점프바의 '클래스(미보유)' 로 본다. */
+document.body.classList.add("owns-class");
 show("scr-login");
 </script>
 </body>
