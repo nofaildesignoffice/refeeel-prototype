@@ -3458,12 +3458,15 @@ function makeSlider(el){
   if(window.lucide) lucide.createIcons();
 
   let hold = 0;                                   /* 이 시각까지는 쉰다 */
+  let idx  = 0;                                   /* 지금 몇 번째 칸에 서 있나 */
   const rest = ms => hold = Date.now() + ms;
 
+  /* ⚠ 칸 너비는 소수점까지 재야 한다. offsetWidth 는 정수로 반올림돼서
+        calc((100% - 60px)/4) 같은 값이면 칸마다 조금씩 어긋나고, 그 오차가 쌓인다. */
   const stepW = ()=>{
     const first = el.children[0];
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    return first.offsetWidth + gap;
+    return first.getBoundingClientRect().width + gap;
   };
 
   /* 애니메이션 없이 제자리를 옮긴다 — 이음매를 감추는 일 */
@@ -3475,12 +3478,25 @@ function makeSlider(el){
     el.style.scrollBehavior = keep;
   }
 
+  /* ⚠ scrollLeft 에 한 칸씩 더하지 않는다. 더하면 오차가 쌓여 칸이 밀린다.
+        몇 번째 칸인지를 세고 그 자리로 곧장 보낸다 — 늘 정확히 한 칸이다.
+     ⚠ 되돌리는 것은 움직이기 전에 한다. 사본 첫 장과 원본 첫 장은 같은 그림이라
+        그 사이에 자리를 옮겨 놓아도 눈에 걸리지 않는다. */
   function slide(dir){
-    const w = stepW(), loop = w * n;
-    if(el.scrollLeft >= loop - 1)      jump(el.scrollLeft - loop);
-    else if(el.scrollLeft < 1 && dir < 0) jump(el.scrollLeft + loop);
-    el.scrollTo({left: el.scrollLeft + w * dir, behavior:"smooth"});
+    const step = stepW();
+    if(idx >= n){ idx -= n; jump(step * idx); }              /* 사본 구간에 있었다면 */
+    if(dir < 0 && idx === 0){ idx = n; jump(step * n); }      /* 왼쪽 끝에서 뒤로 */
+    idx += dir;
+    el.scrollTo({left: step * idx, behavior:"smooth"});
   }
+
+  /* 손으로 민 뒤에는 실제로 어디 서 있는지 다시 센다 */
+  let syncT = null;
+  const sync = ()=>{
+    const step = stepW();
+    if(step > 0) idx = Math.round(el.scrollLeft / step);
+  };
+  const syncSoon = ()=>{ clearTimeout(syncT); syncT = setTimeout(sync, 420); };
 
   wrap.querySelectorAll("[data-slide]").forEach(b=>{
     b.addEventListener("click", e=>{
@@ -3494,8 +3510,14 @@ function makeSlider(el){
   el.addEventListener("mouseenter", ()=> rest(6e5));
   el.addEventListener("mouseleave", ()=> rest(AUTO_MS));
   el.addEventListener("touchstart", ()=> rest(6e5), {passive:true});
-  el.addEventListener("touchend",   ()=> rest(6000), {passive:true});
-  el.addEventListener("wheel",      ()=> rest(6000), {passive:true});
+  el.addEventListener("touchend",   ()=>{ rest(6000); syncSoon(); }, {passive:true});
+  el.addEventListener("wheel",      ()=>{ rest(6000); syncSoon(); }, {passive:true});
+
+  /* 창 폭이 바뀌면 칸 너비도 바뀐다. 서 있던 칸 그대로 다시 앉힌다 */
+  window.addEventListener("resize", ()=>{
+    if(!el.offsetParent) return;
+    jump(stepW() * idx);
+  });
 
   if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
