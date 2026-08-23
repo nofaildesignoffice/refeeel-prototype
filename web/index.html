@@ -1049,8 +1049,8 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   body:not(.pre-auth) .screen>.scroll:last-child{padding-bottom:0;}
 
   /* ── 상단 네비 ── */
-  .wnav{display:block;position:sticky;top:0;z-index:100;background:var(--bg-white);
-    border-bottom:1px solid var(--border-light);}
+  /* 머리말 자체에는 배경을 깔지 않는다. 알약 통과 종 버튼만 떠 있게 둔다 */
+  .wnav{display:block;position:sticky;top:0;z-index:100;background:none;border-bottom:none;}
   .wnav-inner{max-width:1280px;margin:0 auto;padding-inline:24px;height:72px;
     display:flex;align-items:center;justify-content:space-between;gap:32px;}
   /* 로고는 배경 없이 글자만. 통에 담지 않는다 */
