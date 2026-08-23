@@ -94,6 +94,21 @@ body.clean .jumpbar{display:none;}
 .reason{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-light);margin-bottom:6px;}
 .reason i,.reason svg{width:12px;height:12px;}
 .lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text-gray);background:var(--bg-light);border:1px solid var(--border-light);border-radius:4px;padding:2px 7px;}
+
+/* ── 리킷 카드의 무료·유료 표시 ──
+   추천 피드에는 둘이 섞여 나온다. 눌러 들어간 뒤에야 막히면 그건 속은 기분이 된다.
+   목록에서 미리 알 수 있어야 한다.
+   ⚠ 값은 쓰지 않는다. 여기 적는 건 '지금 내 계정에서 열리는가' 뿐이다.
+      그래야 앱 빌드에서도 같은 표시를 그대로 쓸 수 있다. */
+.kit-free,.kit-lock{display:inline-flex;align-items:center;vertical-align:middle;
+  font-size:9.5px;font-weight:800;letter-spacing:0;border-radius:var(--radius-xs);
+  padding:2px 6px;margin-left:6px;}
+/* 무료는 채워서 눈에 걸리게. 이게 먼저 읽혀야 한다 */
+.kit-free{color:var(--bg-white);background:var(--bg-black);}
+/* 유료는 비워서 물러나게. 막는 표시가 목록에서 더 크면 안 된다 */
+.kit-lock{gap:3px;font-weight:700;color:var(--text-gray);
+  background:var(--bg-light);border:1px solid var(--border-light);}
+.kit-lock i,.kit-lock svg{width:9px;height:9px;}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
 .progress-bar>div{height:100%;background:var(--text-black);border-radius:2px;}
@@ -1320,7 +1335,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 리킷</div>
-            <div class="hcard-num">RE:KIT 20</div>
+            <div class="hcard-num">RE:KIT 20<span class="kit-free">무료</span></div>
             <div class="hcard-title">이번 릴스도 실패했다…?</div>
           </div>
         </div>
@@ -1328,7 +1343,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="book-open-check"></i>RE:KIT 41을 읽고 계셔서</div>
-            <div class="hcard-num">RE:KIT 03</div>
+            <div class="hcard-num">RE:KIT 03<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
             <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
           </div>
         </div>
@@ -1336,7 +1351,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
-            <div class="hcard-num">RE:KIT 59</div>
+            <div class="hcard-num">RE:KIT 59<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
           </div>
         </div>
