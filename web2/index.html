@@ -738,15 +738,22 @@ body.clean .jumpbar{display:none;}
 .price-note b{font-weight:700;color:var(--text-gray);}
 
 .prod-grid{display:grid;gap:14px;}
-.prod-card{background:var(--bg-white);border:1px solid var(--border-light);
-  border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;}
+.prod-card{display:flex;flex-direction:column;background:var(--bg-white);
+  border:1px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;}
 .prod-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:0;}
-.prod-body{padding:18px 18px 20px;}
+.prod-body{display:flex;flex-direction:column;flex:1;padding:18px 18px 20px;}
 .prod-kicker{font-size:10.5px;font-weight:700;color:var(--text-muted);letter-spacing:0.2px;}
 .prod-name{font-size:15.5px;font-weight:800;color:var(--text-black);letter-spacing:-0.3px;margin-top:7px;}
 .prod-desc{font-size:12.5px;color:var(--text-light);line-height:1.6;margin-top:8px;}
+/* 값과 들어가는 길을 한 줄에 마주 놓는다. 글 길이가 달라도 바닥 줄은 나란히 선다 */
+.prod-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:auto;padding-top:14px;border-top:1px solid var(--border-light);}
+.prod-price{font-size:15px;font-weight:800;color:var(--text-black);letter-spacing:-0.5px;
+  white-space:nowrap;}
+.prod-price em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--text-light);
+  margin-left:2px;letter-spacing:0;}
 .prod-go{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;
-  color:var(--text-black);margin-top:14px;}
+  color:var(--text-black);white-space:nowrap;flex-shrink:0;}
 .prod-go i,.prod-go svg{width:14px;height:14px;
   transition:transform var(--dur-short) var(--ease);}
 .prod-card:hover .prod-go i,.prod-card:hover .prod-go svg{transform:translateX(3px);}
@@ -2141,14 +2148,15 @@ body.modal-open #scr-interest .ord-sub,
      1280 안에서 한 칸은 296px — 세로형 카드가 버티는 폭이다. */
   .prod-grid{grid-template-columns:repeat(4,1fr);gap:24px;align-items:stretch;}
   /* 칸이 좁아진 만큼 글이 한 줄 더 내려갈 수 있다.
-     설명 높이를 두 줄로 잡아 두고 '자세히 보기' 는 바닥에 붙여 한 줄로 세운다. */
-  .prod-card{display:flex;flex-direction:column;}
-  .prod-body{display:flex;flex-direction:column;flex:1;}
-  .prod-go{margin-top:auto;padding-top:18px;}
+     설명 높이를 두 줄로 잡아 두면 넷의 바닥 줄이 같은 자리에 선다. */
+  .prod-foot{padding-top:16px;}
   .prod-body{padding:24px 24px 26px;}
   .prod-name{font-size:18px;margin-top:9px;}
-  .prod-desc{font-size:13px;margin-top:10px;min-height:42px;}
-  .prod-go{font-size:13.5px;}
+  .prod-desc{font-size:13px;margin-top:10px;min-height:42px;padding-bottom:4px;}
+  .prod-price{font-size:16.5px;}
+  .prod-price em{font-size:12px;}
+  /* 296px 칸에 값과 링크가 같이 들어간다. 값이 길어지면(백만 단위) 링크를 화살표만 남긴다 */
+  .prod-go{font-size:13px;}
 
   /* 쌓은 기록 — 넓은 화면에서는 다섯 칸이 한 줄에 다 선다.
      회색 상자라 화면 끝까지 늘이지 않는다. 왼쪽만 1280 정렬에 맞추고 폭은 760 으로 묶는다. */
@@ -2835,7 +2843,10 @@ body.modal-open #scr-interest .ord-sub,
               <span class="prod-kicker">클래스</span>
               <p class="prod-name">브랜드 전략 클래스</p>
               <p class="prod-desc">브랜드를 세우는 기준을 처음부터 끝까지 함께 짚는 수업.</p>
-              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              <div class="prod-foot">
+                <span class="prod-price">99,000<em>원</em></span>
+                <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              </div>
             </div>
           </div>
 
@@ -2845,7 +2856,10 @@ body.modal-open #scr-interest .ord-sub,
               <span class="prod-kicker">노션 템플릿</span>
               <p class="prod-name">RE:노션</p>
               <p class="prod-desc">콘텐츠와 데이터를 한 판에서 굴리는 노션 작업대.</p>
-              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              <div class="prod-foot">
+                <span class="prod-price">129,000<em>원</em></span>
+                <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              </div>
             </div>
           </div>
 
@@ -2855,7 +2869,10 @@ body.modal-open #scr-interest .ord-sub,
               <span class="prod-kicker">컨설팅</span>
               <p class="prod-name">1:1 컨설팅</p>
               <p class="prod-desc">지금 무엇이 막혀 있는지 같이 짚고, 다음에 할 일을 정합니다.</p>
-              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              <div class="prod-foot">
+                <span class="prod-price">479,000<em>원</em></span>
+                <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              </div>
             </div>
           </div>
 
@@ -2865,7 +2882,10 @@ body.modal-open #scr-interest .ord-sub,
               <span class="prod-kicker">가이드라인</span>
               <p class="prod-name">브랜드 전략 가이드라인</p>
               <p class="prod-desc">브랜드를 세우는 순서와 기준을 문서로 정리해 드립니다.</p>
-              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              <div class="prod-foot">
+                <span class="prod-price">4,800,000<em>원</em></span>
+                <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+              </div>
             </div>
           </div>
         </div>
