@@ -2728,7 +2728,11 @@ body.modal-open #scr-interest .ord-sub,
         !important 끼리는 명시도로 겨루므로 [data-auto] 를 얹어 한 칸 더 세게 만든다. */
   .hscroll[data-auto]{display:flex;gap:20px;overflow-x:auto;padding-bottom:4px;}
   .hscroll[data-auto]>.hcard{flex:0 0 300px;min-width:0!important;}
-  .hscroll[data-auto]>.thumbrow-item{flex:0 0 260px;min-width:0!important;}
+  /* 큐레이션은 한눈에 넉 장(리건, 2026-08-23).
+     폭을 px 로 박으면 화면이 조금만 달라져도 다섯 번째가 삐죽 걸린다.
+     남는 자리를 넷으로 나눠 쓰면 어느 폭에서든 정확히 넉 장이 선다.
+     60px 은 카드 사이 20px 이 세 번 들어간 값이다. */
+  .hscroll[data-auto]>.thumbrow-item{flex:0 0 calc((100% - 60px) / 4);min-width:0!important;}
   .pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;overflow:visible;}
   .pain-card{flex:0 0 auto;min-width:0;white-space:normal;padding:20px 18px;}
   .pain-card i,.pain-card svg{width:20px;height:20px;margin-bottom:12px;}
