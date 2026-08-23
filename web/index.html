@@ -1230,9 +1230,9 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      ② 아래: 늘 같은 자리에 붙어 있는 입력창
      대화는 세로로 길어지지만 입력창은 움직이지 않는다.
      쓰려고 할 때마다 입력창을 찾아 내려가야 하면 대화가 끊긴다. */
-  /* ── 관심사 · 설정 · 이용내역 : 가운데 창 ──
+  /* ── 관심사 · 설정 · 이용내역 · 구독 : 가운데 창 ──
      화면을 통째로 바꾸지 않고 보던 자리 위에 띄운다.
-     안에서 하위 화면(알림 설정·약관·문의…)으로 들어가도 창 안에서 끝난다. */
+     안에서 하위 화면(알림 설정·약관·구독 해지…)으로 들어가도 창 안에서 끝난다. */
   .modal-bd{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.32);}
   .modal-x{display:none;position:fixed;z-index:420;width:44px;height:44px;border-radius:50%;
     border:1px solid var(--border-light);background:var(--bg-white);box-shadow:var(--shadow-sm);
@@ -1256,7 +1256,11 @@ body.modal-open #scr-interest.active,
   body.modal-open #scr-account.active,
   body.modal-open #scr-read.active,
   body.modal-open #scr-leave.active,
-  body.modal-open #scr-orders.active{
+  body.modal-open #scr-orders.active,
+  body.modal-open #scr-sub.active,
+  body.modal-open #scr-pay.active,
+  body.modal-open #scr-unsub.active,
+  body.modal-open #scr-unsub-done.active{
     position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:410;
     width:min(720px,calc(100vw - 48px));height:min(760px,calc(100vh - 96px));
     background:var(--bg-white);border-radius:16px;box-shadow:var(--shadow-md);
@@ -1275,7 +1279,11 @@ body.modal-open #scr-interest .scroll,
   body.modal-open #scr-account .scroll,
   body.modal-open #scr-read .scroll,
   body.modal-open #scr-leave .scroll,
-  body.modal-open #scr-orders .scroll{
+  body.modal-open #scr-orders .scroll,
+  body.modal-open #scr-sub .scroll,
+  body.modal-open #scr-pay .scroll,
+  body.modal-open #scr-unsub .scroll,
+  body.modal-open #scr-unsub-done .scroll{
     flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
     width:auto;max-width:none;padding-inline:0;}
 
@@ -1292,7 +1300,11 @@ body.modal-open #scr-interest .gnb,
   body.modal-open #scr-account .gnb,
   body.modal-open #scr-read .gnb,
   body.modal-open #scr-leave .gnb,
-  body.modal-open #scr-orders .gnb{
+  body.modal-open #scr-orders .gnb,
+  body.modal-open #scr-sub .gnb,
+  body.modal-open #scr-pay .gnb,
+  body.modal-open #scr-unsub .gnb,
+  body.modal-open #scr-unsub-done .gnb{
     flex-shrink:0;height:56px;padding:0 24px;border-bottom:1px solid var(--border-light);
     justify-content:flex-start;align-items:center;gap:12px;background:var(--bg-white);}
 body.modal-open #scr-interest .gnb-title,
@@ -1307,7 +1319,11 @@ body.modal-open #scr-interest .gnb-title,
   body.modal-open #scr-account .gnb-title,
   body.modal-open #scr-read .gnb-title,
   body.modal-open #scr-leave .gnb-title,
-  body.modal-open #scr-orders .gnb-title{font-size:17px;letter-spacing:-0.3px;max-width:none;}
+  body.modal-open #scr-orders .gnb-title,
+  body.modal-open #scr-sub .gnb-title,
+  body.modal-open #scr-pay .gnb-title,
+  body.modal-open #scr-unsub .gnb-title,
+  body.modal-open #scr-unsub-done .gnb-title{font-size:17px;letter-spacing:-0.3px;max-width:none;}
 body.modal-open #scr-interest .ed-bottom,
   body.modal-open #scr-settings .ed-bottom,
   body.modal-open #scr-notiset .ed-bottom,
@@ -1320,7 +1336,28 @@ body.modal-open #scr-interest .ed-bottom,
   body.modal-open #scr-account .ed-bottom,
   body.modal-open #scr-read .ed-bottom,
   body.modal-open #scr-leave .ed-bottom,
-  body.modal-open #scr-orders .ed-bottom{flex-shrink:0;padding:12px 24px 16px;}
+  body.modal-open #scr-orders .ed-bottom,
+  body.modal-open #scr-sub .ed-bottom,
+  body.modal-open #scr-pay .ed-bottom,
+  body.modal-open #scr-unsub .ed-bottom,
+  body.modal-open #scr-unsub-done .ed-bottom{flex-shrink:0;padding:12px 24px 16px;}
+body.modal-open #scr-interest .done-bottom,
+  body.modal-open #scr-settings .done-bottom,
+  body.modal-open #scr-notiset .done-bottom,
+  body.modal-open #scr-lang .done-bottom,
+  body.modal-open #scr-legal .done-bottom,
+  body.modal-open #scr-doc .done-bottom,
+  body.modal-open #scr-help .done-bottom,
+  body.modal-open #scr-ask .done-bottom,
+  body.modal-open #scr-ask-done .done-bottom,
+  body.modal-open #scr-account .done-bottom,
+  body.modal-open #scr-read .done-bottom,
+  body.modal-open #scr-leave .done-bottom,
+  body.modal-open #scr-orders .done-bottom,
+  body.modal-open #scr-sub .done-bottom,
+  body.modal-open #scr-pay .done-bottom,
+  body.modal-open #scr-unsub .done-bottom,
+  body.modal-open #scr-unsub-done .done-bottom{flex-shrink:0;padding:0 24px 24px;}
 
   /* 창 안에서는 뒤로가기가 살아 있어야 목록으로 돌아갈 수 있다 */
 body.modal-open #scr-interest .gnb>i[data-back],
@@ -1336,6 +1373,10 @@ body.modal-open #scr-interest .gnb>i[data-back],
   body.modal-open #scr-read .gnb>i[data-back],
   body.modal-open #scr-leave .gnb>i[data-back],
   body.modal-open #scr-orders .gnb>i[data-back],
+  body.modal-open #scr-sub .gnb>i[data-back],
+  body.modal-open #scr-pay .gnb>i[data-back],
+  body.modal-open #scr-unsub .gnb>i[data-back],
+  body.modal-open #scr-unsub-done .gnb>i[data-back],
 body.modal-open #scr-interest .gnb>svg[data-back],
   body.modal-open #scr-settings .gnb>svg[data-back],
   body.modal-open #scr-notiset .gnb>svg[data-back],
@@ -1348,7 +1389,11 @@ body.modal-open #scr-interest .gnb>svg[data-back],
   body.modal-open #scr-account .gnb>svg[data-back],
   body.modal-open #scr-read .gnb>svg[data-back],
   body.modal-open #scr-leave .gnb>svg[data-back],
-  body.modal-open #scr-orders .gnb>svg[data-back]{display:block;}
+  body.modal-open #scr-orders .gnb>svg[data-back],
+  body.modal-open #scr-sub .gnb>svg[data-back],
+  body.modal-open #scr-pay .gnb>svg[data-back],
+  body.modal-open #scr-unsub .gnb>svg[data-back],
+  body.modal-open #scr-unsub-done .gnb>svg[data-back]{display:block;}
 
   /* 안쪽 여백은 창 폭에 맞춘다 */
 body.modal-open #scr-interest .sec,
@@ -1364,6 +1409,10 @@ body.modal-open #scr-interest .sec,
   body.modal-open #scr-read .sec,
   body.modal-open #scr-leave .sec,
   body.modal-open #scr-orders .sec,
+  body.modal-open #scr-sub .sec,
+  body.modal-open #scr-pay .sec,
+  body.modal-open #scr-unsub .sec,
+  body.modal-open #scr-unsub-done .sec,
 body.modal-open #scr-interest .set-group,
   body.modal-open #scr-settings .set-group,
   body.modal-open #scr-notiset .set-group,
@@ -1377,6 +1426,10 @@ body.modal-open #scr-interest .set-group,
   body.modal-open #scr-read .set-group,
   body.modal-open #scr-leave .set-group,
   body.modal-open #scr-orders .set-group,
+  body.modal-open #scr-sub .set-group,
+  body.modal-open #scr-pay .set-group,
+  body.modal-open #scr-unsub .set-group,
+  body.modal-open #scr-unsub-done .set-group,
 body.modal-open #scr-interest .set-note,
   body.modal-open #scr-settings .set-note,
   body.modal-open #scr-notiset .set-note,
@@ -1390,6 +1443,10 @@ body.modal-open #scr-interest .set-note,
   body.modal-open #scr-read .set-note,
   body.modal-open #scr-leave .set-note,
   body.modal-open #scr-orders .set-note,
+  body.modal-open #scr-sub .set-note,
+  body.modal-open #scr-pay .set-note,
+  body.modal-open #scr-unsub .set-note,
+  body.modal-open #scr-unsub-done .set-note,
 body.modal-open #scr-interest .menu-list,
   body.modal-open #scr-settings .menu-list,
   body.modal-open #scr-notiset .menu-list,
@@ -1403,6 +1460,10 @@ body.modal-open #scr-interest .menu-list,
   body.modal-open #scr-read .menu-list,
   body.modal-open #scr-leave .menu-list,
   body.modal-open #scr-orders .menu-list,
+  body.modal-open #scr-sub .menu-list,
+  body.modal-open #scr-pay .menu-list,
+  body.modal-open #scr-unsub .menu-list,
+  body.modal-open #scr-unsub-done .menu-list,
 body.modal-open #scr-interest .set-list,
   body.modal-open #scr-settings .set-list,
   body.modal-open #scr-notiset .set-list,
@@ -1416,6 +1477,10 @@ body.modal-open #scr-interest .set-list,
   body.modal-open #scr-read .set-list,
   body.modal-open #scr-leave .set-list,
   body.modal-open #scr-orders .set-list,
+  body.modal-open #scr-sub .set-list,
+  body.modal-open #scr-pay .set-list,
+  body.modal-open #scr-unsub .set-list,
+  body.modal-open #scr-unsub-done .set-list,
 body.modal-open #scr-interest .fld,
   body.modal-open #scr-settings .fld,
   body.modal-open #scr-notiset .fld,
@@ -1429,6 +1494,10 @@ body.modal-open #scr-interest .fld,
   body.modal-open #scr-read .fld,
   body.modal-open #scr-leave .fld,
   body.modal-open #scr-orders .fld,
+  body.modal-open #scr-sub .fld,
+  body.modal-open #scr-pay .fld,
+  body.modal-open #scr-unsub .fld,
+  body.modal-open #scr-unsub-done .fld,
 body.modal-open #scr-interest .doc-head,
   body.modal-open #scr-settings .doc-head,
   body.modal-open #scr-notiset .doc-head,
@@ -1442,6 +1511,10 @@ body.modal-open #scr-interest .doc-head,
   body.modal-open #scr-read .doc-head,
   body.modal-open #scr-leave .doc-head,
   body.modal-open #scr-orders .doc-head,
+  body.modal-open #scr-sub .doc-head,
+  body.modal-open #scr-pay .doc-head,
+  body.modal-open #scr-unsub .doc-head,
+  body.modal-open #scr-unsub-done .doc-head,
 body.modal-open #scr-interest .doc-body,
   body.modal-open #scr-settings .doc-body,
   body.modal-open #scr-notiset .doc-body,
@@ -1455,6 +1528,10 @@ body.modal-open #scr-interest .doc-body,
   body.modal-open #scr-read .doc-body,
   body.modal-open #scr-leave .doc-body,
   body.modal-open #scr-orders .doc-body,
+  body.modal-open #scr-sub .doc-body,
+  body.modal-open #scr-pay .doc-body,
+  body.modal-open #scr-unsub .doc-body,
+  body.modal-open #scr-unsub-done .doc-body,
 body.modal-open #scr-interest .acct-hd,
   body.modal-open #scr-settings .acct-hd,
   body.modal-open #scr-notiset .acct-hd,
@@ -1468,6 +1545,10 @@ body.modal-open #scr-interest .acct-hd,
   body.modal-open #scr-read .acct-hd,
   body.modal-open #scr-leave .acct-hd,
   body.modal-open #scr-orders .acct-hd,
+  body.modal-open #scr-sub .acct-hd,
+  body.modal-open #scr-pay .acct-hd,
+  body.modal-open #scr-unsub .acct-hd,
+  body.modal-open #scr-unsub-done .acct-hd,
 body.modal-open #scr-interest .leave-hd,
   body.modal-open #scr-settings .leave-hd,
   body.modal-open #scr-notiset .leave-hd,
@@ -1481,6 +1562,10 @@ body.modal-open #scr-interest .leave-hd,
   body.modal-open #scr-read .leave-hd,
   body.modal-open #scr-leave .leave-hd,
   body.modal-open #scr-orders .leave-hd,
+  body.modal-open #scr-sub .leave-hd,
+  body.modal-open #scr-pay .leave-hd,
+  body.modal-open #scr-unsub .leave-hd,
+  body.modal-open #scr-unsub-done .leave-hd,
 body.modal-open #scr-interest .lose,
   body.modal-open #scr-settings .lose,
   body.modal-open #scr-notiset .lose,
@@ -1494,6 +1579,10 @@ body.modal-open #scr-interest .lose,
   body.modal-open #scr-read .lose,
   body.modal-open #scr-leave .lose,
   body.modal-open #scr-orders .lose,
+  body.modal-open #scr-sub .lose,
+  body.modal-open #scr-pay .lose,
+  body.modal-open #scr-unsub .lose,
+  body.modal-open #scr-unsub-done .lose,
 body.modal-open #scr-interest .set-btn,
   body.modal-open #scr-settings .set-btn,
   body.modal-open #scr-notiset .set-btn,
@@ -1507,6 +1596,10 @@ body.modal-open #scr-interest .set-btn,
   body.modal-open #scr-read .set-btn,
   body.modal-open #scr-leave .set-btn,
   body.modal-open #scr-orders .set-btn,
+  body.modal-open #scr-sub .set-btn,
+  body.modal-open #scr-pay .set-btn,
+  body.modal-open #scr-unsub .set-btn,
+  body.modal-open #scr-unsub-done .set-btn,
 body.modal-open #scr-interest .ed-note,
   body.modal-open #scr-settings .ed-note,
   body.modal-open #scr-notiset .ed-note,
@@ -1520,6 +1613,10 @@ body.modal-open #scr-interest .ed-note,
   body.modal-open #scr-read .ed-note,
   body.modal-open #scr-leave .ed-note,
   body.modal-open #scr-orders .ed-note,
+  body.modal-open #scr-sub .ed-note,
+  body.modal-open #scr-pay .ed-note,
+  body.modal-open #scr-unsub .ed-note,
+  body.modal-open #scr-unsub-done .ed-note,
 body.modal-open #scr-interest .fs-pick,
   body.modal-open #scr-settings .fs-pick,
   body.modal-open #scr-notiset .fs-pick,
@@ -1533,6 +1630,10 @@ body.modal-open #scr-interest .fs-pick,
   body.modal-open #scr-read .fs-pick,
   body.modal-open #scr-leave .fs-pick,
   body.modal-open #scr-orders .fs-pick,
+  body.modal-open #scr-sub .fs-pick,
+  body.modal-open #scr-pay .fs-pick,
+  body.modal-open #scr-unsub .fs-pick,
+  body.modal-open #scr-unsub-done .fs-pick,
 body.modal-open #scr-interest .fs-prev,
   body.modal-open #scr-settings .fs-prev,
   body.modal-open #scr-notiset .fs-prev,
@@ -1546,6 +1647,78 @@ body.modal-open #scr-interest .fs-prev,
   body.modal-open #scr-read .fs-prev,
   body.modal-open #scr-leave .fs-prev,
   body.modal-open #scr-orders .fs-prev,
+  body.modal-open #scr-sub .fs-prev,
+  body.modal-open #scr-pay .fs-prev,
+  body.modal-open #scr-unsub .fs-prev,
+  body.modal-open #scr-unsub-done .fs-prev,
+body.modal-open #scr-interest .done-wrap,
+  body.modal-open #scr-settings .done-wrap,
+  body.modal-open #scr-notiset .done-wrap,
+  body.modal-open #scr-lang .done-wrap,
+  body.modal-open #scr-legal .done-wrap,
+  body.modal-open #scr-doc .done-wrap,
+  body.modal-open #scr-help .done-wrap,
+  body.modal-open #scr-ask .done-wrap,
+  body.modal-open #scr-ask-done .done-wrap,
+  body.modal-open #scr-account .done-wrap,
+  body.modal-open #scr-read .done-wrap,
+  body.modal-open #scr-leave .done-wrap,
+  body.modal-open #scr-orders .done-wrap,
+  body.modal-open #scr-sub .done-wrap,
+  body.modal-open #scr-pay .done-wrap,
+  body.modal-open #scr-unsub .done-wrap,
+  body.modal-open #scr-unsub-done .done-wrap{padding-inline:24px;margin-inline:0;width:auto;max-width:none;}
+body.modal-open #scr-interest .sec,
+  body.modal-open #scr-settings .sec,
+  body.modal-open #scr-notiset .sec,
+  body.modal-open #scr-lang .sec,
+  body.modal-open #scr-legal .sec,
+  body.modal-open #scr-doc .sec,
+  body.modal-open #scr-help .sec,
+  body.modal-open #scr-ask .sec,
+  body.modal-open #scr-ask-done .sec,
+  body.modal-open #scr-account .sec,
+  body.modal-open #scr-read .sec,
+  body.modal-open #scr-leave .sec,
+  body.modal-open #scr-orders .sec,
+  body.modal-open #scr-sub .sec,
+  body.modal-open #scr-pay .sec,
+  body.modal-open #scr-unsub .sec,
+  body.modal-open #scr-unsub-done .sec{padding-block:24px;}
+body.modal-open #scr-interest .set-group,
+  body.modal-open #scr-settings .set-group,
+  body.modal-open #scr-notiset .set-group,
+  body.modal-open #scr-lang .set-group,
+  body.modal-open #scr-legal .set-group,
+  body.modal-open #scr-doc .set-group,
+  body.modal-open #scr-help .set-group,
+  body.modal-open #scr-ask .set-group,
+  body.modal-open #scr-ask-done .set-group,
+  body.modal-open #scr-account .set-group,
+  body.modal-open #scr-read .set-group,
+  body.modal-open #scr-leave .set-group,
+  body.modal-open #scr-orders .set-group,
+  body.modal-open #scr-sub .set-group,
+  body.modal-open #scr-pay .set-group,
+  body.modal-open #scr-unsub .set-group,
+  body.modal-open #scr-unsub-done .set-group{padding-block:22px 8px;}
+body.modal-open #scr-interest .set-note,
+  body.modal-open #scr-settings .set-note,
+  body.modal-open #scr-notiset .set-note,
+  body.modal-open #scr-lang .set-note,
+  body.modal-open #scr-legal .set-note,
+  body.modal-open #scr-doc .set-note,
+  body.modal-open #scr-help .set-note,
+  body.modal-open #scr-ask .set-note,
+  body.modal-open #scr-ask-done .set-note,
+  body.modal-open #scr-account .set-note,
+  body.modal-open #scr-read .set-note,
+  body.modal-open #scr-leave .set-note,
+  body.modal-open #scr-orders .set-note,
+  body.modal-open #scr-sub .set-note,
+  body.modal-open #scr-pay .set-note,
+  body.modal-open #scr-unsub .set-note,
+  body.modal-open #scr-unsub-done .set-note{padding-block:12px 0;}
 body.modal-open #scr-interest .ord-sub,
   body.modal-open #scr-settings .ord-sub,
   body.modal-open #scr-notiset .ord-sub,
@@ -1559,71 +1732,10 @@ body.modal-open #scr-interest .ord-sub,
   body.modal-open #scr-read .ord-sub,
   body.modal-open #scr-leave .ord-sub,
   body.modal-open #scr-orders .ord-sub,
-body.modal-open #scr-interest .done-wrap,
-  body.modal-open #scr-settings .done-wrap,
-  body.modal-open #scr-notiset .done-wrap,
-  body.modal-open #scr-lang .done-wrap,
-  body.modal-open #scr-legal .done-wrap,
-  body.modal-open #scr-doc .done-wrap,
-  body.modal-open #scr-help .done-wrap,
-  body.modal-open #scr-ask .done-wrap,
-  body.modal-open #scr-ask-done .done-wrap,
-  body.modal-open #scr-account .done-wrap,
-  body.modal-open #scr-read .done-wrap,
-  body.modal-open #scr-leave .done-wrap,
-  body.modal-open #scr-orders .done-wrap{padding-inline:24px;margin-inline:0;width:auto;max-width:none;}
-body.modal-open #scr-interest .sec,
-  body.modal-open #scr-settings .sec,
-  body.modal-open #scr-notiset .sec,
-  body.modal-open #scr-lang .sec,
-  body.modal-open #scr-legal .sec,
-  body.modal-open #scr-doc .sec,
-  body.modal-open #scr-help .sec,
-  body.modal-open #scr-ask .sec,
-  body.modal-open #scr-ask-done .sec,
-  body.modal-open #scr-account .sec,
-  body.modal-open #scr-read .sec,
-  body.modal-open #scr-leave .sec,
-  body.modal-open #scr-orders .sec{padding-block:24px;}
-body.modal-open #scr-interest .set-group,
-  body.modal-open #scr-settings .set-group,
-  body.modal-open #scr-notiset .set-group,
-  body.modal-open #scr-lang .set-group,
-  body.modal-open #scr-legal .set-group,
-  body.modal-open #scr-doc .set-group,
-  body.modal-open #scr-help .set-group,
-  body.modal-open #scr-ask .set-group,
-  body.modal-open #scr-ask-done .set-group,
-  body.modal-open #scr-account .set-group,
-  body.modal-open #scr-read .set-group,
-  body.modal-open #scr-leave .set-group,
-  body.modal-open #scr-orders .set-group{padding-block:22px 8px;}
-body.modal-open #scr-interest .set-note,
-  body.modal-open #scr-settings .set-note,
-  body.modal-open #scr-notiset .set-note,
-  body.modal-open #scr-lang .set-note,
-  body.modal-open #scr-legal .set-note,
-  body.modal-open #scr-doc .set-note,
-  body.modal-open #scr-help .set-note,
-  body.modal-open #scr-ask .set-note,
-  body.modal-open #scr-ask-done .set-note,
-  body.modal-open #scr-account .set-note,
-  body.modal-open #scr-read .set-note,
-  body.modal-open #scr-leave .set-note,
-  body.modal-open #scr-orders .set-note{padding-block:12px 0;}
-body.modal-open #scr-interest .ord-sub,
-  body.modal-open #scr-settings .ord-sub,
-  body.modal-open #scr-notiset .ord-sub,
-  body.modal-open #scr-lang .ord-sub,
-  body.modal-open #scr-legal .ord-sub,
-  body.modal-open #scr-doc .ord-sub,
-  body.modal-open #scr-help .ord-sub,
-  body.modal-open #scr-ask .ord-sub,
-  body.modal-open #scr-ask-done .ord-sub,
-  body.modal-open #scr-account .ord-sub,
-  body.modal-open #scr-read .ord-sub,
-  body.modal-open #scr-leave .ord-sub,
-  body.modal-open #scr-orders .ord-sub{margin-inline:24px;padding:18px;width:auto;}
+  body.modal-open #scr-sub .ord-sub,
+  body.modal-open #scr-pay .ord-sub,
+  body.modal-open #scr-unsub .ord-sub,
+  body.modal-open #scr-unsub-done .ord-sub{margin-inline:24px;padding:18px;width:auto;}
 
   /* 여기는 페이지가 아니라 '방' 이다(리건, 2026-08-23).
      화면은 머리말 아래를 꽉 채운 채 그대로 있고, 대화만 그 안에서 흐른다.
@@ -1919,7 +2031,7 @@ body.modal-open #scr-interest .ord-sub,
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-orders">이용내역</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
+  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-orders">이용내역</button><button data-jump="scr-sub">구독관리</button><button data-jump="scr-pay">결제수단</button><button data-jump="scr-unsub">해지</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -3545,7 +3657,7 @@ body.modal-open #scr-interest .ord-sub,
       <div class="ord-sub-row"><span>결제 금액</span><b>월 9,900원</b></div>
       <div class="ord-sub-row"><span>다음 결제일</span><b>2026. 09. 08</b></div>
       <div class="ord-sub-row"><span>결제 수단</span><b>신한카드 ···· 4821</b></div>
-      <button class="btn btn-secondary" style="width:100%;margin-top:16px">구독 관리</button>
+      <button class="btn btn-secondary" style="width:100%;margin-top:16px" data-go="scr-sub">구독 관리</button>
     </div>
 
     <div class="set-group">구매한 것</div>
@@ -3577,6 +3689,120 @@ body.modal-open #scr-interest .ord-sub,
     </div>
     <p class="set-note">영수증과 세금계산서는 문의하기로 요청해 주세요.</p>
 
+  </div>
+</section>
+
+<!-- ══════════ 구독 관리 (웹 전용) ══════════
+     ⚠ 앱 빌드에는 넣지 않는다. 결제·해지 경로를 앱에 노출하면 스토어 리더 앱 조항에 걸린다. -->
+<section class="screen" id="scr-sub">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">구독 관리</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="ord-sub" style="margin-top:20px">
+      <div class="ord-sub-top">
+        <div>
+          <b>RE:FEEEL 구독</b>
+          <em>2026. 03. 08 시작 · 6개월째</em>
+        </div>
+        <span class="ord-badge on">이용 중</span>
+      </div>
+      <div class="ord-sub-row"><span>결제 금액</span><b>월 9,900원</b></div>
+      <div class="ord-sub-row"><span>다음 결제일</span><b>2026. 09. 08</b></div>
+    </div>
+
+    <div class="set-group">결제</div>
+    <div class="set-list">
+      <div class="set-row" data-go="scr-pay"><span class="grow"><b>결제 수단</b><em>신한카드 ···· 4821</em></span><i data-lucide="chevron-right"></i></div>
+      <div class="set-row" data-go="scr-orders"><span class="grow"><b>결제 내역</b></span><i data-lucide="chevron-right"></i></div>
+    </div>
+
+    <div class="set-group">구독</div>
+    <div class="set-list">
+      <div class="set-row" data-go="scr-unsub"><span class="grow"><b>구독 해지</b></span><i data-lucide="chevron-right"></i></div>
+    </div>
+    <p class="set-note">해지하셔도 다음 결제일 전까지는 그대로 읽으실 수 있어요.</p>
+  </div>
+</section>
+
+<!-- ══════════ 결제 수단 (웹 전용) ══════════
+     ⚠ 카드번호를 직접 받는 화면은 만들지 않는다. 카드 등록은 결제사 창에서 끝낸다 —
+        우리 화면에서 카드번호를 받으면 그 순간부터 PCI-DSS 범위에 들어간다. -->
+<section class="screen" id="scr-pay">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">결제 수단</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="set-group">등록된 카드</div>
+    <div class="set-list">
+      <label class="set-row pick"><input type="radio" name="card" checked><span class="grow"><b>신한카드 ···· 4821</b><em>기본 결제 수단</em></span><i data-lucide="check"></i></label>
+      <label class="set-row pick"><input type="radio" name="card"><span class="grow"><b>국민카드 ···· 9033</b></span><i data-lucide="check"></i></label>
+    </div>
+    <div class="set-btn">
+      <button class="btn btn-secondary" style="width:100%"><i data-lucide="plus"></i>카드 추가</button>
+    </div>
+    <p class="set-note">카드 정보는 결제대행사가 보관하고 리필은 저장하지 않아요.<br>카드 추가는 결제사 창에서 진행돼요.</p>
+  </div>
+</section>
+
+<!-- ══════════ 구독 해지 (웹 전용) ══════════
+     탈퇴와 다르다는 걸 분명히 한다 — 기록은 남는다. 이걸 안 적으면 해지를 못 누른다. -->
+<section class="screen" id="scr-unsub">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">구독 해지</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+    <div class="leave-hd"><h3>구독을 멈추시겠어요?</h3></div>
+    <div class="set-note" style="padding-top:10px">해지하시면 이렇게 돼요.</div>
+    <ul class="lose">
+      <li><i data-lucide="calendar-check"></i><b>2026년 9월 7일</b>까지는 그대로 읽으실 수 있어요</li>
+      <li><i data-lucide="lock"></i>9월 8일부터 지난 편과 새 편을 볼 수 없어요</li>
+      <li><i data-lucide="highlighter"></i>밑줄 <b>10개</b>와 메모 <b>6개</b>는 그대로 남아요</li>
+      <li><i data-lucide="rotate-ccw"></i>언제든 다시 구독하면 이어서 읽을 수 있어요</li>
+    </ul>
+
+    <div class="fld" style="padding-top:22px">
+      <label>멈추시는 이유를 알려주세요 (선택)</label>
+      <div class="chip-wrap single" style="gap:8px">
+        <span class="chip toggle">읽을 시간이 없어요</span>
+        <span class="chip toggle">생각보다 안 읽게 돼요</span>
+        <span class="chip toggle">내용이 제 상황과 안 맞아요</span>
+        <span class="chip toggle">가격이 부담돼요</span>
+        <span class="chip toggle">잠시 쉬어가려고요</span>
+        <span class="chip toggle">그 밖에</span>
+      </div>
+    </div>
+    <div class="fld">
+      <textarea class="ta" style="min-height:96px" placeholder="더 하고 싶은 말씀이 있다면 적어주세요."></textarea>
+    </div>
+  </div>
+  <div class="ed-bottom">
+    <button class="btn btn-danger" style="width:100%" data-open="sheet-unsub">구독 해지하기</button>
+  </div>
+</section>
+
+<!-- ══════════ 해지 완료 (웹 전용) ══════════ -->
+<section class="screen" id="scr-unsub-done">
+  <div class="gnb">
+    <span class="gnb-side"></span>
+    <span class="gnb-title"></span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll" style="display:flex;flex-direction:column">
+    <div class="done-wrap">
+      <div class="done-ic"><i data-lucide="check"></i></div>
+      <h3>구독이 멈췄어요</h3>
+      <p><b>2026년 9월 7일</b>까지는 그대로 읽으실 수 있어요.<br>남기신 밑줄과 메모는 그대로 있어요.</p>
+    </div>
+    <div class="done-bottom">
+      <button class="btn btn-secondary" style="width:100%" data-go="scr-orders">확인</button>
+    </div>
   </div>
 </section>
 
@@ -4302,6 +4528,22 @@ body.modal-open #scr-interest .ord-sub,
   </div>
 </div>
 
+<!-- 구독 해지 — 되돌릴 수 있는 일이라 짧게 묻는다. 탈퇴 시트와 무게가 다르다 -->
+<div class="sheet-wrap" id="sheet-unsub">
+  <div class="sheet-bd" data-closesheet></div>
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-msg">
+      <h4>구독을 멈출까요?</h4>
+      <p>9월 7일까지는 그대로 읽으실 수 있고, 남기신 기록도 그대로 있어요.</p>
+    </div>
+    <div class="sheet-act">
+      <button class="btn btn-danger" data-go="scr-unsub-done">구독 해지하기</button>
+      <button class="btn btn-ghost" data-closesheet>계속 구독하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- 메모 — 밑줄과 달리 품이 드는 일이라 시트를 띄워 쓰게 한다.
      원문을 위에 붙여 두는 이유: 뭘 보고 쓴 메모인지 나중에 나도 모른다. -->
 <div class="sheet-wrap" id="sheet-memo">
@@ -4356,6 +4598,7 @@ const NAV_HOME = {
   "scr-legal":"scr-my", "scr-doc":"scr-my", "scr-help":"scr-my",
   "scr-ask":"scr-my", "scr-ask-done":"scr-my", "scr-account":"scr-my",
   "scr-read":"scr-my", "scr-interest":"scr-my", "scr-leave":"scr-my", "scr-orders":"scr-my",
+  "scr-sub":"scr-my", "scr-pay":"scr-my", "scr-unsub":"scr-my", "scr-unsub-done":"scr-my",
   "scr-series":"scr-search"
 };
 let stack = [];
@@ -4364,7 +4607,7 @@ let current = "scr-login";
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
 
 /* 데스크톱에서 가운데 창으로 뜨는 화면들 */
-const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave","scr-orders"];
+const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave","scr-orders","scr-sub","scr-pay","scr-unsub","scr-unsub-done"];
 
 function show(id){
   /* 관심사·설정은 보던 화면을 두고 그 위에 창으로 뜬다 */
