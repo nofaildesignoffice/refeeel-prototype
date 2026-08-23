@@ -1236,9 +1236,16 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     padding-block:16px 20px;border-top:none;background:var(--bg-white);}
   #scr-chat .ci-box,#scr-chatstart .ci-box,#scr-chatroom .ci-box{
     padding:17px 22px;font-size:15px;border-radius:24px;border-color:var(--border-default);background:var(--bg-white);}
+  /* 보내기도 종 버튼과 같은 원형 — 누를 수 있는 것끼리 생김새를 맞춘다 */
   #scr-chat .chat-input>i,#scr-chat .chat-input>svg,
   #scr-chatstart .chat-input>i,#scr-chatstart .chat-input>svg,
-  #scr-chatroom .chat-input>i,#scr-chatroom .chat-input>svg{width:24px;height:24px;}
+  #scr-chatroom .chat-input>i,#scr-chatroom .chat-input>svg{
+    width:52px;height:52px;padding:14px;border-radius:50%;flex-shrink:0;cursor:pointer;
+    border:1px solid var(--border-light);background:var(--bg-white);box-shadow:var(--shadow-sm);
+    color:var(--text-dark);transition:background .15s ease;}
+  #scr-chat .chat-input>i:hover,#scr-chat .chat-input>svg:hover,
+  #scr-chatstart .chat-input>i:hover,#scr-chatstart .chat-input>svg:hover,
+  #scr-chatroom .chat-input>i:hover,#scr-chatroom .chat-input>svg:hover{background:var(--bg-light);}
   .nk-home-input{display:flex;cursor:pointer;}
 
   /* 첫 화면 — 가운데에 인사말, 그 아래 갈래 */
