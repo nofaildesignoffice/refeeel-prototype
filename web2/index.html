@@ -243,6 +243,8 @@ body.clean .jumpbar{display:none;}
 .thumbrow-item{min-width:118px;cursor:pointer;}
 .thumbrow-item .img-ph{width:118px;height:78px;}
 .thumbrow-item p{font-size:12px;font-weight:600;line-height:1.4;margin-top:6px;}
+/* 슬라이더 안에서는 카드 폭이 달라졌다. 그림도 같이 따라가야 한다 */
+.hscroll[data-auto] .thumbrow-item .img-ph{width:100%;height:auto;aspect-ratio:16/10;}
 .new-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 /* 시리즈 배너 — 좁은 화면에서는 세로로 접힌다 */
 .series-banner{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;cursor:pointer;}
