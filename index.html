@@ -143,6 +143,14 @@ body.clean .jumpbar{display:none;}
 .hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
 /* ── 카드 슬라이더 ── */
 .slider{position:relative;}
+/* 한 줄에 선 카드는 크기가 같아야 한다(리건, 2026-08-23).
+   폭은 flex-basis 로 박고, 높이는 글이 차지할 자리를 미리 내주어 맞춘다. */
+.hscroll[data-auto]>.hcard{flex:0 0 200px;}
+.hscroll[data-auto]>.thumbrow-item{flex:0 0 140px;}
+.hscroll[data-auto] .reason{align-items:flex-start;min-height:2.8em;}
+.hscroll[data-auto] .reason i,.hscroll[data-auto] .reason svg{flex-shrink:0;margin-top:2px;}
+.hscroll[data-auto] .hcard-title{min-height:2.9em;}
+.hscroll[data-auto] .thumbrow-item p{min-height:2.8em;}
 /* 화살표는 좁은 화면에 두지 않는다. 손으로 밀면 되는 자리에 버튼을 얹으면 카드만 가린다 */
 .sl-arr{display:none;}
 
