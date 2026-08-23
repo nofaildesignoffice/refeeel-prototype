@@ -703,7 +703,7 @@ body.clean .jumpbar{display:none;}
 .seg2 button{position:relative;padding:0 0 10px;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-light);cursor:pointer;white-space:nowrap;}
 .seg2 button.on{color:var(--text-black);}
 .seg2 button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:1px;background:var(--text-black);}
-/* ── 요금제 ──
+/* ── 멤버십 ──
    웹에만 있는 화면이다. 좁은 화면에서는 한 줄에 하나씩 쌓는다. */
 .pseg-view{display:none;}
 .pseg-view.on{display:block;}
@@ -2123,7 +2123,7 @@ body.modal-open #scr-interest .ord-sub,
   /* 창 안에서 화면을 갈아 끼울 때도 스며들게 */
   .noti-pop .screen.active,.nk-widget .screen.active{animation:fade-in var(--dur-medium) var(--ease-enter);}
 
-  /* ── 요금제 : 세 칸 나란히 ──
+  /* ── 멤버십 : 세 칸 나란히 ──
      세 값은 서로 견주어 보는 것이라 한눈에 같이 들어와야 한다. 쌓으면 비교가 안 된다.
      칸 높이는 stretch 로 맞춰 버튼이 아래에서 한 줄로 선다. */
   .price-grid{grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
@@ -2318,7 +2318,7 @@ body.modal-open #scr-interest .ord-sub,
 <div class="jumpbar" id="jumpbar">
   <button data-jump="scr-login">로그인</button><button data-jump="scr-agree">약관동의</button><button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
-  <button data-jump="scr-price">요금제</button>
+  <button data-jump="scr-price">멤버십</button>
   <button data-jump="scr-search">검색</button>
   <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button>
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-reader">모아보기리더</button><button data-jump="scr-notekit">리킷별기록</button>
@@ -2346,7 +2346,7 @@ body.modal-open #scr-interest .ord-sub,
         <!-- 활성 표시는 버튼마다 칠하는 게 아니라 잉크 하나가 옮겨 다닌다 -->
         <span class="pill-ink" id="pill-ink"></span>
         <button data-tab="scr-home">홈</button>
-        <button data-tab="scr-price">요금제</button>
+        <button data-tab="scr-price">멤버십</button>
         <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-chat">낙타AI</button>
         <button data-tab="scr-library">인사이트</button>
@@ -2746,18 +2746,18 @@ body.modal-open #scr-interest .ord-sub,
   </nav>
 </section>
 
-<!-- ══════════ 요금제 (웹 전용) ══════════
+<!-- ══════════ 멤버십 (웹 전용) ══════════
      ⚠ 앱 빌드에는 이 화면을 옮기지 않는다. 값과 결제를 앱 안에서 보이면
         스토어의 리더 앱 조항에 걸린다. 파는 자리는 웹에만 둔다(리건, 2026-08-23).
      ⚠ 크레딧(월 400 · 종합 300)은 아직 가설이다. 참고 문서에 그렇게 적혀 있다.
         수가 정해지면 Plus 카드부터 고친다.
      ⚠ 네이버플레이스 분석진단 리포트는 판매를 접는다 — 여기 넣지 않는다.
-     ⚠ 브랜드 전략 클래스는 앱 안에 브랜딩 클래스 시리즈로도 있다.
-        읽는 자리와 파는 자리가 다를 뿐 같은 물건이다 — 이름이 갈리지 않게 볼 것. -->
+     ⚠ 브랜딩 클래스는 앱 안에 시리즈로도 있다. 읽는 자리와 파는 자리가 다를 뿐
+        같은 물건이다. 이름을 하나로 맞춰 두었으니(리건, 2026-08-23) 갈리지 않게 볼 것. -->
 <section class="screen" id="scr-price">
   <div class="gnb">
     <i data-lucide="chevron-left" data-back></i>
-    <span class="gnb-title">요금제</span>
+    <span class="gnb-title">멤버십</span>
     <span class="gnb-side"></span>
   </div>
   <div class="scroll">
@@ -2841,7 +2841,7 @@ body.modal-open #scr-interest .ord-sub,
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="prod-body">
               <span class="prod-kicker">클래스</span>
-              <p class="prod-name">브랜드 전략 클래스</p>
+              <p class="prod-name">브랜딩 클래스</p>
               <p class="prod-desc">브랜드를 세우는 기준을 처음부터 끝까지 함께 짚는 수업.</p>
               <div class="prod-foot">
                 <span class="prod-price">99,000<em>원</em></span>
@@ -4964,7 +4964,7 @@ body.modal-open #scr-interest .ord-sub,
       <div class="wfoot-col">
         <p class="wfoot-col-title">서비스</p>
         <button data-tab="scr-home">홈</button>
-        <button data-tab="scr-price">요금제</button>
+        <button data-tab="scr-price">멤버십</button>
         <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-chat">낙타AI</button>
         <button data-tab="scr-library">인사이트</button>
@@ -5489,7 +5489,7 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
     return;
   }
-  /* 요금제 축 — 리킷 구독 / 이외 서비스 */
+  /* 멤버십 축 — 리킷 구독 / 이외 서비스 */
   if(t.dataset.pseg){
     document.querySelectorAll("[data-pseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".pseg-view").forEach(v=>v.classList.toggle("on", v.id==="pseg-"+t.dataset.pseg));
