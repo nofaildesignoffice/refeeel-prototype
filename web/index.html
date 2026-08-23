@@ -895,6 +895,21 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .ed-div{height:8px;background:var(--bg-light);}
 .ed-bottom{flex-shrink:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));background:var(--bg-white);border-top:1px solid var(--border-light);}
 .ed-note{padding:0 16px 22px;font-size:11.5px;color:var(--text-light);line-height:1.65;}
+
+/* ── 이용내역 ──
+   구독은 '지금 돌아가고 있는 것' 이라 카드로 크게, 나머지는 지나간 일이라 목록으로. */
+.ord-sub{margin:0 16px;padding:18px;border:1px solid var(--border-light);border-radius:var(--radius-md);background:var(--bg-white);}
+.ord-sub-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border-light);}
+.ord-sub-top b{display:block;font-size:15px;font-weight:800;}
+.ord-sub-top em{display:block;font-style:normal;font-size:12px;color:var(--text-light);margin-top:5px;}
+.ord-sub-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;font-size:13px;color:var(--text-gray);}
+.ord-sub-row b{font-weight:700;color:var(--text-black);}
+.ord-row{align-items:flex-start;gap:10px;}
+.ord-price{font-size:13px;font-weight:700;color:var(--text-dark);white-space:nowrap;}
+.ord-badge{flex-shrink:0;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;
+  background:var(--bg-light);color:var(--text-gray);white-space:nowrap;}
+.ord-badge.on{background:var(--bg-black);color:var(--bg-white);}
+.ord-badge.done{background:none;border:1px solid var(--border-light);color:var(--text-light);}
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .stat-tile{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px 6px;text-align:center;}
 .stat-tile b{display:block;font-size:17px;font-weight:800;}
@@ -1215,7 +1230,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
      ② 아래: 늘 같은 자리에 붙어 있는 입력창
      대화는 세로로 길어지지만 입력창은 움직이지 않는다.
      쓰려고 할 때마다 입력창을 찾아 내려가야 하면 대화가 끊긴다. */
-  /* ── 관심사 · 설정 : 가운데 창 ──
+  /* ── 관심사 · 설정 · 이용내역 : 가운데 창 ──
      화면을 통째로 바꾸지 않고 보던 자리 위에 띄운다.
      안에서 하위 화면(알림 설정·약관·문의…)으로 들어가도 창 안에서 끝난다. */
   .modal-bd{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.32);}
@@ -1240,7 +1255,8 @@ body.modal-open #scr-interest.active,
   body.modal-open #scr-ask-done.active,
   body.modal-open #scr-account.active,
   body.modal-open #scr-read.active,
-  body.modal-open #scr-leave.active{
+  body.modal-open #scr-leave.active,
+  body.modal-open #scr-orders.active{
     position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:410;
     width:min(720px,calc(100vw - 48px));height:min(760px,calc(100vh - 96px));
     background:var(--bg-white);border-radius:16px;box-shadow:var(--shadow-md);
@@ -1258,7 +1274,8 @@ body.modal-open #scr-interest .scroll,
   body.modal-open #scr-ask-done .scroll,
   body.modal-open #scr-account .scroll,
   body.modal-open #scr-read .scroll,
-  body.modal-open #scr-leave .scroll{
+  body.modal-open #scr-leave .scroll,
+  body.modal-open #scr-orders .scroll{
     flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
     width:auto;max-width:none;padding-inline:0;}
 
@@ -1274,7 +1291,8 @@ body.modal-open #scr-interest .gnb,
   body.modal-open #scr-ask-done .gnb,
   body.modal-open #scr-account .gnb,
   body.modal-open #scr-read .gnb,
-  body.modal-open #scr-leave .gnb{
+  body.modal-open #scr-leave .gnb,
+  body.modal-open #scr-orders .gnb{
     flex-shrink:0;height:56px;padding:0 24px;border-bottom:1px solid var(--border-light);
     justify-content:flex-start;align-items:center;gap:12px;background:var(--bg-white);}
 body.modal-open #scr-interest .gnb-title,
@@ -1288,7 +1306,8 @@ body.modal-open #scr-interest .gnb-title,
   body.modal-open #scr-ask-done .gnb-title,
   body.modal-open #scr-account .gnb-title,
   body.modal-open #scr-read .gnb-title,
-  body.modal-open #scr-leave .gnb-title{font-size:17px;letter-spacing:-0.3px;max-width:none;}
+  body.modal-open #scr-leave .gnb-title,
+  body.modal-open #scr-orders .gnb-title{font-size:17px;letter-spacing:-0.3px;max-width:none;}
 body.modal-open #scr-interest .ed-bottom,
   body.modal-open #scr-settings .ed-bottom,
   body.modal-open #scr-notiset .ed-bottom,
@@ -1300,7 +1319,8 @@ body.modal-open #scr-interest .ed-bottom,
   body.modal-open #scr-ask-done .ed-bottom,
   body.modal-open #scr-account .ed-bottom,
   body.modal-open #scr-read .ed-bottom,
-  body.modal-open #scr-leave .ed-bottom{flex-shrink:0;padding:12px 24px 16px;}
+  body.modal-open #scr-leave .ed-bottom,
+  body.modal-open #scr-orders .ed-bottom{flex-shrink:0;padding:12px 24px 16px;}
 
   /* 창 안에서는 뒤로가기가 살아 있어야 목록으로 돌아갈 수 있다 */
 body.modal-open #scr-interest .gnb>i[data-back],
@@ -1315,6 +1335,7 @@ body.modal-open #scr-interest .gnb>i[data-back],
   body.modal-open #scr-account .gnb>i[data-back],
   body.modal-open #scr-read .gnb>i[data-back],
   body.modal-open #scr-leave .gnb>i[data-back],
+  body.modal-open #scr-orders .gnb>i[data-back],
 body.modal-open #scr-interest .gnb>svg[data-back],
   body.modal-open #scr-settings .gnb>svg[data-back],
   body.modal-open #scr-notiset .gnb>svg[data-back],
@@ -1326,7 +1347,8 @@ body.modal-open #scr-interest .gnb>svg[data-back],
   body.modal-open #scr-ask-done .gnb>svg[data-back],
   body.modal-open #scr-account .gnb>svg[data-back],
   body.modal-open #scr-read .gnb>svg[data-back],
-  body.modal-open #scr-leave .gnb>svg[data-back]{display:block;}
+  body.modal-open #scr-leave .gnb>svg[data-back],
+  body.modal-open #scr-orders .gnb>svg[data-back]{display:block;}
 
   /* 안쪽 여백은 창 폭에 맞춘다 */
 body.modal-open #scr-interest .sec,
@@ -1341,6 +1363,7 @@ body.modal-open #scr-interest .sec,
   body.modal-open #scr-account .sec,
   body.modal-open #scr-read .sec,
   body.modal-open #scr-leave .sec,
+  body.modal-open #scr-orders .sec,
 body.modal-open #scr-interest .set-group,
   body.modal-open #scr-settings .set-group,
   body.modal-open #scr-notiset .set-group,
@@ -1353,6 +1376,7 @@ body.modal-open #scr-interest .set-group,
   body.modal-open #scr-account .set-group,
   body.modal-open #scr-read .set-group,
   body.modal-open #scr-leave .set-group,
+  body.modal-open #scr-orders .set-group,
 body.modal-open #scr-interest .set-note,
   body.modal-open #scr-settings .set-note,
   body.modal-open #scr-notiset .set-note,
@@ -1365,6 +1389,7 @@ body.modal-open #scr-interest .set-note,
   body.modal-open #scr-account .set-note,
   body.modal-open #scr-read .set-note,
   body.modal-open #scr-leave .set-note,
+  body.modal-open #scr-orders .set-note,
 body.modal-open #scr-interest .menu-list,
   body.modal-open #scr-settings .menu-list,
   body.modal-open #scr-notiset .menu-list,
@@ -1377,6 +1402,7 @@ body.modal-open #scr-interest .menu-list,
   body.modal-open #scr-account .menu-list,
   body.modal-open #scr-read .menu-list,
   body.modal-open #scr-leave .menu-list,
+  body.modal-open #scr-orders .menu-list,
 body.modal-open #scr-interest .set-list,
   body.modal-open #scr-settings .set-list,
   body.modal-open #scr-notiset .set-list,
@@ -1389,6 +1415,7 @@ body.modal-open #scr-interest .set-list,
   body.modal-open #scr-account .set-list,
   body.modal-open #scr-read .set-list,
   body.modal-open #scr-leave .set-list,
+  body.modal-open #scr-orders .set-list,
 body.modal-open #scr-interest .fld,
   body.modal-open #scr-settings .fld,
   body.modal-open #scr-notiset .fld,
@@ -1401,6 +1428,7 @@ body.modal-open #scr-interest .fld,
   body.modal-open #scr-account .fld,
   body.modal-open #scr-read .fld,
   body.modal-open #scr-leave .fld,
+  body.modal-open #scr-orders .fld,
 body.modal-open #scr-interest .doc-head,
   body.modal-open #scr-settings .doc-head,
   body.modal-open #scr-notiset .doc-head,
@@ -1413,6 +1441,7 @@ body.modal-open #scr-interest .doc-head,
   body.modal-open #scr-account .doc-head,
   body.modal-open #scr-read .doc-head,
   body.modal-open #scr-leave .doc-head,
+  body.modal-open #scr-orders .doc-head,
 body.modal-open #scr-interest .doc-body,
   body.modal-open #scr-settings .doc-body,
   body.modal-open #scr-notiset .doc-body,
@@ -1425,6 +1454,7 @@ body.modal-open #scr-interest .doc-body,
   body.modal-open #scr-account .doc-body,
   body.modal-open #scr-read .doc-body,
   body.modal-open #scr-leave .doc-body,
+  body.modal-open #scr-orders .doc-body,
 body.modal-open #scr-interest .acct-hd,
   body.modal-open #scr-settings .acct-hd,
   body.modal-open #scr-notiset .acct-hd,
@@ -1437,6 +1467,7 @@ body.modal-open #scr-interest .acct-hd,
   body.modal-open #scr-account .acct-hd,
   body.modal-open #scr-read .acct-hd,
   body.modal-open #scr-leave .acct-hd,
+  body.modal-open #scr-orders .acct-hd,
 body.modal-open #scr-interest .leave-hd,
   body.modal-open #scr-settings .leave-hd,
   body.modal-open #scr-notiset .leave-hd,
@@ -1449,6 +1480,7 @@ body.modal-open #scr-interest .leave-hd,
   body.modal-open #scr-account .leave-hd,
   body.modal-open #scr-read .leave-hd,
   body.modal-open #scr-leave .leave-hd,
+  body.modal-open #scr-orders .leave-hd,
 body.modal-open #scr-interest .lose,
   body.modal-open #scr-settings .lose,
   body.modal-open #scr-notiset .lose,
@@ -1461,6 +1493,7 @@ body.modal-open #scr-interest .lose,
   body.modal-open #scr-account .lose,
   body.modal-open #scr-read .lose,
   body.modal-open #scr-leave .lose,
+  body.modal-open #scr-orders .lose,
 body.modal-open #scr-interest .set-btn,
   body.modal-open #scr-settings .set-btn,
   body.modal-open #scr-notiset .set-btn,
@@ -1473,6 +1506,7 @@ body.modal-open #scr-interest .set-btn,
   body.modal-open #scr-account .set-btn,
   body.modal-open #scr-read .set-btn,
   body.modal-open #scr-leave .set-btn,
+  body.modal-open #scr-orders .set-btn,
 body.modal-open #scr-interest .ed-note,
   body.modal-open #scr-settings .ed-note,
   body.modal-open #scr-notiset .ed-note,
@@ -1485,6 +1519,7 @@ body.modal-open #scr-interest .ed-note,
   body.modal-open #scr-account .ed-note,
   body.modal-open #scr-read .ed-note,
   body.modal-open #scr-leave .ed-note,
+  body.modal-open #scr-orders .ed-note,
 body.modal-open #scr-interest .fs-pick,
   body.modal-open #scr-settings .fs-pick,
   body.modal-open #scr-notiset .fs-pick,
@@ -1497,6 +1532,7 @@ body.modal-open #scr-interest .fs-pick,
   body.modal-open #scr-account .fs-pick,
   body.modal-open #scr-read .fs-pick,
   body.modal-open #scr-leave .fs-pick,
+  body.modal-open #scr-orders .fs-pick,
 body.modal-open #scr-interest .fs-prev,
   body.modal-open #scr-settings .fs-prev,
   body.modal-open #scr-notiset .fs-prev,
@@ -1509,6 +1545,20 @@ body.modal-open #scr-interest .fs-prev,
   body.modal-open #scr-account .fs-prev,
   body.modal-open #scr-read .fs-prev,
   body.modal-open #scr-leave .fs-prev,
+  body.modal-open #scr-orders .fs-prev,
+body.modal-open #scr-interest .ord-sub,
+  body.modal-open #scr-settings .ord-sub,
+  body.modal-open #scr-notiset .ord-sub,
+  body.modal-open #scr-lang .ord-sub,
+  body.modal-open #scr-legal .ord-sub,
+  body.modal-open #scr-doc .ord-sub,
+  body.modal-open #scr-help .ord-sub,
+  body.modal-open #scr-ask .ord-sub,
+  body.modal-open #scr-ask-done .ord-sub,
+  body.modal-open #scr-account .ord-sub,
+  body.modal-open #scr-read .ord-sub,
+  body.modal-open #scr-leave .ord-sub,
+  body.modal-open #scr-orders .ord-sub,
 body.modal-open #scr-interest .done-wrap,
   body.modal-open #scr-settings .done-wrap,
   body.modal-open #scr-notiset .done-wrap,
@@ -1520,7 +1570,8 @@ body.modal-open #scr-interest .done-wrap,
   body.modal-open #scr-ask-done .done-wrap,
   body.modal-open #scr-account .done-wrap,
   body.modal-open #scr-read .done-wrap,
-  body.modal-open #scr-leave .done-wrap{padding-inline:24px;margin-inline:0;width:auto;max-width:none;}
+  body.modal-open #scr-leave .done-wrap,
+  body.modal-open #scr-orders .done-wrap{padding-inline:24px;margin-inline:0;width:auto;max-width:none;}
 body.modal-open #scr-interest .sec,
   body.modal-open #scr-settings .sec,
   body.modal-open #scr-notiset .sec,
@@ -1532,7 +1583,8 @@ body.modal-open #scr-interest .sec,
   body.modal-open #scr-ask-done .sec,
   body.modal-open #scr-account .sec,
   body.modal-open #scr-read .sec,
-  body.modal-open #scr-leave .sec{padding-block:24px;}
+  body.modal-open #scr-leave .sec,
+  body.modal-open #scr-orders .sec{padding-block:24px;}
 body.modal-open #scr-interest .set-group,
   body.modal-open #scr-settings .set-group,
   body.modal-open #scr-notiset .set-group,
@@ -1544,7 +1596,8 @@ body.modal-open #scr-interest .set-group,
   body.modal-open #scr-ask-done .set-group,
   body.modal-open #scr-account .set-group,
   body.modal-open #scr-read .set-group,
-  body.modal-open #scr-leave .set-group{padding-block:22px 8px;}
+  body.modal-open #scr-leave .set-group,
+  body.modal-open #scr-orders .set-group{padding-block:22px 8px;}
 body.modal-open #scr-interest .set-note,
   body.modal-open #scr-settings .set-note,
   body.modal-open #scr-notiset .set-note,
@@ -1556,7 +1609,21 @@ body.modal-open #scr-interest .set-note,
   body.modal-open #scr-ask-done .set-note,
   body.modal-open #scr-account .set-note,
   body.modal-open #scr-read .set-note,
-  body.modal-open #scr-leave .set-note{padding-block:12px 0;}
+  body.modal-open #scr-leave .set-note,
+  body.modal-open #scr-orders .set-note{padding-block:12px 0;}
+body.modal-open #scr-interest .ord-sub,
+  body.modal-open #scr-settings .ord-sub,
+  body.modal-open #scr-notiset .ord-sub,
+  body.modal-open #scr-lang .ord-sub,
+  body.modal-open #scr-legal .ord-sub,
+  body.modal-open #scr-doc .ord-sub,
+  body.modal-open #scr-help .ord-sub,
+  body.modal-open #scr-ask .ord-sub,
+  body.modal-open #scr-ask-done .ord-sub,
+  body.modal-open #scr-account .ord-sub,
+  body.modal-open #scr-read .ord-sub,
+  body.modal-open #scr-leave .ord-sub,
+  body.modal-open #scr-orders .ord-sub{margin-inline:24px;padding:18px;width:auto;}
 
   /* 여기는 페이지가 아니라 '방' 이다(리건, 2026-08-23).
      화면은 머리말 아래를 꽉 채운 채 그대로 있고, 대화만 그 안에서 흐른다.
@@ -1852,7 +1919,7 @@ body.modal-open #scr-interest .set-note,
   <button data-jump="scr-viewer">뷰어</button>
   <button data-jump="scr-done">완독직후</button>
   <button data-jump="scr-series">시리즈</button>
-  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
+  <button data-jump="scr-my">내 리킷</button><button data-jump="scr-interest">관심사</button><button data-jump="scr-settings">설정</button><button data-jump="scr-orders">이용내역</button><button data-jump="scr-read">읽기</button><button data-jump="scr-account">계정</button><button data-jump="scr-notiset">알림설정</button><button data-jump="scr-lang">언어</button><button data-jump="scr-legal">약관</button><button data-jump="scr-doc">약관본문</button><button data-jump="scr-help">문의</button><button data-jump="scr-ask">문의작성</button><button data-jump="scr-ask-done">문의완료</button><button data-jump="scr-leave">탈퇴</button><button data-jump="scr-leave-done">탈퇴완료</button>
   <button data-jump="scr-noti">알림</button>
 </div>
 
@@ -3454,6 +3521,65 @@ body.modal-open #scr-interest .set-note,
   </nav>
 </section>
 
+<!-- ══════════ 이용내역 (웹 전용) ══════════
+     ⚠ 앱 빌드에는 이 화면을 넣지 않는다. 결제·가격을 노출하면 스토어 리더 앱 조항에 걸린다.
+        앱에서는 설정의 '이용내역' 이 웹으로 빠지는 외부 링크로 남는다.
+     ⚠ 금액과 날짜는 화면 확인용 더미다. 실제로는 결제 서버에서 내려온다. -->
+<section class="screen" id="scr-orders">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">이용내역</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+
+    <div class="set-group">구독</div>
+    <div class="ord-sub">
+      <div class="ord-sub-top">
+        <div>
+          <b>RE:FEEEL 구독</b>
+          <em>매주 새 리킷과 지난 편 전부</em>
+        </div>
+        <span class="ord-badge on">이용 중</span>
+      </div>
+      <div class="ord-sub-row"><span>결제 금액</span><b>월 9,900원</b></div>
+      <div class="ord-sub-row"><span>다음 결제일</span><b>2026. 09. 08</b></div>
+      <div class="ord-sub-row"><span>결제 수단</span><b>신한카드 ···· 4821</b></div>
+      <button class="btn btn-secondary" style="width:100%;margin-top:16px">구독 관리</button>
+    </div>
+
+    <div class="set-group">구매한 것</div>
+    <div class="set-list">
+      <div class="set-row ord-row">
+        <span class="grow">
+          <b>브랜딩 클래스</b>
+          <em>2026. 07. 12 결제 · 9개 회차</em>
+        </span>
+        <span class="ord-price">330,000원</span>
+        <span class="ord-badge">이용 중</span>
+      </div>
+      <div class="set-row ord-row">
+        <span class="grow">
+          <b>1:1 컨설팅 60분</b>
+          <em>2026. 06. 03 결제 · 06. 11 진행</em>
+        </span>
+        <span class="ord-price">150,000원</span>
+        <span class="ord-badge done">완료</span>
+      </div>
+      <div class="set-row ord-row">
+        <span class="grow">
+          <b>브랜드 콘텐츠 가이드라인</b>
+          <em>2026. 05. 20 결제 · PDF 42쪽</em>
+        </span>
+        <span class="ord-price">89,000원</span>
+        <span class="ord-badge">받기</span>
+      </div>
+    </div>
+    <p class="set-note">영수증과 세금계산서는 문의하기로 요청해 주세요.</p>
+
+  </div>
+</section>
+
 <!-- ══════════ 설정 (내 리킷 ⚙) ══════════ -->
 <!-- ══════════ 관심사 수정 ══════════ -->
 <section class="screen" id="scr-interest">
@@ -3905,7 +4031,8 @@ body.modal-open #scr-interest .set-note,
     <div class="set-group">서비스</div>
     <div class="menu-list">
       <!-- 이용내역은 앱 안에서 열지 않고 웹으로 빠진다. 그래서 화살표 대신 외부링크 아이콘. -->
-      <div class="menu-row"><i data-lucide="receipt-text"></i><span class="grow">이용내역</span><i data-lucide="external-link"></i></div>
+      <!-- 웹에서는 앱과 달리 밖으로 나가지 않는다. 여기서 바로 연다 -->
+      <div class="menu-row" data-go="scr-orders"><i data-lucide="receipt-text"></i><span class="grow">이용내역</span><i data-lucide="chevron-right"></i></div>
       <div class="menu-row" data-go="scr-legal"><i data-lucide="file-text"></i><span class="grow">약관 및 정책</span><i data-lucide="chevron-right"></i></div>
       <div class="menu-row" data-go="scr-help"><i data-lucide="circle-help"></i><span class="grow">문의하기</span><i data-lucide="chevron-right"></i></div>
     </div>
@@ -4228,7 +4355,7 @@ const NAV_HOME = {
   "scr-settings":"scr-my", "scr-notiset":"scr-my", "scr-lang":"scr-my",
   "scr-legal":"scr-my", "scr-doc":"scr-my", "scr-help":"scr-my",
   "scr-ask":"scr-my", "scr-ask-done":"scr-my", "scr-account":"scr-my",
-  "scr-read":"scr-my", "scr-interest":"scr-my", "scr-leave":"scr-my",
+  "scr-read":"scr-my", "scr-interest":"scr-my", "scr-leave":"scr-my", "scr-orders":"scr-my",
   "scr-series":"scr-search"
 };
 let stack = [];
@@ -4237,7 +4364,7 @@ let current = "scr-login";
 function isWide(){ return window.matchMedia("(min-width:1024px)").matches; }
 
 /* 데스크톱에서 가운데 창으로 뜨는 화면들 */
-const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave"];
+const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","scr-legal","scr-doc","scr-help","scr-ask","scr-ask-done","scr-account","scr-read","scr-leave","scr-orders"];
 
 function show(id){
   /* 관심사·설정은 보던 화면을 두고 그 위에 창으로 뜬다 */
