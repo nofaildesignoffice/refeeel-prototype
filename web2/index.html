@@ -105,12 +105,12 @@ body.clean .jumpbar{display:none;}
 .screen.active{animation:scr-in var(--dur-medium) var(--ease-enter);}
 
 /* 세그먼트로 갈아 끼우는 화면들도 스며들게 */
-.bseg-view.on,.lseg-view.on,.sseg-view.on,.myseg-view.on,.nview.on,.browse-view.on,.fs-prev{
+.bseg-view.on,.lseg-view.on,.sseg-view.on,.myseg-view.on,.pseg-view.on,.nview.on,.browse-view.on,.fs-prev{
   animation:fade-in var(--dur-medium) var(--ease-enter);}
 
 /* 움직임을 줄여 달라고 해 둔 기기에서는 전부 끈다 */
 @media (prefers-reduced-motion: reduce){
-  .screen.active,.bseg-view.on,.lseg-view.on,.sseg-view.on,.myseg-view.on,
+  .screen.active,.bseg-view.on,.lseg-view.on,.sseg-view.on,.myseg-view.on,.pseg-view.on,
   .nview.on,.browse-view.on{animation:none;}
   *,*::before,*::after{transition-duration:0.01ms!important;}
 }
@@ -703,6 +703,54 @@ body.clean .jumpbar{display:none;}
 .seg2 button{position:relative;padding:0 0 10px;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-light);cursor:pointer;white-space:nowrap;}
 .seg2 button.on{color:var(--text-black);}
 .seg2 button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:1px;background:var(--text-black);}
+/* ── 요금제 ──
+   웹에만 있는 화면이다. 좁은 화면에서는 한 줄에 하나씩 쌓는다. */
+.pseg-view{display:none;}
+.pseg-view.on{display:block;}
+.price-lead{margin-bottom:20px;}
+.price-lead h3{font-size:19px;font-weight:800;color:var(--text-black);letter-spacing:-0.4px;line-height:1.35;}
+.price-lead p{font-size:13px;color:var(--text-light);line-height:1.6;margin-top:8px;}
+.price-grid{display:grid;gap:14px;}
+.price-card{position:relative;display:flex;flex-direction:column;background:var(--bg-white);
+  border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px 20px;
+  transition:border-color var(--dur-short) var(--ease),box-shadow var(--dur-short) var(--ease);}
+/* 권하는 칸은 테두리를 검게 두른다. 색으로 가리지 않고 선으로만 짚는다 */
+.price-card.on{border-color:var(--text-black);box-shadow:var(--shadow-md);}
+.pc-badge{position:absolute;top:-11px;left:20px;background:var(--bg-black);color:var(--bg-white);
+  font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:var(--radius-full);letter-spacing:-0.2px;}
+.pc-plan{font-size:14px;font-weight:800;color:var(--text-black);letter-spacing:-0.2px;}
+.pc-cost{display:flex;align-items:baseline;gap:4px;margin-top:10px;}
+.pc-cost b{font-size:30px;font-weight:800;color:var(--text-black);letter-spacing:-1.2px;}
+.pc-cost span{font-size:13px;font-weight:600;color:var(--text-light);}
+.pc-line{font-size:12.5px;color:var(--text-light);line-height:1.6;margin-top:10px;
+  padding-bottom:18px;border-bottom:1px solid var(--border-light);}
+.pc-feat{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:11px;flex:1;}
+.pc-feat li{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--text-dark);line-height:1.55;}
+.pc-feat i,.pc-feat svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;color:var(--text-black);}
+.pc-feat b{font-weight:700;color:var(--text-black);}
+/* 아직 정해지지 않은 수에는 표를 달아 둔다 */
+.pc-feat em{font-style:normal;font-size:10px;font-weight:700;color:var(--text-muted);
+  background:var(--bg-light);border-radius:var(--radius-xs);padding:1px 5px;margin-left:5px;}
+.pc-btn{width:100%;margin-top:22px;}
+.pc-btn:disabled{opacity:0.45;cursor:default;}
+.price-note{font-size:11.5px;color:var(--text-muted);line-height:1.75;margin-top:18px;
+  background:var(--bg-light);border-radius:var(--radius-md);padding:14px 16px;}
+.price-note b{font-weight:700;color:var(--text-gray);}
+
+.prod-grid{display:grid;gap:14px;}
+.prod-card{background:var(--bg-white);border:1px solid var(--border-light);
+  border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;}
+.prod-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:0;}
+.prod-body{padding:18px 18px 20px;}
+.prod-kicker{font-size:10.5px;font-weight:700;color:var(--text-muted);letter-spacing:0.2px;}
+.prod-name{font-size:15.5px;font-weight:800;color:var(--text-black);letter-spacing:-0.3px;margin-top:7px;}
+.prod-desc{font-size:12.5px;color:var(--text-light);line-height:1.6;margin-top:8px;}
+.prod-go{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;
+  color:var(--text-black);margin-top:14px;}
+.prod-go i,.prod-go svg{width:14px;height:14px;
+  transition:transform var(--dur-short) var(--ease);}
+.prod-card:hover .prod-go i,.prod-card:hover .prod-go svg{transform:translateX(3px);}
+
 .myseg-view{display:none;}
 .myseg-view.on{display:block;}
 .bseg-view{display:none;}
@@ -1997,7 +2045,7 @@ body.modal-open #scr-interest .ord-sub,
      v1 에서는 어떤 건 회색 배경, 어떤 건 rgba, 어떤 건 opacity 로 제각각이었다.
      Material 처럼 '잉크를 덮는' 한 가지 방식으로 통일한다 — 얹는 세기만 8% / 12% 로 다르다.
      그래야 무엇을 누르든 같은 세기로 반응한다. */
-  .gcard,.ex-row,.card,.menu-row,.set-row,.tpl,.mcard,.pcard,.rank-row,.pain-card,.noti-row,
+  .gcard,.ex-row,.card,.menu-row,.set-row,.tpl,.mcard,.pcard,.rank-row,.pain-card,.noti-row,.prod-card,
   .chip,.wnav-pill button,.wnav-ic,.btn,.side-item,.faq summary,.tpl-ic{
     transition:background-color var(--dur-short) var(--ease),
                border-color var(--dur-short) var(--ease),
@@ -2032,6 +2080,33 @@ body.modal-open #scr-interest .ord-sub,
 
   /* 창 안에서 화면을 갈아 끼울 때도 스며들게 */
   .noti-pop .screen.active,.nk-widget .screen.active{animation:fade-in var(--dur-medium) var(--ease-enter);}
+
+  /* ── 요금제 : 세 칸 나란히 ──
+     세 값은 서로 견주어 보는 것이라 한눈에 같이 들어와야 한다. 쌓으면 비교가 안 된다.
+     칸 높이는 stretch 로 맞춰 버튼이 아래에서 한 줄로 선다. */
+  .price-grid{grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
+  .price-card{padding:36px 30px;border-radius:var(--radius-xl);}
+  .price-card.on{transform:translateY(-8px);}
+  .pc-badge{top:-13px;left:30px;font-size:11.5px;padding:6px 14px;}
+  .pc-plan{font-size:16px;}
+  .pc-cost{margin-top:14px;}
+  .pc-cost b{font-size:42px;letter-spacing:-1.8px;}
+  .pc-cost span{font-size:14px;}
+  .pc-line{font-size:13.5px;margin-top:12px;padding-bottom:24px;min-height:66px;}
+  .pc-feat{margin-top:24px;gap:13px;}
+  .pc-feat li{font-size:13.5px;}
+  .pc-btn{margin-top:28px;padding-block:14px;}
+  .price-lead{text-align:center;margin-bottom:44px;}
+  .price-lead h3{font-size:30px;letter-spacing:-0.8px;}
+  .price-lead p{font-size:15px;margin-top:12px;}
+  .price-note{font-size:12.5px;margin-top:28px;padding:20px 24px;text-align:center;}
+
+  /* 상품은 넷이 아니라 셋이다. 넷으로 두면 빈 칸이 남는다 */
+  .prod-grid{grid-template-columns:repeat(3,1fr);gap:24px;}
+  .prod-body{padding:24px 24px 26px;}
+  .prod-name{font-size:19px;margin-top:9px;}
+  .prod-desc{font-size:13.5px;margin-top:10px;min-height:44px;}
+  .prod-go{font-size:13.5px;margin-top:18px;}
 
   /* --- 섹션이 숨 쉴 자리 : 위아래 70px 로 통일(리건, 2026-08-22) --- */
   .sec,.sec.alt{padding-block:70px;}
@@ -2179,6 +2254,7 @@ body.modal-open #scr-interest .ord-sub,
 <div class="jumpbar" id="jumpbar">
   <button data-jump="scr-login">로그인</button><button data-jump="scr-agree">약관동의</button><button data-jump="scr-ob1">온보딩</button>
   <button data-jump="scr-home">홈</button>
+  <button data-jump="scr-price">요금제</button>
   <button data-jump="scr-search">검색</button>
   <button data-jump="scr-chat">낙타AI</button><button data-jump="scr-chatstart">AI선택지</button><button data-jump="scr-chatroom">AI대화</button>
   <button data-jump="scr-library">인사이트</button><button data-jump="scr-reader">모아보기리더</button><button data-jump="scr-notekit">리킷별기록</button>
@@ -2206,6 +2282,7 @@ body.modal-open #scr-interest .ord-sub,
         <!-- 활성 표시는 버튼마다 칠하는 게 아니라 잉크 하나가 옮겨 다닌다 -->
         <span class="pill-ink" id="pill-ink"></span>
         <button data-tab="scr-home">홈</button>
+        <button data-tab="scr-price">요금제</button>
         <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-chat">낙타AI</button>
         <button data-tab="scr-library">인사이트</button>
@@ -2603,6 +2680,135 @@ body.modal-open #scr-interest .ord-sub,
     <button class="nav-item" data-tab="scr-library"><i data-lucide="lightbulb"></i><span>인사이트</span></button>
     <button class="nav-item" data-tab="scr-my"><i data-lucide="user"></i><span>내 리킷</span></button>
   </nav>
+</section>
+
+<!-- ══════════ 요금제 (웹 전용) ══════════
+     ⚠ 앱 빌드에는 이 화면을 옮기지 않는다. 값과 결제를 앱 안에서 보이면
+        스토어의 리더 앱 조항에 걸린다. 파는 자리는 웹에만 둔다(리건, 2026-08-23).
+     ⚠ 크레딧(월 400 · 종합 300)은 아직 가설이다. 참고 문서에 그렇게 적혀 있다.
+        수가 정해지면 Plus 카드부터 고친다.
+     ⚠ 네이버플레이스 분석진단 리포트는 판매를 접는다 — 여기 넣지 않는다.
+     ⚠ 브랜드 전략 클래스는 이 그리드에 없다. 앱 안에 시리즈로 이미 살아 있어서
+        파는 물건 목록과 자리가 겹친다. 넣을지는 리건에게 물어볼 것. -->
+<section class="screen" id="scr-price">
+  <div class="gnb">
+    <i data-lucide="chevron-left" data-back></i>
+    <span class="gnb-title">요금제</span>
+    <span class="gnb-side"></span>
+  </div>
+  <div class="scroll">
+
+    <div class="seg seg-top">
+      <span class="seg-ink"></span>
+      <button data-pseg="sub" class="on">리킷 구독</button>
+      <button data-pseg="etc">이외 서비스</button>
+    </div>
+
+    <!-- ── 리킷 구독 ── -->
+    <div class="pseg-view on" id="pseg-sub">
+      <div class="sec">
+        <div class="price-lead">
+          <h3>먼저 읽어 보고 정하세요</h3>
+          <p>무료로도 충분히 읽힙니다. 더 필요해지는 순간에 올리면 됩니다.</p>
+        </div>
+
+        <div class="price-grid">
+          <div class="price-card">
+            <div class="pc-plan">무료</div>
+            <div class="pc-cost"><b>0</b><span>원</span></div>
+            <p class="pc-line">먼저 도움을 받아 보는 자리</p>
+            <ul class="pc-feat">
+              <li><i data-lucide="check"></i>무료로 열어 둔 리킷은 전문 열람</li>
+              <li><i data-lucide="check"></i>유료편은 앞 1~2문단까지</li>
+              <li><i data-lucide="check"></i>처음 추천받은 한 편은 전문 · 영구 소장</li>
+              <li><i data-lucide="check"></i>밑줄과 메모</li>
+              <li><i data-lucide="check"></i>오늘 피드와 알림</li>
+              <li><i data-lucide="check"></i>개인화 비즈니스 북 최초 1회</li>
+            </ul>
+            <button class="btn btn-secondary pc-btn" disabled>지금 쓰는 중</button>
+          </div>
+
+          <div class="price-card on">
+            <span class="pc-badge">가장 많이 고릅니다</span>
+            <div class="pc-plan">RE:KIT</div>
+            <div class="pc-cost"><b>9,900</b><span>원 / 월</span></div>
+            <p class="pc-line">필요한 기준을 계속 읽고, 기억하고, 다시 확인하는 멤버십</p>
+            <ul class="pc-feat">
+              <li><i data-lucide="check"></i><b>리킷 전편 열람</b></li>
+              <li><i data-lucide="check"></i>내 상황에 맞춘 오늘 피드</li>
+              <li><i data-lucide="check"></i>낙타AI 기본 사용량</li>
+              <li><i data-lucide="check"></i>밑줄 · 메모를 때맞춰 다시 만나기</li>
+              <li><i data-lucide="check"></i>따로 산 콘텐츠도 한자리에</li>
+              <li><i data-lucide="check"></i>비즈니스 북은 최초 1회 이후 별도 이용권</li>
+            </ul>
+            <button class="btn btn-primary pc-btn">구독하기</button>
+          </div>
+
+          <div class="price-card">
+            <div class="pc-plan">RE:KIT Plus</div>
+            <div class="pc-cost"><b>19,800</b><span>원 / 월</span></div>
+            <p class="pc-line">읽은 기준을 내 사업에 적용하고, 지금과 다음을 정리하는 멤버십</p>
+            <ul class="pc-feat">
+              <li><i data-lucide="check"></i><b>RE:KIT의 모든 것</b></li>
+              <li><i data-lucide="check"></i>낙타AI 확장 사용량</li>
+              <li><i data-lucide="check"></i>월 400크레딧<em>가설</em></li>
+              <li><i data-lucide="check"></i>종합 비즈니스 북 (300크레딧)<em>가설</em></li>
+              <li><i data-lucide="check"></i>남은 크레딧으로 후속 작업</li>
+              <li><i data-lucide="check"></i>기록이 쌓이면 다음 챕터 · 변화 비교</li>
+            </ul>
+            <button class="btn btn-secondary pc-btn">Plus 시작하기</button>
+          </div>
+        </div>
+
+        <p class="price-note"><b>크레딧으로 할 수 있는 일</b> — 지금 가장 큰 병목 하나 정리 · 비즈니스 북 한 챕터 업데이트 · 지난 7일 실행 점검 · 리킷 한 편을 내 사업에 옮긴 실행표 · 고민 하나에 대한 심층 답변<br>크레딧 수치는 아직 가설입니다. 확정되면 이 화면에서 먼저 알려 드립니다.</p>
+      </div>
+    </div>
+
+    <!-- ── 이외 서비스 ── -->
+    <div class="pseg-view" id="pseg-etc">
+      <div class="sec">
+        <div class="price-lead">
+          <h3>구독과 별개로 필요한 것</h3>
+          <p>한 번 갖추면 계속 쓰는 것들입니다.</p>
+        </div>
+
+        <div class="prod-grid">
+          <div class="prod-card" data-go="scr-price">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="prod-body">
+              <span class="prod-kicker">노션 템플릿</span>
+              <p class="prod-name">RE:노션</p>
+              <p class="prod-desc">콘텐츠와 데이터를 한 판에서 굴리는 노션 작업대.</p>
+              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+            </div>
+          </div>
+
+          <div class="prod-card" data-go="scr-price">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="prod-body">
+              <span class="prod-kicker">컨설팅</span>
+              <p class="prod-name">1:1 컨설팅</p>
+              <p class="prod-desc">지금 무엇이 막혀 있는지 같이 짚고, 다음에 할 일을 정합니다.</p>
+              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+            </div>
+          </div>
+
+          <div class="prod-card" data-go="scr-price">
+            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="prod-body">
+              <span class="prod-kicker">가이드라인</span>
+              <p class="prod-name">브랜드 전략 가이드라인</p>
+              <p class="prod-desc">브랜드를 세우는 순서와 기준을 문서로 정리해 드립니다.</p>
+              <span class="prod-go">자세히 보기<i data-lucide="arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+        <!-- ⚠ 지금은 눌러도 제자리다. 각 상품의 랜딩페이지는 따로 기획해 붙인다(리건, 2026-08-23).
+             그때 data-go 를 scr-lp-notion / scr-lp-consult / scr-lp-guide 로 바꾼다. -->
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <!-- ══════════ 검색 (탐색 홈) ══════════ -->
@@ -4632,6 +4838,7 @@ body.modal-open #scr-interest .ord-sub,
       <div class="wfoot-col">
         <p class="wfoot-col-title">서비스</p>
         <button data-tab="scr-home">홈</button>
+        <button data-tab="scr-price">요금제</button>
         <button data-tab="scr-search">리킷 찾기</button>
         <button data-tab="scr-chat">낙타AI</button>
         <button data-tab="scr-library">인사이트</button>
@@ -5101,7 +5308,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-pseg],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -5154,6 +5361,12 @@ document.addEventListener("click", e=>{
   if(t.dataset.bseg){
     document.querySelectorAll("[data-bseg]").forEach(b=>b.classList.toggle("on", b===t));
     document.querySelectorAll(".bseg-view").forEach(v=>v.classList.toggle("on", v.id==="bseg-"+t.dataset.bseg));
+    return;
+  }
+  /* 요금제 축 — 리킷 구독 / 이외 서비스 */
+  if(t.dataset.pseg){
+    document.querySelectorAll("[data-pseg]").forEach(b=>b.classList.toggle("on", b===t));
+    document.querySelectorAll(".pseg-view").forEach(v=>v.classList.toggle("on", v.id==="pseg-"+t.dataset.pseg));
     return;
   }
   /* 내 리킷 상위 축 — 리킷 / 시리즈 */
