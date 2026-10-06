@@ -54,6 +54,11 @@
   --brand-press:#C7D600;                 /* 눌렀을 때 — opacity 로 다루면 라임이 묽게 보인다 */
   --brand-soft:rgba(223,240,0,0.20);
   --brand-ring:rgba(223,240,0,0.55);
+
+  /* 경고·알림 빨강 — 원래 .btn-danger 가 쓰던 값을 토큰으로 올렸다.
+     라임이 '누를 것', 빨강이 '못 되돌리는 것 · 안 읽은 것'. 역할이 겹치지 않는다.
+     더 선명하게 하려면 이 한 줄만 #D7352B 로 바꾼다(흰 글자 4.7:1 로 버튼에도 쓸 수 있다). */
+  --alert:#B23B32;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
@@ -157,7 +162,7 @@ body.clean .jumptoggle{display:none!important;}
 .avatar{width:26px;height:26px;border-radius:50%;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
 .avatar i,.avatar svg{width:14px;height:14px;color:var(--placeholder-icon);}
 .bell-wrap{position:relative;display:flex;}
-.bell-dot{position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--text-black);}
+.bell-dot{position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--alert);box-shadow:0 0 0 1.5px var(--bg-white);}
 
 .gnb{flex-shrink:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:var(--bg-white);border-bottom:1px solid var(--border-light);}
 .gnb .gnb-title{font-size:13px;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
@@ -1194,7 +1199,7 @@ body.free #scr-viewer .progress-thin{display:none;}
   color:var(--text-gray);margin-top:16px;}
 .keep-foot i,.keep-foot svg{width:13px;height:13px;flex-shrink:0;}
 /* 탈퇴 쪽 꼬리말만 붉다 — 거기서는 정말 없어지기 때문이다. 해지 버튼과 같은 붉은색 */
-.keep-foot.warn{color:#B23B32;}
+.keep-foot.warn{color:var(--alert);}
 
 /* ── 좁은 화면 꼬리말 ──
    홈 본문 맨 끝에만 붙는다. 다른 탭에는 두지 않는다 —
@@ -1295,7 +1300,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 .sheet-msg h4{font-size:15.5px;font-weight:800;letter-spacing:-0.2px;}
 .sheet-msg p{font-size:12.5px;color:var(--text-gray);line-height:1.7;margin-top:9px;}
 .sheet-act{display:flex;flex-direction:column;gap:8px;padding:16px 20px 0;}
-.btn-danger{background:#B23B32;color:var(--bg-white);}
+.btn-danger{background:var(--alert);color:var(--bg-white);}
 .btn-ghost{background:none;color:var(--text-gray);border:none;}
 
 /* 탈퇴 — 사라지는 것을 세어서 보여준다. 숫자가 있어야 무게가 전달된다 */
@@ -1535,7 +1540,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .noti-row:last-child{border-bottom:none;}
 .noti-ic{width:36px;height:36px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
 .noti-ic i,.noti-ic svg{width:16px;height:16px;color:var(--text-dark);}
-.noti-ic .dot{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--text-black);}
+.noti-ic .dot{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--alert);box-shadow:0 0 0 1.5px var(--bg-white);}
 .noti-body{flex:1;}
 .noti-title{font-size:13px;font-weight:700;line-height:1.45;}
 .noti-desc{font-size:12px;color:var(--text-gray);line-height:1.5;margin-top:2px;}
@@ -1734,7 +1739,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     transition:background var(--dur-short) var(--ease);}
   .wnav-ic:hover{background:var(--bg-light);}
   .wnav-ic i,.wnav-ic svg{width:20px;height:20px;color:var(--text-dark);}
-  .wnav-dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--text-black);}
+  .wnav-dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--alert);box-shadow:0 0 0 1.5px var(--bg-white);}
 
   /* ── 섹션 컨테이너 : 1280px ──
      감싸는 상자는 화면 전체 폭을 그대로 쓰고, 좌우 패딩으로 안쪽을 1280 에 앉힌다.
