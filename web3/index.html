@@ -101,6 +101,7 @@ svg.lucide{flex-shrink:0;}   /* 굵기는 lucide 기본값 2 유지 */
 }
 /* 어두운 판 위에서는 흰 링이라야 보인다 */
 .hs-slide:focus-visible,.sub-cta :focus-visible,.login-side :focus-visible,
+.login-wrap :focus-visible,
 #scr-reader :focus-visible{outline-color:var(--bg-white);}
 
 /* ===== 점프바 (리뷰용) ===== */
@@ -1617,41 +1618,49 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
 .login-side,.login-copy{display:none;}
 .login-scroll{display:flex;flex-direction:column;}
-/* ── 로그인 바탕 — 브랜드 3색 메시 그라디언트 (리건, 2026-10-06) ──
-   #FCFEE6(가장 옅은 라임) · #DFF000(브랜드) · #B2C000(눌러 놓은 라임) 셋으로 짰다.
-   한 줄 linear 로는 '화려하다'가 나오지 않는다 — 어디가 중심인지 모르게 덩이(radial)를 네 개
-   겹쳐야 색이 번지는 것처럼 보인다. 맨 아래 linear 는 덩이 사이 빈 곳을 메우는 바닥이다.
-   ⚠ 이 위에는 흰 글자를 올리지 않는다. #B2C000 은 흰 글자와 2.0:1 밖에 안 된다. */
+/* ── 로그인 바탕 — 검은 판 (리건, 2026-10-06) ──
+   #1A1A1A 다. 순수 #000 이 아니라 시스템이 쓰는 검정이라 다른 화면의 어두운 면과 같은 색이다.
+   배경을 검게 하면 이 칸 안의 글자 색이 전부 뒤집혀야 한다 — 큰 제목이 --text-black 이라
+   그대로 두면 검은 판에 검은 글씨가 된다. 그래서 아래에서 다섯 줄을 한꺼번에 밝은 쪽으로 돌린다. */
 .login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;
-  position:relative;overflow:hidden;
-  background:
-    radial-gradient(78% 62% at 14% 10%, #FCFEE6 0%, rgba(252,254,230,0) 64%),
-    radial-gradient(64% 56% at 88% 16%, #DFF000 0%, rgba(223,240,0,0) 62%),
-    radial-gradient(82% 70% at 80% 94%, #B2C000 0%, rgba(178,192,0,0) 66%),
-    radial-gradient(58% 52% at 18% 82%, #DFF000 0%, rgba(223,240,0,0) 60%),
-    linear-gradient(158deg, #FCFEE6 0%, #DFF000 54%, #B2C000 100%);}
+  position:relative;background:var(--bg-black);}
 
-/* 유리에 비친 빛 한 겹. soft-light 라 아래 색을 덮지 않고 밝기만 건드린다.
-   28초에 한 바퀴 — 더 빠르면 바탕이 말을 걸어서 로그인 버튼을 못 보게 된다. */
-.login-wrap::before{content:"";position:absolute;z-index:0;pointer-events:none;
-  left:-45%;right:-45%;top:-45%;bottom:-45%;
-  background:conic-gradient(from 0deg,
-    rgba(255,255,255,0.62) 0deg, rgba(255,255,255,0) 68deg,
-    rgba(178,192,0,0.40) 148deg, rgba(255,255,255,0) 226deg,
-    rgba(252,254,230,0.58) 308deg, rgba(255,255,255,0.62) 360deg);
-  mix-blend-mode:soft-light;
-  animation:login-sheen 28s linear infinite;}
-@keyframes login-sheen{to{transform:rotate(360deg);}}
-@media (prefers-reduced-motion: reduce){.login-wrap::before{animation:none;}}
-/* 글자와 버튼은 빛 겹보다 위에 */
-.login-wrap>*{position:relative;z-index:1;}
+/* 검은 판 위의 글자 — 큰 제목만 완전한 흰색, 나머지는 단계를 둬서 위계를 남긴다 */
+#scr-login .login-logo,#scr-login .login-side-copy{color:#fff;}
+#scr-login .login-brand p,#scr-login .login-side-sub{color:rgba(255,255,255,0.70);}
+#scr-login .login-side-logo{color:rgba(255,255,255,0.45);}
+#scr-login .login-note{color:rgba(255,255,255,0.50);}
 
-/* 라임 위에서 회색 글자는 묽어진다 — #999 는 #B2C000 위에서 1.4:1 로 사실상 안 보인다.
-   ID 를 물려 아래 데스크톱 규칙(.login-side-sub 등)을 특이도로 이긴다. */
-#scr-login .login-brand p,#scr-login .login-note,
-#scr-login .login-side-logo,#scr-login .login-side-sub{color:var(--text-dark);}
-/* 흰 버튼이 그라디언트에서 떠 보이게. 그림자도 라임 쪽으로 기울여 둔다 */
-#scr-login .lbtn{box-shadow:0 2px 10px -3px rgba(60,70,0,0.28);}
+/* ── 로그인 버튼 — 테두리만 있는 문, 호버하면 라임이 왼쪽에서 차오른다 ──
+   차오르는 효과는 가짜 요소 대신 background-size 로 만든다. 가짜 요소에 z-index:-1 을 주면
+   쌓임 맥락에 따라 글자 뒤로 숨거나 판 밖으로 나가는데, 배경은 원래 글자 뒤라서 그 걱정이 없다.
+   ⚠ 차오른 뒤에는 글자가 잉크로 바뀐다. 라임 위의 흰 글자는 1.3:1 로, 호버하는 순간 글자가 사라진다. */
+#scr-login .lbtn{
+  box-shadow:none;
+  color:#fff;
+  border-color:rgba(255,255,255,0.55);
+  background-color:transparent;
+  background-image:linear-gradient(var(--brand),var(--brand));
+  background-repeat:no-repeat;
+  background-position:left center;
+  background-size:0% 100%;
+  transition:background-size .42s cubic-bezier(.22,1,.36,1),
+             color .22s ease .06s,
+             border-color .22s ease;}
+/* Apple 버튼도 같은 모양으로 맞춘다 — 검은 판에서는 검은 버튼이 사라진다.
+   ⚠ 실제 구현에서는 Apple 브랜드 규격(검정 또는 흰색 버튼)을 다시 확인해야 한다. */
+#scr-login .lbtn.apple{background-color:transparent;border-color:rgba(255,255,255,0.55);color:#fff;}
+#scr-login .lbtn:hover,#scr-login .lbtn.apple:hover{
+  background-size:100% 100%;
+  color:var(--brand-ink);
+  border-color:var(--brand);}
+#scr-login .lbtn:active,#scr-login .lbtn.apple:active{
+  background-image:linear-gradient(var(--brand-press),var(--brand-press));}
+/* 손가락으로 쓰는 기기에서는 호버가 없다 — 눌렀을 때 바로 차오르게 둔다 */
+@media (hover:none){
+  #scr-login .lbtn:active,#scr-login .lbtn.apple:active{
+    background-size:100% 100%;color:var(--brand-ink);border-color:var(--brand);}
+}
 .login-brand{text-align:center;margin-bottom:44px;}
 .login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
 .login-brand p{font-size:13px;color:var(--text-gray);margin-top:10px;}
