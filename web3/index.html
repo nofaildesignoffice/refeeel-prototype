@@ -76,6 +76,16 @@
                  inset 0 -1px 0 rgba(0,0,0,0.05),
                  0 8px 24px -8px rgba(0,0,0,0.22),
                  0 2px 6px -2px rgba(0,0,0,0.10);
+
+  /* 굴절이 켜졌을 때 — 테두리 빛이 한 바퀴 돌고 위쪽이 가장 밝다.
+     애플 유리의 '가장자리가 빛난다'는 느낌은 색이 아니라 이 안쪽 테두리에서 나온다. */
+  --glass-bg-thin:rgba(255,255,255,0.26);
+  --glass-line-thin:rgba(255,255,255,0.42);
+  --glass-shadow-lens:inset 0 0 0 1px rgba(255,255,255,0.30),
+                      inset 0 1.5px 1px -0.5px rgba(255,255,255,0.95),
+                      inset 0 -1.5px 1px -0.5px rgba(255,255,255,0.45),
+                      0 10px 28px -10px rgba(0,0,0,0.30),
+                      0 2px 6px -2px rgba(0,0,0,0.12);
 }
 
 /* ── commel 워드마크 ──
@@ -219,7 +229,13 @@ body.clean .jumptoggle{display:none!important;}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
 .sec-more{font-size:12px;color:var(--text-light);}
-.img-ph{background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.img-ph{position:relative;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+/* 썸네일 위 '며칠 됐는지' — 사진이 밝든 어둡든 읽히게 어두운 판을 깔고 흰 글자를 올린다.
+   라임을 쓰지 않는다. 라임은 '누를 것'을 가리키는 색인데 이건 누르는 게 아니라 정보다. */
+.age-badge{position:absolute;left:10px;top:10px;z-index:1;
+  padding:4px 9px;border-radius:var(--radius-full);
+  font-size:11px;font-weight:700;letter-spacing:-0.2px;color:#fff;
+  background:rgba(0,0,0,0.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
 /* ── 디자인 샘플 썸네일 ──
    그림이 들어온 칸. 안내 아이콘은 숨기지만 .ex-read(읽음 체크)처럼 겉에 얹힌 표시는 남긴다 —
    그래서 자식 선택자(>)로 아이콘만 집는다. */
@@ -274,6 +290,8 @@ body.clean .jumptoggle{display:none!important;}
 .hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:7px;z-index:2;}
 .hs-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;padding:0;cursor:pointer;transition:width var(--dur-short),background var(--dur-short);}
 .hs-dot.on{width:18px;border-radius:3px;background:var(--bg-white);}
+.continue-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+.wide-only{display:none;}
 .continue-card{display:flex;gap:12px;padding:12px;align-items:center;}
 .continue-card .img-ph{width:68px;height:68px;}
 .continue-body{flex:1;min-width:0;}
@@ -1801,6 +1819,10 @@ mark.hl mark.hl{background:none;box-shadow:none;}
     background:var(--glass-bg);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
 
+  /* 굴절이 켜지면 유리가 스스로 밝아지므로 흰 기를 걷는다 — 안 걷으면 뿌연 판이 된다 */
+  .wnav-pill.lg-on,.wnav-ic.lg-on{background:var(--glass-bg-thin);border-color:var(--glass-line-thin);
+    box-shadow:var(--glass-shadow-lens);}
+
   /* ── 옮겨 다니는 잉크 ──
      M3 탭 인디케이터와 같은 방식이다(250ms · emphasized).
      버튼마다 배경을 칠했다 지웠다 하면 '켜짐/꺼짐' 두 상태뿐이라 어디서 어디로 갔는지 안 보인다.
@@ -2981,6 +3003,13 @@ body.modal-open #scr-interest .ord-sub,
   .continue-card{padding:18px;gap:18px;}
   .continue-card .img-ph{width:96px;height:96px;}
   .continue-title{font-size:15.5px;}
+  /* 홈의 세 장짜리 줄만 가로로 편다. 카드가 좁아지니 그림도 같이 줄인다.
+     .continue-card 에 그냥 걸면 '내 코킷'의 네 장까지 같이 줄어든다 — 여기 안으로 가둔다. */
+  .continue-grid{grid-template-columns:repeat(3,1fr);gap:20px;}
+  .wide-only{display:flex;}
+  .continue-grid .continue-card{padding:16px;gap:14px;}
+  .continue-grid .continue-card .img-ph{width:76px;height:76px;}
+  .continue-grid .continue-title{font-size:14.5px;}
   .rank-row{padding:16px 0;gap:18px;}
   .rank-row .img-ph{width:64px;height:64px;}
   .rank-title{font-size:15.5px;}
@@ -3386,6 +3415,9 @@ body.modal-open #scr-interest .ord-sub,
 
     <div class="sec">
       <div class="sec-head"><span class="sec-title">최근 읽고 있는 코킷</span></div>
+      <!-- 좁은 화면은 한 장만. 넓은 화면은 세 장을 가로로 편다(리건, 2026-10-06) —
+           데스크톱은 한 장만 두면 가로가 텅 빈다. 뒤 두 장은 .wide-only 로 좁은 화면에서 감춘다. -->
+      <div class="continue-grid">
       <div class="card continue-card" data-go="scr-viewer">
         <div class="img-ph"><i data-lucide="image"></i></div>
         <div class="continue-body">
@@ -3396,6 +3428,27 @@ body.modal-open #scr-interest .ord-sub,
         </div>
         <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
       </div>
+      <div class="card continue-card wide-only" data-go="scr-viewer">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="continue-body">
+          <div class="continue-num">CO:KIT 51</div>
+          <div class="continue-title">뇌는 왜 이야기에 속는가</div>
+          <div class="progress-bar"><div style="width:72%"></div></div>
+          <div class="continue-meta"><span>72%</span><span>3일 전 읽음</span></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+      </div>
+      <div class="card continue-card wide-only" data-go="scr-viewer">
+        <div class="img-ph"><i data-lucide="image"></i></div>
+        <div class="continue-body">
+          <div class="continue-num">CO:KIT 15</div>
+          <div class="continue-title">사업자의 인스타 프로필 설정법</div>
+          <div class="progress-bar"><div style="width:20%"></div></div>
+          <div class="continue-meta"><span>20%</span><span>5일 전 읽음</span></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
+      </div>
+      </div>
     </div>
 
     <div class="sec alt">
@@ -3403,7 +3456,7 @@ body.modal-open #scr-interest .ord-sub,
       <!-- 한 장을 폭 전체로 늘리면 이미지 높이가 700px 을 넘는다. 두 장으로 나눠 담는다 -->
       <div class="new-grid">
         <div class="card bigcard" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="img-ph"><i data-lucide="image"></i><span class="age-badge">2일 전</span></div>
           <div class="bigcard-body">
             <div class="bigcard-kicker"><span class="k">CO:KIT 89 · NEW</span></div>
             <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
@@ -3411,7 +3464,7 @@ body.modal-open #scr-interest .ord-sub,
           </div>
         </div>
         <div class="card bigcard" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="img-ph"><i data-lucide="image"></i><span class="age-badge">6일 전</span></div>
           <div class="bigcard-body">
             <div class="bigcard-kicker"><span class="k">CO:KIT 88 · NEW</span></div>
             <div class="bigcard-title">인스타랑 밀당하는 법</div>
@@ -6456,6 +6509,90 @@ function fillSampleImages(){
   });
 }
 fillSampleImages();
+
+/* ══════════ 리퀴드 글래스 — 흐림 말고 굴절 (2026-10-06) ══════════
+   흐리기만 한 반투명 판은 유리가 아니라 간유리다. 진짜 유리가 유리로 보이는 이유는
+   가장자리에서 뒤에 있는 것을 '꺾기' 때문이다(굴절). 그래서 세 가지를 쌓는다.
+
+   ⓐ 변위 지도 — 가운데는 #808080(=안 민다), 테두리로 갈수록 R(가로)·G(세로)가 강해지는 그림.
+      안쪽에 둥근 사각형을 #808080 로 흐리게 덮어서 '가운데는 그대로, 테두리만 꺾임'을 만든다.
+   ⓑ feDisplacementMap — 그 지도대로 배경 픽셀을 민다. R·G·B 를 조금씩 다른 세기로 세 번 밀어
+      screen 으로 겹치면 테두리에 색이 갈라진다. 그게 유리의 색수차다.
+   ⓒ 테두리 빛 — 안쪽 그림자로 한 바퀴. 위가 가장 밝다.
+
+   지도는 요소 크기에 맞춰 그려야 해서 크기가 바뀔 때마다 다시 만든다(ResizeObserver).
+   ⚠ backdrop-filter 안의 url() 은 크로미움 계열만 된다. 사파리·파이어폭스는 아래 fallback 으로
+     흐림+채도만 남는다 — 그래서 CSS 쪽 기본값을 '그것만으로도 쓸 만하게' 잡아 뒀다.
+   참고: github.com/nikdelvin/liquid-glass, blog.logrocket.com 의 CSS/SVG 리퀴드 글래스 해설 */
+const LG_OK = (() => {
+  const d = document.createElement("div");
+  d.style.cssText = "backdrop-filter:url(#x)";
+  return d.style.backdropFilter.indexOf("url(") === 0;
+})();
+
+function lgMap(w, h, r, depth){
+  return "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
+    '<style>.mix{mix-blend-mode:screen}</style><defs>' +
+    '<linearGradient id="Y" x1="0" x2="0" y1="' + Math.ceil(r / h * 15) + '%" y2="' + Math.floor(100 - r / h * 15) + '%">' +
+      '<stop offset="0%" stop-color="#0F0"/><stop offset="100%" stop-color="#000"/></linearGradient>' +
+    '<linearGradient id="X" x1="' + Math.ceil(r / w * 15) + '%" x2="' + Math.floor(100 - r / w * 15) + '%" y1="0" y2="0">' +
+      '<stop offset="0%" stop-color="#F00"/><stop offset="100%" stop-color="#000"/></linearGradient>' +
+    '</defs>' +
+    '<rect width="' + w + '" height="' + h + '" fill="#808080"/>' +
+    '<g filter="blur(2px)">' +
+      '<rect width="' + w + '" height="' + h + '" fill="#000080"/>' +
+      '<rect width="' + w + '" height="' + h + '" fill="url(#Y)" class="mix"/>' +
+      '<rect width="' + w + '" height="' + h + '" fill="url(#X)" class="mix"/>' +
+      '<rect x="' + depth + '" y="' + depth + '" width="' + (w - 2 * depth) + '" height="' + (h - 2 * depth) +
+        '" rx="' + r + '" ry="' + r + '" fill="#808080" filter="blur(' + depth + 'px)"/>' +
+    '</g></svg>');
+}
+
+/* R·G·B 를 서로 다른 세기로 밀고 screen 으로 합친다 — 테두리에서 색이 갈라지는 게 색수차다 */
+function lgFilter(w, h, r, depth, strength, ca){
+  const map = lgMap(w, h, r, depth);
+  const pass = (scale, mat, res) =>
+    '<feDisplacementMap in="SourceGraphic" in2="m" scale="' + scale +
+      '" xChannelSelector="R" yChannelSelector="G"/>' +
+    '<feColorMatrix type="matrix" values="' + mat + '" result="' + res + '"/>';
+  return "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '">' +
+    '<defs><filter id="d" color-interpolation-filters="sRGB">' +
+      '<feImage x="0" y="0" width="' + w + '" height="' + h + '" href="' + map + '" result="m"/>' +
+      pass(strength + ca * 2, "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0", "R") +
+      pass(strength + ca,     "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0", "G") +
+      pass(strength,          "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0", "B") +
+      '<feBlend in="R" in2="G" mode="screen"/><feBlend in2="B" mode="screen"/>' +
+    '</filter></defs></svg>') + "#d";
+}
+
+const LG_SPEC = [
+  [".wnav-pill", {depth: 5, strength: 42, ca: 3, blur: 4, bright: 1.06, sat: 1.7}],
+  [".wnav-ic",   {depth: 5, strength: 34, ca: 2, blur: 4, bright: 1.06, sat: 1.7}]
+];
+
+function lgPaint(el, o){
+  const w = Math.round(el.offsetWidth), h = Math.round(el.offsetHeight);
+  if(!w || !h){ el.classList.remove("lg-on"); return; }
+  const cs = parseFloat(getComputedStyle(el).borderRadius) || 0;
+  const r = Math.min(cs, Math.min(w, h) / 2);
+  el.style.backdropFilter = el.style.webkitBackdropFilter =
+    "blur(" + (o.blur / 2) + "px) url('" + lgFilter(w, h, r, o.depth, o.strength, o.ca) +
+    "') blur(" + o.blur + "px) brightness(" + o.bright + ") saturate(" + o.sat + ")";
+  el.classList.add("lg-on");
+}
+
+function lgInit(){
+  if(!LG_OK) return;                      /* 사파리·파이어폭스는 CSS 기본값 그대로 둔다 */
+  LG_SPEC.forEach(([sel, o]) => {
+    document.querySelectorAll(sel).forEach(el => {
+      lgPaint(el, o);
+      if(window.ResizeObserver) new ResizeObserver(() => lgPaint(el, o)).observe(el);
+    });
+  });
+}
+lgInit();
 
 /* ══════════ GNB 로고 색 — 밑에 깔린 사진을 보고 뒤집는다 (2026-10-06) ══════════
    밝기는 캔버스로 잰다. 다만 다른 도메인 이미지는 CORS 때문에 픽셀을 읽을 수 없다(tainted canvas) —
