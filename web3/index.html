@@ -1504,7 +1504,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 /* 구독 상태는 배지 줄을 따로 두지 않고 이름 옆 상태 표시로 붙인다.
    '누구 · 어떤 상태'가 한 줄에서 끝나야 프로필이 두 덩이로 안 쪼개진다. */
 .my-state{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--text-gray);flex-shrink:0;}
-.my-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--text-dark);}
+.my-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 1px var(--brand-ink);}
 /* 관심사는 지금 뭐가 걸려 있는지 나열하지 않는다. 그건 들어가서 보면 되고,
    여기서는 '고칠 수 있는 곳이 있다'만 알면 된다.
    이름 줄 오른쪽 끝에 붙인다(리건, 2026-08-19) — 아래로 내리면 이름·계정과 세 줄이 되고,
@@ -1617,7 +1617,41 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
 .login-side,.login-copy{display:none;}
 .login-scroll{display:flex;flex-direction:column;}
-.login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;}
+/* ── 로그인 바탕 — 브랜드 3색 메시 그라디언트 (리건, 2026-10-06) ──
+   #FCFEE6(가장 옅은 라임) · #DFF000(브랜드) · #B2C000(눌러 놓은 라임) 셋으로 짰다.
+   한 줄 linear 로는 '화려하다'가 나오지 않는다 — 어디가 중심인지 모르게 덩이(radial)를 네 개
+   겹쳐야 색이 번지는 것처럼 보인다. 맨 아래 linear 는 덩이 사이 빈 곳을 메우는 바닥이다.
+   ⚠ 이 위에는 흰 글자를 올리지 않는다. #B2C000 은 흰 글자와 2.0:1 밖에 안 된다. */
+.login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(78% 62% at 14% 10%, #FCFEE6 0%, rgba(252,254,230,0) 64%),
+    radial-gradient(64% 56% at 88% 16%, #DFF000 0%, rgba(223,240,0,0) 62%),
+    radial-gradient(82% 70% at 80% 94%, #B2C000 0%, rgba(178,192,0,0) 66%),
+    radial-gradient(58% 52% at 18% 82%, #DFF000 0%, rgba(223,240,0,0) 60%),
+    linear-gradient(158deg, #FCFEE6 0%, #DFF000 54%, #B2C000 100%);}
+
+/* 유리에 비친 빛 한 겹. soft-light 라 아래 색을 덮지 않고 밝기만 건드린다.
+   28초에 한 바퀴 — 더 빠르면 바탕이 말을 걸어서 로그인 버튼을 못 보게 된다. */
+.login-wrap::before{content:"";position:absolute;z-index:0;pointer-events:none;
+  left:-45%;right:-45%;top:-45%;bottom:-45%;
+  background:conic-gradient(from 0deg,
+    rgba(255,255,255,0.62) 0deg, rgba(255,255,255,0) 68deg,
+    rgba(178,192,0,0.40) 148deg, rgba(255,255,255,0) 226deg,
+    rgba(252,254,230,0.58) 308deg, rgba(255,255,255,0.62) 360deg);
+  mix-blend-mode:soft-light;
+  animation:login-sheen 28s linear infinite;}
+@keyframes login-sheen{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion: reduce){.login-wrap::before{animation:none;}}
+/* 글자와 버튼은 빛 겹보다 위에 */
+.login-wrap>*{position:relative;z-index:1;}
+
+/* 라임 위에서 회색 글자는 묽어진다 — #999 는 #B2C000 위에서 1.4:1 로 사실상 안 보인다.
+   ID 를 물려 아래 데스크톱 규칙(.login-side-sub 등)을 특이도로 이긴다. */
+#scr-login .login-brand p,#scr-login .login-note,
+#scr-login .login-side-logo,#scr-login .login-side-sub{color:var(--text-dark);}
+/* 흰 버튼이 그라디언트에서 떠 보이게. 그림자도 라임 쪽으로 기울여 둔다 */
+#scr-login .lbtn{box-shadow:0 2px 10px -3px rgba(60,70,0,0.28);}
 .login-brand{text-align:center;margin-bottom:44px;}
 .login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
 .login-brand p{font-size:13px;color:var(--text-gray);margin-top:10px;}
@@ -2537,7 +2571,10 @@ body.modal-open #scr-interest .ord-sub,
   .login-img span{font-size:13px;font-weight:600;letter-spacing:0.3px;}
 
   /* 오른쪽 — 브랜드 문구가 먼저, 그 아래 들어가는 문 */
-  #scr-login .login-wrap{padding:72px 64px;max-width:560px;}
+  /* 바탕은 칸을 가득, 글·버튼 폭은 전과 같게(560 - 64*2 = 432px).
+     .login-wrap 에 max-width 를 두면 그라디언트도 거기서 끊겨 오른쪽이 흰 채로 남는다. */
+  #scr-login .login-wrap{padding:72px 64px;max-width:none;}
+  #scr-login .login-wrap>*{max-width:432px;width:100%;}
   #scr-login .login-brand{display:none;}   /* 아래 login-copy 가 같은 말을 더 크게 한다 */
   .login-copy{display:block;margin-bottom:44px;}
   .login-side-logo{font-size:17px;font-weight:800;letter-spacing:1px;color:var(--text-light);margin-bottom:28px;}
