@@ -1072,7 +1072,10 @@ body.free #scr-viewer .progress-thin{display:none;}
 /* 글자와 버튼은 막보다 위에 */
 .login-wrap>*{position:relative;z-index:1;}
 
-/* 어두운 바탕 위의 글자 — 큰 것만 완전한 흰색, 나머지는 단계를 둬서 위계를 남긴다 */
+/* 어두운 바탕 위의 글자 — 큰 것만 완전한 흰색, 나머지는 단계를 둬서 위계를 남긴다.
+   .login-logo 도 여기 들어간다. 워드마크가 fill:currentColor 라 글자색을 안 주면
+   본문 색(#1A1A1A)을 그대로 물려받아 검은 바탕에서 사라진다. */
+#scr-login .login-logo{color:#fff;}
 #scr-login .login-brand p{color:rgba(255,255,255,0.72);}
 #scr-login .login-note{color:rgba(255,255,255,0.55);}
 
