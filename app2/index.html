@@ -1087,7 +1087,10 @@ body.free #scr-viewer .progress-thin{display:none;}
   box-shadow:none;
   color:#fff;
   border-color:rgba(255,255,255,0.55);
-  background-color:transparent;
+  /* 투명이 아니라 검은 판이다(리건, 2026-10-07) — 웹 로그인 오른쪽 칸과 같은 #1A1A1A.
+     앱은 버튼 뒤로 사진이 그대로 비쳐서 글자가 사진 무늬와 겹쳤다. 판을 깔아 글자를 떼어 놓는다.
+     차오르는 라임은 background-image 라 이 색보다 위에 깔린다 — 눌렀을 때 동작은 그대로다. */
+  background-color:var(--bg-black);
   background-image:linear-gradient(var(--brand),var(--brand));
   background-repeat:no-repeat;
   background-position:left center;
@@ -1097,7 +1100,7 @@ body.free #scr-viewer .progress-thin{display:none;}
              border-color .22s ease;}
 /* Apple 버튼도 같은 모양으로 맞춘다 — 어두운 바탕에서는 검은 버튼이 사라진다.
    ⚠ 실제 구현에서는 Apple 브랜드 규격(검정 또는 흰색 버튼)을 다시 확인해야 한다. */
-#scr-login .lbtn.apple{background-color:transparent;border-color:rgba(255,255,255,0.55);color:#fff;}
+#scr-login .lbtn.apple{background-color:var(--bg-black);border-color:rgba(255,255,255,0.55);color:#fff;}
 /* 앱은 손가락으로 쓴다 — 누르고 있는 동안 차오른다 */
 #scr-login .lbtn:active,#scr-login .lbtn.apple:active{
   background-size:100% 100%;
