@@ -1058,44 +1058,64 @@ body.free #scr-viewer .progress-thin{display:none;}
    앱을 열면 바로 로그인이다(리건, 2026-08-18).
    ⚠ 실제 구현에서는 Google·Apple 공식 브랜드 에셋과 버튼 규격을 그대로 써야 한다.
    ⚠ Google 로그인을 넣으면 App Store 심사 4.8 조항에 따라 Apple 로그인이 필수다. */
-/* ── 로그인 바탕 — 브랜드 3색 메시 그라디언트 (리건, 2026-10-06) ──
-   #FCFEE6 · #DFF000 · #B2C000 셋. 한 줄 linear 로는 '화려하다'가 나오지 않는다 —
-   어디가 중심인지 모르게 덩이(radial)를 네 개 겹쳐야 색이 번지는 것처럼 보인다.
-   맨 아래 linear 는 덩이 사이 빈 곳을 메우는 바닥이다.
-   ⚠ 이 위에는 흰 글자를 올리지 않는다. #B2C000 은 흰 글자와 2.0:1 밖에 안 된다. */
+/* ── 로그인 바탕 — 유리 사진 + 검은 오버레이 (리건, 2026-10-07) ──
+   웹 v3 의 로그인 왼쪽 칸에 쓰던 사진을 앱에서는 화면 전체에 깐다.
+   앱은 한 칸이라 사진과 글이 같은 면을 쓰므로, 사진 위에 검은 막을 한 겹 덮어 글자 자리를 만든다.
+   ⚠ 막 농도는 글자 때문에 정해진 숫자다. 사진에서 가장 밝은 라임 띠 위에서도 흰 글자가 읽혀야 한다 —
+     0.72 에서 큰 글자는 넉넉하고 가장 작은 줄이 3.8:1 쯤이다. 더 안전하게 가려면 0.78 로 올린다.
+   ⚠ 리퀴드 글래스는 앱에 넣지 않는다(리건) — WKWebView 가 굴절을 지원하지 않는다. 여긴 사진과 막뿐이다. */
 .login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;
   position:relative;overflow:hidden;
-  background:
-    radial-gradient(78% 62% at 14% 10%, #FCFEE6 0%, rgba(252,254,230,0) 64%),
-    radial-gradient(64% 56% at 88% 16%, #DFF000 0%, rgba(223,240,0,0) 62%),
-    radial-gradient(82% 70% at 80% 94%, #B2C000 0%, rgba(178,192,0,0) 66%),
-    radial-gradient(58% 52% at 18% 82%, #DFF000 0%, rgba(223,240,0,0) 60%),
-    linear-gradient(158deg, #FCFEE6 0%, #DFF000 54%, #B2C000 100%);}
-
-/* 유리에 비친 빛 한 겹. soft-light 라 아래 색을 덮지 않고 밝기만 건드린다.
-   28초에 한 바퀴 — 더 빠르면 바탕이 말을 걸어서 로그인 버튼을 못 보게 된다. */
-.login-wrap::before{content:"";position:absolute;z-index:0;pointer-events:none;
-  left:-45%;right:-45%;top:-45%;bottom:-45%;
-  background:conic-gradient(from 0deg,
-    rgba(255,255,255,0.62) 0deg, rgba(255,255,255,0) 68deg,
-    rgba(178,192,0,0.40) 148deg, rgba(255,255,255,0) 226deg,
-    rgba(252,254,230,0.58) 308deg, rgba(255,255,255,0.62) 360deg);
-  mix-blend-mode:soft-light;
-  animation:login-sheen 28s linear infinite;}
-@keyframes login-sheen{to{transform:rotate(360deg);}}
-@media (prefers-reduced-motion: reduce){.login-wrap::before{animation:none;}}
+  background:url("login-glass.jpg") center/cover no-repeat var(--bg-black);}
+.login-wrap::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:rgba(0,0,0,0.72);}
+/* 글자와 버튼은 막보다 위에 */
 .login-wrap>*{position:relative;z-index:1;}
 
-/* 라임 위에서 회색 글자는 묽어진다 — #999 는 #B2C000 위에서 1.4:1 로 사실상 안 보인다 */
-#scr-login .login-brand p,#scr-login .login-note{color:var(--text-dark);}
-/* 흰 버튼이 그라디언트에서 떠 보이게. 그림자도 라임 쪽으로 기울여 둔다 */
-#scr-login .lbtn{box-shadow:0 2px 10px -3px rgba(60,70,0,0.28);}
+/* 어두운 바탕 위의 글자 — 큰 것만 완전한 흰색, 나머지는 단계를 둬서 위계를 남긴다 */
+#scr-login .login-brand p{color:rgba(255,255,255,0.72);}
+#scr-login .login-note{color:rgba(255,255,255,0.55);}
+
+/* ── 로그인 버튼 — 테두리만 있는 문, 누르면 라임이 왼쪽에서 차오른다 ──
+   차오르는 효과는 가짜 요소 대신 background-size 로 만든다. 가짜 요소에 z-index:-1 을 주면
+   쌓임 맥락에 따라 글자 뒤로 숨거나 판 밖으로 나가는데, 배경은 원래 글자 뒤라 그 걱정이 없다.
+   ⚠ 차오른 뒤에는 글자가 잉크로 바뀐다. 라임 위의 흰 글자는 1.3:1 로, 그 순간 글자가 사라진다. */
+#scr-login .lbtn{
+  box-shadow:none;
+  color:#fff;
+  border-color:rgba(255,255,255,0.55);
+  background-color:transparent;
+  background-image:linear-gradient(var(--brand),var(--brand));
+  background-repeat:no-repeat;
+  background-position:left center;
+  background-size:0% 100%;
+  transition:background-size .42s cubic-bezier(.22,1,.36,1),
+             color .22s ease .06s,
+             border-color .22s ease;}
+/* Apple 버튼도 같은 모양으로 맞춘다 — 어두운 바탕에서는 검은 버튼이 사라진다.
+   ⚠ 실제 구현에서는 Apple 브랜드 규격(검정 또는 흰색 버튼)을 다시 확인해야 한다. */
+#scr-login .lbtn.apple{background-color:transparent;border-color:rgba(255,255,255,0.55);color:#fff;}
+/* 앱은 손가락으로 쓴다 — 누르고 있는 동안 차오른다 */
+#scr-login .lbtn:active,#scr-login .lbtn.apple:active{
+  background-size:100% 100%;
+  color:var(--brand-ink);
+  border-color:var(--brand);}
+@media (hover:hover){
+  #scr-login .lbtn:hover,#scr-login .lbtn.apple:hover{
+    background-size:100% 100%;color:var(--brand-ink);border-color:var(--brand);}
+}
 .login-brand{text-align:center;margin-bottom:44px;}
 .login-logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
 .login-brand p{font-size:13px;color:var(--text-gray);margin-top:10px;}
 .lbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--border-default);background:var(--bg-white);color:var(--text-black);}
 .lbtn+.lbtn{margin-top:9px;}
 .lbtn i,.lbtn svg{width:17px;height:17px;}
+/* ── 로그인 버튼의 브랜드 로고 ──
+   lucide 에는 브랜드 마크가 없어서 SVG 를 직접 넣었다.
+   Apple 마크는 fill:currentColor 라 글자와 함께 뒤집힌다 — 어두운 바탕에선 흰색, 라임 위에선 잉크.
+   Google G 는 4색을 고정한다. 색을 바꾸면 Google 브랜드 규정 위반이다. */
+.lbtn .ico-brand{width:17px;height:17px;flex-shrink:0;}
+.lbtn .ico-apple{width:18px;height:18px;}
 .lbtn.apple{background:var(--text-black);border-color:var(--text-black);color:var(--bg-white);}
 .login-note{text-align:center;font-size:11.5px;color:var(--text-light);margin-top:18px;line-height:1.6;}
 
@@ -1162,8 +1182,8 @@ body.free #scr-viewer .progress-thin{display:none;}
       </div>
       <!-- 순서는 Google → Apple → 이메일. 영어권·한국 모두 이 셋이면 시작할 수 있다.
            카카오는 한국 유입이 늘면, LINE 은 일본 진출 시 붙인다. -->
-      <button class="lbtn" data-go="scr-agree">Google로 계속하기</button>
-      <button class="lbtn apple" data-go="scr-agree">Apple로 계속하기</button>
+      <button class="lbtn" data-go="scr-agree"><svg class="ico-brand" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google로 계속하기</button>
+      <button class="lbtn apple" data-go="scr-agree"><svg class="ico-brand ico-apple" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>Apple로 계속하기</button>
       <button class="lbtn" data-go="scr-agree"><i data-lucide="mail"></i>이메일로 계속하기</button>
       <p class="login-note">처음이시면 자동으로 가입돼요</p>
     </div>
