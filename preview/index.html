@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>COMMEL 카드 스타일 — 올렸을 때</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#1A1A1A; --ink-2:#333333; --gray:#666666; --light:#999999; --muted:#BCBCBC;
+  --white:#FFFFFF; --tint:#FBFDEF; --paper:#FBFAF8; --page:#EFEDE8;
+  --line:#E0E0E0; --line-2:#D0D0D0;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-soft:rgba(223,240,0,.20);
+  --r-xs:4px; --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:9999px;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);color:var(--ink);line-height:1.5;
+  -webkit-font-smoothing:antialiased;}
+:where(a,button,article):focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+
+/* ══════════ 고르는 자리 — 스크롤해도 따라온다 ══════════ */
+.bar{position:sticky;top:0;z-index:60;background:rgba(239,237,232,.92);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
+  border-bottom:1px solid var(--line-2);}
+.bar-in{max-width:1460px;margin:0 auto;padding:14px 22px 12px;}
+.bar-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.bar .mark{height:17px;width:auto;aspect-ratio:573.51/125.93;color:var(--ink);}
+.bar h1{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
+.bar h1 span{color:var(--light);font-weight:700;}
+.bar .hint{font-size:12px;color:var(--gray);margin-left:auto;}
+.picks{display:flex;gap:6px;overflow-x:auto;padding:11px 0 2px;scrollbar-width:none;}
+.picks::-webkit-scrollbar{display:none;}
+.pick{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:var(--r-full);
+  border:1px solid var(--line-2);background:var(--white);font-family:inherit;font-size:12.5px;font-weight:700;
+  color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:.14s var(--ease);}
+.pick b{font-size:10px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;}
+.pick em{font-style:normal;font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
+.pick:hover{border-color:var(--ink);}
+.pick.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.pick.on b,.pick.on em{color:rgba(26,26,26,.55);}
+.note{font-size:12.5px;color:var(--gray);padding:9px 0 1px;line-height:1.6;}
+
+/* ══════════ 두 폭을 나란히 ══════════ */
+.stage{max-width:1460px;margin:0 auto;padding:26px 22px 90px;
+  display:grid;grid-template-columns:minmax(0,1fr) 374px;gap:26px;align-items:start;}
+.fr-lab{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.fr-lab b{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--ink-2);}
+.fr-lab span{font-size:10.5px;font-weight:700;color:var(--light);border:1px solid var(--line-2);
+  border-radius:var(--r-full);padding:2px 8px;}
+
+/* 브라우저 틀 */
+.web .chrome{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#E4E1DB;
+  border-radius:var(--r-md) var(--r-md) 0 0;border:1px solid var(--line-2);border-bottom:none;}
+.web .dot{width:9px;height:9px;border-radius:50%;background:#C9C5BD;}
+.web .url{flex:1;margin-left:6px;height:20px;border-radius:var(--r-full);background:var(--paper);
+  display:flex;align-items:center;padding:0 10px;font-size:10px;color:var(--light);}
+.view{background:var(--paper);border:1px solid var(--line-2);overflow:hidden;}
+.web .view{border-radius:0 0 var(--r-md) var(--r-md);height:760px;overflow-y:auto;}
+.web .view::-webkit-scrollbar{width:8px;}
+.web .view::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:9999px;}
+
+/* 폰 틀 */
+.app .phone{background:var(--ink);border-radius:38px;padding:9px;box-shadow:0 18px 40px -20px rgba(0,0,0,.45);}
+.app .view{border-radius:30px;height:742px;overflow-y:auto;border:none;scrollbar-width:none;}
+.app .view::-webkit-scrollbar{display:none;}
+.app .status{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 4px;
+  font-size:11px;font-weight:700;color:var(--ink);}
+.app .status i{display:flex;gap:3px;}
+.app .status i em{width:3px;height:9px;border-radius:1px;background:var(--ink);font-style:normal;}
+
+/* 화면 안쪽 공통 (앱/웹 둘 다) */
+.nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:0 20px;height:56px;
+  background:rgba(251,250,248,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);}
+.nav .mark{height:15px;width:auto;aspect-ratio:573.51/125.93;color:var(--ink);}
+.nav ul{display:flex;gap:16px;list-style:none;margin-left:auto;}
+.nav li{font-size:12px;font-weight:700;color:var(--gray);}
+.nav li.on{color:var(--ink);}
+.app .nav{height:48px;padding:0 16px;}
+.app .nav ul{display:none;}
+.app .nav .bell{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#B23B32;}
+
+.hero{position:relative;aspect-ratio:21/9;background-size:cover;background-position:center;display:flex;
+  align-items:flex-end;}
+.app .hero{aspect-ratio:4/3;}
+.hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,rgba(0,0,0,.78) 100%);}
+.hero-b{position:relative;z-index:1;padding:20px;}
+.hero-lab{font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:var(--brand);}
+.hero-t{font-size:20px;font-weight:800;letter-spacing:-.5px;color:#fff;margin-top:7px;line-height:1.35;}
+.hero-s{font-size:11px;color:rgba(255,255,255,.72);margin-top:7px;}
+.app .hero-t{font-size:17px;}
+
+.sec{padding:26px 20px;}
+.sec+.sec{padding-top:4px;}
+.app .sec{padding:20px 16px;}
+.sec-head{display:flex;align-items:baseline;margin-bottom:13px;}
+.sec-title{font-size:15px;font-weight:800;letter-spacing:-.4px;}
+.app .sec-title{font-size:14px;}
+.sec-more{margin-left:auto;font-size:11px;font-weight:600;color:var(--light);}
+
+.grid{display:grid;gap:16px;}
+.g1{grid-template-columns:1fr;} .g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);}
+.app .grid{grid-template-columns:1fr;gap:12px;}
+.slider{display:flex;gap:13px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:none;}
+.slider::-webkit-scrollbar{display:none;}
+.slider > *{flex:0 0 196px;scroll-snap-align:start;}
+.app .slider{gap:10px;}
+.app .slider > *{flex:0 0 164px;}
+
+/* ══════════ 카드 뼈대 — 열여섯 껍질이 모두 이 마크업을 쓴다 ══════════ */
+.c{display:flex;flex-direction:column;overflow:hidden;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease);}
+.c-img{position:relative;width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;
+  background-color:var(--line);flex-shrink:0;transition:filter .25s var(--ease);}
+.c-age{position:absolute;left:8px;top:8px;padding:2px 7px;border-radius:var(--r-full);font-size:9.5px;
+  font-weight:700;color:#fff;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.c-body{padding:11px 1px 0;flex:1;display:flex;flex-direction:column;}
+.c-kicker{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.c-no{font-size:9.5px;font-weight:800;letter-spacing:.6px;color:var(--light);}
+.c-no::before{content:"CO:KIT ";}
+.c-free{font-size:9px;font-weight:800;color:var(--brand-ink);background:var(--brand);border-radius:var(--r-xs);padding:1px 5px;}
+.c-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-.3px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.c-meta{margin-top:auto;padding-top:9px;}
+.c-topic{font-size:10px;font-weight:600;color:var(--gray);}
+.t{display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease);}
+.t-quote{font-size:13.5px;font-weight:600;line-height:1.7;letter-spacing:-.3px;color:var(--ink);word-break:keep-all;}
+.t-src{display:flex;align-items:center;gap:7px;margin-top:14px;}
+.t-no{font-size:9.5px;font-weight:800;letter-spacing:.6px;color:var(--light);}
+.t-no::before{content:"CO:KIT ";}
+.t-topic{font-size:10px;font-weight:600;color:var(--gray);}
+
+/* 하단 탭바 (앱만) */
+.tabs{position:sticky;bottom:0;display:flex;background:rgba(255,255,255,.94);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);padding:9px 0 18px;}
+.tabs div{flex:1;text-align:center;font-size:9.5px;font-weight:700;color:var(--light);}
+.tabs div.on{color:var(--ink);}
+.tabs div::before{content:"";display:block;width:17px;height:17px;margin:0 auto 4px;border-radius:5px;
+  background:var(--line-2);}
+.tabs div.on::before{background:var(--ink);}
+
+@media (max-width:1180px){
+  .stage{grid-template-columns:1fr;}
+  .app{max-width:374px;}
+  .web .view{height:620px;}
+}
+
+/* ───── 01 민무늬 ───── */
+.s1 .c-img{border-radius:var(--r-sm);}
+.s1 .t{border-top:2px solid var(--ink);padding:14px 1px 2px;}
+/* ───── 02 실선 ───── */
+.s2 .c,.s2 .t{border:1px solid var(--line);border-radius:var(--r-sm);background:var(--white);}
+.s2 .c-body{padding:11px;} .s2 .t{padding:16px 14px;}
+.s2 .c:hover,.s2 .t:hover{border-color:var(--ink);}
+/* ───── 03 면 ───── */
+.s3 .c,.s3 .t{background:var(--tint);border-radius:var(--r-lg);}
+.s3 .c-img{border-radius:0;} .s3 .c-body{padding:13px;} .s3 .t{padding:18px 16px;}
+.s3 .c:hover,.s3 .t:hover{background:#F4F9D8;}
+/* ───── 04 그림자 ───── */
+.s4 .c,.s4 .t{background:var(--white);border-radius:var(--r-lg);
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 6px 16px -8px rgba(0,0,0,.14);}
+.s4 .c-body{padding:13px;} .s4 .t{padding:18px 16px;}
+.s4 .c:hover,.s4 .t:hover{transform:translateY(-3px);
+  box-shadow:0 2px 4px rgba(0,0,0,.05),0 14px 30px -12px rgba(0,0,0,.22);}
+/* ───── 05 라임 레일 ───── */
+.s5 .c{padding-left:12px;border-left:3px solid var(--line);}
+.s5 .c-img{border-radius:var(--r-xs);} .s5 .c-body{padding:11px 0 0;}
+.s5 .c:hover{border-left-color:var(--brand);}
+.s5 .t{padding:1px 0 1px 13px;border-left:3px solid var(--brand);}
+.s5 .c-no,.s5 .t-no{color:var(--ink-2);}
+/* ───── 06 오버레이 ───── */
+.s6 .c{position:relative;border-radius:var(--r-md);aspect-ratio:3/4;}
+.s6 .c-img{position:absolute;inset:0;aspect-ratio:auto;height:100%;}
+.s6 .c-img::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.3) 42%,rgba(0,0,0,.84) 100%);}
+.s6 .c-body{position:relative;z-index:1;margin-top:auto;padding:14px 13px;}
+.s6 .c-title{color:#fff;-webkit-line-clamp:3;}
+.s6 .c-no{color:rgba(255,255,255,.72);} .s6 .c-topic{color:rgba(255,255,255,.66);} .s6 .c-age{z-index:1;}
+.s6 .t{background:var(--ink);border-radius:var(--r-md);padding:20px 17px;}
+.s6 .t-quote{color:#fff;} .s6 .t-no{color:rgba(255,255,255,.55);} .s6 .t-topic{color:rgba(255,255,255,.66);}
+/* ───── 07 가로형 ───── */
+.s7 .grid{grid-template-columns:1fr !important;gap:10px;}
+.s7 .c{flex-direction:row;align-items:center;gap:13px;background:var(--white);border-radius:var(--r-md);
+  padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.05),0 6px 16px -10px rgba(0,0,0,.12);}
+.s7 .c-img{width:84px;aspect-ratio:1/1;flex-shrink:0;border-radius:var(--r-sm);}
+.s7 .c-age{left:6px;top:6px;font-size:9px;padding:1px 5px;}
+.s7 .c-body{padding:0;} .s7 .c-meta{padding-top:7px;}
+.s7 .slider > *{flex:0 0 300px;}
+.s7 .t{background:var(--white);border-radius:var(--r-md);padding:16px 14px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 6px 16px -10px rgba(0,0,0,.12);}
+/* ───── 08 풀블리드 ───── */
+.s8 .c{border-radius:var(--r-lg);overflow:visible;}
+.s8 .c-img{border-radius:var(--r-lg);aspect-ratio:4/5;}
+.s8 .c-body{position:relative;z-index:1;margin:-44px 10px 0;background:var(--white);border-radius:var(--r-md);
+  padding:13px;box-shadow:0 6px 20px -10px rgba(0,0,0,.25);transition:transform .2s var(--ease);}
+.s8 .c:hover .c-body{transform:translateY(-4px);}
+.s8 .t{background:var(--white);border-radius:var(--r-md);padding:18px 16px;box-shadow:0 6px 20px -10px rgba(0,0,0,.2);}
+/* ───── 09 잡지 ───── */
+.s9 .c{border-top:1px solid var(--ink);padding-top:11px;}
+.s9 .c-img{aspect-ratio:3/2;border-radius:0;order:2;margin-top:11px;}
+.s9 .c-body{order:1;padding:0;flex:0 0 auto;}
+.s9 .c-kicker{display:block;margin-bottom:4px;}
+.s9 .c-no{font-size:30px;font-weight:800;letter-spacing:-1.4px;color:var(--ink);line-height:1;display:block;
+  font-variant-numeric:tabular-nums;}
+.s9 .c-no::before{content:"";}
+.s9 .c-free{display:inline-block;margin-top:5px;}
+.s9 .c-title{font-size:14.5px;letter-spacing:-.4px;}
+.s9 .t{border-top:1px solid var(--ink);padding-top:11px;}
+.s9 .t-no{font-size:26px;font-weight:800;letter-spacing:-1.2px;color:var(--ink);line-height:1;display:block;
+  margin-bottom:8px;font-variant-numeric:tabular-nums;}
+.s9 .t-no::before{content:"";}
+.s9 .t-src{flex-direction:column;align-items:flex-start;gap:0;margin-top:12px;}
+/* ───── 10 티켓 ───── */
+.s10 .c{background:var(--white);border-radius:var(--r-md);box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 20px -12px rgba(0,0,0,.18);}
+.s10 .c-img{border-radius:0;}
+.s10 .c-body{padding:17px 13px 13px;position:relative;}
+.s10 .c-body::before{content:"";position:absolute;left:10px;right:10px;top:0;border-top:2px dashed var(--line-2);}
+.s10 .c-body::after{content:"";position:absolute;left:0;right:0;top:-8px;height:16px;pointer-events:none;
+  background:radial-gradient(circle 8px at 0 50%,var(--paper) 99%,transparent 100%),
+             radial-gradient(circle 8px at 100% 50%,var(--paper) 99%,transparent 100%);}
+.s10 .t{background:var(--white);border-radius:var(--r-md);padding:17px 15px;border-left:2px dashed var(--line-2);
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 20px -12px rgba(0,0,0,.18);}
+/* ───── 11 겹침 ───── */
+.s11 .grid,.s11 .slider{padding-top:9px;}
+.s11 .c,.s11 .t{position:relative;overflow:visible;background:var(--white);border-radius:var(--r-md);
+  box-shadow:0 1px 2px rgba(0,0,0,.06);}
+.s11 .c::before,.s11 .t::before{content:"";position:absolute;inset:-6px -6px auto -6px;height:22px;z-index:-1;
+  background:var(--white);border-radius:var(--r-md);box-shadow:0 1px 2px rgba(0,0,0,.05),0 -2px 10px -6px rgba(0,0,0,.14);}
+.s11 .c-img{border-top-left-radius:var(--r-md);border-top-right-radius:var(--r-md);}
+.s11 .c-body{padding:12px;} .s11 .t{padding:18px 16px;}
+.s11 .c:hover{transform:translateY(-3px);}
+/* ───── 12 잉크 프레임 ───── */
+.s12 .c,.s12 .t{border:2px solid var(--ink);border-radius:0;background:var(--white);}
+.s12 .c-img{border-radius:0;} .s12 .c-body{padding:11px;} .s12 .t{padding:16px 14px;}
+.s12 .c-no,.s12 .t-no{color:var(--ink);}
+.s12 .c:hover,.s12 .t:hover{background:var(--brand);}
+/* ───── 13 라임 블록 ───── */
+.s13 .c{background:var(--brand);border-radius:var(--r-lg);}
+.s13 .c-img{filter:grayscale(1) contrast(1.06);mix-blend-mode:multiply;border-radius:0;}
+.s13 .c-body{padding:13px;}
+.s13 .c-title,.s13 .c-no,.s13 .c-topic{color:var(--brand-ink);}
+.s13 .c-no{opacity:.62;} .s13 .c-topic{opacity:.7;}
+.s13 .c-free{background:var(--ink);color:var(--brand);}
+.s13 .c:hover .c-img{filter:none;mix-blend-mode:normal;}
+.s13 .t{background:var(--brand);border-radius:var(--r-lg);padding:20px 17px;}
+.s13 .t-quote,.s13 .t-no,.s13 .t-topic{color:var(--brand-ink);} .s13 .t-no{opacity:.62;}
+/* ───── 14 눌린 면 ───── */
+.s14 .c,.s14 .t{background:var(--tint);border-radius:var(--r-lg);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.08),inset 0 0 0 1px rgba(0,0,0,.04);}
+.s14 .c-img{border-radius:var(--r-sm);margin:8px 8px 0;width:auto;}
+.s14 .c-body{padding:10px 13px 13px;} .s14 .t{padding:18px 16px;}
+/* ───── 15 모서리 컷 ───── */
+.s15 .c,.s15 .t{background:var(--white);border-radius:0;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);
+  box-shadow:inset 0 0 0 1px var(--line);}
+.s15 .c-img{border-radius:0;}
+.s15 .c-body{padding:11px 22px 11px 11px;} .s15 .t{padding:16px 26px 16px 15px;}
+.s15 .c:hover,.s15 .t:hover{background:var(--tint);}
+/* ───── 16 분할 ───── */
+.s16 .c{background:var(--ink);border-radius:var(--r-md);}
+.s16 .c-img{border-radius:0;} .s16 .c-body{padding:13px;}
+.s16 .c-title{color:#fff;} .s16 .c-no{color:rgba(255,255,255,.62);} .s16 .c-topic{color:rgba(255,255,255,.66);}
+.s16 .c-meta{border-top:1px solid rgba(255,255,255,.14);margin-top:10px;padding-top:9px;}
+.s16 .t{background:var(--ink);border-radius:var(--r-md);padding:20px 17px;}
+.s16 .t-quote{color:#fff;} .s16 .t-no{color:var(--brand);} .s16 .t-topic{color:rgba(255,255,255,.66);}
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="logo-commel" viewBox="0 0 573.51 125.93"><path fill="currentColor" fill-rule="evenodd" d="M572.23 124.65L563.23 124.77L561.85 123.42L561.89 2.42L562.23 0.99L563.23 0.00L572.23 0.14L573.30 1.42L573.51 123.42L572.23 124.65ZM49.23 125.54L42.23 125.60L33.23 124.04L29.23 122.93L22.23 119.69L17.27 116.42L13.55 113.42L10.62 110.42L6.16 104.42L1.97 95.42L0.44 88.42L0.00 83.42L0.10 79.42L1.75 70.42L4.75 63.42L7.77 58.42L11.92 53.42L15.02 50.42L21.23 45.87L27.23 42.77L36.23 39.90L44.23 39.08L48.23 39.15L56.23 39.96L61.23 41.50L65.23 42.87L71.23 45.98L78.23 51.26L82.13 55.42L81.23 56.89L78.23 58.90L73.23 61.96L72.23 61.97L67.16 57.42L60.23 53.25L54.05 51.42L48.85 50.42L42.23 50.42L39.23 50.96L31.55 53.42L26.23 56.37L22.45 59.42L19.54 62.42L15.23 68.80L13.23 74.13L12.20 79.42L12.13 84.42L13.23 90.82L15.23 96.07L17.97 100.42L22.23 105.18L27.37 109.42L33.38 112.42L38.23 113.69L47.23 114.38L53.23 113.68L57.23 112.60L61.23 110.78L67.86 106.42L72.23 102.21L73.23 102.14L77.23 104.10L82.12 107.42L81.23 109.25L76.95 113.42L68.23 119.85L62.23 122.62L58.23 123.85L49.23 125.54ZM139.23 125.43L133.23 125.60L123.23 123.85L120.23 122.86L114.23 119.90L109.23 116.75L103.23 111.13L100.10 107.42L96.67 101.42L94.04 94.42L92.80 87.42L92.67 79.42L93.90 71.42L96.90 63.42L99.82 58.42L106.23 51.11L112.23 46.12L118.23 42.94L129.23 39.83L136.23 39.43L144.23 40.13L153.23 43.07L158.23 45.74L163.23 49.05L170.38 56.42L173.82 61.42L176.56 67.42L177.99 72.42L178.95 78.42L178.85 86.42L177.90 92.42L176.57 97.42L173.74 103.42L168.65 110.42L165.89 113.42L162.23 116.52L155.23 120.95L151.23 122.87L148.23 123.82L139.23 125.43ZM451.23 124.61L442.23 124.47L441.23 124.14L440.71 123.42L440.63 77.42L440.23 73.03L438.42 66.42L435.23 60.57L431.23 56.25L427.04 53.42L423.23 51.78L420.23 50.99L417.23 50.43L414.12 50.42L409.23 51.37L404.23 53.24L399.51 56.42L397.23 58.63L394.23 62.42L392.73 65.42L391.13 69.42L389.93 76.42L389.90 123.42L389.23 124.35L388.23 124.60L380.23 124.59L379.23 124.37L378.12 123.42L378.26 77.42L377.56 71.42L376.23 66.70L373.23 60.98L370.23 57.50L364.88 53.42L360.18 51.42L355.23 50.54L351.23 50.64L347.23 51.40L342.23 53.29L336.21 57.42L333.23 60.78L330.23 65.64L328.89 69.42L327.43 77.42L327.36 123.42L326.23 124.69L316.23 124.51L315.49 123.42L315.47 77.42L314.45 71.42L312.23 64.76L308.81 59.42L306.09 56.42L304.23 55.03L301.78 53.42L298.23 51.86L292.23 50.49L290.23 50.42L284.23 51.28L281.23 52.19L278.23 53.38L273.75 56.42L270.83 59.42L268.01 63.42L266.16 67.42L264.96 71.42L264.21 77.42L264.17 123.42L263.23 124.34L262.23 124.62L254.23 124.59L253.23 124.29L252.61 123.42L252.46 75.42L251.23 68.91L248.37 62.42L245.23 58.21L243.23 56.25L239.23 53.42L233.23 51.25L227.23 50.63L222.23 51.16L216.23 53.29L211.69 56.42L208.23 60.12L205.23 64.57L202.85 70.42L201.85 76.42L201.80 123.42L201.23 124.22L200.23 124.56L191.23 124.68L190.15 123.42L190.13 77.42L190.73 70.42L192.10 65.42L195.14 58.42L198.23 53.95L201.23 50.54L206.23 46.30L212.23 42.88L221.23 39.85L228.23 39.52L235.23 39.95L244.23 43.07L249.23 46.18L252.23 48.84L255.43 52.42L259.23 58.56L260.23 58.09L262.23 54.87L266.66 49.42L270.23 46.23L275.23 42.89L279.23 41.20L284.23 39.83L291.23 39.50L298.23 40.06L306.23 42.84L313.23 47.27L316.55 50.42L319.59 54.42L322.23 59.32L323.23 60.08L324.23 59.15L326.09 55.42L329.12 51.42L334.23 46.16L339.23 42.87L347.23 39.97L354.23 39.54L361.23 39.91L370.23 42.87L375.23 46.05L377.23 47.77L380.58 51.42L383.44 55.42L384.23 57.35L385.23 58.14L386.23 58.35L387.00 56.42L389.73 52.42L393.23 48.58L396.23 45.87L401.23 42.93L410.23 39.87L417.23 39.54L423.23 39.90L432.23 42.89L437.23 45.88L441.23 49.18L444.68 53.42L447.24 57.42L450.46 64.42L451.73 69.42L452.34 76.42L452.38 123.42L451.23 124.61ZM514.23 125.58L505.23 125.93L500.23 125.62L496.23 124.79L489.23 122.69L481.23 118.07L476.23 113.83L473.23 110.66L468.74 104.42L465.91 98.42L463.93 90.42L463.28 83.42L463.85 76.42L464.77 71.42L465.88 67.42L468.69 61.42L471.82 56.42L477.52 50.42L483.23 46.13L489.23 42.95L499.23 39.95L507.23 39.50L516.23 40.04L525.23 42.95L533.23 47.46L539.88 53.42L542.42 56.42L545.52 61.42L548.63 69.42L549.87 75.42L550.24 84.42L549.98 85.42L549.23 85.97L477.23 86.04L476.01 86.42L475.66 88.42L476.13 92.42L479.15 99.42L482.23 103.76L488.23 109.52L493.49 112.42L497.23 113.83L503.23 115.14L507.23 115.46L511.23 115.09L517.23 113.84L521.23 112.57L525.23 110.55L530.87 106.42L533.23 103.72L535.23 102.95L542.23 107.12L543.46 108.42L543.41 109.42L542.82 110.42L539.23 114.05L536.23 116.56L531.23 119.88L525.23 122.79L521.23 124.10L514.23 125.58ZM536.61 76.42L537.88 75.42L538.08 74.42L536.59 69.42L535.34 66.42L533.42 63.42L530.15 59.42L526.74 56.42L522.12 53.42L516.66 51.42L509.23 50.17L504.23 50.32L497.23 51.86L492.86 53.42L487.75 56.42L482.23 61.44L479.20 65.42L476.19 72.42L475.84 74.42L476.23 75.94L477.23 76.42L536.61 76.42ZM138.23 114.42L143.23 113.63L147.19 112.42L150.23 110.94L154.23 108.40L160.23 102.68L163.26 98.42L166.23 91.13L167.24 81.42L166.39 74.42L164.92 70.42L162.23 65.42L160.23 62.54L157.23 59.28L153.65 56.42L148.23 53.23L142.89 51.42L136.23 50.42L128.84 51.42L123.23 53.19L117.47 56.42L113.23 60.11L110.23 63.73L107.23 68.59L105.80 72.42L104.57 77.42L104.00 83.42L104.88 89.42L107.21 96.42L110.21 101.42L114.55 106.42L118.25 109.42L124.23 112.54L131.23 114.20L138.23 114.42Z"/></symbol>
+</svg>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="bar-top">
+      <svg class="mark" role="img" aria-label="commel"><use href="#logo-commel"/></svg>
+      <h1>카드 스타일 <span>— 올렸을 때</span></h1>
+      <span class="hint">눌러서 바꿔 보세요 · 웹과 앱이 같이 바뀝니다</span>
+    </div>
+    <div class="picks"><button class="pick" data-s="1"><b>01</b>민무늬<em>1차</em></button><button class="pick" data-s="2"><b>02</b>실선<em>1차</em></button><button class="pick" data-s="3"><b>03</b>면<em>1차</em></button><button class="pick on" data-s="4"><b>04</b>그림자<em>1차</em></button><button class="pick" data-s="5"><b>05</b>라임 레일<em>1차</em></button><button class="pick" data-s="6"><b>06</b>오버레이<em>1차</em></button><button class="pick" data-s="7"><b>07</b>가로형<em>2차</em></button><button class="pick" data-s="8"><b>08</b>풀블리드<em>2차</em></button><button class="pick" data-s="9"><b>09</b>잡지<em>2차</em></button><button class="pick" data-s="10"><b>10</b>티켓<em>2차</em></button><button class="pick" data-s="11"><b>11</b>겹침<em>2차</em></button><button class="pick" data-s="12"><b>12</b>잉크 프레임<em>2차</em></button><button class="pick" data-s="13"><b>13</b>라임 블록<em>2차</em></button><button class="pick" data-s="14"><b>14</b>눌린 면<em>2차</em></button><button class="pick" data-s="15"><b>15</b>모서리 컷<em>2차</em></button><button class="pick" data-s="16"><b>16</b>분할<em>2차</em></button></div>
+    <p class="note" data-s="1" hidden>상자를 지우고 여백으로 가른다. 글이 가장 먼저 보인다.</p><p class="note" data-s="2" hidden>1px 테두리와 작은 모서리. 경계가 분명하다.</p><p class="note" data-s="3" hidden>테두리 대신 옅은 라임 틴트. 덩어리로 가른다.</p><p class="note" data-s="4">흰 카드를 얕게 띄운다. 지금 web3 에 적용된 안.</p><p class="note" data-s="5" hidden>왼쪽에 라임 레일. 브랜드 색이 구조가 된다.</p><p class="note" data-s="6" hidden>글을 이미지 위에. 가장 화려하고 가장 위험하다.</p><p class="note" data-s="7" hidden>그림 왼쪽, 글 오른쪽. 한 줄에 한 장.</p><p class="note" data-s="8" hidden>그림이 가득 차고 글 판이 위로 올라탄다.</p><p class="note" data-s="9" hidden>번호를 키워 조판 요소로. 활자가 주인공.</p><p class="note" data-s="10" hidden>절취선과 홈. 손에 쥐는 물건 같다.</p><p class="note" data-s="11" hidden>뒤에 한 장이 비친다 — 묶음이라는 뜻.</p><p class="note" data-s="12" hidden>2px 잉크 테두리, 모서리는 깎지 않는다.</p><p class="note" data-s="13" hidden>카드를 통째로 브랜드 색으로. 화면당 한 장.</p><p class="note" data-s="14" hidden>띄우지 않고 종이에 눌러 넣는다.</p><p class="note" data-s="15" hidden>한 귀퉁이를 잘라 낸다. 형태로 서명한다.</p><p class="note" data-s="16" hidden>글 판이 잉크. 색으로 끊는다.</p>
+  </div>
+</div>
+
+<div class="stage s4" id="stage">
+  <div class="fr web">
+    <div class="fr-lab"><b>웹</b><span>데스크톱</span></div>
+    <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="url">commel.com</span></div>
+    <div class="view"><div class="nav"><svg class="mark" role="img" aria-label="commel"><use href="#logo-commel"/></svg><ul><li class="on">홈</li><li>멤버십</li><li>코킷 찾기</li><li>낙타AI</li><li>인사이트</li><li>내 코킷</li></ul></div><div class="hero" style="background-image:url('https://i.pinimg.com/1200x/d8/2d/93/d82d93b34ecdde6116d12072491b7076.jpg')"><div class="hero-b"><p class="hero-lab">THIS WEEK</p><h3 class="hero-t">이번에 제게 낚이셨다면 미안해요.</h3><p class="hero-s">CO:KIT 101 · 전환·매출</p></div></div><div class="sec"><div class="sec-head"><span class="sec-title">이번 주 새 코킷</span><span class="sec-more">더보기</span></div><div class="grid g2"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/d8/2d/93/d82d93b34ecdde6116d12072491b7076.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">101</span><span class="c-free">무료</span></div><h4 class="c-title">이번에 제게 낚이셨다면 미안해요.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/8f/7c/58/8f7c585b4331bacff9f237a158820759.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">99</span></div><h4 class="c-title">상대를 모르는데 설득을 한다? 응. 그거 맞아요. 점쟁이.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">리건님을 위한 추천</span><span class="sec-more">더보기</span></div><div class="grid g3"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/5a/c6/f9/5ac6f9ef1435e3c61e10010ecab28fae.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">98</span></div><h4 class="c-title">현 시점, 사업을 가장 빨리 망하게 하는 방법.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/7e/e9/56/7ee956d2f58c8fcc9b26fa915049b6c5.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">97</span></div><h4 class="c-title">도대체, 내 사업은 무엇이 문제인가</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/736x/fc/a0/a4/fca0a439641a19cfddc4c66b35ef4063.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">96</span></div><h4 class="c-title">더 ‘나은’ 것이 아닌 ‘다른’ 것.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">사장님들이 밑줄 친 문장</span></div><div class="grid g3 g-t"><article class="t" tabindex="0"><p class="t-quote">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</p><div class="t-src"><span class="t-no">41</span><span class="t-topic">전환·매출</span></div></article><article class="t" tabindex="0"><p class="t-quote">이력을 먼저 나열하면 고객은 스펙을 비교하기 시작합니다.</p><div class="t-src"><span class="t-no">51</span><span class="t-topic">소비자 심리</span></div></article><article class="t" tabindex="0"><p class="t-quote">‘3개월 멈추면 어떻게 되는가?’ 결과가 치명적이지 않은 가지는 쳐낼 후보예요.</p><div class="t-src"><span class="t-no">57</span><span class="t-topic">사업 성장</span></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">낙타의 큐레이션</span><span class="sec-more">더보기</span></div><div class="slider"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/99/36/69/993669d0ed1ee9a28f138428e74bdc2d.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">95</span></div><h4 class="c-title">AI로 콘텐츠 ‘진짜’ 자동화하는 법</h4><div class="c-meta"><span class="c-topic">콘텐츠</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/736x/8e/9b/ed/8e9bed24aa470f2d6da3d6d419276b23.jpg')"><span class="c-age">2개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">93</span></div><h4 class="c-title">나는 콘텐츠만큼은 절대로 자동화하지 않는다</h4><div class="c-meta"><span class="c-topic">콘텐츠</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/67/c0/ea/67c0ea208a8d71e0da706d7dc66b4aa2.jpg')"><span class="c-age">2개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">91</span><span class="c-free">무료</span></div><h4 class="c-title">늦었다고 생각할 때, 진짜 늦은 것일지도</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://pub-df7c5d3e703845768a1b37d329b42e95.r2.dev/rekit089/hero.jpg')"><span class="c-age">3개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">89</span></div><h4 class="c-title">프롬프트 대신, 마케터의 기준을 넣었습니다</h4><div class="c-meta"><span class="c-topic">AI·프롬프트</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/d8/2d/93/d82d93b34ecdde6116d12072491b7076.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">101</span><span class="c-free">무료</span></div><h4 class="c-title">이번에 제게 낚이셨다면 미안해요.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/7e/e9/56/7ee956d2f58c8fcc9b26fa915049b6c5.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">97</span></div><h4 class="c-title">도대체, 내 사업은 무엇이 문제인가</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article></div></div></div>
+  </div>
+  <div class="fr app">
+    <div class="fr-lab"><b>앱</b><span>iPhone</span></div>
+    <div class="phone"><div class="view">
+      <div class="status"><span>9:41</span><i><em></em><em></em><em></em></i></div>
+      <div class="nav"><svg class="mark" role="img" aria-label="commel"><use href="#logo-commel"/></svg><span class="bell"></span></div><div class="hero" style="background-image:url('https://i.pinimg.com/1200x/d8/2d/93/d82d93b34ecdde6116d12072491b7076.jpg')"><div class="hero-b"><p class="hero-lab">THIS WEEK</p><h3 class="hero-t">이번에 제게 낚이셨다면 미안해요.</h3><p class="hero-s">CO:KIT 101 · 전환·매출</p></div></div><div class="sec"><div class="sec-head"><span class="sec-title">이번 주 새 코킷</span></div><div class="grid g1"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/d8/2d/93/d82d93b34ecdde6116d12072491b7076.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">101</span><span class="c-free">무료</span></div><h4 class="c-title">이번에 제게 낚이셨다면 미안해요.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">리건님을 위한 추천</span></div><div class="slider"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/5a/c6/f9/5ac6f9ef1435e3c61e10010ecab28fae.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">98</span></div><h4 class="c-title">현 시점, 사업을 가장 빨리 망하게 하는 방법.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/7e/e9/56/7ee956d2f58c8fcc9b26fa915049b6c5.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">97</span></div><h4 class="c-title">도대체, 내 사업은 무엇이 문제인가</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/736x/fc/a0/a4/fca0a439641a19cfddc4c66b35ef4063.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">96</span></div><h4 class="c-title">더 ‘나은’ 것이 아닌 ‘다른’ 것.</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">사장님들이 밑줄 친 문장</span></div><div class="grid g1 g-t"><article class="t" tabindex="0"><p class="t-quote">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</p><div class="t-src"><span class="t-no">41</span><span class="t-topic">전환·매출</span></div></article></div></div><div class="sec"><div class="sec-head"><span class="sec-title">낙타의 큐레이션</span></div><div class="slider"><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/99/36/69/993669d0ed1ee9a28f138428e74bdc2d.jpg')"><span class="c-age">1개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">95</span></div><h4 class="c-title">AI로 콘텐츠 ‘진짜’ 자동화하는 법</h4><div class="c-meta"><span class="c-topic">콘텐츠</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/736x/8e/9b/ed/8e9bed24aa470f2d6da3d6d419276b23.jpg')"><span class="c-age">2개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">93</span></div><h4 class="c-title">나는 콘텐츠만큼은 절대로 자동화하지 않는다</h4><div class="c-meta"><span class="c-topic">콘텐츠</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://i.pinimg.com/1200x/67/c0/ea/67c0ea208a8d71e0da706d7dc66b4aa2.jpg')"><span class="c-age">2개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">91</span><span class="c-free">무료</span></div><h4 class="c-title">늦었다고 생각할 때, 진짜 늦은 것일지도</h4><div class="c-meta"><span class="c-topic">전환·매출</span></div></div></article><article class="c " tabindex="0"><div class="c-img" style="background-image:url('https://pub-df7c5d3e703845768a1b37d329b42e95.r2.dev/rekit089/hero.jpg')"><span class="c-age">3개월 전</span></div><div class="c-body"><div class="c-kicker"><span class="c-no">89</span></div><h4 class="c-title">프롬프트 대신, 마케터의 기준을 넣었습니다</h4><div class="c-meta"><span class="c-topic">AI·프롬프트</span></div></div></article></div></div><div class="tabs"><div class="on">홈</div><div>찾기</div><div>낙타AI</div><div>인사이트</div><div>내 코킷</div></div>
+    </div></div>
+  </div>
+</div>
+
+<script>
+/* 고른 껍질만 .stage 에 걸어 준다. 화면 두 벌은 그대로 두고 클래스 한 글자만 바꾼다 —
+   마크업이 같아야 '같은 화면을 다르게 입힌 것'이 눈에 보인다. */
+const stage = document.getElementById("stage");
+const N = 16;
+document.querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => {
+  const s = b.dataset.s;
+  document.querySelectorAll(".pick").forEach(x => x.classList.toggle("on", x === b));
+  for(let i = 1; i <= N; i++) stage.classList.remove("s" + i);
+  stage.classList.add("s" + s);
+  document.querySelectorAll(".note").forEach(p => p.hidden = (p.dataset.s !== s));
+  /* 바꾼 뒤 두 화면을 같은 자리에서 보도록 위로 올린다 */
+  document.querySelectorAll(".view").forEach(v => v.scrollTo({top:0, behavior:"smooth"}));
+}));
+/* 숫자 키 1~9 로도 넘긴다 */
+addEventListener("keydown", e => {
+  const n = parseInt(e.key, 10);
+  if(n >= 1 && n <= 9) document.querySelector('.pick[data-s="' + n + '"]')?.click();
+});
+</script>
+</body>
+</html>
