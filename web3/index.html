@@ -70,31 +70,27 @@
                                       히어로 추천 · 가로 슬라이더 · 큰 카드 · 섬네일 타일
        · 글만 있는 카드     02 실선    사진이 없으니 1px 테두리가 경계를 맡는다.
                                       밑줄 친 문장 · 지금 이런 고민 · 추천 메모 · 인사이트 통계
-       · 가로형 두 자리     07 가로형  흰 판에 얕은 그림자, 84px 정사각 사진.
+       · 가로형 두 자리     07 가로형  흰 판에 1px 테두리, 84px 정사각 사진.
                                       찾기 > 이번 주 인기 TOP · 찾기 > 목록 보기
-       · 가로 리스트 행     민무늬     행 사이 1px 선. 상자가 없으면 어디까지가 한 행인지 알 수 없다.
+       · 가로 리스트 행     테두리     위와 같은 선. 행이 아니라 한 줄에 한 장짜리 카드다.
                                       읽던 코킷 · 내 코킷 · 템플릿 · 시리즈
 
-     가로형 둘과 가로 리스트 행이 서로 다른 안이라는 점은 알고 둔 것이다 —
-     리건이 그 두 자리만 지목했다. 나머지 행까지 판으로 올릴지는 따로 정할 문제다.
+     결국 사진이 경계를 맡는 자리만 민무늬로 남았다. 사진이 없거나 가로로 눕는 자리는
+     모두 1px 테두리로 선다. 그림자는 어디에도 쓰지 않는다.
 
-     그림자 토큰만 none 으로 돌리면 안 된다 — 흰 배경이 남아 틴트 섹션에 흰 상자가 그대로 보인다.
-     배경까지 같이 걷어야 민무늬가 성립한다. 그래서 --card-bg 를 둔다.
+     민무늬를 만들 때 그림자만 걷으면 안 된다 — 흰 배경이 남아 틴트 섹션(#FBFDEF)에
+     흰 상자가 그대로 보인다. 배경까지 같이 걷어야 성립한다. 그래서 --card-bg 를 둔다.
      --card-radius 는 남긴다. 상자가 사라져도 점선 카드·온보딩 장·낙타AI 안내는 상자로 남는다. */
   --card-radius:16px;
   --card-bg:transparent;
-  --card-shadow:none;
-  --card-shadow-hi:none;
   /* 사진이 유일한 상자가 되니 모서리를 조금 깎는다. 작은 썸네일은 기본 --radius-sm(8px) 을 쓴다 */
   --card-img-radius:10px;
-  --card-row-line:1px solid var(--border-light);
 
-  /* 가로형 두 자리 — 미리보기 07 '가로형'. 리스트 행이 아니라 '한 줄에 한 장짜리 카드'다.
-     구분선을 걷고 흰 판이 경계를 맡는다. 그림자는 민무늬 쪽보다 얕게 둔다(-10px spread) —
-     한 화면에 여든아홉 장이 쌓이는 목록이라 깊으면 화면이 무거워진다. */
-  --row-card-shadow:0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -10px rgba(0,0,0,0.12);
-  /* 글만 있는 카드 — 미리보기 02 '실선'. 사진이 없으니 테두리가 경계를 맡는다 */
-  --text-card-line:1px solid var(--border-light);
+  /* 테두리로 서는 카드의 선. 사진이 경계를 맡지 못하는 자리는 모두 이 선을 쓴다 —
+     글만 있는 카드, 가로형 두 자리, 가로 리스트 행 넷이 같은 선으로 선다.
+     그림자는 쓰지 않는다. 목록에 여든아홉 장이 쌓이므로 그림자가 겹치면 화면이 무거워지고,
+     한 장이 떠 있는 것과 여든아홉 장이 떠 있는 것은 전혀 다르게 보인다. */
+  --card-line:1px solid var(--border-light);
 
   /* ══════════ iOS 리퀴드 글래스 ══════════
      반투명 + 흐림만으로는 유리가 되지 않는다. 세 겹이 있어야 유리로 읽힌다 —
@@ -330,11 +326,13 @@ body.clean .jumptoggle{display:none!important;}
 .hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:7px;z-index:2;}
 .hs-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;padding:0;cursor:pointer;transition:width var(--dur-short),background var(--dur-short);}
 .hs-dot.on{width:18px;border-radius:3px;background:var(--bg-white);}
-/* 리스트 행은 gap 을 0 으로 두고 구분선으로 가른다. 선과 여백이 겹치면 선이 떠 보인다 */
-.continue-grid{display:grid;grid-template-columns:1fr;gap:0;}
+/* 카드끼리 붙으면 맞닿은 선이 2px 로 보인다 — 부모가 간격을 준다 */
+.continue-grid{display:grid;grid-template-columns:1fr;gap:10px;}
 .wide-only{display:none;}
-.continue-card{display:flex;gap:12px;padding:13px 0;align-items:center;}
-.continue-card+.continue-card{border-top:var(--card-row-line);}
+/* 행이 아니라 한 줄에 한 장짜리 카드다(리건, 2026-11-06). 구분선을 걷고 테두리로 세운다 —
+   간격은 부모가 준다(.continue-grid 와 '내 코킷' 섹션 모두 10px). */
+.continue-card{display:flex;gap:12px;padding:10px;align-items:center;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
 .continue-card .img-ph{width:68px;height:68px;}
 .continue-body{flex:1;min-width:0;}
 .continue-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
@@ -391,7 +389,7 @@ body.clean .jumptoggle{display:none!important;}
 .bigcard-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
 /* 글만 있는 카드는 실선이다 — 미리보기 02 '실선'. 사진이 없으니 테두리가 경계를 맡는다.
    미리보기의 .t 와 같이 세로 flex 로 둔다 — 데스크톱에서 석 장이 나란히 설 때 키가 맞는다. */
-.quote-card{display:flex;flex-direction:column;background:var(--bg-white);border:var(--text-card-line);border-radius:var(--radius-sm);padding:16px 14px;cursor:pointer;}
+.quote-card{display:flex;flex-direction:column;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:16px 14px;cursor:pointer;}
 .quote-card .q-mark i,.quote-card .q-mark svg{width:16px;height:16px;color:var(--text-muted);}
 .quote-card .q-text{font-size:13px;font-weight:600;line-height:1.6;margin:8px 0;}
 .quote-card .q-src{font-size:11px;color:var(--text-light);}
@@ -399,10 +397,10 @@ body.clean .jumptoggle{display:none!important;}
 .quote-card .q-cnt i,.quote-card .q-cnt svg{width:12px;height:12px;}
 /* 미리보기처럼 석 장을 나란히 둔다. 좁은 폭에서는 둘째·셋째가 .wide-only 로 빠진다 */
 .quote-grid{display:grid;grid-template-columns:1fr;gap:12px;}
-/* 가로형 — 미리보기 07 '가로형' 그대로다. 흰 판, 얕은 그림자, 84px 정사각 사진.
-   한 줄에 한 장이므로 구분선이 필요 없다 — 판 사이의 10px 가 경계다. */
+/* 가로형 — 미리보기 07 '가로형' 에서 그림자를 걷고 테두리로 세웠다(리건, 2026-11-06).
+   선 색은 밑줄 친 문장(.quote-card)과 같다. 한 줄에 한 장이므로 행 구분선이 필요 없다. */
 .rank-row{display:flex;align-items:center;gap:13px;padding:10px;cursor:pointer;
-  background:var(--bg-white);border-radius:var(--radius-md);box-shadow:var(--row-card-shadow);}
+  background:var(--bg-white);border-radius:var(--radius-md);border:var(--card-line);}
 .rank-row+.rank-row{margin-top:10px;}
 .rank-num{font-size:15px;font-weight:800;color:var(--text-muted);width:18px;text-align:center;}
 .rank-row .img-ph{width:84px;height:84px;border-radius:var(--radius-sm);}
@@ -410,7 +408,7 @@ body.clean .jumptoggle{display:none!important;}
 .rank-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .rank-meta{font-size:11px;color:var(--text-light);margin-top:7px;}
-.ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;box-shadow:var(--card-shadow);}
+.ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;}
 .ac-close{position:absolute;top:10px;right:10px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;}
 .ac-close i,.ac-close svg{width:14px;height:14px;color:var(--text-light);}
 .sec.alt .ai-card{background:var(--bg-white);}
@@ -426,7 +424,7 @@ body.clean .jumptoggle{display:none!important;}
 .pain-grid{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .pain-grid::-webkit-scrollbar{display:none;}
 /* 가로로 나란히 놓이는 칸이다 — 테두리가 그대로 칸 수를 알려 준다 */
-.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--bg-white);border:var(--text-card-line);border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;}
+.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;}
 .pain-card i,.pain-card svg{width:15px;height:15px;color:var(--text-dark);margin-bottom:7px;}
 .pain-card b{display:block;font-size:13px;font-weight:700;line-height:1.4;}
 .pain-card span{display:block;font-size:11px;color:var(--text-light);margin-top:3px;}
@@ -507,7 +505,7 @@ body.clean .jumptoggle{display:none!important;}
 .chat-input>i,.chat-input>svg{width:22px;height:22px;color:var(--text-dark);}
 
 /* 인사이트 */
-.memo-card{background:var(--bg-white);border:var(--text-card-line);border-radius:var(--radius-sm);padding:14px;cursor:pointer;}
+.memo-card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:14px;cursor:pointer;}
 .memo-quote{border-left:3px solid var(--border-default);padding:2px 0 2px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:10px;}
 .memo-mine{display:flex;gap:8px;align-items:flex-start;}
 .memo-mine i,.memo-mine svg{width:12px;height:12px;color:var(--text-muted);margin-top:4px;flex-shrink:0;}
@@ -515,7 +513,7 @@ body.clean .jumptoggle{display:none!important;}
 .memo-src{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--text-light);}
 .type-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--bg-light);border-radius:var(--radius-xs);padding:2px 7px;color:var(--text-gray);}
 .type-tag i,.type-tag svg{width:10px;height:10px;}
-.series-card{padding:14px 0;display:flex;gap:12px;align-items:center;cursor:pointer;border-top:var(--card-row-line);}
+.series-card{padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
 .series-card .img-ph{width:54px;height:54px;}
 .series-body{flex:1;min-width:0;}
 .series-title{font-size:14px;font-weight:700;}
@@ -537,7 +535,8 @@ body.clean .jumptoggle{display:none!important;}
 .nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
 .nview{display:none;}
 .nview.on{display:block;}
-.note-list{display:flex;flex-direction:column;gap:0;}
+/* 카드끼리 붙으면 맞닿은 선이 2px 로 보인다 — 부모가 간격을 준다 */
+.note-list{display:flex;flex-direction:column;gap:10px;}
 /* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다.
    날짜 라벨은 그날 첫 기록에 붙어 있어서, 그날이 통째로 빠지면 날짜도 같이 사라진다. */
 #scr-library:has(#memo-only:checked) .tl-ev:not(.has-memo){display:none;}
@@ -644,7 +643,7 @@ body.clean .jumptoggle{display:none!important;}
 /* 다음 카드가 살짝 걸쳐 보이게 78% — 옆에 더 있다는 걸 화살표 없이 알린다.
    정보 패널은 면 아래로 떼지 않고 면 위에 얹는다 — 떼어 놓으면 카드가 둘로 보인다. */
 .pcard{flex:0 0 78%;scroll-snap-align:center;aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:space-between;
-  padding:17px 13px 13px;border-radius:var(--card-radius);overflow:hidden;cursor:pointer;box-shadow:var(--card-shadow);
+  padding:17px 13px 13px;border-radius:var(--card-radius);overflow:hidden;cursor:pointer;
   background:var(--placeholder-bg);}
 /* 최근일수록 진하다 — 세 장을 나란히 두면 시간 순서가 색으로도 읽힌다 */
 .pcard:nth-child(2){background:#E9E9E9;}
@@ -658,8 +657,8 @@ body.clean .jumptoggle{display:none!important;}
 .pc-body i,.pc-body svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
 
 /* 주제 — 한 줄에 하나씩 쭉. 주제가 늘어도 무너지지 않고, 스크롤만 길어진다. */
-.tpl{display:flex;align-items:center;gap:11px;padding:10px 0;border:none;border-radius:0;background:var(--card-bg);cursor:pointer;box-shadow:none;}
-.tpl+.tpl{margin-top:0;border-top:var(--card-row-line);}
+.tpl{display:flex;align-items:center;gap:11px;padding:10px;border:var(--card-line);border-radius:var(--radius-md);background:var(--bg-white);cursor:pointer;}
+.tpl+.tpl{margin-top:10px;}
 .tpl-ic{width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-md);background:var(--bg-light);display:flex;align-items:center;justify-content:center;}
 .tpl-ic i,.tpl-ic svg{width:18px;height:18px;color:var(--text-gray);}
 .tpl .grow{flex:1;min-width:0;}
@@ -672,7 +671,7 @@ body.clean .jumptoggle{display:none!important;}
    그래서 두 숫자에 위계가 생기고, 메모 쪽이 값지다는 게 설명 없이 읽힌다.
    분모를 만들지 않는다 — '10개 중 4개'라고 쓰는 순간 나머지 6개가 빚이 된다. */
 /* 통계 석 칸은 한 묶음이다 — 실선 상자로 묶고, 칸 사이 구분선은 그대로 둔다 */
-.ins-stat{display:flex;padding:17px 8px;background:var(--bg-white);border:var(--text-card-line);border-radius:var(--radius-sm);}
+.ins-stat{display:flex;padding:17px 8px;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);}
 .ins-stat>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .ins-stat>div+div{border-left:1px solid var(--border-light);}
 .ins-stat b{font-size:21px;font-weight:800;letter-spacing:-0.5px;}
@@ -714,8 +713,8 @@ body.clean .jumptoggle{display:none!important;}
 .tl-when span{font-size:10.5px;font-weight:600;color:var(--text-light);}
 /* 코킷별 — 기록을 바로 펼치지 않고 코킷 카드로 접는다.
    기록이 쌓일수록 평면 나열은 못 읽는다. 코킷은 이미 사람이 기억하는 단위다. */
-.kitcard{padding:13px 0;display:flex;gap:12px;align-items:center;cursor:pointer;}
-.kitcard+.kitcard{border-top:var(--card-row-line);}
+.kitcard{padding:10px;display:flex;gap:12px;align-items:center;cursor:pointer;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
 .kitcard .img-ph{width:56px;height:56px;flex-shrink:0;}
 .kc-body{flex:1;min-width:0;}
 .kc-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
@@ -834,7 +833,7 @@ body.clean .jumptoggle{display:none!important;}
 /* 가로형 — 위와 같은 안이다. 이 행은 제목 아래 설명과 태그까지 올 수 있어
    내용이 사진보다 높다 — 가운데 정렬하면 사진이 떠 보이므로 위에 붙인다. */
 .ex-row{display:flex;align-items:flex-start;gap:13px;padding:10px;cursor:pointer;
-  background:var(--bg-white);border-radius:var(--radius-md);box-shadow:var(--row-card-shadow);}
+  background:var(--bg-white);border-radius:var(--radius-md);border:var(--card-line);}
 .ex-row+.ex-row{margin-top:10px;}
 .ex-thumb{position:relative;width:84px;height:84px;flex-shrink:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
 .ex-thumb>i,.ex-thumb>svg{width:18px;height:18px;color:var(--placeholder-icon);}
@@ -2740,17 +2739,17 @@ body.modal-open #scr-interest .ord-sub,
     background-color:rgba(var(--state-ink), var(--state-press));}
 
   /* 민무늬에는 떠오를 상자가 없다 — 사진을 눌러서, 글을 흐려서 답한다 */
-  .card:hover .img-ph,.prod-card:hover .img-ph{opacity:0.90;}
-  .quote-card:hover .q-text,.memo-card:hover .continue-title,
-  .kitcard:hover .continue-title,.series-card:hover .continue-title,
-  .continue-card:hover .continue-title,.hcard:hover .hcard-title,
-  .bigcard:hover .bigcard-title,.tpl:hover .tpl-t,.prod-card:hover .prod-name{opacity:0.66;}
-  /* 가로형 판은 사진으로 답한다 — 판을 띄우면 여든아홉 줄이 한꺼번에 들썩인다 */
+  .hcard:hover .img-ph,.bigcard:hover .img-ph,.prod-card:hover .img-ph{opacity:0.90;}
+  .hcard:hover .hcard-title,.bigcard:hover .bigcard-title,
+  .prod-card:hover .prod-name{opacity:0.66;}
+  /* 사진을 가진 카드는 사진도 함께 눌러 준다 — 띄우면 여든아홉 줄이 한꺼번에 들썩인다 */
   .rank-row:hover .img-ph,.ex-row:hover .ex-thumb{opacity:0.90;}
   .rank-row:hover .rank-title,.ex-row:hover .ex-title{opacity:0.66;}
   .mcard:hover,.pcard:hover{opacity:0.92;}
-  /* 테두리를 가진 것들은 테두리가 진해지는 것으로 답한다 */
+  /* 테두리로 선 것들은 모두 테두리가 진해지는 것으로 답한다 */
   .quote-card:hover,.pain-card:hover,.memo-card:hover,
+  .rank-row:hover,.ex-row:hover,.continue-card:hover,.kitcard:hover,
+  .series-card:hover,.tpl:hover,
   .price-card:hover{border-color:var(--text-black);}
   /* .gcard 는 섬네일 타일이다 — 민무늬에서는 .card 와 모양이 같아진다 */
   .gcard:hover{opacity:0.86;}
@@ -3077,9 +3076,8 @@ body.modal-open #scr-interest .ord-sub,
      .continue-card 에 그냥 걸면 '내 코킷'의 네 장까지 같이 줄어든다 — 여기 안으로 가둔다. */
   .continue-grid{grid-template-columns:repeat(3,1fr);gap:24px;}
   .wide-only{display:flex;}
-  /* 세 장이 나란히 서면 행이 아니라 칸이다 — 구분선을 지우고 여백으로만 가른다 */
-  .continue-grid .continue-card{padding:0;gap:14px;}
-  .continue-grid .continue-card+.continue-card{border-top:none;}
+  /* 세 장이 나란히 서도 카드다 — 테두리와 패딩을 그대로 갖고 간격만 넓힌다 */
+  .continue-grid .continue-card{padding:12px;gap:14px;}
   .continue-grid .continue-card .img-ph{width:76px;height:76px;}
   .continue-grid .continue-title{font-size:14.5px;}
   .rank-row{padding:12px;gap:16px;}
