@@ -141,14 +141,19 @@ body.clean .jumpbar{display:none;}
 .sec.alt{background:var(--bg-light);}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
-/* 영어 라벨은 대문자로 선다 — 한글용 음수 자간을 그대로 쓰면 글자끼리 붙는다 */
-.sec-title.en{letter-spacing:0.8px;}
 .sec-more{font-size:12px;color:var(--text-light);}
 .img-ph{background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
 /* ── 디자인 샘플 썸네일 ──
    그림이 들어온 칸. 안내 아이콘만 숨기고 .ex-read(읽음 체크)처럼 겉에 얹힌 표시는 남긴다 —
    그래서 자식 선택자(>)로 아이콘만 집는다. */
 .has-img{background-size:cover;background-position:center;background-repeat:no-repeat;}
+/* 썸네일 위 작은 표시 — 사진이 밝든 어둡든 읽히게 어두운 판을 깔고 흰 글자를 올린다.
+   라임을 쓰지 않는다. 라임은 '누를 것'을 가리키는 색인데 이건 누르는 게 아니라 정보다.
+   웹과 달리 blur 를 걸지 않는다 — 앱에서는 굴절을 쓰지 않는다. */
+.age-badge{position:absolute;left:10px;top:10px;z-index:1;
+  padding:4px 9px;border-radius:var(--radius-full);
+  font-size:11px;font-weight:700;letter-spacing:-0.2px;color:#fff;
+  background:rgba(0,0,0,0.60);}
 .has-img>i,.has-img>svg{display:none;}
 .img-ph i,.img-ph svg{width:22px;height:22px;color:var(--placeholder-icon);}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text-dark);background:var(--bg-white);border:1px solid var(--border-light);border-radius:999px;padding:7px 14px;cursor:pointer;}
@@ -252,22 +257,25 @@ body.clean .jumpbar{display:none;}
 
 .hscroll::-webkit-scrollbar{display:none;}
 /* ── 낙타 큐레이션 카드 ──
-   미리보기의 카드 뼈대(.c)를 그대로 가져왔다(리건, 2026-11-06). 118×78 섬네일에 글자 한 줄이
-   붙어 있던 자리다 — 번호·이름·키워드 석 층이 되었다. 사진이 경계를 맡으니 민무늬다.
-   키워드는 바닥에 맞춘다(margin-top:auto) — 이름이 한 줄인 카드와 두 줄인 카드가 섞여도
-   키워드 줄이 한 선에 선다. 그래서 글에 min-height 를 주지 않아도 키가 맞는다. */
+   미리보기의 카드 뼈대(.c)를 그대로 가져왔다(리건, 2026-11-07). 네 층이 그 순서대로 선다 —
+   사진 위 배지(.c-age) · 소제목(.c-no) · 이름(.c-title) · 주제 한 줄(.c-topic).
+   118×78 섬네일에 글자 한 줄이 붙어 있던 자리다. 사진이 경계를 맡으니 민무늬다.
+   주제 줄은 바닥에 맞춘다(margin-top:auto) — 이름이 한 줄인 카드와 두 줄인 카드가 섞여도
+   주제가 한 선에 선다. 그래서 글에 min-height 를 주지 않아도 키가 맞는다. */
 .cur-card{min-width:118px;cursor:pointer;display:flex;flex-direction:column;}
-.cur-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:var(--card-img-radius);}
+.cur-card .img-ph{position:relative;width:100%;aspect-ratio:16/10;border-radius:var(--card-img-radius);}
 .cur-body{display:flex;flex-direction:column;flex:1;padding:11px 0 0;}
-/* 큐레이션 순번이다 — 코킷 번호가 아니다. 그래서 'CO:KIT' 을 붙이지 않는다 */
+/* 소제목 — 코킷 카드의 'CO:KIT 89' 와 같은 자리, 같은 방식이다(리건, 2026-11-07).
+   묶음 이름이 앞에 서고 순번이 뒤에 붙는다. 영문은 섹션 제목이 아니라 여기에 들어간다. */
 .cur-no{font-size:9.5px;font-weight:800;letter-spacing:0.6px;color:var(--text-light);margin-bottom:6px;}
+.cur-no::before{content:"NAKTA CURATION ";}
 .cur-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-/* 키워드는 주제 분류 여섯에서만 고른다 — 여기서 새 말을 만들면 분류표가 갈라진다.
-   모양은 목록 카드의 태그(.ex-tags)와 같은 알약이다 */
-.cur-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:auto;padding-top:9px;}
-.cur-tags span{font-size:10px;font-weight:600;color:var(--text-gray);
-  background:var(--bg-light);border-radius:var(--radius-full);padding:2px 7px;}
+/* 주제는 분류 여섯에서만 고른다 — 여기서 새 말을 만들면 분류표가 갈라진다.
+   미리보기의 주제 한 줄(.c-topic)과 같이 맨 글자로 둔다. 알약으로 묶으면 눌리는 것처럼 보이고
+   사진·이름보다 먼저 눈에 걸린다. 둘 이상이면 가운뎃점으로 잇는다. */
+.cur-meta{margin-top:auto;padding-top:9px;font-size:10px;font-weight:600;color:var(--text-gray);}
+.cur-meta span+span::before{content:"·";margin:0 5px;color:var(--text-muted);}
 .bigcard{cursor:pointer;}
 .bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:var(--card-img-radius);}
 .bigcard-body{padding:13px 0 0;}
@@ -1605,14 +1613,14 @@ body.free #scr-viewer .progress-thin{display:none;}
     </div>
 
     <div class="sec alt">
-      <div class="sec-head"><span class="sec-title en">NAKTA CURATION</span></div>
+      <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span></div>
       <div class="hscroll" data-auto>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-tags"><span>사업 성장</span><span>브랜딩</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-tags"><span>브랜딩</span><span>전환·매출</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-tags"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">04</span><div class="cur-title">한 명에게 말하듯 써야 1만 명에게 닿는다</div><div class="cur-tags"><span>콘텐츠</span><span>소비자 심리</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">05</span><div class="cur-title">전문가일수록 절대 쓰면 안 되는 말</div><div class="cur-tags"><span>콘텐츠</span><span>전환·매출</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">06</span><div class="cur-title">할 말이 없는 게 아니라, 있는데 모르는 것뿐</div><div class="cur-tags"><span>콘텐츠</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 7개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-meta"><span>사업 성장</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 5개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-meta"><span>브랜딩</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 6개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-meta"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 9개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">04</span><div class="cur-title">한 명에게 말하듯 써야 1만 명에게 닿는다</div><div class="cur-meta"><span>콘텐츠</span><span>소비자 심리</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 4개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">05</span><div class="cur-title">전문가일수록 절대 쓰면 안 되는 말</div><div class="cur-meta"><span>콘텐츠</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 8개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">06</span><div class="cur-title">할 말이 없는 게 아니라, 있는데 모르는 것뿐</div><div class="cur-meta"><span>콘텐츠</span><span>브랜딩</span></div></div></div>
       </div>
     </div>
 
