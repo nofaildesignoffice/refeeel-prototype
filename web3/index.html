@@ -57,6 +57,14 @@
   --brand-press:#C7D600;                 /* 눌렀을 때 — opacity 로 다루면 라임이 묽게 보인다 */
   --brand-soft:rgba(223,240,0,0.20);
   --brand-ring:rgba(223,240,0,0.55);
+  /* 인기 TOP 라벨 셋 — 라임 한 색의 농도 3단이다(리건, 2026-11-06).
+     1위가 꽉 찬 라임이고 아래로 갈수록 묽어진다. 금·은·동처럼 색을 셋 들여오면
+     브랜드색이 아닌 색이 둘 늘어난다 — 서브컬러가 정해지기 전에는 라임 하나로 센다.
+     opacity 로 묽히면 라임이 탁해 보이므로 흰색과 섞은 값을 직접 적는다(60% · 35%).
+     셋 다 흰 카드 위에 서고, 라임 계열 위에는 무엇이든 --brand-ink 를 얹는다. */
+  --rank-1:var(--brand);
+  --rank-2:#ECF666;
+  --rank-3:#F4FAA6;
 
   /* 경고·알림 빨강 — 원래 .btn-danger 가 쓰던 값을 토큰으로 올렸다.
      라임이 '누를 것', 빨강이 '못 되돌리는 것 · 안 읽은 것'. 역할이 겹치지 않는다.
@@ -402,10 +410,17 @@ body.clean .jumptoggle{display:none!important;}
 .rank-row{display:flex;align-items:center;gap:13px;padding:10px;cursor:pointer;
   background:var(--bg-white);border-radius:var(--radius-md);border:var(--card-line);}
 .rank-row+.rank-row{margin-top:10px;}
-.rank-num{font-size:15px;font-weight:800;color:var(--text-muted);width:18px;text-align:center;}
+/* 순위는 제목 위 라벨로 올라갔다(리건, 2026-11-06). 숫자 하나가 사진 왼쪽에 떨어져 있으면
+   어느 제목의 순위인지 눈이 한 번 더 움직인다 — 'TOP 1' 까지 적어 제목의 머리말로 둔다.
+   모양은 무료·유료 배지(.kit-free)와 같은 결로 맞춘다 — 한 목록에서 배지가 둘 다 보인다. */
+.rank-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.2px;
+  line-height:1.4;padding:2px 7px;border-radius:var(--radius-xs);color:var(--brand-ink);}
+.rank-badge.r1{background:var(--rank-1);}
+.rank-badge.r2{background:var(--rank-2);}
+.rank-badge.r3{background:var(--rank-3);}
 .rank-row .img-ph{width:84px;height:84px;border-radius:var(--radius-sm);}
 .rank-body{flex:1;min-width:0;}
-.rank-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;
+.rank-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;margin-top:6px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .rank-meta{font-size:11px;color:var(--text-light);margin-top:7px;}
 .ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;}
@@ -3082,6 +3097,7 @@ body.modal-open #scr-interest .ord-sub,
   .continue-grid .continue-title{font-size:14.5px;}
   .rank-row{padding:12px;gap:16px;}
   .rank-row .img-ph{width:84px;height:84px;}
+  .rank-badge{font-size:11px;padding:3px 8px;}
   .rank-title{font-size:15.5px;}
   .ex-row{padding:12px;gap:16px;}
   /* 여기는 .img-ph 로 적혀 있었다 — 이 행의 그림은 .ex-thumb 이라 한 번도 걸리지 않았다.
@@ -4719,9 +4735,9 @@ body.modal-open #scr-interest .ord-sub,
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">이번 주 인기 TOP</span></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">1</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">한국인 욕구별 훅 템플릿 40개</div><div class="rank-meta">CO:KIT 68</div></div></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">2</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">CO:KIT 41</div></div></div>
-      <div class="rank-row" data-go="scr-viewer"><span class="rank-num">3</span><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">CO:KIT 55</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><span class="rank-badge r1">TOP 1</span><div class="rank-title">한국인 욕구별 훅 템플릿 40개</div><div class="rank-meta">CO:KIT 68</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><span class="rank-badge r2">TOP 2</span><div class="rank-title">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div><div class="rank-meta">CO:KIT 41</div></div></div>
+      <div class="rank-row" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="rank-body"><span class="rank-badge r3">TOP 3</span><div class="rank-title">2026년 네이버 플레이스, 리뷰 많아도 밀리는 이유</div><div class="rank-meta">CO:KIT 55</div></div></div>
     </div>
 
     </div><!-- /find-default -->
