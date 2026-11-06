@@ -63,14 +63,26 @@
      더 선명하게 하려면 이 한 줄만 #D7352B 로 바꾼다(흰 글자 4.7:1 로 버튼에도 쓸 수 있다). */
   --alert:#B23B32;
 
-  /* ══════════ 카드 — 베리에이션 04 '그림자' (리건, 2026-11-05) ══════════
-     여섯 안 중에서 고른 것이다. 테두리를 걷고 흰 카드를 바탕에서 얕게 띄운다.
-     세 줄로 묶어 둔다 — 다른 변형으로 갈아탈 때 여기만 바꾸면 카드가 쓰이는 모든 자리가 따라온다.
-     그림자는 두 겹이다. 위 겹(1px)은 바탕에서 떼어 내는 선 노릇을 하고,
-     아래 겹(16px, 음수 spread)은 떠 있다는 느낌만 준다. 한 겹으로 하면 번지거나 선이 없다. */
+  /* ══════════ 카드 — 베리에이션 01 '민무늬' (리건, 2026-11-06) ══════════
+     04 '그림자'에서 갈아탔다. 상자를 지운다 — 배경도, 테두리도, 그림자도 없다.
+     읽는 서비스에 가장 가깝다. 상자가 없으니 글이 먼저 보인다.
+
+     상자를 걷으면 경계를 만들 것이 셋 남는다. 쓰임마다 다른 것을 쓴다.
+       · 사진이 있는 카드  → 사진이 경계다. 글은 사진 왼쪽 선에 맞춰 붙인다.
+       · 글만 있는 카드    → 머리에 2px 잉크 선을 긋는다. 틴트 섹션(#FBFDEF)에서도 이것만 살아남는다.
+       · 가로 리스트 행    → 행 사이에 1px 선. 상자가 없으면 어디까지가 한 행인지 알 수 없다.
+
+     그림자 토큰만 none 으로 돌리면 안 된다 — 흰 배경이 남아 틴트 섹션에 흰 상자가 그대로 보인다.
+     배경까지 같이 걷어야 민무늬가 성립한다. 그래서 --card-bg 를 둔다.
+     --card-radius 는 남긴다. 상자가 사라져도 점선 카드·온보딩 장·낙타AI 안내는 상자로 남는다. */
   --card-radius:16px;
-  --card-shadow:0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -8px rgba(0,0,0,0.14);
-  --card-shadow-hi:0 2px 4px rgba(0,0,0,0.05), 0 14px 30px -12px rgba(0,0,0,0.22);
+  --card-bg:transparent;
+  --card-shadow:none;
+  --card-shadow-hi:none;
+  /* 사진이 유일한 상자가 되니 모서리를 조금 깎는다. 작은 썸네일은 기본 --radius-sm(8px) 을 쓴다 */
+  --card-img-radius:10px;
+  --card-head-line:2px solid var(--text-black);
+  --card-row-line:1px solid var(--border-light);
 
   /* ══════════ iOS 리퀴드 글래스 ══════════
      반투명 + 흐림만으로는 유리가 되지 않는다. 세 겹이 있어야 유리로 읽힌다 —
@@ -279,10 +291,13 @@ body.clean .jumptoggle{display:none!important;}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
 .progress-bar>div{height:100%;background:var(--brand);border-radius:2px;}
-.card{background:var(--bg-white);border:none;border-radius:var(--card-radius);overflow:hidden;box-shadow:var(--card-shadow);}
-/* 떠오르는 움직임은 카드 격인 것들만 공유한다 */
-.card,.tpl,.quote-card,.pain-card,.prod-card,.pcard,.ai-card{
-  transition:transform var(--dur-short) var(--ease),box-shadow var(--dur-short) var(--ease);}
+.card{background:var(--card-bg);border:none;border-radius:0;overflow:visible;box-shadow:none;}
+/* 민무늬는 띄우지 않는다 — 떠오를 상자가 없다. 바뀌는 건 투명도와 선 색이다 */
+.card,.tpl,.quote-card,.pain-card,.prod-card,.pcard,.ai-card,.price-card,
+.card .img-ph,.prod-card .img-ph,.hcard-title,.bigcard-title,.continue-title,
+.quote-card .q-text,.tpl-t{
+  transition:opacity var(--dur-short) var(--ease),border-color var(--dur-short) var(--ease),
+             box-shadow var(--dur-short) var(--ease);}
 
 /* 홈 — 히어로 슬라이더 (4:3 카드) */
 .hero-slider{position:relative;}
@@ -302,20 +317,22 @@ body.clean .jumptoggle{display:none!important;}
 .hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:7px;z-index:2;}
 .hs-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;padding:0;cursor:pointer;transition:width var(--dur-short),background var(--dur-short);}
 .hs-dot.on{width:18px;border-radius:3px;background:var(--bg-white);}
-.continue-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+/* 리스트 행은 gap 을 0 으로 두고 구분선으로 가른다. 선과 여백이 겹치면 선이 떠 보인다 */
+.continue-grid{display:grid;grid-template-columns:1fr;gap:0;}
 .wide-only{display:none;}
-.continue-card{display:flex;gap:12px;padding:12px;align-items:center;}
+.continue-card{display:flex;gap:12px;padding:13px 0;align-items:center;}
+.continue-card+.continue-card{border-top:var(--card-row-line);}
 .continue-card .img-ph{width:68px;height:68px;}
 .continue-body{flex:1;min-width:0;}
 .continue-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
 .continue-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;}
 .continue-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-light);margin-top:6px;}
 .hcard{min-width:190px;cursor:pointer;}
-.hcard .img-ph{width:100%;aspect-ratio:16/10;border-radius:0;}
-.hcard-body{padding:12px;}
+.hcard .img-ph{width:100%;aspect-ratio:16/10;border-radius:var(--card-img-radius);}
+.hcard-body{padding:11px 0 0;}
 .hcard-num{font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:4px;letter-spacing:0.5px;}
 .hcard-title{font-size:13px;font-weight:700;line-height:1.45;}
-.hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.hscroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
 /* ── 마우스로 끄는 동안 ──
    ⚠ 붙는 자리(scroll-snap)를 잠시 끈다. 켜 둔 채로 끌면 손을 떼기도 전에
       카드에 달라붙어 덜컥거린다. 놓으면 다시 켜져서 가까운 카드에 앉는다.
@@ -353,25 +370,29 @@ body.clean .jumptoggle{display:none!important;}
 .sb-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
 .sb-cta{display:none;}
 .bigcard{cursor:pointer;}
-.bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:0;}
-.bigcard-body{padding:14px;}
+.bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:var(--card-img-radius);}
+.bigcard-body{padding:13px 0 0;}
 .bigcard-kicker{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .bigcard-kicker .k{font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-light);}
 .bigcard-title{font-size:16px;font-weight:800;line-height:1.4;}
 .bigcard-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
-.quote-card{background:var(--bg-white);border:none;border-radius:var(--card-radius);padding:16px;cursor:pointer;box-shadow:var(--card-shadow);}
+/* 사진이 없으니 사진이 경계가 되어 줄 수 없다. 머리에 선을 긋는다 — 틴트 섹션에서도 이것만 살아남는다 */
+.quote-card{background:var(--card-bg);border:none;border-top:var(--card-head-line);border-radius:0;padding:13px 1px 2px;cursor:pointer;box-shadow:none;}
 .quote-card .q-mark i,.quote-card .q-mark svg{width:16px;height:16px;color:var(--text-muted);}
 .quote-card .q-text{font-size:13px;font-weight:600;line-height:1.6;margin:8px 0;}
 .quote-card .q-src{font-size:11px;color:var(--text-light);}
 .quote-card .q-cnt{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-light);margin-top:8px;}
 .quote-card .q-cnt i,.quote-card .q-cnt svg{width:12px;height:12px;}
-.rank-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);cursor:pointer;}
+/* 가로형 — 미리보기 07 의 기하다. 섬네일 84px 정사각, 사이 13px.
+   흰 판과 그림자는 가져오지 않았다. 민무늬에서는 섬네일이 경계고 행은 선으로 가른다. */
+.rank-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:var(--card-row-line);cursor:pointer;}
 .rank-row:last-child{border-bottom:none;}
 .rank-num{font-size:15px;font-weight:800;color:var(--text-muted);width:18px;text-align:center;}
-.rank-row .img-ph{width:44px;height:44px;}
+.rank-row .img-ph{width:84px;height:84px;border-radius:var(--card-img-radius);}
 .rank-body{flex:1;min-width:0;}
-.rank-title{font-size:13px;font-weight:700;line-height:1.4;}
-.rank-meta{font-size:11px;color:var(--text-light);margin-top:2px;}
+.rank-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rank-meta{font-size:11px;color:var(--text-light);margin-top:7px;}
 .ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;box-shadow:var(--card-shadow);}
 .ac-close{position:absolute;top:10px;right:10px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;}
 .ac-close i,.ac-close svg{width:14px;height:14px;color:var(--text-light);}
@@ -387,7 +408,7 @@ body.clean .jumptoggle{display:none!important;}
 .search-input.filled{color:var(--text-black);font-weight:600;background:var(--bg-white);}
 .pain-grid{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .pain-grid::-webkit-scrollbar{display:none;}
-.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--bg-white);border:none;border-radius:var(--card-radius);padding:13px 14px;cursor:pointer;box-shadow:var(--card-shadow);}
+.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--card-bg);border:none;border-top:var(--card-head-line);border-radius:0;padding:11px 16px 0 0;cursor:pointer;box-shadow:none;}
 .pain-card i,.pain-card svg{width:15px;height:15px;color:var(--text-dark);margin-bottom:7px;}
 .pain-card b{display:block;font-size:13px;font-weight:700;line-height:1.4;}
 .pain-card span{display:block;font-size:11px;color:var(--text-light);margin-top:3px;}
@@ -468,7 +489,7 @@ body.clean .jumptoggle{display:none!important;}
 .chat-input>i,.chat-input>svg{width:22px;height:22px;color:var(--text-dark);}
 
 /* 인사이트 */
-.memo-card{padding:14px;cursor:pointer;}
+.memo-card{padding:13px 0 0;border-top:var(--card-head-line);cursor:pointer;}
 .memo-quote{border-left:3px solid var(--border-default);padding:2px 0 2px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:10px;}
 .memo-mine{display:flex;gap:8px;align-items:flex-start;}
 .memo-mine i,.memo-mine svg{width:12px;height:12px;color:var(--text-muted);margin-top:4px;flex-shrink:0;}
@@ -476,7 +497,7 @@ body.clean .jumptoggle{display:none!important;}
 .memo-src{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--text-light);}
 .type-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--bg-light);border-radius:var(--radius-xs);padding:2px 7px;color:var(--text-gray);}
 .type-tag i,.type-tag svg{width:10px;height:10px;}
-.series-card{padding:14px;display:flex;gap:12px;align-items:center;cursor:pointer;}
+.series-card{padding:14px 0;display:flex;gap:12px;align-items:center;cursor:pointer;border-top:var(--card-row-line);}
 .series-card .img-ph{width:54px;height:54px;}
 .series-body{flex:1;min-width:0;}
 .series-title{font-size:14px;font-weight:700;}
@@ -498,7 +519,7 @@ body.clean .jumptoggle{display:none!important;}
 .nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:var(--shadow-sm);}
 .nview{display:none;}
 .nview.on{display:block;}
-.note-list{display:flex;flex-direction:column;gap:10px;}
+.note-list{display:flex;flex-direction:column;gap:0;}
 /* 메모 쓴 것만 — 목록/그룹 동시에 좁힌다.
    날짜 라벨은 그날 첫 기록에 붙어 있어서, 그날이 통째로 빠지면 날짜도 같이 사라진다. */
 #scr-library:has(#memo-only:checked) .tl-ev:not(.has-memo){display:none;}
@@ -619,8 +640,8 @@ body.clean .jumptoggle{display:none!important;}
 .pc-body i,.pc-body svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;}
 
 /* 주제 — 한 줄에 하나씩 쭉. 주제가 늘어도 무너지지 않고, 스크롤만 길어진다. */
-.tpl{display:flex;align-items:center;gap:11px;padding:9px 12px 9px 9px;border:none;border-radius:var(--card-radius);background:var(--bg-white);cursor:pointer;box-shadow:var(--card-shadow);}
-.tpl+.tpl{margin-top:8px;}
+.tpl{display:flex;align-items:center;gap:11px;padding:10px 0;border:none;border-radius:0;background:var(--card-bg);cursor:pointer;box-shadow:none;}
+.tpl+.tpl{margin-top:0;border-top:var(--card-row-line);}
 .tpl-ic{width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-md);background:var(--bg-light);display:flex;align-items:center;justify-content:center;}
 .tpl-ic i,.tpl-ic svg{width:18px;height:18px;color:var(--text-gray);}
 .tpl .grow{flex:1;min-width:0;}
@@ -632,7 +653,7 @@ body.clean .jumptoggle{display:none!important;}
    쌓은 양이 아니라 '내가 만든 것'을 센다. 밑줄은 손가락 한 번이고 메모는 품이 든다.
    그래서 두 숫자에 위계가 생기고, 메모 쪽이 값지다는 게 설명 없이 읽힌다.
    분모를 만들지 않는다 — '10개 중 4개'라고 쓰는 순간 나머지 6개가 빚이 된다. */
-.ins-stat{display:flex;padding:17px 8px;}
+.ins-stat{display:flex;padding:16px 0;border-top:var(--card-head-line);}
 .ins-stat>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .ins-stat>div+div{border-left:1px solid var(--border-light);}
 .ins-stat b{font-size:21px;font-weight:800;letter-spacing:-0.5px;}
@@ -674,7 +695,8 @@ body.clean .jumptoggle{display:none!important;}
 .tl-when span{font-size:10.5px;font-weight:600;color:var(--text-light);}
 /* 코킷별 — 기록을 바로 펼치지 않고 코킷 카드로 접는다.
    기록이 쌓일수록 평면 나열은 못 읽는다. 코킷은 이미 사람이 기억하는 단위다. */
-.kitcard{padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;}
+.kitcard{padding:13px 0;display:flex;gap:12px;align-items:center;cursor:pointer;}
+.kitcard+.kitcard{border-top:var(--card-row-line);}
 .kitcard .img-ph{width:56px;height:56px;flex-shrink:0;}
 .kc-body{flex:1;min-width:0;}
 .kc-num{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-light);margin-bottom:3px;}
@@ -790,9 +812,12 @@ body.clean .jumptoggle{display:none!important;}
 .sort-row.on i,.sort-row.on svg{display:block;}
 .browse-view{display:none;}
 .browse-view.on{display:block;}
-.ex-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-light);cursor:pointer;}
+/* 가로형 — 섬네일을 미리보기와 같은 84px 정사각으로 올린다.
+   이 행은 제목 아래 설명과 태그까지 올 수 있어 내용이 섬네일보다 높다 —
+   가운데 정렬하면 섬네일이 떠 보이므로 위에 붙인다. */
+.ex-row{display:flex;align-items:flex-start;gap:13px;padding:14px 0;border-bottom:var(--card-row-line);cursor:pointer;}
 .ex-row:last-child{border-bottom:none;}
-.ex-thumb{position:relative;width:62px;height:62px;flex-shrink:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.ex-thumb{position:relative;width:84px;height:84px;flex-shrink:0;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--card-img-radius);}
 .ex-thumb>i,.ex-thumb>svg{width:18px;height:18px;color:var(--placeholder-icon);}
 .ex-read{position:absolute;right:-3px;bottom:-3px;width:17px;height:17px;border-radius:50%;background:var(--brand);border:2px solid var(--bg-white);display:flex;align-items:center;justify-content:center;}
 .ex-read i,.ex-read svg{width:9px;height:9px;color:var(--brand-ink);}
@@ -846,12 +871,12 @@ body.clean .jumptoggle{display:none!important;}
 .price-lead h3{font-size:19px;font-weight:800;color:var(--text-black);letter-spacing:-0.4px;line-height:1.35;}
 .price-lead p{font-size:13px;color:var(--text-light);line-height:1.6;margin-top:8px;}
 .price-grid{display:grid;gap:14px;}
+/* 요금제는 민무늬에서 뺀 자리다. 석 칸을 나란히 놓고 고르게 하는 표이므로
+   '이 칸까지가 한 요금제'를 상자 없이 말할 방법이 없다 — 1px 테두리로 둘러 둔다. */
 .price-card{position:relative;display:flex;flex-direction:column;background:var(--bg-white);
-  border:none;border-radius:var(--card-radius);padding:24px 20px;box-shadow:var(--card-shadow);
-  transition:transform var(--dur-short) var(--ease),box-shadow var(--dur-short) var(--ease);}
+  border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px 20px;}
 /* 권하는 칸은 테두리를 검게 두른다. 색으로 가리지 않고 선으로만 짚는다 */
-/* 테두리를 걷었으니 '권함'은 고리로 짚는다 — box-shadow 로 두르면 레이아웃이 밀리지 않는다 */
-.price-card.on{box-shadow:0 0 0 2px var(--text-black), var(--card-shadow-hi);}
+.price-card.on{border-color:var(--text-black);box-shadow:0 0 0 1px var(--text-black);}
 .pc-badge{position:absolute;top:-11px;left:20px;background:var(--brand);color:var(--brand-ink);
   font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:var(--radius-full);letter-spacing:-0.2px;}
 .pc-plan{font-size:14px;font-weight:800;color:var(--text-black);letter-spacing:-0.2px;}
@@ -874,10 +899,10 @@ body.clean .jumptoggle{display:none!important;}
 .price-note b{font-weight:700;color:var(--text-gray);}
 
 .prod-grid{display:grid;gap:14px;}
-.prod-card{display:flex;flex-direction:column;background:var(--bg-white);
-  border:none;border-radius:var(--card-radius);overflow:hidden;cursor:pointer;box-shadow:var(--card-shadow);}
-.prod-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:0;}
-.prod-body{display:flex;flex-direction:column;flex:1;padding:18px 18px 20px;}
+.prod-card{display:flex;flex-direction:column;background:var(--card-bg);
+  border:none;border-radius:0;overflow:visible;cursor:pointer;box-shadow:none;}
+.prod-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:var(--card-img-radius);}
+.prod-body{display:flex;flex-direction:column;flex:1;padding:15px 0 0;}
 .prod-kicker{font-size:10.5px;font-weight:700;color:var(--text-muted);letter-spacing:0.2px;}
 .prod-name{font-size:15.5px;font-weight:800;color:var(--text-black);letter-spacing:-0.3px;margin-top:7px;}
 .prod-desc{font-size:12.5px;color:var(--text-light);line-height:1.6;margin-top:8px;}
@@ -2695,12 +2720,18 @@ body.modal-open #scr-interest .ord-sub,
   .wnav-pill button:active,.wnav-ic:active{
     background-color:rgba(var(--state-ink), var(--state-press));}
 
-  /* 떠 있는 것들은 조금 더 떠오르는 것으로 답한다 */
-  .card:hover,.tpl:hover,.mcard:hover,.pcard:hover,.quote-card:hover,
-  .pain-card:hover,.price-card:hover,.prod-card:hover{
-    transform:translateY(-3px);box-shadow:var(--card-shadow-hi);}
-  .price-card.on:hover{box-shadow:0 0 0 2px var(--text-black), var(--card-shadow-hi);}
-  /* .gcard 는 카드가 아니라 섬네일 타일이다 — 한 화면에 마흔 장이 깔려서 띄우면 화면이 들썩인다 */
+  /* 민무늬에는 떠오를 상자가 없다 — 사진을 눌러서, 글을 흐려서 답한다 */
+  .card:hover .img-ph,.prod-card:hover .img-ph{opacity:0.90;}
+  .quote-card:hover .q-text,.memo-card:hover .continue-title,
+  .kitcard:hover .continue-title,.series-card:hover .continue-title,
+  .continue-card:hover .continue-title,.hcard:hover .hcard-title,
+  .bigcard:hover .bigcard-title,.tpl:hover .tpl-t,.prod-card:hover .prod-name{opacity:0.66;}
+  /* 머리 선을 가진 것은 그 선이 라임으로 바뀐다 */
+  .pain-card:hover{border-top-color:var(--brand);}
+  .mcard:hover,.pcard:hover{opacity:0.92;}
+  /* 요금제만 상자를 갖고 있으니 테두리로 답한다 */
+  .price-card:hover{border-color:var(--text-black);}
+  /* .gcard 는 섬네일 타일이다 — 민무늬에서는 .card 와 모양이 같아진다 */
   .gcard:hover{opacity:0.86;}
   .chip:hover{border-color:var(--text-black);}
   .btn:hover{opacity:0.85;}
@@ -3023,16 +3054,20 @@ body.modal-open #scr-interest .ord-sub,
   .continue-title{font-size:15.5px;}
   /* 홈의 세 장짜리 줄만 가로로 편다. 카드가 좁아지니 그림도 같이 줄인다.
      .continue-card 에 그냥 걸면 '내 코킷'의 네 장까지 같이 줄어든다 — 여기 안으로 가둔다. */
-  .continue-grid{grid-template-columns:repeat(3,1fr);gap:20px;}
+  .continue-grid{grid-template-columns:repeat(3,1fr);gap:24px;}
   .wide-only{display:flex;}
-  .continue-grid .continue-card{padding:16px;gap:14px;}
+  /* 세 장이 나란히 서면 행이 아니라 칸이다 — 구분선을 지우고 여백으로만 가른다 */
+  .continue-grid .continue-card{padding:0;gap:14px;}
+  .continue-grid .continue-card+.continue-card{border-top:none;}
   .continue-grid .continue-card .img-ph{width:76px;height:76px;}
   .continue-grid .continue-title{font-size:14.5px;}
-  .rank-row{padding:16px 0;gap:18px;}
-  .rank-row .img-ph{width:64px;height:64px;}
+  .rank-row{padding:16px 0;gap:16px;}
+  .rank-row .img-ph{width:84px;height:84px;}
   .rank-title{font-size:15.5px;}
-  .ex-row{padding:20px 0;gap:20px;}
-  .ex-row .img-ph{width:132px;height:84px;}
+  .ex-row{padding:18px 0;gap:16px;}
+  /* 여기는 .img-ph 로 적혀 있었다 — 이 행의 그림은 .ex-thumb 이라 한 번도 걸리지 않았다.
+     선택자를 고치면서 미리보기와 같은 84px 정사각으로 맞춘다. */
+  .ex-row .ex-thumb{width:84px;height:84px;}
   .ex-title{font-size:16px;}
   .ex-desc{font-size:13.5px;}
   .series-card{padding:20px;gap:18px;}
@@ -3363,17 +3398,17 @@ body.modal-open #scr-interest .ord-sub,
       <p>고른 고민에 맞는 코킷부터 시작해보세요</p>
     </div>
     <div class="sec" style="display:flex;flex-direction:column;gap:12px">
-      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+      <div class="card memo-card" data-go="scr-viewer">
         <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'를 고르셔서</div>
         <div class="continue-num">CO:KIT 20</div>
         <div class="continue-title" style="margin-bottom:0">이번 릴스도 실패했다…?</div>
       </div>
-      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+      <div class="card memo-card" data-go="scr-viewer">
         <div class="reason"><i data-lucide="sparkles"></i>'매출이 안 돼요'를 고르셔서</div>
         <div class="continue-num">CO:KIT 41</div>
         <div class="continue-title" style="margin-bottom:0">팔지 않으면 팔리는 3단계 콘텐츠 퍼널</div>
       </div>
-      <div class="card memo-card" data-go="scr-viewer" style="padding:14px">
+      <div class="card memo-card" data-go="scr-viewer">
         <div class="reason"><i data-lucide="trophy"></i>사장님들이 가장 많이 완독한 코킷</div>
         <div class="continue-num">CO:KIT 68</div>
         <div class="continue-title" style="margin-bottom:0">한국인 욕구별 훅 템플릿 40개</div>
