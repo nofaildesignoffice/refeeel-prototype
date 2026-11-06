@@ -265,6 +265,8 @@ body.clean .jumptoggle{display:none!important;}
 .sec.alt{background:var(--bg-light);}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
+/* 영어 라벨은 대문자로 선다 — 한글용 음수 자간을 그대로 쓰면 글자끼리 붙는다 */
+.sec-title.en{letter-spacing:0.8px;}
 .sec-more{font-size:12px;color:var(--text-light);}
 .img-ph{position:relative;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
 /* 썸네일 위 '며칠 됐는지' — 사진이 밝든 어둡든 읽히게 어두운 판을 깔고 흰 글자를 올린다.
@@ -311,8 +313,8 @@ body.clean .jumptoggle{display:none!important;}
 /* 민무늬는 띄우지 않는다 — 떠오를 상자가 없다. 바뀌는 건 투명도와 선 색이다 */
 .card,.tpl,.quote-card,.pain-card,.prod-card,.pcard,.ai-card,.price-card,
 .memo-card,.ins-stat,.rank-row,.ex-row,
-.card .img-ph,.prod-card .img-ph,.rank-row .img-ph,.ex-thumb,
-.hcard-title,.bigcard-title,.continue-title,.tpl-t{
+.card .img-ph,.prod-card .img-ph,.rank-row .img-ph,.ex-thumb,.cur-card .img-ph,
+.hcard-title,.bigcard-title,.continue-title,.tpl-t,.cur-title{
   transition:opacity var(--dur-short) var(--ease),border-color var(--dur-short) var(--ease),
              box-shadow var(--dur-short) var(--ease);}
 
@@ -366,20 +368,31 @@ body.clean .jumptoggle{display:none!important;}
 /* 한 줄에 선 카드는 크기가 같아야 한다(리건, 2026-08-23).
    폭은 flex-basis 로 박고, 높이는 글이 차지할 자리를 미리 내주어 맞춘다. */
 .hscroll[data-auto]>.hcard{flex:0 0 200px;}
-.hscroll[data-auto]>.thumbrow-item{flex:0 0 140px;}
+.hscroll[data-auto]>.cur-card{flex:0 0 196px;}
 .hscroll[data-auto] .reason{align-items:flex-start;min-height:2.8em;}
 .hscroll[data-auto] .reason i,.hscroll[data-auto] .reason svg{flex-shrink:0;margin-top:2px;}
 .hscroll[data-auto] .hcard-title{min-height:2.9em;}
-.hscroll[data-auto] .thumbrow-item p{min-height:2.8em;}
 /* 화살표는 좁은 화면에 두지 않는다. 손으로 밀면 되는 자리에 버튼을 얹으면 카드만 가린다 */
 .sl-arr{display:none;}
 
 .hscroll::-webkit-scrollbar{display:none;}
-.thumbrow-item{min-width:118px;cursor:pointer;}
-.thumbrow-item .img-ph{width:118px;height:78px;}
-.thumbrow-item p{font-size:12px;font-weight:600;line-height:1.4;margin-top:6px;}
-/* 슬라이더 안에서는 카드 폭이 달라졌다. 그림도 같이 따라가야 한다 */
-.hscroll[data-auto] .thumbrow-item .img-ph{width:100%;height:auto;aspect-ratio:16/10;}
+/* ── 낙타 큐레이션 카드 ──
+   미리보기의 카드 뼈대(.c)를 그대로 가져왔다(리건, 2026-11-06). 118×78 섬네일에 글자 한 줄이
+   붙어 있던 자리다 — 번호·이름·키워드 석 층이 되었다. 사진이 경계를 맡으니 민무늬다.
+   키워드는 바닥에 맞춘다(margin-top:auto) — 이름이 한 줄인 카드와 두 줄인 카드가 섞여도
+   키워드 줄이 한 선에 선다. 그래서 글에 min-height 를 주지 않아도 키가 맞는다. */
+.cur-card{min-width:118px;cursor:pointer;display:flex;flex-direction:column;}
+.cur-card .img-ph{width:100%;aspect-ratio:16/10;border-radius:var(--card-img-radius);}
+.cur-body{display:flex;flex-direction:column;flex:1;padding:11px 0 0;}
+/* 큐레이션 순번이다 — 코킷 번호가 아니다. 그래서 'CO:KIT' 을 붙이지 않는다 */
+.cur-no{font-size:9.5px;font-weight:800;letter-spacing:0.6px;color:var(--text-light);margin-bottom:6px;}
+.cur-title{font-size:13.5px;font-weight:700;line-height:1.45;letter-spacing:-0.3px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+/* 키워드는 주제 분류 여섯에서만 고른다 — 여기서 새 말을 만들면 분류표가 갈라진다.
+   모양은 목록 카드의 태그(.ex-tags)와 같은 알약이다 */
+.cur-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:auto;padding-top:9px;}
+.cur-tags span{font-size:10px;font-weight:600;color:var(--text-gray);
+  background:var(--bg-light);border-radius:var(--radius-full);padding:2px 7px;}
 .new-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 /* 시리즈 배너 — 좁은 화면에서는 세로로 접힌다 */
 .series-banner{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;cursor:pointer;}
@@ -2754,9 +2767,10 @@ body.modal-open #scr-interest .ord-sub,
     background-color:rgba(var(--state-ink), var(--state-press));}
 
   /* 민무늬에는 떠오를 상자가 없다 — 사진을 눌러서, 글을 흐려서 답한다 */
-  .hcard:hover .img-ph,.bigcard:hover .img-ph,.prod-card:hover .img-ph{opacity:0.90;}
+  .hcard:hover .img-ph,.bigcard:hover .img-ph,.prod-card:hover .img-ph,
+  .cur-card:hover .img-ph{opacity:0.90;}
   .hcard:hover .hcard-title,.bigcard:hover .bigcard-title,
-  .prod-card:hover .prod-name{opacity:0.66;}
+  .prod-card:hover .prod-name,.cur-card:hover .cur-title{opacity:0.66;}
   /* 사진을 가진 카드는 사진도 함께 눌러 준다 — 띄우면 여든아홉 줄이 한꺼번에 들썩인다 */
   .rank-row:hover .img-ph,.ex-row:hover .ex-thumb{opacity:0.90;}
   .rank-row:hover .rank-title,.ex-row:hover .ex-title{opacity:0.66;}
@@ -3031,7 +3045,7 @@ body.modal-open #scr-interest .ord-sub,
      폭을 px 로 박으면 화면이 조금만 달라져도 다섯 번째가 삐죽 걸린다.
      남는 자리를 넷으로 나눠 쓰면 어느 폭에서든 정확히 넉 장이 선다.
      60px 은 카드 사이 20px 이 세 번 들어간 값이다. */
-  .hscroll[data-auto]>.thumbrow-item{flex:0 0 calc((100% - 60px) / 4);min-width:0!important;}
+  .hscroll[data-auto]>.cur-card{flex:0 0 calc((100% - 60px) / 4);min-width:0!important;}
   .pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;overflow:visible;}
   .pain-card{flex:0 0 auto;min-width:0;white-space:normal;padding:20px 18px;}
   .pain-card i,.pain-card svg{width:20px;height:20px;margin-bottom:12px;}
@@ -3065,8 +3079,10 @@ body.modal-open #scr-interest .ord-sub,
   .sl-arr:hover{background:var(--bg-light);}
   .sl-arr i,.sl-arr svg{width:20px;height:20px;color:var(--text-black);}
 
-  .thumbrow-item .img-ph{width:100%;height:auto;aspect-ratio:16/10;}
-  .thumbrow-item p{font-size:15px;font-weight:700;line-height:1.45;margin-top:12px;}
+  .cur-body{padding-top:13px;}
+  .cur-no{font-size:10.5px;}
+  .cur-title{font-size:15px;}
+  .cur-tags{padding-top:11px;}
   .hcard-body{padding:18px;}
   .hcard-title{font-size:15px;}
   .hcard-num{font-size:11px;}
@@ -3644,14 +3660,14 @@ body.modal-open #scr-interest .ord-sub,
     </div>
 
     <div class="sec">
-      <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span></div>
+      <div class="sec-head"><span class="sec-title en">NAKTA CURATION</span></div>
       <div class="hscroll" data-auto>
-        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>빼는 게 먼저, 더하는 게 나중</p></div>
-        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>'OO 하면 떠오르는 브랜드'가 되는 법</p></div>
-        <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>사람은 타겟이 아니다</p></div>
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>한 명에게 말하듯 써야 1만 명에게 닿는다</p></div>
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>전문가일수록 절대 쓰면 안 되는 말</p></div>
-          <div class="thumbrow-item" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><p>할 말이 없는 게 아니라, 있는데 모르는 것뿐</p></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-tags"><span>사업 성장</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-tags"><span>브랜딩</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-tags"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">04</span><div class="cur-title">한 명에게 말하듯 써야 1만 명에게 닿는다</div><div class="cur-tags"><span>콘텐츠</span><span>소비자 심리</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">05</span><div class="cur-title">전문가일수록 절대 쓰면 안 되는 말</div><div class="cur-tags"><span>콘텐츠</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">06</span><div class="cur-title">할 말이 없는 게 아니라, 있는데 모르는 것뿐</div><div class="cur-tags"><span>콘텐츠</span><span>브랜딩</span></div></div></div>
       </div>
     </div>
 
