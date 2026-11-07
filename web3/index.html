@@ -135,9 +135,9 @@
    글자로 적던 자리를 실제 로고로 바꿨다. 비율은 573.5 : 125.9 로 고정하고 높이만 자리마다 준다.
    글자(font-size)와 달리 로고는 윗선·아랫선이 글꼴과 다르다 — 그래서 em 이 아니라 px 로 맞춘다. */
 .logo-mark{display:block;width:auto;aspect-ratio:573.51 / 125.93;}
-.topbar .logo .logo-mark{height:11px;}
+.topbar .logo .logo-mark{height:18.7px;}
 .login-logo .logo-mark{height:21px;margin:0 auto;}
-.wnav-logo .logo-mark{height:15px;}
+.wnav-logo .logo-mark{height:25.5px;}
 .login-side-logo .logo-mark{height:13px;}
 .wfoot-name .logo-mark{height:15px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -3222,8 +3222,13 @@ body.modal-open #scr-interest .ord-sub,
     border-radius:var(--radius-full);background:var(--bg-white);
     border:1px solid var(--border-light);box-shadow:var(--shadow-md);cursor:pointer;
     transition:background-color var(--dur-short) var(--ease);}
-  .sl-prev{left:-14px;}
-  .sl-next{right:-14px;}
+  /* 화살표는 카드 밖에 선다(리건, 2026-11-08). 트랙 좌우에 화살표 자리를 비우고
+     그 자리에 앉힌다 — 전에는 카드 위에 겹쳐 사진과 글자를 가렸다.
+     섹션 바깥으로 빼지 않는 이유: .sec 의 좌우 패딩은 좁은 데스크톱에서 24px 까지
+     줄어들어 44px 짜리 화살표가 화면 밖으로 잘린다. */
+  .slider{padding-inline:56px;}
+  .sl-prev{left:0;}
+  .sl-next{right:0;}
   .sl-arr:hover{background:var(--bg-light);}
   .sl-arr i,.sl-arr svg{width:20px;height:20px;color:var(--text-black);}
 
