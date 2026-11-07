@@ -183,15 +183,18 @@ body.clean .jumpbar{display:none;}
 /* 라벨은 코킷 번호 위에 한 줄을 차지한다(리건, 2026-11-07). 번호 옆에 붙어 있을 때는
    'CO:KIT 20무료' 처럼 한 덩어리로 읽혀 번호도 라벨도 흐려졌다 — 줄을 따로 주면
    번호는 번호로, 라벨은 라벨로 읽힌다. 모서리는 완전히 둥근 알약이다. */
+/* 크기·굵기·자간·패딩까지 랜딩 .label 의 값이다 — 색과 모서리만 닮으면 다른 물건이 된다.
+   9.5px 로는 알약 안에서 글자가 떠 보였다. 아래 여백만 우리 값이다(8px) —
+   랜딩의 14~18px 은 섹션 제목 위에 홀로 서는 라벨의 여백이라 카드 안에서는 너무 벌어진다. */
 .kit-free,.kit-lock{display:inline-flex;align-items:center;vertical-align:middle;
-  font-size:9.5px;font-weight:800;letter-spacing:0;border-radius:var(--radius-full);
-  padding:3px 9px;margin-bottom:5px;}
+  font-size:12.5px;font-weight:700;letter-spacing:-0.2px;border-radius:var(--radius-full);
+  padding:6px 13px;margin-bottom:8px;}
 /* 무료는 어두운 판에 라임 글자, 구독 회원은 라임 판에 어두운 글자다(리건, 2026-11-07).
    같은 알약에 색만 뒤집히니 한 목록에 둘이 섞여 나와도 짝으로 읽힌다 —
    어느 한쪽이 더 크지도 작지도 않다. 라임 위에는 언제나 --brand-ink 를 얹는다. */
 .kit-free{color:var(--brand);background:var(--bg-black);}
 .kit-lock{gap:3px;color:var(--brand-ink);background:var(--brand);}
-.kit-lock i,.kit-lock svg{width:9px;height:9px;}
+.kit-lock i,.kit-lock svg{width:12px;height:12px;}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
 .progress-bar>div{height:100%;background:var(--brand);border-radius:2px;}
