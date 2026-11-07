@@ -180,14 +180,17 @@ body.clean .jumpbar{display:none;}
    목록에서 미리 알 수 있어야 한다.
    ⚠ 값은 쓰지 않는다. 여기 적는 건 '지금 내 계정에서 열리는가' 뿐이다.
       그래야 앱 빌드에서도 같은 표시를 그대로 쓸 수 있다. */
+/* 라벨은 코킷 번호 위에 한 줄을 차지한다(리건, 2026-11-07). 번호 옆에 붙어 있을 때는
+   'CO:KIT 20무료' 처럼 한 덩어리로 읽혀 번호도 라벨도 흐려졌다 — 줄을 따로 주면
+   번호는 번호로, 라벨은 라벨로 읽힌다. 모서리는 완전히 둥근 알약이다. */
 .kit-free,.kit-lock{display:inline-flex;align-items:center;vertical-align:middle;
-  font-size:9.5px;font-weight:800;letter-spacing:0;border-radius:var(--radius-xs);
-  padding:2px 6px;margin-left:6px;}
-/* 무료는 채워서 눈에 걸리게. 이게 먼저 읽혀야 한다 */
-.kit-free{color:var(--brand-ink);background:var(--brand);}
-/* 유료는 비워서 물러나게. 막는 표시가 목록에서 더 크면 안 된다 */
-.kit-lock{gap:3px;font-weight:700;color:var(--text-gray);
-  background:var(--bg-light);border:1px solid var(--border-light);}
+  font-size:9.5px;font-weight:800;letter-spacing:0;border-radius:var(--radius-full);
+  padding:3px 9px;margin-bottom:5px;}
+/* 무료는 어두운 판에 라임 글자, 구독 회원은 라임 판에 어두운 글자다(리건, 2026-11-07).
+   같은 알약에 색만 뒤집히니 한 목록에 둘이 섞여 나와도 짝으로 읽힌다 —
+   어느 한쪽이 더 크지도 작지도 않다. 라임 위에는 언제나 --brand-ink 를 얹는다. */
+.kit-free{color:var(--brand);background:var(--bg-black);}
+.kit-lock{gap:3px;color:var(--brand-ink);background:var(--brand);}
 .kit-lock i,.kit-lock svg{width:9px;height:9px;}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
@@ -296,12 +299,33 @@ body.clean .jumpbar{display:none;}
 .bigcard-desc{font-size:12px;color:var(--text-gray);line-height:1.6;margin-top:6px;}
 /* 글만 있는 카드는 실선이다 — 미리보기 02 '실선'. 사진이 없으니 테두리가 경계를 맡는다.
    미리보기의 .t 와 같이 세로 flex 로 둔다 — 데스크톱에서 석 장이 나란히 설 때 키가 맞는다. */
-.quote-card{display:flex;flex-direction:column;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:16px 14px;cursor:pointer;}
-.quote-card .q-mark i,.quote-card .q-mark svg{width:16px;height:16px;color:var(--text-muted);}
-.quote-card .q-text{font-size:13px;font-weight:600;line-height:1.6;margin:8px 0;}
-.quote-card .q-src{font-size:11px;color:var(--text-light);}
-.quote-card .q-cnt{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-light);margin-top:8px;}
-.quote-card .q-cnt i,.quote-card .q-cnt svg{width:12px;height:12px;}
+/* ── 밑줄 친 문장 ──
+   브랜딩 클래스 랜딩의 후기 카드를 참고해 네 층으로 다시 세웠다(리건, 2026-11-07).
+   큰 따옴표 · 문장 · 출처 · 윗선 아래 밑줄 수. 가로 석 장은 그대로다.
+   가장 큰 변화는 문장에 형광펜이 실제로 그려진다는 것이다 — 섹션 이름이
+   '사장님들이 밑줄 친 문장'인데 정작 밑줄은 어디에도 보이지 않았다. */
+.quote-card{display:flex;flex-direction:column;background:var(--bg-white);border:var(--card-line);
+  border-radius:var(--radius-md);padding:20px 18px;cursor:pointer;}
+/* 따옴표는 아이콘이 아니라 글자로 찍는다 — 뷰어의 인용문(.vq)과 같은 세리프를 쓴다.
+   큰 글자를 좁은 높이에 눌러 담아(line-height·height) 아래 여백을 줄인다.
+   라임을 쓰지 않는다 — 이 카드에서 라임은 형광펜 몫이고, 둘이 같이 서면 서로를 깎는다. */
+.quote-card .q-mark{font-family:'Instrument Serif','Pretendard',serif;
+  font-size:44px;line-height:0.55;height:20px;color:var(--border-default);}
+.quote-card .q-text{font-size:14.5px;font-weight:700;line-height:1.6;letter-spacing:-0.3px;
+  margin:12px 0 10px;word-break:keep-all;}
+/* 문장 안 핵심 어절에 그어지는 형광펜 — 리더에서 긋는 밑줄(mark.hl)과 같은 색이다.
+   mark.hl 을 그대로 쓰지 않는다. 그건 리더가 집어 메모를 띄우는 요소라(JS 가 집는다)
+   홈 카드에 두면 엉뚱한 자리에서 메모 말풍선이 뜬다. 모양만 같은 별도 선택자로 둔다. */
+.quote-card .q-u{background:linear-gradient(transparent 58%,var(--brand-soft) 58%);
+  box-shadow:inset 0 -2px 0 var(--brand);padding:0 1px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
+.quote-card .q-src{font-size:11.5px;line-height:1.5;color:var(--text-light);}
+/* 밑줄 수는 윗선을 두르고 바닥에 붙인다(margin-top:auto) —
+   문장이 한 줄인 카드와 세 줄인 카드가 섞여도 석 장의 밑동이 한 선에 선다. */
+.quote-card .q-cnt{display:flex;align-items:center;gap:5px;margin-top:auto;padding-top:12px;
+  border-top:1px solid var(--border-light);
+  font-size:11.5px;font-weight:700;color:var(--text-gray);}
+.quote-card .q-cnt i,.quote-card .q-cnt svg{width:13px;height:13px;}
 /* 가로형 — 미리보기 07 '가로형' 에서 그림자를 걷고 테두리로 세웠다(리건, 2026-11-06).
    선 색은 밑줄 친 문장(.quote-card)과 같다. 한 줄에 한 장이므로 행 구분선이 필요 없다. */
 .rank-row{display:flex;align-items:center;gap:13px;padding:10px;cursor:pointer;
@@ -1577,8 +1601,8 @@ body.free #scr-viewer .progress-thin{display:none;}
     <div class="sec">
       <div class="sec-head"><span class="sec-title">사장님들이 밑줄 친 문장</span></div>
       <div class="quote-card" data-go="scr-viewer">
-        <span class="q-mark"><i data-lucide="quote"></i></span>
-        <p class="q-text">본인이 느꼈다면, 팔로워는 훨씬 먼저 느꼈다.</p>
+        <span class="q-mark">“</span>
+        <p class="q-text">본인이 느꼈다면, <span class="q-u">팔로워는 훨씬 먼저 느꼈다</span>.</p>
         <p class="q-src">CO:KIT 59 · 판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</p>
         <div class="q-cnt"><i data-lucide="highlighter"></i>이번 주 128명이 밑줄</div>
       </div>
@@ -1591,7 +1615,8 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 코킷</div>
-            <div class="hcard-num">CO:KIT 20<span class="kit-free">무료</span></div>
+            <span class="kit-free">무료</span>
+            <div class="hcard-num">CO:KIT 20</div>
             <div class="hcard-title">이번 릴스도 실패했다…?</div>
           </div>
         </div>
@@ -1599,7 +1624,8 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="book-open-check"></i>CO:KIT 41을 읽고 계셔서</div>
-            <div class="hcard-num">CO:KIT 03<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+            <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+            <div class="hcard-num">CO:KIT 03</div>
             <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
           </div>
         </div>
@@ -1607,7 +1633,8 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
-            <div class="hcard-num">CO:KIT 59<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+            <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+            <div class="hcard-num">CO:KIT 59</div>
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
           </div>
         </div>
@@ -1615,7 +1642,8 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 코킷</div>
-              <div class="hcard-num">CO:KIT 81<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+              <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+              <div class="hcard-num">CO:KIT 81</div>
               <div class="hcard-title">제품 말고 '두 사람'을 파세요</div>
             </div>
           </div>
@@ -1623,7 +1651,8 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="book-open-check"></i>'콘텐츠 소재가 떨어졌어요'에 맞는 코킷</div>
-              <div class="hcard-num">CO:KIT 80<span class="kit-free">무료</span></div>
+              <span class="kit-free">무료</span>
+              <div class="hcard-num">CO:KIT 80</div>
               <div class="hcard-title">콘텐츠는 만드는 게 아니라, 포착하는 것</div>
             </div>
           </div>
@@ -1631,7 +1660,8 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
-              <div class="hcard-num">CO:KIT 87<span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span></div>
+              <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+              <div class="hcard-num">CO:KIT 87</div>
               <div class="hcard-title">95 대 5 법칙</div>
             </div>
           </div>
