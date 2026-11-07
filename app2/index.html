@@ -18,7 +18,7 @@
   /* 쓰는 자리는 있었는데 정의가 없던 넷 (2026-11-06). 값은 웹(web3)과 같다 —
      두 쪽이 다른 모서리와 다른 속도로 움직이면 같은 서비스로 보이지 않는다. */
   --radius-xs:4px; --radius-full:9999px;
-  --dur-short:150ms; --ease:cubic-bezier(0.2, 0, 0, 1);
+  --dur-short:150ms; --dur-medium:250ms; --ease:cubic-bezier(0.2, 0, 0, 1);
   --shadow-sm:0 1px 3px rgba(0,0,0,0.08); --shadow-md:0 4px 12px rgba(0,0,0,0.1);
 
   /* ══════════ 브랜드 색 (v2, 2026-10-06) ══════════
@@ -842,9 +842,28 @@ body.clean .jumpbar{display:none;}
 .gcard.read b{color:var(--text-muted);}
 .gcard .img-ph{position:relative;}
 
-.seg{display:flex;background:var(--bg-light);border-radius:var(--radius-sm);padding:3px;margin:14px 16px 0;}
-.seg button{flex:1;font-size:11.5px;font-weight:700;padding:8px 0;border:none;border-radius:6px;background:none;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
-.seg button.on{background:var(--brand);color:var(--brand-ink);box-shadow:var(--shadow-sm);}
+/* ── 두 갈래 전환 ──
+   위 네비의 알약 통과 같은 꼴이다. 잉크 하나가 좌우로 옮겨 다니며 지금 있는 곳을 가리킨다.
+   회색 홈에 흰 조각을 얹던 예전 방식은 '켜짐/꺼짐' 두 상태뿐이라 옮겨 간 방향이 안 보였다.
+   웹에서 그대로 가져왔다(리건, 2026-11-07) — 제품 UI 는 웹과 앱이 같아야 한다.
+   hover 규칙만 뺐다. 앱에는 손가락뿐이라 가리킬 커서가 없다. */
+.seg{position:relative;display:flex;align-items:center;gap:2px;padding:5px;margin:14px 16px 0;
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-full);
+  box-shadow:var(--shadow-sm);}
+.seg-ink{position:absolute;top:5px;bottom:5px;left:0;width:0;z-index:0;
+  background:var(--brand);border-radius:var(--radius-full);opacity:0;
+  transition:transform var(--dur-medium) var(--ease),
+             width var(--dur-medium) var(--ease),
+             opacity var(--dur-short) var(--ease);}
+.seg-ink.no-anim{transition:none;}
+/* 여백은 클래스로 준다 — 인라인 style 은 CSS 를 이겨서 나중에 손댈 수 없다 */
+.seg.seg-top{margin:12px 16px 0;}
+.seg button{position:relative;z-index:1;flex:1;font-size:12.5px;font-weight:700;padding:10px 0;
+  border:none;border-radius:var(--radius-full);background:none;color:var(--text-gray);
+  font-family:inherit;cursor:pointer;white-space:nowrap;
+  transition:color var(--dur-short) var(--ease);}
+/* 잉크가 도착할 즈음 글자가 밝아진다 */
+.seg button.on{color:var(--brand-ink);background:none;box-shadow:none;transition-delay:90ms;}
 /* 두 단 탭 — 위는 알약, 아래는 밑줄.
    같은 알약을 두 줄 겹치면 어느 쪽이 상위인지 알 수 없다. 생김새가 달라야 위계가 읽힌다. */
 .seg2{display:flex;gap:20px;padding:16px 16px 0;border-bottom:1px solid var(--border-light);}
@@ -1844,7 +1863,8 @@ body.free #scr-viewer .progress-thin{display:none;}
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
     </div>
   </div>
-  <div class="seg" style="margin:12px 16px 0">
+  <div class="seg seg-top">
+    <span class="seg-ink"></span>
     <button data-sseg="find" class="on">검색하기</button>
     <button data-sseg="browse">둘러보기</button>
   </div>
@@ -2570,6 +2590,7 @@ body.free #scr-viewer .progress-thin{display:none;}
        읽기는 한 번에 하나·스와이프, 찾기는 밀도 높은 목록·스크롤.
        한 화면에 겹치면 서로를 방해하므로 모드를 나눈다 — 검색탭의 '검색하기 · 둘러보기'와 같은 패턴. -->
   <div class="seg">
+    <span class="seg-ink"></span>
     <button data-lseg="all" class="on">전체보기</button>
     <button data-lseg="collect">모아보기</button>
   </div>
@@ -3058,6 +3079,7 @@ body.free #scr-viewer .progress-thin{display:none;}
          코킷은 한 편씩 읽고 끝나지만 시리즈는 여러 편을 이어 듣는 묶음이라
          '읽는 중·완독·저장'이라는 축이 애초에 걸리지 않는다. 그래서 축을 하나 위로 올렸다. -->
     <div class="seg">
+      <span class="seg-ink"></span>
       <button data-myseg="kit" class="on">코킷</button>
       <button data-myseg="series">시리즈</button>
     </div>
@@ -3841,6 +3863,22 @@ let current = "scr-login";
    ⚠ 진짜 주소가 정해지면 여기만 고치면 된다. */
 const WEB_LANDING = "https://nofaildesignoffice.github.io/refeeel-prototype/web2/?go=scr-lp-class";
 
+/* 두 갈래 전환의 잉크를 지금 켜진 버튼 위로 옮긴다.
+   버튼의 실제 위치·폭을 읽어서 옮기므로 글자 길이가 달라도 알아서 맞는다.
+   아직 안 보이는 화면이면 폭이 0 이라 재지 않고 물러난다 —
+   폭 0 으로 깔아 두면 글자 뒤에 아무것도 없는 채로 남는다. */
+function moveSegInk(seg){
+  const ink = seg.querySelector(".seg-ink");
+  const on = seg.querySelector("button.on");
+  if(!ink) return;
+  if(!on){ ink.style.opacity = 0; return; }
+  if(!on.offsetWidth) return;
+  ink.style.opacity = 1;
+  ink.style.width = on.offsetWidth + "px";
+  ink.style.transform = "translateX(" + on.offsetLeft + "px)";
+}
+function moveAllSegInk(){ document.querySelectorAll(".seg").forEach(moveSegInk); }
+
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   const el = document.getElementById(id);
@@ -3857,6 +3895,7 @@ function show(id){
   document.querySelectorAll("#jumpbar button").forEach(b=>{
     b.classList.toggle("on", b.dataset.jump === id);
   });
+  moveAllSegInk();
 }
 
 /* 대화 시작 화면은 들어올 때마다 처음 상태로 되돌린다.
@@ -4941,6 +4980,20 @@ initBrowse();
    안 산 사람의 길은 점프바의 '클래스(미보유)' 로 본다. */
 document.body.classList.add("owns-class");
 show("scr-login");
+
+/* 첫 그림에서는 미끄러지지 않는다 — 제자리에서 시작한다 */
+document.querySelectorAll(".seg-ink").forEach(s=> s.classList.add("no-anim"));
+moveAllSegInk();
+requestAnimationFrame(()=>{
+  document.querySelectorAll(".seg-ink").forEach(s=> s.classList.remove("no-anim"));
+});
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveAllSegInk);
+/* 갈래를 누르면 잉크가 따라간다. 기존 클릭 처리를 건드리지 않고 뒤에서 한 번 더 본다 */
+document.addEventListener("click", e=>{
+  if(e.target.closest(".seg")) requestAnimationFrame(moveAllSegInk);
+});
+/* 폭이 바뀌면 버튼 자리도 바뀐다 */
+window.addEventListener("resize", moveAllSegInk);
 </script>
 </body>
 </html>

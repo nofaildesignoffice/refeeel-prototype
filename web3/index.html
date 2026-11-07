@@ -3154,6 +3154,9 @@ body.modal-open #scr-interest .ord-sub,
      ⚠ 위 .hscroll>* 의 min-width:0!important 를 넘어야 해서 여기도 !important 를 쓴다.
         !important 끼리는 명시도로 겨루므로 [data-auto] 를 얹어 한 칸 더 세게 만든다. */
   .hscroll[data-auto]{display:flex;gap:20px;overflow-x:auto;padding-bottom:4px;}
+  /* 풀블리드 카드의 그림자는 데스크톱에서도 잘리면 안 된다 — 바로 윗줄이 4px 로 되돌리므로
+     여기서 다시 적어 준다. 모바일 쪽 규칙(.hscroll[data-bleed])과 같은 값이다. */
+  .hscroll[data-bleed]{padding-bottom:14px;}
   .hscroll[data-auto]>.hcard{flex:0 0 300px;min-width:0!important;}
   /* 시리즈는 데스크톱에서 다시 슬라이더다 — 넷이 한 줄에 서면 격자가 필요 없다 */
   .hscroll[data-grid2]{display:flex;overflow-x:auto;}
