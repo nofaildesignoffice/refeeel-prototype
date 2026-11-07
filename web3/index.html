@@ -2086,7 +2086,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .tl-wrap,.pc-wrap,.tagbar,.note-bar,.v-end,.fld,.set-group,.set-note,.leave-hd,
   .doc-head,.doc-body,.menu-list,.set-list,.lose,.set-btn,.ch-note,.my-profile,.done-hero,
   .search-anchor,.recall-hd,.acct-hd,.fs-pick,.fs-prev,.ed-note,.noti-date{
-    padding-inline:max(24px,calc((100% - 1280px) / 2));margin-inline:0;}
+    padding-inline:max(64px,calc((100% - 1280px) / 2));margin-inline:0;}
   .pc-track{padding-inline:0;}
   /* 낙타AI — 폭이 세 배라 글과 반짝임을 함께 키운다.
      그러지 않으면 섹션이 텅 빈 띠처럼 보인다. 사진은 전체 폭, 글은 1160 안이다. */
@@ -2995,7 +2995,7 @@ body.modal-open #scr-interest .ord-sub,
 
   /* 쌓은 기록 — 넓은 화면에서는 다섯 칸이 한 줄에 다 선다.
      회색 상자라 화면 끝까지 늘이지 않는다. 왼쪽만 1280 정렬에 맞추고 폭은 760 으로 묶는다. */
-  .keep-box{margin:24px max(24px,calc((100% - 1280px) / 2)) 0;max-width:760px;
+  .keep-box{margin:24px max(64px,calc((100% - 1280px) / 2)) 0;max-width:760px;
     padding:28px 30px;border-radius:var(--radius-xl);}
   .keep-hd{font-size:16px;}
   .keep-nums{grid-template-columns:repeat(5,1fr);gap:16px;margin-top:20px;}
@@ -3209,7 +3209,7 @@ body.modal-open #scr-interest .ord-sub,
   /* --- 히어로 비율 : 4:3 은 데스크톱에서 너무 높다 --- */
   .hs-slide{aspect-ratio:21/9;}
   /* 판은 화면 끝까지 깔리되 글자는 1280 안쪽 — 아래 섹션들과 같은 세로선에 선다 */
-  .hs-body{padding:36px max(24px,calc((100% - 1280px) / 2)) 56px;}
+  .hs-body{padding:36px max(64px,calc((100% - 1280px) / 2)) 56px;}
   .hs-title{font-size:34px;line-height:1.3;}
   .hs-sub{font-size:15px;margin-top:12px;}
   .hs-label{font-size:12px;}
@@ -3224,11 +3224,11 @@ body.modal-open #scr-interest .ord-sub,
     transition:background-color var(--dur-short) var(--ease);}
   /* 화살표는 카드 밖에 선다(리건, 2026-11-08). 트랙 좌우에 화살표 자리를 비우고
      그 자리에 앉힌다 — 전에는 카드 위에 겹쳐 사진과 글자를 가렸다.
-     섹션 바깥으로 빼지 않는 이유: .sec 의 좌우 패딩은 좁은 데스크톱에서 24px 까지
-     줄어들어 44px 짜리 화살표가 화면 밖으로 잘린다. */
-  .slider{padding-inline:56px;}
-  .sl-prev{left:0;}
-  .sl-next{right:0;}
+     카드 트랙은 본문 폭 그대로다 — 좌우선이 다른 섹션과 맞아야 한다(리건).
+     대신 본문 좌우 여백의 최소를 64px 로 올려 화살표가 설 자리를 만들었다.
+     그러지 않으면 좁은 데스크톱(여백 24px)에서 화살표가 화면 밖으로 잘린다. */
+  .sl-prev{left:-56px;}
+  .sl-next{right:-56px;}
   .sl-arr:hover{background:var(--bg-light);}
   .sl-arr i,.sl-arr svg{width:20px;height:20px;color:var(--text-black);}
 
@@ -3305,7 +3305,7 @@ body.modal-open #scr-interest .ord-sub,
      점 지름 9px 이니 중심은 여백+4.5, 레일 굵기 1px 이므로 시작은 여백+4. */
   .tl-wrap{padding-top:8px;padding-bottom:80px;}
   #scr-library .tl-wrap::before{bottom:102px;}
-  #scr-library .tl-wrap::before{left:calc(max(24px, (100% - 1280px) / 2) + 4px);}
+  #scr-library .tl-wrap::before{left:calc(max(64px, (100% - 1280px) / 2) + 4px);}
   .tl-ev+.tl-ev{margin-top:18px;}
   .tl-ev+.tl-ev:has(.tl-when){margin-top:32px;}
 
@@ -3315,7 +3315,7 @@ body.modal-open #scr-interest .ord-sub,
   #scr-my .gnb{display:none;}
   #scr-my .my-profile{
     display:flex;justify-content:flex-start;align-items:center;gap:24px;
-    margin:70px max(24px,calc((100% - 1280px) / 2)) 0;padding:32px 36px;
+    margin:70px max(64px,calc((100% - 1280px) / 2)) 0;padding:32px 36px;
     background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-md);}
   /* 사람은 왼쪽 끝, 조작 버튼은 오른쪽 끝. 가운데는 비워 둔다 */
   #scr-my .my-info{flex:1;min-width:0;}
