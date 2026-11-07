@@ -26,26 +26,49 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .bar{position:sticky;top:0;z-index:60;background:rgba(239,237,232,.93);
   -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
   border-bottom:1px solid var(--line-2);}
-.bar-in{max-width:1180px;margin:0 auto;padding:15px 22px 13px;}
+.bar-in{max-width:1240px;margin:0 auto;padding:15px 22px 13px;}
 .bar h1{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
 .bar h1 span{color:var(--light);font-weight:700;}
 .bar p{font-size:12.5px;color:var(--gray);margin-top:5px;line-height:1.6;}
+.bar p b{font-weight:800;color:var(--ink-2);}
 
-.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 90px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:30px 26px;}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 22px 100px;}
+.item+.item{margin-top:46px;padding-top:44px;border-top:1px solid var(--line-2);}
+.item>h2{display:flex;align-items:baseline;gap:9px;margin-bottom:4px;}
+.item>h2 b{font-size:12px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;}
+.item>h2 span{font-size:16px;font-weight:800;letter-spacing:-.3px;}
+.item>.desc{font-size:13px;color:var(--gray);line-height:1.65;margin-bottom:16px;}
 
-.item>h2{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;}
-.item>h2 b{font-size:11px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;}
-.item>h2 span{font-size:14px;font-weight:800;letter-spacing:-.3px;}
-.item>p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:11px;min-height:38px;}
+/* 두 폭을 나란히 — 넓은 화면에서는 옆으로, 좁으면 아래로 */
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:22px;align-items:start;}
+.lab{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.lab b{font-size:11.5px;font-weight:800;letter-spacing:.3px;color:var(--ink-2);}
+.lab i{font-style:normal;font-size:10px;font-weight:700;color:var(--light);
+  border:1px solid var(--line-2);border-radius:var(--r-full);padding:2px 8px;}
 
-/* 핸드폰 폭 그대로 — 실제로 보일 크기다 */
-.phone{width:100%;max-width:390px;background:var(--white);border:1px solid var(--line-2);
-  border-radius:var(--r-lg);overflow:hidden;}
-.phone .before{padding:17px 16px 19px;}
-.phone .before .lab{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);margin-bottom:9px;}
-.phone .before .row{height:9px;border-radius:var(--r-full);background:#EFEFEF;}
-.phone .before .row+.row{margin-top:7px;width:62%;}
+/* 브라우저 틀 */
+.chrome{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#E4E1DB;
+  border-radius:var(--r-md) var(--r-md) 0 0;border:1px solid var(--line-2);border-bottom:none;}
+.chrome s{width:9px;height:9px;border-radius:50%;background:#C9C5BD;text-decoration:none;}
+.chrome u{flex:1;margin-left:6px;height:20px;border-radius:var(--r-full);background:var(--paper);
+  display:flex;align-items:center;padding:0 10px;font-size:10px;color:var(--light);text-decoration:none;}
+.box{background:var(--white);border:1px solid var(--line-2);overflow:hidden;}
+.dt .box{border-radius:0 0 var(--r-md) var(--r-md);}
+.mb .box{border-radius:var(--r-lg);}
+/* 앞 섹션이 있다는 것만 알린다 — 이 자리가 어디에 끼는지 보이게 */
+.near{padding:16px 18px 18px;}
+.dt .near{padding:20px 26px 22px;}
+.near .t{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);margin-bottom:9px;}
+.near .r{height:9px;border-radius:var(--r-full);background:#EFEFEF;}
+.near .r+.r{margin-top:7px;width:62%;}
+
+@media(max-width:1100px){
+  .pair{grid-template-columns:minmax(0,1fr);}
+  .mb{max-width:392px;}
+}
+@media(max-width:600px){
+  .wrap{padding:20px 14px 70px;}
+}
 
 /* ══════════ 열 가지 안이 함께 쓰는 바탕 ══════════ */
 .ai{position:relative;overflow:hidden;background:#111;isolation:isolate;}
@@ -64,10 +87,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
   background:var(--brand);color:var(--brand-ink);transition:transform .16s var(--ease);}
 .ai .btn:hover{transform:translateY(-2px);}
 .ai .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);}
-.ai .btn.white{background:#fff;color:var(--ink);}
 .ai .btn svg{width:15px;height:15px;flex-shrink:0;}
 /* 낙타는 글 뒤, 오버레이 위.
-   height:auto 가 없으면 svg 는 기본 150px 로 서서 viewBox 비율이 깨진다 — 폭만 주면 안 된다. */
+   height:auto 와 바깥 svg 의 viewBox 가 둘 다 있어야 비율이 산다 —
+   viewBox 가 없으면 svg 는 기본 150px 로 서고, height 를 안 주면 폭만 늘어난다. */
 .ai .cam{position:absolute;z-index:2;color:#fff;height:auto;}
 
 /* ── 01 바닥에서 피어오르는 그늘 ── */
@@ -78,7 +101,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 /* ── 02 비스듬히 지나가는 그늘 ── */
 .v2 .ov{background:linear-gradient(105deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.80) 42%,rgba(0,0,0,.34) 72%,rgba(0,0,0,.06) 100%);}
 .v2 .in{padding-right:120px;}
-.v2 .cam{right:-18px;top:50%;transform:translateY(-50%);width:158px;opacity:.9;}
+.v2 .cam{right:-18px;bottom:-10px;width:158px;opacity:.9;}
 
 /* ── 03 한가운데 세우기 ── */
 .v3{text-align:center;}
@@ -89,7 +112,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 
 /* ── 04 말을 거는 모양 ── */
 .v4 .ov{background:linear-gradient(to top,rgba(0,0,0,.93) 12%,rgba(0,0,0,.66) 52%,rgba(0,0,0,.34) 100%);}
-.v4 .chat{display:flex;flex-direction:column;gap:7px;margin-bottom:15px;align-items:flex-start;}
+.v4 .chat{display:flex;flex-direction:column;gap:7px;margin:12px 0 15px;align-items:flex-start;}
 .v4 .bub{font-size:11.5px;font-weight:600;line-height:1.5;padding:9px 13px;border-radius:14px;
   background:rgba(255,255,255,.16);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   border:1px solid rgba(255,255,255,.14);max-width:84%;}
@@ -109,7 +132,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v6 .ring{position:absolute;z-index:2;right:16px;top:50%;transform:translateY(-50%);
   width:108px;height:108px;border-radius:50%;background:rgba(223,240,0,.14);
   border:1.5px solid rgba(223,240,0,.5);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
-.v6 .ring svg{width:84px;height:auto;margin-bottom:-6px;color:#fff;}
+.v6 .ring svg{width:84px;height:auto;margin-bottom:-8px;color:#fff;}
 
 /* ── 07 위는 글, 아래는 낙타 ── */
 .v7 .ov{background:linear-gradient(to bottom,rgba(0,0,0,.92) 0%,rgba(0,0,0,.74) 46%,rgba(0,0,0,.52) 100%);}
@@ -117,7 +140,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v7 .foot{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;
   gap:12px;padding:16px 20px 0;}
 .v7 .foot svg{width:96px;height:auto;color:#fff;margin-bottom:-2px;opacity:.95;flex-shrink:0;}
-.v7 .btn{margin-top:0;}
+.v7 .btn{margin-top:0;margin-bottom:14px;}
 
 /* ── 08 반씩 나눠 쓰기 ── */
 .v8 .ov{background:linear-gradient(to right,rgba(0,0,0,.93) 0%,rgba(0,0,0,.86) 50%,rgba(0,0,0,.40) 100%);}
@@ -131,7 +154,6 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v9 .in{padding-top:70px;}
 .v9 h3{font-size:25px;letter-spacing:-.9px;line-height:1.28;}
 .v9 .cam{right:16px;top:14px;width:54px;opacity:.55;}
-.v9 .btn{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);}
 
 /* ── 10 낙타가 배경이 되는 ── */
 .v10 .ov{background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.66) 55%,rgba(0,0,0,.52) 100%);}
@@ -139,9 +161,59 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v10 .in{padding-top:30px;text-align:center;}
 .v10 .btn{width:100%;justify-content:center;}
 
-@media(max-width:600px){
-  .wrap{padding:20px 14px 70px;}
-  .grid{gap:26px 0;}
+/* ══════════ 데스크톱 웹 — 같은 구성이 넓은 폭으로 펼쳐진다 ══════════
+   폭이 세 배가 되는데 글자와 낙타가 그대로면 섹션이 텅 빈 띠처럼 보인다.
+   그래서 글·버튼·낙타를 함께 키우고 섹션에 최소 높이를 준다.
+   글은 한 벌뿐이다 — 달라지는 것은 아래 규칙들뿐이다. */
+.dt .ai{min-height:380px;display:flex;flex-direction:column;justify-content:center;}
+.dt .in{padding:44px 56px;max-width:1160px;width:100%;margin:0 auto;}
+.dt .kick{font-size:11.5px;letter-spacing:1.5px;margin-bottom:13px;}
+.dt h3{font-size:32px;letter-spacing:-1px;line-height:1.3;}
+.dt p{font-size:15.5px;margin-top:11px;}
+.dt .btn{font-size:14.5px;padding:15px 26px;margin-top:24px;}
+.dt .btn svg{width:17px;height:17px;}
+
+.dt .v1 .in{padding-top:150px;}
+.dt .v1 .cam{width:300px;right:4%;bottom:-24px;}
+.dt .v2 .in{padding-right:420px;}
+.dt .v2 .cam{width:340px;right:5%;bottom:-18px;}
+.dt .v3 .in{padding:50px 56px 54px;}
+.dt .v3 .cam{width:96px;margin-bottom:20px;}
+.dt .v4 .in{padding-top:44px;}
+.dt .v4 .chat{margin:18px 0 22px;}
+.dt .v4 .bub{font-size:14px;padding:12px 18px;border-radius:18px;max-width:52%;}
+.dt .v4 .cam{width:92px;right:5%;top:44px;}
+.dt .v5 .in{margin:34px auto;padding:38px 42px;max-width:1100px;}
+.dt .v5 .cam{width:230px;right:4%;bottom:10px;}
+.dt .v6 .in{padding-right:420px;}
+.dt .v6 .ring{width:260px;height:260px;right:6%;}
+.dt .v6 .ring svg{width:200px;margin-bottom:-18px;}
+.dt .v7 .foot{padding:22px 56px 0;max-width:1160px;margin:0 auto;width:100%;}
+.dt .v7 .foot svg{width:190px;}
+.dt .v7 .btn{margin-bottom:34px;}
+.dt .v8 .in{gap:50px;}
+.dt .v8 h3{font-size:30px;}
+.dt .v8 .cam{width:280px;}
+.dt .v9 .in{padding-top:130px;}
+.dt .v9 h3{font-size:46px;letter-spacing:-1.6px;}
+.dt .v9 .cam{width:104px;right:5%;top:44px;}
+.dt .v10 .in{padding-top:56px;}
+.dt .v10 .cam{width:620px;bottom:-70px;}
+.dt .v10 .btn{width:auto;min-width:300px;}
+
+/* 미리보기 칸이 좁아지면 '데스크톱' 쪽도 글자를 줄인다 — 실제 데스크톱 폭이 아니기 때문이다 */
+@media(max-width:820px){
+  .dt .in{padding:30px 26px;}
+  .dt h3{font-size:24px;}
+  .dt .v9 h3{font-size:32px;}
+  .dt .v1 .in{padding-top:110px;}
+  .dt .v9 .in{padding-top:96px;}
+  .dt .v2 .in,.dt .v6 .in{padding-right:200px;}
+  .dt .v6 .ring{width:150px;height:150px;}
+  .dt .v6 .ring svg{width:116px;}
+  .dt .v10 .cam{width:380px;}
+  .dt .v7 .foot{padding:18px 26px 0;}
+  .dt .v7 .foot svg{width:130px;}
 }
 </style>
 </head>
@@ -150,30 +222,24 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 <div class="bar"><div class="bar-in">
   <h1>낙타AI 섹션 <span>— 열 가지 안</span></h1>
   <p>홈의 낙타AI 자리를 카드가 아니라 섹션 전체로 세웁니다. 사진 위에 검은 그늘을 그라디언트로 깔고,
-     그 위에 글·버튼·낙타를 얹었습니다. 핸드폰에서 보일 폭 그대로입니다 — 번호를 알려주시면 웹·앱에 넣겠습니다.</p>
+     그 위에 글·버튼·낙타를 얹었습니다. 안마다 <b>데스크톱 웹</b>과 <b>모바일 웹 · 앱</b>을 함께 뒀습니다 —
+     모바일 웹과 앱은 같은 화면입니다. 번호를 알려주시면 웹·앱에 넣겠습니다.</p>
 </div></div>
 
 <!-- 낙타 — 열 안이 함께 쓴다 -->
 <svg width="0" height="0" aria-hidden="true" style="position:absolute">
   <symbol id="camel" viewBox="0 0 200 170">
     <g fill="currentColor">
-      <!-- 혹 둘과 몸 -->
       <path d="M26 168c-4 0-6-3-6-7 0-18 4-33 11-44 3-12 11-20 20-20 7 0 13 5 16 13 4-14 13-23 23-23 11 0 20 10 23 25 4-6 9-9 15-9 7 0 13 4 17 11l9 16c2 4 0 8-4 8-3 0-5-1-6-4l-8-14c-2-4-5-6-8-6-5 0-9 5-9 12v35c0 4-3 7-7 7s-7-3-7-7v-18c-5 4-11 6-18 6-8 0-15-3-20-8v20c0 4-3 7-7 7z"/>
-      <!-- 목 -->
       <path d="M150 96c-4 0-7-3-7-7V58c0-14 9-25 21-25 11 0 20 9 21 21 0 4-3 7-7 8-4 0-7-3-8-7 0-4-3-7-6-7-4 0-7 4-7 10v31c0 4-3 7-7 7z"/>
-      <!-- 머리 -->
       <ellipse cx="166" cy="37" rx="19" ry="16"/>
-      <!-- 주둥이 -->
       <ellipse cx="185" cy="44" rx="11" ry="9"/>
-      <!-- 귀 -->
       <ellipse cx="156" cy="20" rx="5" ry="7" transform="rotate(-18 156 20)"/>
-      <!-- 다리 -->
       <rect x="40" y="140" width="11" height="30" rx="5"/>
       <rect x="66" y="144" width="11" height="26" rx="5"/>
       <rect x="104" y="140" width="11" height="30" rx="5"/>
       <rect x="128" y="144" width="11" height="26" rx="5"/>
     </g>
-    <!-- 눈은 라임 -->
     <circle cx="170" cy="33" r="3.4" fill="#DFF000"/>
   </symbol>
   <symbol id="arrow" viewBox="0 0 24 24">
@@ -182,204 +248,315 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
   </symbol>
 </svg>
 
-<div class="wrap"><div class="grid">
+<div class="wrap">
 
   <!-- 01 -->
   <div class="item">
     <h2><b>01</b><span>바닥에서 피어오르는 그늘</span></h2>
-    <p>사진 아래쪽만 짙게 깔아 글이 앉을 자리를 만듭니다. 사진이 가장 많이 남는 안입니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v1">
-        <div class="bg a"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤 고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">사진 아래쪽만 짙게 깔아 글이 앉을 자리를 만듭니다. 사진이 가장 많이 남는 안입니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v1">
+            <div class="bg a"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤 고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 02 -->
   <div class="item">
     <h2><b>02</b><span>비스듬히 지나가는 그늘</span></h2>
-    <p>왼쪽은 짙고 오른쪽은 열어 둡니다. 낙타가 사진에 반쯤 잠겨 서 있습니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v2">
-        <div class="bg b"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤<br>고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">왼쪽은 짙고 오른쪽은 열어 둡니다. 낙타가 사진에 반쯤 잠겨 서 있습니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v2">
+            <div class="bg b"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤<br>고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 03 -->
   <div class="item">
     <h2><b>03</b><span>한가운데 세우기</span></h2>
-    <p>가장자리로 갈수록 어두워지는 그늘 위에 가운데로 모읍니다. 낙타가 작게 위에 섭니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v3">
-        <div class="bg a"></div><div class="ov"></div>
-        <div class="in">
-          <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤 고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">가장자리로 갈수록 어두워지는 그늘 위에 가운데로 모읍니다. 낙타가 작게 위에 섭니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v3">
+            <div class="bg a"></div><div class="ov"></div>
+            <div class="in">
+              <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤 고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 04 -->
   <div class="item">
     <h2><b>04</b><span>말을 거는 모양</span></h2>
-    <p>주고받는 말풍선을 그대로 보여 줍니다. 무엇을 하는 자리인지 가장 빨리 읽힙니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v4">
-        <div class="bg b"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <div class="chat" style="margin-top:12px">
-            <div class="bub me">릴스 조회수는 나오는데 매출이 안 늘어요</div>
-            <div class="bub">조회수가 아니라 '누가' 보고 있는지가 문제일 수 있어요.</div>
-          </div>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">주고받는 말풍선을 그대로 보여 줍니다. 무엇을 하는 자리인지 가장 빨리 읽힙니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v4">
+            <div class="bg b"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <div class="chat">
+                <div class="bub me">릴스 조회수는 나오는데 매출이 안 늘어요</div>
+                <div class="bub">조회수가 아니라 '누가' 보고 있는지가 문제일 수 있어요.</div>
+              </div>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 05 -->
   <div class="item">
     <h2><b>05</b><span>라임 선으로 가둔 자리</span></h2>
-    <p>사진 위에 라임 테두리로 한 겹 더 두릅니다. 브랜드 색이 가장 또렷한 안입니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v5">
-        <div class="bg a"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤 고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">사진 위에 라임 테두리로 한 겹 더 두릅니다. 브랜드 색이 가장 또렷한 안입니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v5">
+            <div class="bg a"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤 고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 06 -->
   <div class="item">
     <h2><b>06</b><span>둥근 창 안의 낙타</span></h2>
-    <p>낙타를 원 안에 담아 아이콘처럼 세웁니다. 글과 그림이 또렷이 나뉩니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v6">
-        <div class="bg b"></div><div class="ov"></div>
-        <div class="ring"><svg viewBox="0 0 200 170"><use href="#camel"/></svg></div>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤<br>고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지<br>같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">낙타를 원 안에 담아 아이콘처럼 세웁니다. 글과 그림이 또렷이 나뉩니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v6">
+            <div class="bg b"></div><div class="ov"></div>
+            <div class="ring"><svg viewBox="0 0 200 170"><use href="#camel"/></svg></div>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤<br>고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 07 -->
   <div class="item">
     <h2><b>07</b><span>위는 글, 아래는 낙타</span></h2>
-    <p>글을 위에 두고 낙타가 바닥에 서서 버튼과 나란히 놓입니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v7">
-        <div class="bg a"></div><div class="ov"></div>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤 고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+    <p class="desc">글을 위에 두고 낙타가 바닥에 서서 버튼과 나란히 놓입니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v7">
+            <div class="bg a"></div><div class="ov"></div>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤 고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+            </div>
+            <div class="foot">
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+              <svg viewBox="0 0 200 170"><use href="#camel"/></svg>
+            </div>
+          </section>
         </div>
-        <div class="foot">
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
-          <svg viewBox="0 0 200 170"><use href="#camel"/></svg>
-        </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 08 -->
   <div class="item">
     <h2><b>08</b><span>반씩 나눠 쓰기</span></h2>
-    <p>왼쪽은 글, 오른쪽은 낙타. 높이가 가장 낮아 앞뒤 섹션을 가리지 않습니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v8">
-        <div class="bg b"></div><div class="ov"></div>
-        <div class="in">
-          <div class="txt">
-            <div class="kick">NAKTA AI</div>
-            <h3>요즘 어떤<br>고민 있으세요?</h3>
-            <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
-          </div>
-          <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+    <p class="desc">왼쪽은 글, 오른쪽은 낙타. 높이가 가장 낮아 앞뒤 섹션을 가리지 않습니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v8">
+            <div class="bg b"></div><div class="ov"></div>
+            <div class="in">
+              <div class="txt">
+                <div class="kick">NAKTA AI</div>
+                <h3>요즘 어떤<br>고민 있으세요?</h3>
+                <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+              </div>
+              <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 09 -->
   <div class="item">
     <h2><b>09</b><span>질문을 크게</span></h2>
-    <p>묻는 말을 제일 크게 키우고 버튼은 테두리만 남깁니다. 글이 주인공인 안입니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v9">
-        <div class="bg a"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤<br>고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn ghost">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">묻는 말을 제일 크게 키우고 버튼은 테두리만 남깁니다. 글이 주인공인 안입니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v9">
+            <div class="bg a"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤<br>고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn ghost">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
   <!-- 10 -->
   <div class="item">
     <h2><b>10</b><span>낙타가 배경이 되는</span></h2>
-    <p>낙타를 크게 깔아 무늬처럼 씁니다. 버튼이 폭을 다 써서 누를 자리가 가장 큽니다.</p>
-    <div class="phone">
-      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
-      <section class="ai v10">
-        <div class="bg b"></div><div class="ov"></div>
-        <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
-        <div class="in">
-          <div class="kick">NAKTA AI</div>
-          <h3>요즘 어떤 고민 있으세요?</h3>
-          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
-          <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+    <p class="desc">낙타를 크게 깔아 무늬처럼 씁니다. 버튼이 폭을 다 써서 누를 자리가 가장 큽니다.</p>
+    <div class="pair">
+      <div class="frame dt">
+        <div class="lab"><b>데스크톱 웹</b><i>넓은 폭</i></div>
+        <div class="chrome"><s></s><s></s><s></s><u>commel.co</u></div>
+        <div class="box">
+          <div class="near"><div class="t">앞 섹션</div><div class="r"></div><div class="r"></div></div>
+          <section class="ai v10">
+            <div class="bg b"></div><div class="ov"></div>
+            <svg class="cam" viewBox="0 0 200 170"><use href="#camel"/></svg>
+            <div class="in">
+              <div class="kick">NAKTA AI</div>
+              <h3>요즘 어떤 고민 있으세요?</h3>
+              <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+              <button class="btn">고민 이야기하기<svg viewBox="0 0 24 24"><use href="#arrow"/></svg></button>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
+      <div class="frame mb">
+        <div class="lab"><b>모바일 웹 · 앱</b><i>같은 화면</i></div>
+        <div class="box"></div>
+      </div>
     </div>
   </div>
 
-</div></div>
+</div>
+
+<script>
+/* 모바일 칸은 데스크톱 칸을 그대로 복제해 채운다.
+   같은 마크업을 두 번 적어 두면 한쪽만 고치는 일이 생긴다 — 글은 한 벌만 둔다.
+   달라지는 것은 .dt 아래의 규칙뿐이다. */
+document.querySelectorAll(".item").forEach(item=>{
+  const src = item.querySelector(".dt .box");
+  const dst = item.querySelector(".mb .box");
+  if(src && dst) dst.innerHTML = src.innerHTML;
+});
+</script>
 
 </body>
 </html>
