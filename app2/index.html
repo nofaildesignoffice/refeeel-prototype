@@ -578,8 +578,13 @@ body.clean .jumpbar{display:none;}
 /* 주제 — 한 줄에 하나씩 쭉. 주제가 늘어도 무너지지 않고, 스크롤만 길어진다. */
 .tpl{display:flex;align-items:center;gap:11px;padding:10px;border:var(--card-line);border-radius:var(--radius-md);background:var(--bg-white);cursor:pointer;}
 .tpl+.tpl{margin-top:10px;}
-.tpl-ic{width:44px;height:44px;flex-shrink:0;border-radius:10px;background:var(--bg-light);display:flex;align-items:center;justify-content:center;}
-.tpl-ic i,.tpl-ic svg{width:18px;height:18px;color:var(--text-gray);}
+/* 아이콘 칸은 어두운 판에 라임을 얹는다(리건, 2026-11-07).
+   흰 줄 일곱이 내려가는 자리다 — 칸이 밝으면 아이콘이 배경에 묻혀 주제가 구분되지 않는다.
+   판을 어둡게 하면 주제마다 한 점씩 또렷하게 선다. 라임은 어두운 데서 가장 세게 서는
+   색이다(#2D2D2D 위에서 약 11:1). 거꾸로 라임 판에 어두운 아이콘을 넣으면 일곱 줄이
+   라임으로 가득 차 브랜드색이 '누를 것'이 아니라 배경색이 된다. */
+.tpl-ic{width:44px;height:44px;flex-shrink:0;border-radius:10px;background:var(--bg-dark);display:flex;align-items:center;justify-content:center;}
+.tpl-ic i,.tpl-ic svg{width:18px;height:18px;color:var(--brand);}
 .tpl .grow{flex:1;min-width:0;}
 .tpl-t{font-size:13.5px;font-weight:800;letter-spacing:-0.2px;}
 .tpl-s{font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
