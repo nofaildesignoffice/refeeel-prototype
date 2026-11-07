@@ -193,8 +193,7 @@ body.clean .jumpbar{display:none;}
    같은 알약에 색만 뒤집히니 한 목록에 둘이 섞여 나와도 짝으로 읽힌다 —
    어느 한쪽이 더 크지도 작지도 않다. 라임 위에는 언제나 --brand-ink 를 얹는다. */
 .kit-free{color:var(--brand);background:var(--bg-black);}
-.kit-lock{gap:3px;color:var(--brand-ink);background:var(--brand);}
-.kit-lock i,.kit-lock svg{width:12px;height:12px;}
+.kit-lock{color:var(--brand-ink);background:var(--brand);}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
 .progress-bar>div{height:100%;background:var(--brand);border-radius:2px;}
@@ -366,6 +365,9 @@ body.clean .jumpbar{display:none;}
 .search-input{display:flex;align-items:center;gap:8px;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-light);cursor:pointer;}
 .search-input i,.search-input svg{width:16px;height:16px;color:var(--text-light);}
 .search-input.filled{color:var(--text-black);font-weight:600;background:var(--bg-white);}
+/* 적힌 검색어 — 큐레이션 이름이 들어오면 길어질 수 있다. 한 줄로 두고 넘치면 자른다.
+   줄바꿈되면 검색창의 키가 늘어나 그 아래가 한 칸 밀린다. */
+.search-input .sq{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;}
 .result-card{padding:14px;border-bottom:1px solid var(--border-light);cursor:pointer;}
 .result-card:last-child{border-bottom:none;}
@@ -1637,7 +1639,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="book-open-check"></i>CO:KIT 41을 읽고 계셔서</div>
-            <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+            <span class="kit-lock">구독 회원 전용</span>
             <div class="hcard-num">CO:KIT 03</div>
             <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
           </div>
@@ -1646,7 +1648,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
-            <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+            <span class="kit-lock">구독 회원 전용</span>
             <div class="hcard-num">CO:KIT 59</div>
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
           </div>
@@ -1655,7 +1657,7 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 코킷</div>
-              <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+              <span class="kit-lock">구독 회원 전용</span>
               <div class="hcard-num">CO:KIT 81</div>
               <div class="hcard-title">제품 말고 '두 사람'을 파세요</div>
             </div>
@@ -1673,7 +1675,7 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
-              <span class="kit-lock"><i data-lucide="lock"></i>구독 회원</span>
+              <span class="kit-lock">구독 회원 전용</span>
               <div class="hcard-num">CO:KIT 87</div>
               <div class="hcard-title">95 대 5 법칙</div>
             </div>
@@ -1684,12 +1686,12 @@ body.free #scr-viewer .progress-thin{display:none;}
     <div class="sec">
       <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span></div>
       <div class="hscroll" data-auto>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 7개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-meta"><span>사업 성장</span><span>브랜딩</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 5개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-meta"><span>브랜딩</span><span>전환·매출</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 6개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-meta"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 9개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">04</span><div class="cur-title">한 명에게 말하듯 써야 1만 명에게 닿는다</div><div class="cur-meta"><span>콘텐츠</span><span>소비자 심리</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 4개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">05</span><div class="cur-title">전문가일수록 절대 쓰면 안 되는 말</div><div class="cur-meta"><span>콘텐츠</span><span>전환·매출</span></div></div></div>
-        <div class="cur-card" data-go="scr-viewer"><div class="img-ph"><span class="age-badge">코킷 8개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">06</span><div class="cur-title">할 말이 없는 게 아니라, 있는데 모르는 것뿐</div><div class="cur-meta"><span>콘텐츠</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-curq="빼는 게 먼저, 더하는 게 나중" data-curn="7"><div class="img-ph"><span class="age-badge">코킷 7개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-meta"><span>사업 성장</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-curq="'OO 하면 떠오르는 브랜드'가 되는 법" data-curn="5"><div class="img-ph"><span class="age-badge">코킷 5개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-meta"><span>브랜딩</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-curq="사람은 타겟이 아니다" data-curn="6"><div class="img-ph"><span class="age-badge">코킷 6개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-meta"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
+        <div class="cur-card" data-curq="한 명에게 말하듯 써야 1만 명에게 닿는다" data-curn="9"><div class="img-ph"><span class="age-badge">코킷 9개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">04</span><div class="cur-title">한 명에게 말하듯 써야 1만 명에게 닿는다</div><div class="cur-meta"><span>콘텐츠</span><span>소비자 심리</span></div></div></div>
+        <div class="cur-card" data-curq="전문가일수록 절대 쓰면 안 되는 말" data-curn="4"><div class="img-ph"><span class="age-badge">코킷 4개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">05</span><div class="cur-title">전문가일수록 절대 쓰면 안 되는 말</div><div class="cur-meta"><span>콘텐츠</span><span>전환·매출</span></div></div></div>
+        <div class="cur-card" data-curq="할 말이 없는 게 아니라, 있는데 모르는 것뿐" data-curn="8"><div class="img-ph"><span class="age-badge">코킷 8개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">06</span><div class="cur-title">할 말이 없는 게 아니라, 있는데 모르는 것뿐</div><div class="cur-meta"><span>콘텐츠</span><span>브랜딩</span></div></div></div>
       </div>
     </div>
 
@@ -1769,7 +1771,7 @@ body.free #scr-viewer .progress-thin{display:none;}
   <!-- 검색바: 스크롤 밖 고정 -->
   <div class="search-anchor">
     <div class="search-input plain" data-search="on"><i data-lucide="search"></i>키워드, 고민을 검색해보세요</div>
-    <div class="search-input filled"><i data-lucide="search"></i>릴스 조회수는 나오는데 매출이 안 늘어요<i data-lucide="x" style="margin-left:auto" data-search="off"></i></div>
+    <div class="search-input filled"><i data-lucide="search"></i><span class="sq" data-default="릴스 조회수는 나오는데 매출이 안 늘어요">릴스 조회수는 나오는데 매출이 안 늘어요</span><i data-lucide="x" style="margin-left:auto" data-search="off"></i></div>
   </div>
 
   <!-- ── A. 검색하기 ── -->
@@ -2113,7 +2115,7 @@ body.free #scr-viewer .progress-thin{display:none;}
     <!-- ── 기본 상태 ── -->
     <div class="find-default">
 
-    <div class="sec alt" style="padding-top:18px">
+    <div class="sec" style="padding-top:18px">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
       <div class="hscroll" data-auto>
         <div class="card hcard" data-goclass>
@@ -3950,6 +3952,21 @@ function lseg(key){
     if(on) v.scrollTop = 0;
   });
 }
+/* 검색창에 적히는 말과 결과 수를 한 자리에서 바꾼다(리건, 2026-11-07).
+   낙타 큐레이션에서 넘어오면 묶음 이름이 적히고, 평소 검색에서는 기본 문구로 돌아간다 —
+   돌려놓지 않으면 다음에 검색창을 눌렀을 때 지난 묶음 이름이 그대로 남아 있다. */
+function setFind(q, n){
+  const sq = document.querySelector("#scr-search .search-input.filled .sq");
+  if(sq) sq.textContent = q || sq.dataset.default;
+  const meta = document.querySelector("#sseg-find .find-results .browse-meta");
+  if(meta){
+    /* 묶음에 든 코킷 수가 곧 결과 수다. 읽지 않은 수는 그보다 적어야 말이 된다 */
+    const tot = n || 30, un = n ? Math.max(1, n - 2) : 26;
+    meta.querySelector(".off-unread").textContent = "결과 " + tot + "개";
+    meta.querySelector(".on-unread").textContent = "읽지 않은 결과 " + un + "개";
+  }
+}
+
 function sseg(key){
   document.querySelectorAll("[data-sseg]").forEach(b=>b.classList.toggle("on", b.dataset.sseg===key));
   document.querySelectorAll(".sseg-view").forEach(v=>v.classList.toggle("on", v.id==="sseg-"+key));
@@ -4156,7 +4173,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".hs-dot")) return;
   const close = e.target.closest(".ac-close");
   if(close){ close.closest(".ai-card").style.display="none"; return; }
-  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-goclass],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
+  const t = e.target.closest("[data-sort],[data-pick],[data-sheet],[data-search],[data-curq],[data-goseg],[data-sseg],[data-lseg],[data-view],[data-fview],[data-nview],[data-bseg],[data-myseg],[data-goclass],[data-optnone],[data-open],[data-closesheet],[data-doneclose],[data-go],[data-back],[data-tab],[data-jump],.chip.toggle");
   if(!t) return;
   if(t.hasAttribute("data-optnone")){
     /* 선택지에 자기 고민이 없는 사람 — AI가 한 번 더 말을 걸어 채팅으로 넘긴다.
@@ -4185,8 +4202,21 @@ document.addEventListener("click", e=>{
     document.querySelectorAll(".nview").forEach(v=>v.classList.toggle("on", v.id==="nview-"+t.dataset.nview));
     return;
   }
+  /* 낙타 큐레이션 — 묶음을 누르면 검색 화면으로 가고 검색창에 묶음 이름이 적힌다.
+     묶음마다 목록 화면을 따로 두지 않는다(리건, 2026-11-07). 묶음은 '이 이름으로 고른
+     코킷 N개'이므로 검색 결과로 보여주면, 사용자가 검색창의 말을 고쳐 바로 옆으로 넘어간다. */
+  if(t.dataset.curq){
+    setFind(t.dataset.curq, +t.dataset.curn || 0);
+    sseg("find");
+    document.getElementById("scr-search").classList.add("searching");
+    document.getElementById("sseg-find").scrollTop = 0;
+    tab("scr-search");
+    return;
+  }
   if(t.dataset.search){
     /* 검색은 화면 이동이 아니라 같은 페이지의 상태 전환 */
+    /* 큐레이션에서 넘어온 말과 결과 수가 남지 않게 기본으로 되돌린다 */
+    if(t.dataset.search === "on") setFind(null, 0);
     sseg("find");
     document.getElementById("scr-search").classList.toggle("searching", t.dataset.search === "on");
     document.getElementById("sseg-find").scrollTop = 0;
