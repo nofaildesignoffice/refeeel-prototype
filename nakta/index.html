@@ -65,9 +65,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .ai .btn:hover{transform:translateY(-2px);}
 .ai .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);}
 .ai .btn.white{background:#fff;color:var(--ink);}
-.ai .btn svg{width:15px;height:15px;}
-/* 낙타는 글 뒤, 오버레이 위 */
-.ai .cam{position:absolute;z-index:2;color:#fff;}
+.ai .btn svg{width:15px;height:15px;flex-shrink:0;}
+/* 낙타는 글 뒤, 오버레이 위.
+   height:auto 가 없으면 svg 는 기본 150px 로 서서 viewBox 비율이 깨진다 — 폭만 주면 안 된다. */
+.ai .cam{position:absolute;z-index:2;color:#fff;height:auto;}
 
 /* ── 01 바닥에서 피어오르는 그늘 ── */
 .v1 .ov{background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.72) 38%,rgba(0,0,0,.30) 70%,rgba(0,0,0,.12) 100%);}
@@ -108,14 +109,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v6 .ring{position:absolute;z-index:2;right:16px;top:50%;transform:translateY(-50%);
   width:108px;height:108px;border-radius:50%;background:rgba(223,240,0,.14);
   border:1.5px solid rgba(223,240,0,.5);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
-.v6 .ring svg{width:84px;margin-bottom:-6px;color:#fff;}
+.v6 .ring svg{width:84px;height:auto;margin-bottom:-6px;color:#fff;}
 
 /* ── 07 위는 글, 아래는 낙타 ── */
 .v7 .ov{background:linear-gradient(to bottom,rgba(0,0,0,.92) 0%,rgba(0,0,0,.74) 46%,rgba(0,0,0,.52) 100%);}
 .v7 .in{padding-bottom:0;}
 .v7 .foot{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;
   gap:12px;padding:16px 20px 0;}
-.v7 .foot svg{width:96px;color:#fff;margin-bottom:-2px;opacity:.95;flex-shrink:0;}
+.v7 .foot svg{width:96px;height:auto;color:#fff;margin-bottom:-2px;opacity:.95;flex-shrink:0;}
 .v7 .btn{margin-top:0;}
 
 /* ── 08 반씩 나눠 쓰기 ── */
