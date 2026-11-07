@@ -195,7 +195,7 @@ body.clean .jumpbar{display:none;}
 .card{background:var(--card-bg);border:none;border-radius:0;overflow:visible;}
 /* 민무늬는 띄우지 않는다 — 떠오를 상자가 없다. 눌리면 사진이 어두워지고 글이 흐려진다 */
 .card .img-ph,.card .ex-thumb,.hcard-title,.bigcard-title,.continue-title,
-.quote-card,.pain-card,.memo-card,.ins-stat,.rank-row,.ex-row,
+.quote-card,.memo-card,.ins-stat,.rank-row,.ex-row,
 .rank-row .img-ph,.ex-thumb,.tpl-t,.rank-title,.ex-title,
 .cur-card .img-ph,.cur-title{
   transition:opacity var(--card-move),border-color var(--card-move);}
@@ -205,7 +205,7 @@ body.clean .jumpbar{display:none;}
 .rank-row:active .rank-title,.ex-row:active .ex-title,
 .cur-card:active .cur-title{opacity:0.62;}
 /* 테두리로 선 것들은 모두 테두리가 진해지는 것으로 답한다 */
-.quote-card:active,.pain-card:active,.memo-card:active,
+.quote-card:active,.memo-card:active,
 .rank-row:active,.ex-row:active,.continue-card:active,.kitcard:active,
 .series-card:active,.tpl:active{border-color:var(--text-black);}
 .pcard:active{opacity:0.92;}
@@ -333,13 +333,6 @@ body.clean .jumpbar{display:none;}
 .search-input{display:flex;align-items:center;gap:8px;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-light);cursor:pointer;}
 .search-input i,.search-input svg{width:16px;height:16px;color:var(--text-light);}
 .search-input.filled{color:var(--text-black);font-weight:600;background:var(--bg-white);}
-.pain-grid{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.pain-grid::-webkit-scrollbar{display:none;}
-/* 가로로 나란히 놓이는 칸이다 — 테두리가 그대로 칸 수를 알려 준다 */
-.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;}
-.pain-card i,.pain-card svg{width:15px;height:15px;color:var(--text-dark);margin-bottom:7px;}
-.pain-card b{display:block;font-size:13px;font-weight:700;line-height:1.4;}
-.pain-card span{display:block;font-size:11px;color:var(--text-light);margin-top:3px;}
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;}
 .result-card{padding:14px;border-bottom:1px solid var(--border-light);cursor:pointer;}
 .result-card:last-child{border-bottom:none;}
@@ -2077,23 +2070,7 @@ body.free #scr-viewer .progress-thin{display:none;}
     <!-- ── 기본 상태 ── -->
     <div class="find-default">
 
-    <div class="sec" style="padding-top:18px">
-      <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
-      <div class="pain-grid">
-        <div class="pain-card" data-search="on"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>코킷 31</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>코킷 20</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="trending-down"></i><b>반응은 오는데 안 팔려요</b><span>코킷 19</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="hand-coins"></i><b>파는 티가 나는 게 싫어요</b><span>코킷 5</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="palette"></i><b>다들 비슷해 보여요</b><span>코킷 24</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="brain"></i><b>왜 안 사는지 모르겠어요</b><span>코킷 15</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="bot"></i><b>AI를 어떻게 쓸지 모르겠어요</b><span>코킷 16</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="sparkles"></i><b>AI 검색이 불안해요</b><span>코킷 9</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="bar-chart-3"></i><b>숫자가 뭘 말하는지 몰라요</b><span>코킷 13</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="battery-low"></i><b>바쁜데 남는 게 없어요</b><span>코킷 4</span></div>
-      </div>
-    </div>
-
-    <div class="sec alt">
+    <div class="sec alt" style="padding-top:18px">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
       <div class="hscroll" data-auto>
         <div class="card hcard" data-goclass>
@@ -3785,7 +3762,7 @@ function dragScroll(el){
 }
 
 function startDragScroll(){
-  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.pain-grid,.jumpbar")
+  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.jumpbar")
     .forEach(dragScroll);
 }
 

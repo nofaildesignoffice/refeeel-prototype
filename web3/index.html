@@ -154,7 +154,7 @@ svg.lucide{flex-shrink:0;}   /* 굵기는 lucide 기본값 2 유지 */
    (웹 접근성 지침 WCAG 2.4.7) */
 :where(a,button,input,textarea,select,[tabindex],[data-go],[data-back],[data-tab],[data-jump],
        .chip,.set-row,.menu-row,.ex-row,.rank-row,.noti-row,.gcard,.card,.tpl,.mcard,.pcard,
-       .pain-card,.sen,mark.hl):focus-visible{
+       .sen,mark.hl):focus-visible{
   outline:2px solid var(--text-black);
   outline-offset:2px;
   border-radius:inherit;
@@ -315,7 +315,7 @@ body.clean .jumptoggle{display:none!important;}
 .progress-bar>div{height:100%;background:var(--brand);border-radius:2px;}
 .card{background:var(--card-bg);border:none;border-radius:0;overflow:visible;box-shadow:none;}
 /* 민무늬는 띄우지 않는다 — 떠오를 상자가 없다. 바뀌는 건 투명도와 선 색이다 */
-.card,.tpl,.quote-card,.pain-card,.prod-card,.pcard,.ai-card,.price-card,
+.card,.tpl,.quote-card,.prod-card,.pcard,.ai-card,.price-card,
 .memo-card,.ins-stat,.rank-row,.ex-row,
 .card .img-ph,.prod-card .img-ph,.rank-row .img-ph,.ex-thumb,.cur-card .img-ph,
 .hcard-title,.bigcard-title,.continue-title,.tpl-t,.cur-title{
@@ -461,13 +461,6 @@ body.clean .jumptoggle{display:none!important;}
 .search-input{display:flex;align-items:center;gap:8px;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-light);cursor:pointer;}
 .search-input i,.search-input svg{width:16px;height:16px;color:var(--text-light);}
 .search-input.filled{color:var(--text-black);font-weight:600;background:var(--bg-white);}
-.pain-grid{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.pain-grid::-webkit-scrollbar{display:none;}
-/* 가로로 나란히 놓이는 칸이다 — 테두리가 그대로 칸 수를 알려 준다 */
-.pain-card{flex:0 0 auto;min-width:140px;white-space:nowrap;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;}
-.pain-card i,.pain-card svg{width:15px;height:15px;color:var(--text-dark);margin-bottom:7px;}
-.pain-card b{display:block;font-size:13px;font-weight:700;line-height:1.4;}
-.pain-card span{display:block;font-size:11px;color:var(--text-light);margin-top:3px;}
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;}
 .result-card{padding:14px;border-bottom:1px solid var(--border-light);cursor:pointer;}
 .result-card:last-child{border-bottom:none;}
@@ -1996,7 +1989,6 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
   /* 넓어진 만큼 한 줄에 더 놓는다 */
   .grid2{grid-template-columns:repeat(4,1fr);gap:24px;}
-  .pain-grid{grid-template-columns:repeat(3,1fr);}
   .stat-grid,.mcard{max-width:620px;}
   /* 주제별 인사이트 — 줄로 쌓으면 한 줄에 하나씩이라 화면이 세로로 늘어진다.
      주제는 서로 비교하며 고르는 것이라 한눈에 들어와야 한다. 네 열 격자로 바꿈. */
@@ -2773,7 +2765,7 @@ body.modal-open #scr-interest .ord-sub,
      v1 에서는 어떤 건 회색 배경, 어떤 건 rgba, 어떤 건 opacity 로 제각각이었다.
      Material 처럼 '잉크를 덮는' 한 가지 방식으로 통일한다 — 얹는 세기만 8% / 12% 로 다르다.
      그래야 무엇을 누르든 같은 세기로 반응한다. */
-  .gcard,.ex-row,.card,.menu-row,.set-row,.tpl,.mcard,.pcard,.rank-row,.pain-card,.noti-row,.prod-card,
+  .gcard,.ex-row,.card,.menu-row,.set-row,.tpl,.mcard,.pcard,.rank-row,.noti-row,.prod-card,
   .chip,.wnav-pill button,.wnav-ic,.btn,.side-item,.faq summary,.tpl-ic{
     transition:background-color var(--dur-short) var(--ease),
                border-color var(--dur-short) var(--ease),
@@ -2800,7 +2792,7 @@ body.modal-open #scr-interest .ord-sub,
   .rank-row:hover .rank-title,.ex-row:hover .ex-title{opacity:0.66;}
   .mcard:hover,.pcard:hover{opacity:0.92;}
   /* 테두리로 선 것들은 모두 테두리가 진해지는 것으로 답한다 */
-  .quote-card:hover,.pain-card:hover,.memo-card:hover,
+  .quote-card:hover,.memo-card:hover,
   .rank-row:hover,.ex-row:hover,.continue-card:hover,.kitcard:hover,
   .series-card:hover,.tpl:hover,
   .price-card:hover{border-color:var(--text-black);}
@@ -3070,11 +3062,6 @@ body.modal-open #scr-interest .ord-sub,
      남는 자리를 넷으로 나눠 쓰면 어느 폭에서든 정확히 넉 장이 선다.
      60px 은 카드 사이 20px 이 세 번 들어간 값이다. */
   .hscroll[data-auto]>.cur-card{flex:0 0 calc((100% - 60px) / 4);min-width:0!important;}
-  .pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;overflow:visible;}
-  .pain-card{flex:0 0 auto;min-width:0;white-space:normal;padding:20px 18px;}
-  .pain-card i,.pain-card svg{width:20px;height:20px;margin-bottom:12px;}
-  .pain-card b{font-size:14.5px;}
-  .pain-card span{font-size:12px;margin-top:6px;}
   .pc-track{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;overflow:visible;}
   .pcard{flex:none;}
   .pc-range{left:18px;top:17px;font-size:11.5px;}
@@ -4721,23 +4708,7 @@ body.modal-open #scr-interest .ord-sub,
     <!-- ── 기본 상태 ── -->
     <div class="find-default">
 
-    <div class="sec" style="padding-top:18px">
-      <div class="sec-head"><span class="sec-title">지금 이런 고민이신가요?</span></div>
-      <div class="pain-grid">
-        <div class="pain-card" data-search="on"><i data-lucide="pencil-line"></i><b>뭘 올려야 할지 모르겠어요</b><span>코킷 31</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="eye"></i><b>올려도 반응이 없어요</b><span>코킷 20</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="trending-down"></i><b>반응은 오는데 안 팔려요</b><span>코킷 19</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="hand-coins"></i><b>파는 티가 나는 게 싫어요</b><span>코킷 5</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="palette"></i><b>다들 비슷해 보여요</b><span>코킷 24</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="brain"></i><b>왜 안 사는지 모르겠어요</b><span>코킷 15</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="bot"></i><b>AI를 어떻게 쓸지 모르겠어요</b><span>코킷 16</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="sparkles"></i><b>AI 검색이 불안해요</b><span>코킷 9</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="bar-chart-3"></i><b>숫자가 뭘 말하는지 몰라요</b><span>코킷 13</span></div>
-        <div class="pain-card" data-search="on"><i data-lucide="battery-low"></i><b>바쁜데 남는 게 없어요</b><span>코킷 4</span></div>
-      </div>
-    </div>
-
-    <div class="sec alt">
+    <div class="sec alt" style="padding-top:18px">
       <div class="sec-head"><span class="sec-title">시리즈</span><span class="sec-more" data-go="scr-series">전체보기</span></div>
       <div class="hscroll" data-auto>
         <div class="card hcard" data-goclass>
@@ -7064,7 +7035,7 @@ function dragScroll(el){
 }
 
 function startDragScroll(){
-  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.pain-grid,.jumpbar")
+  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.jumpbar")
     .forEach(dragScroll);
 }
 
