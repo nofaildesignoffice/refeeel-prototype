@@ -144,7 +144,10 @@ body.clean .jumpbar{display:none;}
 
 /* ===== 공통 ===== */
 .sec{padding:20px 16px;}
-.sec.alt{background:var(--bg-light);}
+/* 섹션 배경은 모두 흰색이다(리건, 2026-11-07). 전에는 한 칸씩 번갈아 연한 라임을 깔아
+   섹션을 갈랐다. 클래스(.alt)는 그대로 둔다 — 마크업 열여덟 곳에서 걷어내면
+   되돌리기가 어렵고, 어느 섹션이 교차의 짝이었는지도 잃는다. */
+.sec.alt{background:var(--bg-white);}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
 .sec-more{font-size:12px;color:var(--text-light);}
@@ -232,6 +235,16 @@ body.clean .jumpbar{display:none;}
 .hs-dot.on{width:18px;border-radius:3px;background:var(--bg-white);}
 /* 행이 아니라 한 줄에 한 장짜리 카드다(리건, 2026-11-06). 구분선을 걷고 테두리로 세운다 —
    간격은 부모가 준다. */
+.continue-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+/* 카드가 가로로만 길어 띠처럼 보였다(리건, 2026-11-07) — 가로:세로를 4:1.5 로 둔다.
+   사진은 고정 크기를 버리고 카드 높이에 맞춰 정사각으로 커진다(align-items:stretch).
+   글은 세로 가운데, 꺾쇠도 가운데에 둔다 — 늘어난 높이에 글이 위로 붙으면 비뚤어 보인다.
+   '내 코킷'의 같은 카드(.continue-card)에는 걸지 않는다 — 거기는 네 장이 쌓이는
+   자리라 높아지면 한 화면에 두 장도 들어가지 않는다. 그래서 .continue-grid 안으로 가둔다. */
+.continue-grid .continue-card{aspect-ratio:4/1.5;align-items:stretch;}
+.continue-grid .continue-card .img-ph{width:auto;height:auto;aspect-ratio:1/1;flex-shrink:0;}
+.continue-grid .continue-body{display:flex;flex-direction:column;justify-content:center;}
+.continue-grid .continue-card>i,.continue-grid .continue-card>svg{align-self:center;}
 .continue-card{display:flex;gap:12px;padding:10px;align-items:center;
   background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
 .continue-card .img-ph{width:68px;height:68px;}
@@ -292,6 +305,13 @@ body.clean .jumpbar{display:none;}
    사진·이름보다 먼저 눈에 걸린다. 둘 이상이면 가운뎃점으로 잇는다. */
 .cur-meta{margin-top:auto;padding-top:9px;font-size:10px;font-weight:600;color:var(--text-gray);}
 .cur-meta span+span::before{content:"·";margin:0 5px;color:var(--text-muted);}
+/* 모바일에서는 한 장이 폭을 거의 채우고 다음 장이 15% 걸쳐 보인다(리건, 2026-11-07) —
+   옆에 더 있다는 걸 화살표 없이 알린다. 한 장의 폭은 85% 에서 틈(10px)을 뺀 값이다.
+   그래야 남는 15% 가 고스란히 다음 장 몫이 된다. */
+.new-grid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+.new-grid::-webkit-scrollbar{display:none;}
+.new-grid>.bigcard{flex:0 0 calc(85% - 10px);scroll-snap-align:start;}
 .bigcard{cursor:pointer;}
 .bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:var(--card-img-radius);}
 .bigcard-body{padding:13px 0 0;}
@@ -356,7 +376,6 @@ body.clean .jumpbar{display:none;}
 .ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;}
 .ac-close{position:absolute;top:10px;right:10px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;}
 .ac-close i,.ac-close svg{width:14px;height:14px;color:var(--text-light);}
-.sec.alt .ai-card{background:var(--bg-white);}
 .ai-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-right:26px;}
 .ai-card .ac-head i,.ai-card .ac-head svg{width:16px;height:16px;}
 .ai-card .ac-head b{font-size:13px;font-weight:800;}
@@ -1590,6 +1609,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 
     <div class="sec">
       <div class="sec-head"><span class="sec-title">최근 읽고 있는 코킷</span></div>
+      <div class="continue-grid">
       <div class="card continue-card" data-go="scr-viewer">
         <div class="img-ph"><i data-lucide="image"></i></div>
         <div class="continue-body">
@@ -1600,16 +1620,27 @@ body.free #scr-viewer .progress-thin{display:none;}
         </div>
         <i data-lucide="chevron-right" style="width:18px;height:18px;color:var(--text-muted)"></i>
       </div>
+      </div>
     </div>
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">이번 주 새 코킷</span></div>
-      <div class="card bigcard" data-go="scr-viewer">
-        <div class="img-ph"><i data-lucide="image"></i></div>
-        <div class="bigcard-body">
-          <div class="bigcard-kicker"><span class="k">CO:KIT 89 · NEW</span></div>
-          <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
-          <div class="bigcard-desc">AI는 배우는 게 아니라 시키는 것. 마케터의 판단 기준을 AI에 심는 법.</div>
+      <div class="new-grid">
+        <div class="card bigcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i><span class="age-badge">2일 전</span></div>
+          <div class="bigcard-body">
+            <div class="bigcard-kicker"><span class="k">CO:KIT 89 · NEW</span></div>
+            <div class="bigcard-title">프롬프트 대신, 마케터의 기준을 넣었습니다</div>
+            <div class="bigcard-desc">AI는 배우는 게 아니라 시키는 것. 마케터의 판단 기준을 AI에 심는 법.</div>
+          </div>
+        </div>
+        <div class="card bigcard" data-go="scr-viewer">
+          <div class="img-ph"><i data-lucide="image"></i><span class="age-badge">6일 전</span></div>
+          <div class="bigcard-body">
+            <div class="bigcard-kicker"><span class="k">CO:KIT 88 · NEW</span></div>
+            <div class="bigcard-title">인스타랑 밀당하는 법</div>
+            <div class="bigcard-desc">조회수는 터지는데 매출은 그대로. 알고리즘을 쫓을수록 계정만 크는 이유.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -3807,7 +3838,7 @@ function dragScroll(el){
 }
 
 function startDragScroll(){
-  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.jumpbar")
+  document.querySelectorAll(".hscroll,.hs-track,.pc-track,.tagbar,.jumpbar,.new-grid")
     .forEach(dragScroll);
 }
 
