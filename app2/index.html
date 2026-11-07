@@ -271,6 +271,10 @@ body.clean .jumpbar{display:none;}
 /* 한 줄에 선 카드는 크기가 같아야 한다(리건, 2026-08-23).
    폭은 flex-basis 로 박고, 높이는 글이 차지할 자리를 미리 내주어 맞춘다. */
 .hscroll[data-auto]>.hcard{flex:0 0 200px;}
+/* 추천은 첫 장이 폭을 거의 다 쓴다(리건, 2026-11-07) — '최근에 업데이트된 코킷'과 같은 모양.
+   카드마다 '왜 추천하는지' 한 줄이 붙어서, 좁은 칸에 여럿 늘어놓으면 그 줄이 먼저 잘린다.
+   다음 장은 15% 만 걸쳐 더 있다는 것만 알린다. 데스크톱은 3141줄에서 300px 로 되돌아간다. */
+.hscroll[data-wide]>.hcard{flex:0 0 calc(85% - 14px);}
 /* 시리즈는 좁은 화면에서 슬라이더가 아니라 두 칸 격자다(리건, 2026-11-07).
    카드가 넷뿐이라 옆으로 미는 것보다 두 줄로 세우는 편이 한눈에 들어온다.
    .hcard 의 min-width(190px)를 풀어야 두 칸이 들어간다.
@@ -1690,7 +1694,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 
     <div class="sec alt">
       <div class="sec-head"><span class="sec-title">리건님을 위한 추천</span></div>
-      <div class="hscroll" data-auto>
+      <div class="hscroll" data-auto data-wide>
         <div class="card hcard" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
