@@ -925,8 +925,12 @@ body.clean .jumptoggle{display:none!important;}
 .prog-row .progress-bar{flex:1;}
 .prog-row em{font-style:normal;font-size:10px;font-weight:700;color:var(--text-gray);flex-shrink:0;}
 .ex-desc{font-size:11.5px;color:var(--text-light);line-height:1.45;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ex-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;}
-.ex-tags span{font-size:10px;font-weight:600;color:var(--text-gray);background:var(--bg-light);border-radius:var(--radius-lg);padding:2px 7px;}
+/* 주제는 상자로 묶지 않는다(리건, 2026-11-07) — 큐레이션 카드의 주제 줄(.cur-meta)과
+   똑같이 맨 글자로 둔다. 알약으로 묶으면 눌리는 것처럼 보이고 제목보다 먼저 눈에 걸린다.
+   둘 이상이면 가운뎃점으로 잇는다. 점은 글자보다 흐리게(--text-muted) 둬서
+   이을 뿐 읽히지는 않게 한다. */
+.ex-tags{margin-top:7px;font-size:10px;font-weight:600;color:var(--text-gray);}
+.ex-tags span+span::before{content:"·";margin:0 5px;color:var(--text-muted);}
 .ex-row.read .ex-title,.ex-row.read .ex-desc{color:var(--text-muted);}
 .gcard.read b{color:var(--text-muted);}
 .gcard .img-ph{position:relative;}
@@ -3174,6 +3178,7 @@ body.modal-open #scr-interest .ord-sub,
   .quote-card.wide-only{display:flex;}
   .ex-title{font-size:16px;}
   .ex-desc{font-size:13.5px;}
+  .ex-tags{font-size:11px;}
   .series-card{padding:20px;gap:18px;}
   .series-card .img-ph{width:80px;height:80px;}
   .series-title{font-size:16px;}
