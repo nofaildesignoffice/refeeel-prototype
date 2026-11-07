@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>낙타AI 섹션 — 열 가지 안</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#1A1A1A; --ink-2:#333333; --gray:#666666; --light:#999999; --muted:#BCBCBC;
+  --white:#FFFFFF; --paper:#FBFAF8; --page:#EFEDE8;
+  --line:#E0E0E0; --line-2:#D0D0D0;
+  --brand:#DFF000; --brand-ink:#1A1A1A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:9999px;
+  --ease:cubic-bezier(.2,0,0,1);
+  /* 코멜 사진 — 자사 자산만 쓴다 */
+  --ph1:url("https://pub-df7c5d3e703845768a1b37d329b42e95.r2.dev/rekit089/hero.jpg");
+  --ph2:url("https://pub-df7c5d3e703845768a1b37d329b42e95.r2.dev/rekit088/hero.jpg");
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);color:var(--ink);
+  line-height:1.5;-webkit-font-smoothing:antialiased;}
+:where(a,button):focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+
+/* ══════════ 머리말 ══════════ */
+.bar{position:sticky;top:0;z-index:60;background:rgba(239,237,232,.93);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
+  border-bottom:1px solid var(--line-2);}
+.bar-in{max-width:1180px;margin:0 auto;padding:15px 22px 13px;}
+.bar h1{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
+.bar h1 span{color:var(--light);font-weight:700;}
+.bar p{font-size:12.5px;color:var(--gray);margin-top:5px;line-height:1.6;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 90px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:30px 26px;}
+
+.item>h2{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;}
+.item>h2 b{font-size:11px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;}
+.item>h2 span{font-size:14px;font-weight:800;letter-spacing:-.3px;}
+.item>p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:11px;min-height:38px;}
+
+/* 핸드폰 폭 그대로 — 실제로 보일 크기다 */
+.phone{width:100%;max-width:390px;background:var(--white);border:1px solid var(--line-2);
+  border-radius:var(--r-lg);overflow:hidden;}
+.phone .before{padding:17px 16px 19px;}
+.phone .before .lab{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);margin-bottom:9px;}
+.phone .before .row{height:9px;border-radius:var(--r-full);background:#EFEFEF;}
+.phone .before .row+.row{margin-top:7px;width:62%;}
+
+/* ══════════ 열 가지 안이 함께 쓰는 바탕 ══════════ */
+.ai{position:relative;overflow:hidden;background:#111;isolation:isolate;}
+.ai .bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0;}
+.ai .bg.a{background-image:var(--ph1);}
+.ai .bg.b{background-image:var(--ph2);}
+.ai .ov{position:absolute;inset:0;z-index:1;}
+.ai .in{position:relative;z-index:3;padding:24px 20px;}
+.ai .kick{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--brand);margin-bottom:9px;}
+.ai h3{font-size:19px;font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.35;word-break:keep-all;}
+.ai p{font-size:12.5px;color:rgba(255,255,255,.78);line-height:1.65;margin-top:7px;word-break:keep-all;}
+.ai .btn{display:inline-flex;align-items:center;gap:6px;margin-top:16px;
+  font-family:inherit;font-size:13px;font-weight:800;letter-spacing:-.2px;cursor:pointer;
+  border:none;border-radius:var(--r-full);padding:12px 20px;
+  background:var(--brand);color:var(--brand-ink);transition:transform .16s var(--ease);}
+.ai .btn:hover{transform:translateY(-2px);}
+.ai .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);}
+.ai .btn.white{background:#fff;color:var(--ink);}
+.ai .btn svg{width:15px;height:15px;}
+/* 낙타는 글 뒤, 오버레이 위 */
+.ai .cam{position:absolute;z-index:2;color:#fff;}
+
+/* ── 01 바닥에서 피어오르는 그늘 ── */
+.v1 .ov{background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.72) 38%,rgba(0,0,0,.30) 70%,rgba(0,0,0,.12) 100%);}
+.v1 .in{padding-top:92px;}
+.v1 .cam{right:-10px;bottom:-14px;width:142px;opacity:.95;}
+
+/* ── 02 비스듬히 지나가는 그늘 ── */
+.v2 .ov{background:linear-gradient(105deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.80) 42%,rgba(0,0,0,.34) 72%,rgba(0,0,0,.06) 100%);}
+.v2 .in{padding-right:120px;}
+.v2 .cam{right:-18px;top:50%;transform:translateY(-50%);width:158px;opacity:.9;}
+
+/* ── 03 한가운데 세우기 ── */
+.v3{text-align:center;}
+.v3 .ov{background:radial-gradient(120% 90% at 50% 46%,rgba(0,0,0,.55) 0%,rgba(0,0,0,.84) 62%,rgba(0,0,0,.94) 100%);}
+.v3 .in{padding:26px 24px 28px;}
+.v3 .cam{position:static;display:block;width:62px;margin:0 auto 14px;}
+.v3 .btn{margin-top:18px;}
+
+/* ── 04 말을 거는 모양 ── */
+.v4 .ov{background:linear-gradient(to top,rgba(0,0,0,.93) 12%,rgba(0,0,0,.66) 52%,rgba(0,0,0,.34) 100%);}
+.v4 .chat{display:flex;flex-direction:column;gap:7px;margin-bottom:15px;align-items:flex-start;}
+.v4 .bub{font-size:11.5px;font-weight:600;line-height:1.5;padding:9px 13px;border-radius:14px;
+  background:rgba(255,255,255,.16);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.14);max-width:84%;}
+.v4 .bub.me{align-self:flex-end;background:var(--brand);color:var(--brand-ink);border-color:transparent;}
+.v4 .in{padding-top:20px;}
+.v4 .cam{right:14px;top:16px;width:46px;opacity:.5;}
+
+/* ── 05 라임 선으로 가둔 자리 ── */
+.v5 .ov{background:linear-gradient(to right,rgba(0,0,0,.90) 0%,rgba(0,0,0,.74) 55%,rgba(0,0,0,.52) 100%);}
+.v5 .in{margin:14px;padding:22px 18px;border:1.5px solid var(--brand);border-radius:var(--r-md);
+  background:rgba(0,0,0,.26);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.v5 .cam{right:8px;bottom:6px;width:104px;opacity:.42;}
+
+/* ── 06 둥근 창 안의 낙타 ── */
+.v6 .ov{background:linear-gradient(115deg,rgba(0,0,0,.93) 0%,rgba(0,0,0,.78) 50%,rgba(0,0,0,.42) 100%);}
+.v6 .in{padding-right:132px;}
+.v6 .ring{position:absolute;z-index:2;right:16px;top:50%;transform:translateY(-50%);
+  width:108px;height:108px;border-radius:50%;background:rgba(223,240,0,.14);
+  border:1.5px solid rgba(223,240,0,.5);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+.v6 .ring svg{width:84px;margin-bottom:-6px;color:#fff;}
+
+/* ── 07 위는 글, 아래는 낙타 ── */
+.v7 .ov{background:linear-gradient(to bottom,rgba(0,0,0,.92) 0%,rgba(0,0,0,.74) 46%,rgba(0,0,0,.52) 100%);}
+.v7 .in{padding-bottom:0;}
+.v7 .foot{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;
+  gap:12px;padding:16px 20px 0;}
+.v7 .foot svg{width:96px;color:#fff;margin-bottom:-2px;opacity:.95;flex-shrink:0;}
+.v7 .btn{margin-top:0;}
+
+/* ── 08 반씩 나눠 쓰기 ── */
+.v8 .ov{background:linear-gradient(to right,rgba(0,0,0,.93) 0%,rgba(0,0,0,.86) 50%,rgba(0,0,0,.40) 100%);}
+.v8 .in{display:flex;align-items:center;gap:14px;}
+.v8 .txt{flex:1;min-width:0;}
+.v8 .cam{position:static;width:112px;flex-shrink:0;opacity:.95;}
+.v8 h3{font-size:17px;}
+
+/* ── 09 질문을 크게 ── */
+.v9 .ov{background:linear-gradient(to top,rgba(0,0,0,.95) 20%,rgba(0,0,0,.70) 62%,rgba(0,0,0,.44) 100%);}
+.v9 .in{padding-top:70px;}
+.v9 h3{font-size:25px;letter-spacing:-.9px;line-height:1.28;}
+.v9 .cam{right:16px;top:14px;width:54px;opacity:.55;}
+.v9 .btn{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);}
+
+/* ── 10 낙타가 배경이 되는 ── */
+.v10 .ov{background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.66) 55%,rgba(0,0,0,.52) 100%);}
+.v10 .cam{left:50%;transform:translateX(-50%);bottom:-26px;width:230px;opacity:.20;}
+.v10 .in{padding-top:30px;text-align:center;}
+.v10 .btn{width:100%;justify-content:center;}
+
+@media(max-width:600px){
+  .wrap{padding:20px 14px 70px;}
+  .grid{gap:26px 0;}
+}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <h1>낙타AI 섹션 <span>— 열 가지 안</span></h1>
+  <p>홈의 낙타AI 자리를 카드가 아니라 섹션 전체로 세웁니다. 사진 위에 검은 그늘을 그라디언트로 깔고,
+     그 위에 글·버튼·낙타를 얹었습니다. 핸드폰에서 보일 폭 그대로입니다 — 번호를 알려주시면 웹·앱에 넣겠습니다.</p>
+</div></div>
+
+<!-- 낙타 — 열 안이 함께 쓴다 -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="camel" viewBox="0 0 200 170">
+    <g fill="currentColor">
+      <!-- 혹 둘과 몸 -->
+      <path d="M26 168c-4 0-6-3-6-7 0-18 4-33 11-44 3-12 11-20 20-20 7 0 13 5 16 13 4-14 13-23 23-23 11 0 20 10 23 25 4-6 9-9 15-9 7 0 13 4 17 11l9 16c2 4 0 8-4 8-3 0-5-1-6-4l-8-14c-2-4-5-6-8-6-5 0-9 5-9 12v35c0 4-3 7-7 7s-7-3-7-7v-18c-5 4-11 6-18 6-8 0-15-3-20-8v20c0 4-3 7-7 7z"/>
+      <!-- 목 -->
+      <path d="M150 96c-4 0-7-3-7-7V58c0-14 9-25 21-25 11 0 20 9 21 21 0 4-3 7-7 8-4 0-7-3-8-7 0-4-3-7-6-7-4 0-7 4-7 10v31c0 4-3 7-7 7z"/>
+      <!-- 머리 -->
+      <ellipse cx="166" cy="37" rx="19" ry="16"/>
+      <!-- 주둥이 -->
+      <ellipse cx="185" cy="44" rx="11" ry="9"/>
+      <!-- 귀 -->
+      <ellipse cx="156" cy="20" rx="5" ry="7" transform="rotate(-18 156 20)"/>
+      <!-- 다리 -->
+      <rect x="40" y="140" width="11" height="30" rx="5"/>
+      <rect x="66" y="144" width="11" height="26" rx="5"/>
+      <rect x="104" y="140" width="11" height="30" rx="5"/>
+      <rect x="128" y="144" width="11" height="26" rx="5"/>
+    </g>
+    <!-- 눈은 라임 -->
+    <circle cx="170" cy="33" r="3.4" fill="#DFF000"/>
+  </symbol>
+  <symbol id="arrow" viewBox="0 0 24 24">
+    <path d="M5 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<div class="wrap"><div class="grid">
+
+  <!-- 01 -->
+  <div class="item">
+    <h2><b>01</b><span>바닥에서 피어오르는 그늘</span></h2>
+    <p>사진 아래쪽만 짙게 깔아 글이 앉을 자리를 만듭니다. 사진이 가장 많이 남는 안입니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v1">
+        <div class="bg a"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤 고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="item">
+    <h2><b>02</b><span>비스듬히 지나가는 그늘</span></h2>
+    <p>왼쪽은 짙고 오른쪽은 열어 둡니다. 낙타가 사진에 반쯤 잠겨 서 있습니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v2">
+        <div class="bg b"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤<br>고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="item">
+    <h2><b>03</b><span>한가운데 세우기</span></h2>
+    <p>가장자리로 갈수록 어두워지는 그늘 위에 가운데로 모읍니다. 낙타가 작게 위에 섭니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v3">
+        <div class="bg a"></div><div class="ov"></div>
+        <div class="in">
+          <svg class="cam"><use href="#camel"/></svg>
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤 고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="item">
+    <h2><b>04</b><span>말을 거는 모양</span></h2>
+    <p>주고받는 말풍선을 그대로 보여 줍니다. 무엇을 하는 자리인지 가장 빨리 읽힙니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v4">
+        <div class="bg b"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <div class="chat" style="margin-top:12px">
+            <div class="bub me">릴스 조회수는 나오는데 매출이 안 늘어요</div>
+            <div class="bub">조회수가 아니라 '누가' 보고 있는지가 문제일 수 있어요.</div>
+          </div>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="item">
+    <h2><b>05</b><span>라임 선으로 가둔 자리</span></h2>
+    <p>사진 위에 라임 테두리로 한 겹 더 두릅니다. 브랜드 색이 가장 또렷한 안입니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v5">
+        <div class="bg a"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤 고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="item">
+    <h2><b>06</b><span>둥근 창 안의 낙타</span></h2>
+    <p>낙타를 원 안에 담아 아이콘처럼 세웁니다. 글과 그림이 또렷이 나뉩니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v6">
+        <div class="bg b"></div><div class="ov"></div>
+        <div class="ring"><svg><use href="#camel"/></svg></div>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤<br>고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지<br>같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="item">
+    <h2><b>07</b><span>위는 글, 아래는 낙타</span></h2>
+    <p>글을 위에 두고 낙타가 바닥에 서서 버튼과 나란히 놓입니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v7">
+        <div class="bg a"></div><div class="ov"></div>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤 고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+        </div>
+        <div class="foot">
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+          <svg><use href="#camel"/></svg>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="item">
+    <h2><b>08</b><span>반씩 나눠 쓰기</span></h2>
+    <p>왼쪽은 글, 오른쪽은 낙타. 높이가 가장 낮아 앞뒤 섹션을 가리지 않습니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v8">
+        <div class="bg b"></div><div class="ov"></div>
+        <div class="in">
+          <div class="txt">
+            <div class="kick">NAKTA AI</div>
+            <h3>요즘 어떤<br>고민 있으세요?</h3>
+            <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+          </div>
+          <svg class="cam"><use href="#camel"/></svg>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="item">
+    <h2><b>09</b><span>질문을 크게</span></h2>
+    <p>묻는 말을 제일 크게 키우고 버튼은 테두리만 남깁니다. 글이 주인공인 안입니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v9">
+        <div class="bg a"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤<br>고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn ghost">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="item">
+    <h2><b>10</b><span>낙타가 배경이 되는</span></h2>
+    <p>낙타를 크게 깔아 무늬처럼 씁니다. 버튼이 폭을 다 써서 누를 자리가 가장 큽니다.</p>
+    <div class="phone">
+      <div class="before"><div class="lab">앞 섹션</div><div class="row"></div><div class="row"></div></div>
+      <section class="ai v10">
+        <div class="bg b"></div><div class="ov"></div>
+        <svg class="cam"><use href="#camel"/></svg>
+        <div class="in">
+          <div class="kick">NAKTA AI</div>
+          <h3>요즘 어떤 고민 있으세요?</h3>
+          <p>진짜 문제가 뭔지 같이 찾아드릴게요.</p>
+          <button class="btn">고민 이야기하기<svg><use href="#arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div></div>
+
+</body>
+</html>
