@@ -275,13 +275,17 @@ body.clean .jumpbar{display:none;}
    카드마다 '왜 추천하는지' 한 줄이 붙어서, 좁은 칸에 여럿 늘어놓으면 그 줄이 먼저 잘린다.
    다음 장은 15% 만 걸쳐 더 있다는 것만 알린다. 데스크톱은 3141줄에서 300px 로 되돌아간다. */
 .hscroll[data-wide]>.hcard{flex:0 0 calc(85% - 14px);}
+/* 풀블리드 카드는 판이 사진 위로 올라와 그림자를 드리운다(리건, 2026-11-07).
+   트랙은 overflow-x:auto 라 세로로도 잘린다 — 한 축만 visible 로 둘 수 없기 때문이다.
+   그래서 그림자가 나갈 자리를 안쪽 여백으로 비워 둔다. 그림자는 아래로 6px 번진다. */
+.hscroll[data-bleed]{padding-bottom:14px;}
 /* 시리즈는 좁은 화면에서 슬라이더가 아니라 두 칸 격자다(리건, 2026-11-07).
    카드가 넷뿐이라 옆으로 미는 것보다 두 줄로 세우는 편이 한눈에 들어온다.
    .hcard 의 min-width(190px)를 풀어야 두 칸이 들어간다.
    자동 넘김은 걸지 않는다 — 격자에서는 사본 한 벌이 여덟 칸을 만들고
    화살표가 허공을 가리킨다. 어느 폭에서 격자인지는 이 규칙이 정하고,
    스크립트는 그 결과(display)만 읽는다. 판단하는 곳을 둘로 늘리지 않는다. */
-.hscroll[data-grid2]{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:visible;}
+.hscroll[data-grid2]{display:grid;grid-template-columns:1fr 1fr;column-gap:12px;row-gap:24px;overflow:visible;}
 .hscroll[data-grid2]>.hcard{flex:none;min-width:0;}
 /* 한 장과 다음 장의 머리만 보인다 — 1.1개(리건, 2026-11-07).
    한 장(w) + 틈(14px) + 다음 장의 10%(0.1w) 가 트랙 폭이 되는 값이다.
@@ -290,6 +294,14 @@ body.clean .jumpbar{display:none;}
 .hscroll[data-auto] .reason{align-items:flex-start;min-height:2.8em;}
 .hscroll[data-auto] .reason i,.hscroll[data-auto] .reason svg{flex-shrink:0;margin-top:2px;}
 .hscroll[data-auto] .hcard-title{min-height:2.9em;}
+/* 격자에서는 제목 두 줄 자리를 미리 잡지 않는다(리건, 2026-11-07).
+   시리즈 넉 장이 모두 한 줄이라 제목 아래가 19px 씩 그냥 비어 있었다.
+   줄 수가 달라져도 '9개 회차' 줄은 카드 바닥에 붙어 가로로 맞춰진다 —
+   자리를 미리 비워 두는 대신 아래에서 맞춘다. 큐레이션 카드와 같은 방식이다. */
+.hscroll[data-grid2] .hcard-title{min-height:0;}
+.hscroll[data-grid2] .hcard{display:flex;flex-direction:column;}
+.hscroll[data-grid2] .hcard-body{display:flex;flex-direction:column;flex:1;}
+.hscroll[data-grid2] .continue-meta{margin-top:auto;}
 /* 화살표는 좁은 화면에 두지 않는다. 손으로 밀면 되는 자리에 버튼을 얹으면 카드만 가린다 */
 .sl-arr{display:none;}
 
@@ -612,7 +624,7 @@ body.clean .jumpbar{display:none;}
    카드에 메모 본문은 넣지 않는다(리건, 2026-08-19) — 한 장만 미리 보여주면
    그 한 장이 묶음을 대표해버리고, 정작 읽으러 들어갈 이유는 줄어든다. */
 .pc-wrap{padding:18px 0 2px;}
-.pc-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px 4px;}
+.pc-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px 14px;}
 .pc-track::-webkit-scrollbar{display:none;}
 /* 다음 카드가 살짝 걸쳐 보이게 78% — 옆에 더 있다는 걸 화살표 없이 알린다.
    풀블리드로 세웠다(리건, 2026-11-07) — 면이 카드를 끝까지 덮고, 글 판이 그 아래쪽으로
@@ -1754,7 +1766,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 
     <div class="sec">
       <div class="sec-head"><span class="sec-title">낙타의 큐레이션</span></div>
-      <div class="hscroll" data-auto>
+      <div class="hscroll" data-auto data-bleed>
         <div class="cur-card" data-curq="빼는 게 먼저, 더하는 게 나중" data-curn="7"><div class="img-ph"><span class="age-badge">코킷 7개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">01</span><div class="cur-title">빼는 게 먼저, 더하는 게 나중</div><div class="cur-meta"><span>사업 성장</span><span>브랜딩</span></div></div></div>
         <div class="cur-card" data-curq="'OO 하면 떠오르는 브랜드'가 되는 법" data-curn="5"><div class="img-ph"><span class="age-badge">코킷 5개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">02</span><div class="cur-title">'OO 하면 떠오르는 브랜드'가 되는 법</div><div class="cur-meta"><span>브랜딩</span><span>전환·매출</span></div></div></div>
         <div class="cur-card" data-curq="사람은 타겟이 아니다" data-curn="6"><div class="img-ph"><span class="age-badge">코킷 6개</span><i data-lucide="image"></i></div><div class="cur-body"><span class="cur-no">03</span><div class="cur-title">사람은 타겟이 아니다</div><div class="cur-meta"><span>소비자 심리</span><span>브랜딩</span></div></div></div>
@@ -1775,7 +1787,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">브랜딩 클래스</div>
-            <div class="continue-meta" style="margin-top:6px"><span>9개 회차</span></div>
+            <div class="continue-meta"><span>9개 회차</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -1783,7 +1795,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">RE:노션</div>
-            <div class="continue-meta" style="margin-top:6px"><span>노션 템플릿</span></div>
+            <div class="continue-meta"><span>노션 템플릿</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -1791,7 +1803,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">1:1 컨설팅</div>
-            <div class="continue-meta" style="margin-top:6px"><span>1:1 진행</span></div>
+            <div class="continue-meta"><span>1:1 진행</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -1799,7 +1811,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">브랜드 전략 가이드라인</div>
-            <div class="continue-meta" style="margin-top:6px"><span>맞춤 제작</span></div>
+            <div class="continue-meta"><span>맞춤 제작</span></div>
           </div>
         </div>
       </div>
@@ -2192,7 +2204,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">브랜딩 클래스</div>
-            <div class="continue-meta" style="margin-top:6px"><span>9개 회차</span></div>
+            <div class="continue-meta"><span>9개 회차</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -2200,7 +2212,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">RE:노션</div>
-            <div class="continue-meta" style="margin-top:6px"><span>노션 템플릿</span></div>
+            <div class="continue-meta"><span>노션 템플릿</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -2208,7 +2220,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">1:1 컨설팅</div>
-            <div class="continue-meta" style="margin-top:6px"><span>1:1 진행</span></div>
+            <div class="continue-meta"><span>1:1 진행</span></div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-series">
@@ -2216,7 +2228,7 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="hcard-body">
             <div class="hcard-num">SERIES</div>
             <div class="hcard-title">브랜드 전략 가이드라인</div>
-            <div class="continue-meta" style="margin-top:6px"><span>맞춤 제작</span></div>
+            <div class="continue-meta"><span>맞춤 제작</span></div>
           </div>
         </div>
       </div>
