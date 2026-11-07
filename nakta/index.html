@@ -146,7 +146,8 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .v7 .in{padding-bottom:0;}
 .v7 .foot{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;
   gap:12px;padding:14px 20px 0;}
-.v7 .foot svg{width:104px;height:auto;color:#fff;margin-bottom:12px;opacity:.95;flex-shrink:0;}
+/* 직계 자식만 — .foot 안에는 버튼이 있고 그 안에 화살표 svg 가 들어 있다 */
+.v7 .foot > svg{width:104px;height:auto;color:#fff;margin-bottom:12px;opacity:.95;flex-shrink:0;}
 .v7 .btn{margin-top:0;margin-bottom:14px;}
 
 /* ── 08 반씩 나눠 쓰기 ── */
@@ -198,7 +199,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
 .dt .v6 .ring{width:250px;height:250px;right:7%;}
 .dt .v6 .ring svg{width:152px;}
 .dt .v7 .foot{padding:20px 56px 0;max-width:1160px;margin:0 auto;width:100%;}
-.dt .v7 .foot svg{width:210px;margin-bottom:30px;}
+.dt .v7 .foot > svg{width:210px;margin-bottom:30px;}
 .dt .v7 .btn{margin-bottom:34px;}
 .dt .v8 .in{gap:60px;}
 .dt .v8 h3{font-size:30px;}
@@ -223,7 +224,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);co
   .dt .v6 .ring svg{width:92px;}
   .dt .v10 .ill{width:300px;right:-50px;top:-60px;}
   .dt .v7 .foot{padding:16px 26px 0;}
-  .dt .v7 .foot svg{width:140px;}
+  .dt .v7 .foot > svg{width:140px;}
   .dt .v8 .ill{width:140px;}
   .dt .v1 .ill,.dt .v5 .ill{width:160px;}
 }
