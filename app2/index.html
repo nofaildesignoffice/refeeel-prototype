@@ -151,7 +151,7 @@ body.clean .jumpbar{display:none;}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .sec-title{font-size:16px;font-weight:800;letter-spacing:-0.2px;}
 .sec-more{font-size:12px;color:var(--text-light);}
-.img-ph{background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.img-ph{position:relative;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
 /* ── 디자인 샘플 썸네일 ──
    그림이 들어온 칸. 안내 아이콘만 숨기고 .ex-read(읽음 체크)처럼 겉에 얹힌 표시는 남긴다 —
    그래서 자식 선택자(>)로 아이콘만 집는다. */
@@ -237,14 +237,13 @@ body.clean .jumpbar{display:none;}
    간격은 부모가 준다. */
 .continue-grid{display:grid;grid-template-columns:1fr;gap:10px;}
 /* 카드가 가로로만 길어 띠처럼 보였다(리건, 2026-11-07) — 가로:세로를 4:1.5 로 둔다.
-   사진은 고정 크기를 버리고 카드 높이에 맞춰 정사각으로 커진다(align-items:stretch).
-   글은 세로 가운데, 꺾쇠도 가운데에 둔다 — 늘어난 높이에 글이 위로 붙으면 비뚤어 보인다.
+   높이는 사진이 만든다. 카드에 aspect-ratio 를 걸고 '늘어난 높이에서 사진 폭을 유도'하는
+   방법은 쓰지 않는다 — 데스크톱 Chrome 에서는 멀쩡한데 iOS Safari 는 그 유도를 하지 못해
+   사진 폭이 0 이 된다. 한쪽에서만 깨지는 종류라 눈에 늦게 띈다. 그래서 크기를 직접 적는다.
+   119 + 위아래 여백 20 = 139. 카드 폭 371 기준 371:139 이 4:1.5 다.
    '내 코킷'의 같은 카드(.continue-card)에는 걸지 않는다 — 거기는 네 장이 쌓이는
    자리라 높아지면 한 화면에 두 장도 들어가지 않는다. 그래서 .continue-grid 안으로 가둔다. */
-.continue-grid .continue-card{aspect-ratio:4/1.5;align-items:stretch;}
-.continue-grid .continue-card .img-ph{width:auto;height:auto;aspect-ratio:1/1;flex-shrink:0;}
-.continue-grid .continue-body{display:flex;flex-direction:column;justify-content:center;}
-.continue-grid .continue-card>i,.continue-grid .continue-card>svg{align-self:center;}
+.continue-grid .continue-card .img-ph{width:119px;height:119px;flex-shrink:0;}
 .continue-card{display:flex;gap:12px;padding:10px;align-items:center;
   background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
 .continue-card .img-ph{width:68px;height:68px;}

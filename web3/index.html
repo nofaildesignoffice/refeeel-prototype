@@ -351,14 +351,13 @@ body.clean .jumptoggle{display:none!important;}
 /* 카드끼리 붙으면 맞닿은 선이 2px 로 보인다 — 부모가 간격을 준다 */
 .continue-grid{display:grid;grid-template-columns:1fr;gap:10px;}
 /* 카드가 가로로만 길어 띠처럼 보였다(리건, 2026-11-07) — 가로:세로를 4:1.5 로 둔다.
-   사진은 고정 크기를 버리고 카드 높이에 맞춰 정사각으로 커진다(align-items:stretch).
-   글은 세로 가운데, 꺾쇠도 가운데에 둔다 — 늘어난 높이에 글이 위로 붙으면 비뚤어 보인다.
+   높이는 사진이 만든다. 카드에 aspect-ratio 를 걸고 '늘어난 높이에서 사진 폭을 유도'하는
+   방법은 쓰지 않는다 — 데스크톱 Chrome 에서는 멀쩡한데 iOS Safari 는 그 유도를 하지 못해
+   사진 폭이 0 이 된다. 한쪽에서만 깨지는 종류라 눈에 늦게 띈다. 그래서 크기를 직접 적는다.
+   119 + 위아래 여백 20 = 139. 카드 폭 371 기준 371:139 이 4:1.5 다.
    '내 코킷'의 같은 카드(.continue-card)에는 걸지 않는다 — 거기는 네 장이 쌓이는
    자리라 높아지면 한 화면에 두 장도 들어가지 않는다. 그래서 .continue-grid 안으로 가둔다. */
-.continue-grid .continue-card{aspect-ratio:4/1.5;align-items:stretch;}
-.continue-grid .continue-card .img-ph{width:auto;height:auto;aspect-ratio:1/1;flex-shrink:0;}
-.continue-grid .continue-body{display:flex;flex-direction:column;justify-content:center;}
-.continue-grid .continue-card>i,.continue-grid .continue-card>svg{align-self:center;}
+.continue-grid .continue-card .img-ph{width:119px;height:119px;flex-shrink:0;}
 .wide-only{display:none;}
 /* 행이 아니라 한 줄에 한 장짜리 카드다(리건, 2026-11-06). 구분선을 걷고 테두리로 세운다 —
    간격은 부모가 준다(.continue-grid 와 '내 코킷' 섹션 모두 10px). */
@@ -3184,6 +3183,7 @@ body.modal-open #scr-interest .ord-sub,
   .wide-only{display:flex;}
   /* 세 장이 나란히 서도 카드다 — 테두리와 패딩을 그대로 갖고 간격만 넓힌다 */
   .continue-grid .continue-card{padding:12px;gap:14px;}
+  .continue-grid .continue-card .img-ph{width:135px;height:135px;}
   .continue-grid .continue-title{font-size:14.5px;}
   .rank-row{padding:12px;gap:16px;}
   .rank-row .img-ph{width:84px;height:84px;}
