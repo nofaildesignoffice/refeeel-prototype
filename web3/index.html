@@ -1168,7 +1168,7 @@ body[data-nav="pop"]{ --scr-in:scr-in-pop; --scr-out:scr-out-pop;}
 /* 알약은 상단바와 같은 유리다(리건, 2026-11-09) — 같은 --glass-bg · --glass-blur 를 쓴다.
    ⚠ 굴절(backdrop-filter:url())은 여기서도 안 쓴다 — WKWebView 가 지원하지 않는다.
    테두리는 --glass-line(흰색)이 아니라 --border-light 를 그대로 둔다 —
-   흰 바탕 위에서는 흰 테두리가 사라져 알약 모양이 안 잊힌다.
+   흰 바탕 위에서는 흰 테두리가 사라져 알약 모양이 안 읽힌다.
    블러를 못 쓰는 브라우저에서는 반투명이 글씨를 먹는다 — 흰 바로 되돌린다. */
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
   .seg{background:var(--bg-white);}
