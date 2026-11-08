@@ -409,13 +409,14 @@ const A2 = () => {
 };
 const A3 = () => {
   const rows = [["이번 주",4,2,1],["지난주",3,2,0],["2주 전",2,1,0],["3주 전",1,1,0]];
-  const max = 4;
+  /* 두 막대 폭의 합이 한 줄을 넘지 않게, 가장 긴 줄(4+2)을 기준으로 나눈다 */
+  const max = 6;
   return `${head("나의 인사이트")}<div class="box">
     ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
     <div class="strata">${rows.map(([w,h,m,now]) =>
       `<div class="stratum"><span style="width:44px;flex-shrink:0">${w}</span>
-       <i class="${now?"now":""}" style="width:${(h/max)*74}%"></i>
-       <i class="me" style="width:${(m/max)*74}%"></i><span>${h}·${m}</span></div>`).join("")}</div>
+       <i class="${now?"now":""}" style="width:${(h/max)*64}%"></i>
+       <i class="me" style="width:${(m/max)*64}%"></i><span>${h}·${m}</span></div>`).join("")}</div>
     <div class="hint" style="margin-top:9px">주마다 쌓인 층 — 밝은 쪽이 밑줄, 짙은 쪽이 메모</div>
   </div>`;
 };
