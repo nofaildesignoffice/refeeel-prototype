@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>인사이트 머리 — 게이미픽 60안</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   인사이트 탭 머리(.ins-head)를 게이미픽하게 — 60안
+   4 카테고리 × 5 유형 × 3 톤. 톤은 모든 유형에 같은 규칙으로 걸린다:
+     ① 차분  흰 바탕 + 1px 선, 라임은 점·선에만        (지금 톤에서 한 걸음)
+     ② 또렷  연한 라임빛 바탕, 라임 면적과 숫자를 키운다 (가장 게이미픽)
+     ③ 어두움 검정 바탕 + 흰 글자, 라임이 유일한 색      (낙타AI·밑줄 카드와 같은 결)
+   라임 위에 흰 글자는 쓰지 않는다 — 라임 바탕에는 늘 먹색 글자다.
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  --brand:#DFF000; --brand-press:#C7D600; --brand-ink:#1A1A1A;
+  --brand-soft:rgba(223,240,0,0.20);
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-sm:10px; --radius-md:14px; --radius-lg:18px; --radius-full:9999px;
+  --page:#EBEBEB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--page);color:var(--text-black);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1460px;margin:0 auto;padding:44px 24px 120px;}
+
+h1{font-size:27px;font-weight:800;letter-spacing:-1px;}
+.lead{margin-top:12px;font-size:14px;line-height:1.75;color:var(--text-gray);max-width:860px;word-break:keep-all;}
+.lead b{color:var(--text-black);font-weight:700;}
+.now{margin-top:22px;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+.now-box{width:403px;background:var(--bg-white);border-radius:var(--radius-md);padding:16px;}
+.now-tag{font-size:11px;font-weight:800;letter-spacing:0.6px;color:var(--text-light);margin-bottom:9px;}
+
+nav{position:sticky;top:0;z-index:50;margin:30px 0 0;padding:12px 0;
+  background:rgba(235,235,235,0.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;gap:7px;flex-wrap:wrap;}
+nav a{font-size:12.5px;font-weight:700;color:var(--text-dark);background:var(--bg-white);
+  border:1px solid var(--border-light);border-radius:var(--radius-full);padding:7px 14px;text-decoration:none;}
+nav a:hover{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+
+.cat{margin-top:46px;}
+.cat-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.cat-no{font-size:12px;font-weight:800;letter-spacing:1.4px;color:var(--brand-press);}
+.cat h2{font-size:21px;font-weight:800;letter-spacing:-0.6px;}
+.cat-why{margin-top:9px;font-size:13px;line-height:1.7;color:var(--text-gray);max-width:860px;word-break:keep-all;}
+.cat-need{margin-top:7px;font-size:12px;color:var(--text-light);}
+
+.row{margin-top:26px;}
+.row-head{display:flex;align-items:baseline;gap:10px;margin-bottom:11px;}
+.row-no{font-size:11.5px;font-weight:800;color:var(--text-light);letter-spacing:0.4px;}
+.row-head h3{font-size:15px;font-weight:800;letter-spacing:-0.3px;}
+.row-head p{font-size:12.5px;color:var(--text-gray);}
+.trio{display:flex;gap:16px;flex-wrap:wrap;}
+.cell{width:403px;}
+.cell-tag{font-size:10.5px;font-weight:800;letter-spacing:0.5px;color:var(--text-light);
+  margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+.cell-tag b{color:var(--text-dark);}
+/* 앱 화면 폭 그대로 — 실제로 앉을 자리와 같은 폭에서 본다 */
+.stage{width:403px;background:var(--bg-white);border-radius:var(--radius-md);overflow:hidden;}
+.stage.dark{background:var(--bg-black);}
+.ins-head{padding:16px 16px 18px;}
+
+/* ── 프로토타입에서 가져온 머리말 ── */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.sec-title{font-size:15px;font-weight:800;letter-spacing:-0.4px;}
+.dark .sec-title{color:var(--bg-white);}
+.sec-more{font-size:11.5px;font-weight:700;color:var(--text-light);}
+
+/* ══════ 톤 ══════ */
+.box{border-radius:var(--radius-sm);padding:17px 16px;}
+.t1 .box{background:var(--bg-white);border:1px solid var(--border-light);}
+.t2 .box{background:var(--bg-light);border:1px solid var(--brand);}
+.t3 .box{background:#232323;border:1px solid rgba(255,255,255,0.10);}
+.t3{color:var(--bg-white);}
+.lab{font-size:11.5px;font-weight:700;color:var(--text-gray);}
+.t3 .lab{color:rgba(255,255,255,0.62);}
+.num{font-size:21px;font-weight:800;letter-spacing:-0.5px;line-height:1;}
+.t2 .num{font-size:25px;}
+.t3 .num{color:var(--bg-white);}
+.hint{font-size:11px;color:var(--text-light);line-height:1.5;}
+.t3 .hint{color:rgba(255,255,255,0.48);}
+.lime{color:var(--brand-press);}
+.t3 .lime{color:var(--brand);}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-full);
+  padding:4px 10px;font-size:11px;font-weight:800;background:var(--brand);color:var(--brand-ink);}
+.sep{width:1px;align-self:stretch;background:var(--border-light);}
+.t3 .sep{background:rgba(255,255,255,0.14);}
+
+/* ══════ A. 쌓임 ══════ */
+/* A1 벽돌 격자 */
+.bricks{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:12px;}
+.brick{aspect-ratio:1;border-radius:3px;background:var(--border-light);}
+.t3 .brick{background:rgba(255,255,255,0.12);}
+.brick.hl{background:var(--brand);}
+.brick.me{background:var(--brand-press);}
+.t2 .bricks{gap:5px;}
+.t2 .brick{border-radius:4px;}
+.t3 .brick.me{background:#9FAD00;}
+/* 밑줄 줄과 메모 줄을 따로 쌓는다 — 두 수를 더하지 않는다(코덱스 지적, 2026-11-08) */
+.brick-row{display:flex;align-items:center;gap:9px;margin-top:11px;}
+.brick-lab{flex-shrink:0;width:25px;font-size:10px;font-weight:700;color:var(--text-light);}
+.t3 .brick-lab{color:rgba(255,255,255,0.45);}
+.brick-row .bricks{flex:1;margin-top:0;grid-template-columns:repeat(12,1fr);}
+/* A2 서가 띠 */
+.shelf{display:flex;align-items:flex-end;gap:3px;height:62px;margin-top:13px;
+  padding-bottom:7px;border-bottom:2px solid var(--border-default);}
+.t3 .shelf{border-bottom-color:rgba(255,255,255,0.22);}
+.book{flex:1;border-radius:2px 2px 0 0;background:var(--border-light);}
+.t3 .book{background:rgba(255,255,255,0.14);}
+.book.on{background:var(--brand);}
+.book.me{background:var(--brand-press);}
+.t2 .shelf{height:74px;}
+/* 두 줄 서가 — 윗줄 밑줄, 아랫줄 메모 */
+.shelf.two{height:42px;margin-top:11px;}
+.t2 .shelf.two{height:50px;}
+/* A3 지층 */
+.strata{margin-top:12px;display:flex;flex-direction:column;gap:5px;}
+.stratum{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--text-gray);}
+.t3 .stratum{color:rgba(255,255,255,0.6);}
+.stratum i{display:block;height:11px;border-radius:3px;background:var(--brand-soft);flex-shrink:0;}
+.stratum i.now{background:var(--brand);}
+.stratum i.me{background:var(--brand-press);opacity:0.75;}
+.t3 .stratum i{background:rgba(223,240,0,0.26);}
+.t3 .stratum i.now{background:var(--brand);}
+.t2 .stratum i{height:14px;}
+/* A4 큰 숫자 + 게이지 */
+.gauge{height:7px;border-radius:4px;background:var(--border-light);overflow:hidden;margin-top:11px;}
+.t3 .gauge{background:rgba(255,255,255,0.14);}
+.gauge>i{display:block;height:100%;background:var(--brand);border-radius:4px;}
+.t2 .gauge{height:10px;}
+/* A5 점묘 더미 */
+.dots{position:relative;height:66px;margin-top:10px;}
+.dots>i{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--brand);}
+.dots>i.sq{width:9px;height:9px;border-radius:2px;background:var(--brand-press);}
+.t3 .dots>i{box-shadow:0 0 0 1px rgba(0,0,0,0.25);}
+
+/* ══════ B. 리듬 ══════ */
+/* B1 주간 7칸 */
+.week{display:flex;gap:6px;margin-top:12px;}
+.day{flex:1;text-align:center;}
+.day b{display:block;height:34px;border-radius:7px;background:var(--border-light);}
+.t3 .day b{background:rgba(255,255,255,0.12);}
+.day.on b{background:var(--brand);}
+.day.today b{background:var(--brand);box-shadow:inset 0 0 0 2px var(--brand-ink);}
+.t3 .day.today b{box-shadow:inset 0 0 0 2px #232323;}
+.day span{display:block;margin-top:5px;font-size:10px;font-weight:700;color:var(--text-light);}
+.t3 .day span{color:rgba(255,255,255,0.45);}
+.t2 .day b{height:44px;}
+/* B2 연속 큰 숫자 */
+.streak{display:flex;align-items:center;gap:13px;}
+.streak-n{font-size:40px;font-weight:800;letter-spacing:-2px;line-height:0.9;}
+.t2 .streak-n{font-size:52px;}
+.t3 .streak-n{color:var(--brand);}
+.mini{display:flex;gap:3px;}
+.mini>i{width:8px;height:18px;border-radius:2px;background:var(--border-light);}
+.t3 .mini>i{background:rgba(255,255,255,0.14);}
+.mini>i.on{background:var(--brand);}
+/* B3 히트맵 */
+.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:12px;}
+.heat>i{aspect-ratio:1;border-radius:2px;background:var(--border-light);}
+.t3 .heat>i{background:rgba(255,255,255,0.10);}
+.heat>i.l1{background:var(--brand-soft);}
+.heat>i.l2{background:rgba(223,240,0,0.55);}
+.heat>i.l3{background:var(--brand);}
+.t3 .heat>i.l1{background:rgba(223,240,0,0.22);}
+.t3 .heat>i.l2{background:rgba(223,240,0,0.55);}
+/* B4 고리 게이지 */
+.ring{display:flex;align-items:center;gap:15px;}
+.ring svg{width:76px;height:76px;flex-shrink:0;transform:rotate(-90deg);}
+.t2 .ring svg{width:92px;height:92px;}
+.ring .track{fill:none;stroke:var(--border-light);stroke-width:8;}
+.t3 .ring .track{stroke:rgba(255,255,255,0.14);}
+.ring .bar{fill:none;stroke:var(--brand);stroke-width:8;stroke-linecap:round;}
+.ring-c{position:relative;}
+.ring-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+/* B5 스파크라인 */
+.spark{margin-top:12px;}
+.spark svg{display:block;width:100%;height:54px;}
+.t2 .spark svg{height:66px;}
+.spark .fill{fill:var(--brand-soft);}
+.spark .line{fill:none;stroke:var(--brand-press);stroke-width:2.5;stroke-linejoin:round;}
+.t3 .spark .line{stroke:var(--brand);}
+.spark .dot{fill:var(--brand-press);}
+.t3 .spark .dot{fill:var(--brand);}
+
+/* ══════ C. 단계 ══════ */
+/* C1 도장 배지 */
+.badge{display:flex;align-items:center;gap:14px;}
+.stamp{position:relative;width:62px;height:62px;flex-shrink:0;display:grid;place-items:center;
+  border-radius:50%;border:2px solid var(--brand-press);font-size:19px;font-weight:800;}
+.t2 .stamp{width:72px;height:72px;background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.t3 .stamp{border-color:var(--brand);color:var(--brand);}
+/* C2 마일스톤 선 */
+.miles{position:relative;margin:16px 4px 6px;height:30px;}
+.miles .bar{position:absolute;left:0;right:0;top:9px;height:3px;background:var(--border-light);border-radius:2px;}
+.t3 .miles .bar{background:rgba(255,255,255,0.14);}
+.miles .bar>i{display:block;height:100%;background:var(--brand);border-radius:2px;}
+.mile{position:absolute;top:0;transform:translateX(-50%);text-align:center;}
+.mile b{display:block;width:21px;height:21px;border-radius:50%;background:var(--bg-white);
+  border:2px solid var(--border-default);}
+.t3 .mile b{background:#232323;border-color:rgba(255,255,255,0.3);}
+.mile.on b{background:var(--brand);border-color:var(--brand);}
+.mile span{display:block;margin-top:4px;font-size:9.5px;font-weight:700;color:var(--text-light);white-space:nowrap;}
+.t3 .mile span{color:rgba(255,255,255,0.45);}
+/* C3 레벨 칩 + 경험 막대 */
+.lv{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.lv-chip{display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-full);
+  padding:5px 11px;font-size:11.5px;font-weight:800;
+  background:var(--brand);color:var(--brand-ink);}
+.t1 .lv-chip{background:var(--bg-light);border:1px solid var(--brand);color:var(--brand-ink);}
+/* C4 칭호 */
+.title-row{display:flex;align-items:center;gap:12px;}
+.title-ic{width:40px;height:40px;flex-shrink:0;border-radius:var(--radius-sm);
+  display:grid;place-items:center;background:var(--brand-soft);}
+.t3 .title-ic{background:rgba(223,240,0,0.18);}
+.t2 .title-ic{background:var(--brand);}
+.title-ic svg{width:21px;height:21px;}
+/* C5 다음 칸 */
+.lock{display:flex;align-items:center;gap:11px;border-radius:var(--radius-sm);
+  padding:11px 13px;border:1px dashed var(--border-default);}
+.t3 .lock{border-color:rgba(255,255,255,0.22);}
+.t2 .lock{border-style:solid;border-color:var(--brand);background:var(--bg-white);}
+
+/* ══════ D. 지도 ══════ */
+/* D1 벌집 */
+.hive{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;justify-content:center;}
+.hex{width:62px;height:70px;display:grid;place-items:center;text-align:center;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:var(--border-light);font-size:9.5px;font-weight:700;color:var(--text-gray);line-height:1.25;}
+.t3 .hex{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);}
+.hex.on{background:var(--brand);color:var(--brand-ink);}
+.hex b{display:block;font-size:14px;font-weight:800;}
+.t2 .hex{width:68px;height:76px;}
+/* D2 레이더 */
+.radar{display:flex;justify-content:center;margin-top:8px;}
+.radar svg{width:168px;height:168px;}
+.t2 .radar svg{width:190px;height:190px;}
+.radar .web{fill:none;stroke:var(--border-light);stroke-width:1;}
+.t3 .radar .web{stroke:rgba(255,255,255,0.16);}
+.radar .area{fill:var(--brand-soft);stroke:var(--brand-press);stroke-width:2;}
+.t3 .radar .area{fill:rgba(223,240,0,0.22);stroke:var(--brand);}
+.radar text{font-size:8.5px;font-weight:700;fill:var(--text-light);}
+.t3 .radar text{fill:rgba(255,255,255,0.5);}
+/* D3 도장판 */
+.plate{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px;}
+.slot{border-radius:var(--radius-sm);padding:10px 6px;text-align:center;
+  border:1px dashed var(--border-default);font-size:9.5px;font-weight:700;color:var(--text-light);line-height:1.3;}
+.t3 .slot{border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);}
+.slot.on{border-style:solid;border-color:var(--brand);background:var(--brand-soft);color:var(--text-dark);}
+.t3 .slot.on{background:rgba(223,240,0,0.18);color:var(--bg-white);}
+.t2 .slot.on{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);}
+.slot b{display:block;font-size:13px;font-weight:800;margin-bottom:3px;}
+/* D4 분포 막대 */
+.stackbar{display:flex;height:16px;border-radius:5px;overflow:hidden;margin-top:12px;}
+.t2 .stackbar{height:22px;}
+.stackbar>i{display:block;}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;}
+.legend span{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--text-gray);}
+.t3 .legend span{color:rgba(255,255,255,0.6);}
+.legend i{width:8px;height:8px;border-radius:2px;}
+/* D5 칩 묶음 */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-full);
+  padding:6px 11px;font-size:11px;font-weight:700;
+  background:var(--bg-white);border:1px solid var(--border-light);color:var(--text-gray);}
+.t3 .chip{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.14);color:rgba(255,255,255,0.68);}
+.chip b{font-weight:800;color:var(--text-black);}
+.t3 .chip b{color:var(--bg-white);}
+.chip.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.chip.on b{color:var(--brand-ink);}
+.chip.off{opacity:0.55;}
+
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--border-default);
+  font-size:12px;line-height:1.8;color:var(--text-gray);}
+@media (max-width:1300px){ .trio{flex-direction:column;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>인사이트 머리 — 게이미픽 60안</h1>
+  <p class="lead">
+    인사이트 탭 맨 위(<b>나의 인사이트 · 밑줄 10 / 메모 6</b>) 자리를 게이미픽하게 바꾼 시안입니다.
+    <b>4 카테고리 × 5 유형 × 3 톤</b> = 60안. 톤은 모든 유형에 같은 규칙으로 걸립니다 —
+    <b>①&nbsp;차분</b>(흰 바탕·1px 선, 라임은 점과 선에만) · <b>②&nbsp;또렷</b>(연한 라임빛 바탕, 라임 면적과 숫자를 키움) ·
+    <b>③&nbsp;어두움</b>(검정 바탕·흰 글자, 라임이 유일한 색 — 낙타AI 섹션과 같은 결).
+    칸의 폭은 앱 화면과 같은 403px 입니다. 고르실 때는 <b>유형 번호 + 톤 번호</b>로 알려 주세요(예: B2-③).
+  </p>
+
+  <div class="now">
+    <div class="now-box">
+      <div class="now-tag">지금 (비교용)</div>
+      <div class="ins-head" style="padding:0">
+        <div class="sec-head"><span class="sec-title">나의 인사이트</span></div>
+        <div class="box" style="display:flex;padding:17px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm)">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px">
+            <b class="num">10</b><span class="lab">밑줄</span></div>
+          <div class="sep"></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px">
+            <b class="num">6</b><span class="lab">메모</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="lead" style="flex:1;min-width:300px;margin-top:0">
+      쓰인 샘플 값: 밑줄 <b>10</b> · 메모 <b>6</b> · 연속 <b>12일</b> · 이번 주 <b>6/7일</b> ·
+      여섯 주제 가운데 <b>4</b>개. 연속 일수·주간 목표처럼 지금 데이터에 없는 값이 필요한 유형은
+      각 카테고리 머리에 적어 두었습니다.<br><br>
+      코덱스와 역할을 나눠 의논했습니다 — 코덱스가 카테고리 후보 7개와 톤앤매너 기준을 내고,
+      제가 그 가운데 네 축을 골라 그렸습니다. 코덱스가 잡아낸 세 가지를 반영했습니다:
+      <b>① 밑줄과 메모를 더해 한 숫자로 만들지 않는다</b>(앱에 '밑줄 2개 · 그중 메모 1개' 표현이 있어 합계가 참인지 모릅니다) ·
+      <b>② '상위 몇 %' 같은 줄 세우기와 실력 등급을 쓰지 않는다</b> ·
+      <b>③ 연속이 끊겼다고 벌주지 않는다</b>. 코덱스가 제안한 다섯째 축은 맨 아래에 글로 적어 두었습니다.
+    </p>
+  </div>
+
+  <nav>
+    <a href="#A">A. 쌓임</a><a href="#B">B. 리듬</a><a href="#C">C. 단계</a><a href="#D">D. 지도</a><a href="#E">+ 다섯째 축</a>
+  </nav>
+
+  <div id="out"></div>
+
+  <section class="cat" id="E">
+    <div class="cat-head"><span class="cat-no">다섯째 축 (아직 안 그림)</span><h2>기록 재사용 — 남긴 것이 다음 생각으로</h2></div>
+    <p class="cat-why">
+      코덱스가 제안한 축인데 제가 처음 네 개에서 빠뜨렸습니다. 넣지 않은 이유는 하나뿐입니다 —
+      <b>위 네 축은 지금 있는 값(또는 기준 결정)만으로 되는데, 이 축은 새 데이터가 필요합니다.</b>
+      '밑줄을 다시 열어 봤는지', '그 밑줄에 메모가 붙었는지' 같은 기록별 상태를 서버가 들고 있어야 합니다.
+    </p>
+    <p class="cat-why" style="margin-top:9px">
+      그런데 코덱스의 지적이 맞습니다. 이 축은 <b>더 많이 저장하라고 떠미는 대신, 이미 모은 것을 다시 쓰게</b> 만듭니다 —
+      인사이트 탭이 원래 하려던 일이 그것입니다. 유형 후보는 이렇습니다:
+      <b>남김 → 다시 봄 → 메모함</b> 세 칸 보드 / 밑줄과 그에 붙은 메모를 선으로 잇는 연결도 /
+      '오늘 다시 볼 기록' 카드 한 장 / 저장한 문장 아래 '내 일에는 어떻게 쓸까요?' 펼침판 /
+      '기록 하나 다시 읽기' 회고 체크리스트.
+    </p>
+    <p class="cat-need">원하시면 이 축도 5유형 × 3톤으로 그려 15안을 더 붙이겠습니다. 데이터가 없어도 시안은 됩니다.</p>
+  </section>
+
+  <footer>
+    톤 셋이 모든 유형에 같은 규칙으로 걸려 있어 <b>유형과 톤을 따로</b> 고르실 수 있습니다.<br>
+    라임 바탕에는 먹색 글자만 올렸습니다 — 라임 위 흰 글자는 한 곳도 없습니다.<br>
+    포인트·코인·랜덤 보상·축하 폭죽, '상위 몇 %' 같은 줄 세우기, 실력을 판정하는 등급은 넣지 않았습니다.<br>
+    고른 뒤에는 앱·모바일 웹·데스크톱 웹 세 곳에 같은 구성으로 넣습니다(데스크톱은 가운데 정렬).
+  </footer>
+</div>
+
+<script>
+/* ── 샘플 값. 실제로는 CMS·서버가 준다 ──
+   ⚠ 밑줄과 메모를 더해 한 숫자로 만들지 않는다(코덱스 지적, 2026-11-08).
+      앱에 '밑줄 2개 · 그중 메모 1개' 라는 표현이 있어 메모가 밑줄에 딸린 것일 수 있다.
+      합계가 참인지 아직 모르므로 어느 안에서도 둘을 더하지 않고 나란히만 둔다.
+   ⚠ 주제별 수는 밑줄 10 과 합이 맞는다(3+2+3+1+1+0). 인사이트 탭 태그바에 이미 있는 값이다. */
+const D = {
+  hl: 10, memo: 6,
+  hlGoal: 20, memoGoal: 10,                  /* 다음 지점 — 기획이 정하는 값 */
+  streak: 12, week: [1,1,0,1,1,1,1], weekDone: 6, goal: 7,
+  weeks: [1,3,2,5,4,7,5,8,3,6,8,10],         /* 12주 주간 밑줄 */
+  heat: [0,1,2,1,0,3,2,1,3,2,0,1, 2,3,1,0,2,3,3,1,2,0,1,2, 3,2,1,3,0,1,2,3,1,2,3,2],
+  level: 3, levelName: "밑줄 열 개", next: 4, nextName: "메모 열 개",
+  topics: [["콘텐츠",3],["브랜딩",2],["전환·매출",3],["소비자 심리",1],["AI·프롬프트",1],["사업 성장",0]],
+  miles: [[1,"첫 밑줄"],[10,"10"],[25,"25"],[50,"50"]]
+};
+const TOPIC_ON = D.topics.filter(t => t[1]).length;
+const LIME = ["#DFF000","#C7D600","#9FAD00","rgba(223,240,0,0.55)","rgba(223,240,0,0.32)","rgba(223,240,0,0.16)"];
+
+/* 라벨 두 개가 나란히 서는 기본 머리 — 여러 유형이 같이 쓴다 */
+function twoUp(a, b){
+  return `<div style="display:flex;align-items:center;gap:14px">
+    <div><div class="num">${a[0]}</div><div class="lab" style="margin-top:4px">${a[1]}</div></div>
+    <div class="sep" style="height:30px"></div>
+    <div><div class="num">${b[0]}</div><div class="lab" style="margin-top:4px">${b[1]}</div></div>
+  </div>`;
+}
+function head(title, more){
+  return `<div class="sec-head"><span class="sec-title">${title}</span>${more ? `<span class="sec-more">${more}</span>` : ""}</div>`;
+}
+
+/* ══════ A. 쌓임 ══════ */
+const A1 = () => {
+  const line = (n, cls) => {
+    let s = "";
+    for(let i = 0; i < 12; i++) s += `<i class="brick ${i < n ? cls : ""}"></i>`;
+    return s;
+  };
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="brick-row"><span class="brick-lab">밑줄</span><div class="bricks">${line(D.hl,"hl")}</div></div>
+    <div class="brick-row"><span class="brick-lab">메모</span><div class="bricks">${line(D.memo,"me")}</div></div>
+  </div>`;
+};
+const A2 = () => {
+  const hs = [38,52,30,61,44,57,35,49,62,41,33,55];
+  const shelf = (n, cls) => {
+    let s = "";
+    for(let i = 0; i < 12; i++)
+      s += `<i class="book ${i < n ? cls : ""}" style="height:${i < n ? hs[i] : 12}%"></i>`;
+    return s;
+  };
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="shelf two">${shelf(D.hl,"on")}</div>
+    <div class="shelf two">${shelf(D.memo,"me")}</div>
+  </div>`;
+};
+const A3 = () => {
+  const rows = [["이번 주",4,2,1],["지난주",3,2,0],["2주 전",2,1,0],["3주 전",1,1,0]];
+  const max = 4;
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="strata">${rows.map(([w,h,m,now]) =>
+      `<div class="stratum"><span style="width:44px;flex-shrink:0">${w}</span>
+       <i class="${now?"now":""}" style="width:${(h/max)*74}%"></i>
+       <i class="me" style="width:${(m/max)*74}%"></i><span>${h}·${m}</span></div>`).join("")}</div>
+    <div class="hint" style="margin-top:9px">주마다 쌓인 층 — 밝은 쪽이 밑줄, 짙은 쪽이 메모</div>
+  </div>`;
+};
+const A4 = () => `${head("나의 인사이트")}<div class="box">
+  <div style="display:flex;align-items:flex-end;gap:8px">
+    <div class="num" style="font-size:38px">${D.hl}</div>
+    <div class="lab" style="padding-bottom:5px">밑줄</div>
+    <div class="num" style="font-size:26px;margin-left:8px">${D.memo}</div>
+    <div class="lab" style="padding-bottom:3px">메모</div>
+  </div>
+  <div class="gauge"><i style="width:${(D.hl/D.hlGoal)*100}%"></i></div>
+  <div class="gauge" style="margin-top:6px"><i style="width:${(D.memo/D.memoGoal)*100}%;background:var(--brand-press)"></i></div>
+  <div class="hint" style="margin-top:8px">밑줄 <b class="lime">${D.hlGoal - D.hl}개</b> · 메모 <b class="lime">${D.memoGoal - D.memo}개</b>면 다음 지점</div>
+</div>`;
+const A5 = () => {
+  const pos = [[8,52],[20,38],[31,56],[42,30],[53,48],[64,22],[75,44],[86,34],[14,18],[26,12],
+               [37,8],[48,14],[59,6],[70,12],[81,16],[92,10]];
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="dots">${pos.map(([x,y],i) =>
+      `<i class="${i >= D.hl ? "sq" : ""}" style="left:${x}%;bottom:${y}%"></i>`).join("")}</div>
+    <div class="hint">점은 밑줄 ${D.hl}개, 사각은 메모 ${D.memo}개 — 하나씩 늘어납니다</div>
+  </div>`;
+};
+
+/* ══════ B. 리듬 ══════ */
+const DAYS = ["월","화","수","목","금","토","일"];
+const B1 = () => `${head("나의 인사이트")}<div class="box">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <span class="pill">${D.weekDone}/7일</span>
+  </div>
+  <div class="week">${D.week.map((v,i) =>
+    `<div class="day ${v ? (i === 6 ? "today" : "on") : ""}"><b></b><span>${DAYS[i]}</span></div>`).join("")}</div>
+</div>`;
+const B2 = () => `${head("나의 인사이트")}<div class="box">
+  <div class="streak">
+    <div><div class="streak-n">${D.streak}</div><div class="lab" style="margin-top:5px">일 연속 기록</div></div>
+    <div class="sep" style="height:42px"></div>
+    <div><div class="mini">${D.week.map(v => `<i class="${v?"on":""}"></i>`).join("")}</div>
+      <div class="hint" style="margin-top:7px">밑줄 ${D.hl} · 메모 ${D.memo}</div></div>
+  </div>
+</div>`;
+const B3 = () => `${head("나의 인사이트")}<div class="box">
+  ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+  <div class="heat">${D.heat.map(v => `<i class="${v ? "l" + v : ""}"></i>`).join("")}</div>
+  <div class="hint" style="margin-top:9px">지난 12주 — 짙은 칸이 많이 그은 주입니다</div>
+</div>`;
+const B4 = () => {
+  const r = 30, c = 2 * Math.PI * r, p = D.weekDone / D.goal;
+  return `${head("나의 인사이트")}<div class="box">
+    <div class="ring">
+      <div class="ring-c">
+        <svg viewBox="0 0 76 76"><circle class="track" cx="38" cy="38" r="${r}"/>
+          <circle class="bar" cx="38" cy="38" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}"/></svg>
+        <div class="ring-in"><div class="num" style="font-size:19px">${D.weekDone}/7</div>
+          <div class="lab" style="font-size:9.5px;margin-top:2px">이번 주</div></div>
+      </div>
+      <div>${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+        <div class="hint" style="margin-top:9px">하루에 하나만 그어도 한 칸이 찹니다</div></div>
+    </div>
+  </div>`;
+};
+const B5 = () => {
+  const w = 340, h = 54, max = Math.max(...D.weeks);
+  const pts = D.weeks.map((v,i) => [ (i/(D.weeks.length-1))*w, h - (v/max)*(h-8) - 4 ]);
+  const line = pts.map(([x,y],i) => `${i?"L":"M"}${x.toFixed(1)} ${y.toFixed(1)}`).join("");
+  const last = pts[pts.length-1];
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="spark"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <path class="fill" d="${line}L${w} ${h}L0 ${h}Z"/><path class="line" d="${line}"/>
+      <circle class="dot" cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.5"/>
+    </svg></div>
+    <div class="hint" style="margin-top:7px">12주째 — 쌓이는 속도가 가장 빠른 주입니다</div>
+  </div>`;
+};
+
+/* ══════ C. 단계 ══════ */
+const C1 = () => `${head("나의 인사이트")}<div class="box">
+  <div class="badge">
+    <div class="stamp">${D.level}단</div>
+    <div><div class="num" style="font-size:17px">${D.levelName}</div>
+      <div class="lab" style="margin-top:5px">밑줄 ${D.hl} · 메모 ${D.memo}</div>
+      <div class="hint" style="margin-top:6px">메모 <b class="lime">${D.next}개</b> 더 쓰면 <b>${D.nextName}</b></div></div>
+  </div>
+</div>`;
+const C2 = () => {
+  const max = 50, done = D.hl;
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="miles"><div class="bar"><i style="width:${(done/max)*100}%"></i></div>
+      ${D.miles.map(([v,t]) =>
+        `<div class="mile ${done >= v ? "on" : ""}" style="left:${(v/max)*100}%"><b></b><span>${t}</span></div>`).join("")}
+    </div>
+  </div>`;
+};
+const C3 = () => `${head("나의 인사이트")}<div class="box">
+  <div class="lv">
+    <div><div class="lv-chip">${D.levelName}까지 왔어요</div>
+      <div class="lab" style="margin-top:9px">밑줄 ${D.hl} · 메모 ${D.memo}</div></div>
+    <div class="num" style="font-size:17px">${D.hl}<span class="lab" style="font-size:11px"> / ${D.hlGoal}</span></div>
+  </div>
+  <div class="gauge"><i style="width:${(D.hl/D.hlGoal)*100}%"></i></div>
+  <div class="hint" style="margin-top:8px">밑줄 ${D.hlGoal - D.hl}개 더 그으면 <b>밑줄 ${D.hlGoal}개</b></div>
+</div>`;
+const C4 = () => `${head("나의 인사이트")}<div class="box">
+  <div class="title-row">
+    <div class="title-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg></div>
+    <div><div class="num" style="font-size:16px">밑줄 열 개를 남겼어요</div>
+      <div class="hint" style="margin-top:5px">8월 16일에 닿은 자리입니다</div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:13px">
+    <div class="chip on">밑줄 ${D.hl}</div><div class="chip">메모 ${D.memo}</div><div class="chip off">메모 ${D.memoGoal}개까지 ${D.memoGoal - D.memo}개</div>
+  </div>
+</div>`;
+const C5 = () => `${head("나의 인사이트")}<div class="box">
+  ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+  <div class="lock" style="margin-top:13px">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.6">
+      <rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div><div style="font-size:12.5px;font-weight:800">이번 달 기록 한 권</div>
+      <div class="hint" style="margin-top:3px">밑줄 <b class="lime">${D.hlGoal - D.hl}개</b> 더 그으면 열립니다</div></div>
+  </div>
+</div>`;
+
+/* ══════ D. 지도 ══════ */
+const D1 = () => `${head("나의 인사이트")}<div class="box">
+  ${twoUp([TOPIC_ON + "/6","채운 주제"],[D.hl,"밑줄"])}
+  <div class="hive">${D.topics.map(([t,n]) =>
+    `<div class="hex ${n ? "on" : ""}"><b>${n || "·"}</b>${t}</div>`).join("")}</div>
+</div>`;
+const D2 = () => {
+  const n = D.topics.length, max = 4, R = 62, cx = 84, cy = 80;
+  const pt = (i, r) => {
+    const a = -Math.PI/2 + i * 2*Math.PI/n;
+    return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+  };
+  const web = [1,0.66,0.33].map(k =>
+    `<polygon class="web" points="${D.topics.map((_,i)=>pt(i,R*k).map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`).join("");
+  const spokes = D.topics.map((_,i)=>{const [x,y]=pt(i,R);return `<line class="web" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;}).join("");
+  const area = `<polygon class="area" points="${D.topics.map(([,v],i)=>pt(i, R*Math.max(v,0.12)/max).map(x=>x.toFixed(1)).join(",")).join(" ")}"/>`;
+  const labels = D.topics.map(([t],i)=>{
+    const [x,y]=pt(i,R+13);
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${t}</text>`;}).join("");
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+    <div class="radar"><svg viewBox="0 0 168 160">${web}${spokes}${area}${labels}</svg></div>
+  </div>`;
+};
+const D3 = () => `${head("나의 인사이트")}<div class="box">
+  ${twoUp([TOPIC_ON + "/6","찍은 도장"],[D.hl,"밑줄"])}
+  <div class="plate">${D.topics.map(([t,n]) =>
+    `<div class="slot ${n ? "on" : ""}"><b>${n || "·"}</b>${t}</div>`).join("")}</div>
+</div>`;
+const D4 = () => {
+  const tot = D.topics.reduce((s,[,n]) => s+n, 0);
+  return `${head("나의 인사이트")}<div class="box">
+    ${twoUp([D.hl,"밑줄"],[TOPIC_ON + "/6","주제"])}
+    <div class="stackbar">${D.topics.map(([,n],i) =>
+      n ? `<i style="width:${(n/tot)*100}%;background:${LIME[i]}"></i>` : "").join("")}</div>
+    <div class="legend">${D.topics.filter(t=>t[1]).map(([t,n],i) =>
+      `<span><i style="background:${LIME[D.topics.findIndex(x=>x[0]===t)]}"></i>${t} <b>${n}</b></span>`).join("")}</div>
+  </div>`;
+};
+const D5 = () => `${head("나의 인사이트")}<div class="box">
+  ${twoUp([D.hl,"밑줄"],[D.memo,"메모"])}
+  <div class="chips">${D.topics.map(([t,n]) =>
+    `<span class="chip ${n >= 3 ? "on" : n ? "" : "off"}">${t}<b>${n}</b></span>`).join("")}</div>
+  <div class="hint" style="margin-top:10px">여섯 주제 가운데 <b class="lime">넷</b>을 건드렸어요 — 남은 둘은 아직 빈칸</div>
+</div>`;
+
+/* ══════ 묶음 ══════ */
+const CATS = [
+  { id:"A", no:"CATEGORY A", name:"쌓임 — 모은 것이 눈에 보이게",
+    why:"숫자 두 개를 '부피'로 바꿉니다. 10과 6은 작아 보이지만 칸이 차 있으면 쌓였다는 느낌이 듭니다. 서비스가 파는 것이 '읽고 남긴 것'이라 가장 정직한 방향입니다.",
+    need:"지금 데이터(밑줄·메모)만으로 전부 성립합니다. 둘을 더해 한 숫자로 만들지 않았습니다 — 앱에 '밑줄 2개 · 그중 메모 1개' 라는 표현이 있어 메모가 밑줄에 딸린 것일 수 있다고 코덱스가 짚었습니다. 그래서 밑줄 줄과 메모 줄을 따로 쌓습니다.",
+    rows:[
+      ["A1","벽돌 격자","24칸 가운데 채운 칸 — 밑줄은 밝은 라임, 메모는 짙은 라임",A1],
+      ["A2","서가 띠","조각이 책등처럼 꽂혀 간다. 높이가 들쭉날쭉해 '모은 것' 같다",A2],
+      ["A3","지층","주차별로 가로 띠가 층층이 쌓인다 — 아래로 내려갈수록 지난 주",A3],
+      ["A4","큰 숫자 + 게이지","숫자가 주인. 아래 한 줄 게이지로 다음 묶음까지 남은 양",A4],
+      ["A5","점묘 더미","점(밑줄)과 사각(메모)이 흩어져 쌓인다. 하나 늘 때마다 점이 하나 더",A5]]},
+  { id:"B", no:"CATEGORY B", name:"리듬 — 꾸준함이 보이게",
+    why:"독서·학습 앱이 가장 많이 쓰는 축입니다(연속 일수·주간 목표·히트맵). 사장님에게도 '어제도 했다'는 사실이 숫자보다 셉니다. 코덱스가 이 축의 위험을 짚었습니다 — 연속이 끊기면 실패로 취급하는 장치(불꽃·경고·초기화)는 쓰지 않고, '연속 7일'보다 '이번 주 기록한 6일'처럼 띄어 쉰 날도 인정하는 셈법을 기본으로 둡니다.",
+    need:"연속 일수·요일별 기록이 필요합니다. 지금 프로토타입에는 없는 값입니다.",
+    rows:[
+      ["B1","주간 7칸","이번 주 요일 칸. 오늘은 테두리로 표시",B1],
+      ["B2","연속 큰 숫자","'12일 연속'을 크게. 옆에 이번 주 일곱 칸 미니",B2],
+      ["B3","히트맵 12주","작은 칸 격자. 짙은 칸이 많이 그은 주",B3],
+      ["B4","고리 게이지","이번 주 목표 대비 진행을 원형으로",B4],
+      ["B5","스파크라인","주차별 누적선. 쌓이는 속도가 보인다",B5]]},
+  { id:"C", no:"CATEGORY C", name:"단계 — 어디까지 왔나",
+    why:"가장 게임 같은 축이고, 그래서 가장 조심해야 하는 축입니다. 포인트·코인·랜덤 보상은 쓰지 않습니다. 코덱스와 같은 선을 잡았습니다 — <b>도달한 사실</b>만 적고(‘밑줄 열 개를 남겼어요’), 실력을 추정하는 등급은 쓰지 않습니다(‘초보 사장 → 매출 고수’ 금지). ‘상위 몇 %’ 같은 줄 세우기도 뺐습니다.",
+    need:"어느 수에서 다음 지점이 열리는지(10 · 25 · 50 따위) 기준만 정하면 됩니다. 밑줄 수로 잡았습니다.",
+    rows:[
+      ["C1","도장 배지","원형 도장에 단계. 옆에 다음 단계까지 남은 수",C1],
+      ["C2","마일스톤 선","0 → 10 → 25 → 50 눈금 위를 걸어간다",C2],
+      ["C3","레벨 칩 + 막대","라임 칩으로 단계, 아래 게이지로 다음까지",C3],
+      ["C4","칭호","'밑줄 긋는 사장님' 같은 호칭 + 상위 비율",C4],
+      ["C5","다음 칸 열기","점선 자물쇠 칸. 몇 개 더 모으면 열리는지",C5]]},
+  { id:"D", no:"CATEGORY D", name:"지도 — 어느 주제를 채웠나",
+    why:"여섯 분류(콘텐츠·브랜딩·전환·매출·소비자 심리·AI·프롬프트·사업 성장)를 수집판으로 씁니다. 빈칸이 '다음에 읽을 것'을 알려 주므로 게이미픽하면서 동시에 추천으로도 일합니다 — 이 서비스에서 가장 쓸모 있는 방향입니다.",
+    need:"주제별 밑줄·메모 수가 필요합니다. 인사이트 탭 아래쪽에 이미 있는 값입니다.",
+    rows:[
+      ["D1","벌집","육각 여섯 칸. 채운 주제는 라임",D1],
+      ["D2","레이더","거미줄 위 분포. 치우침이 한눈에 보인다",D2],
+      ["D3","도장판","여섯 칸 가운데 찍힌 칸 — 수집판 느낌이 가장 세다",D3],
+      ["D4","분포 막대","한 줄 띠에 주제 비율. 가장 조용한 안",D4],
+      ["D5","칩 묶음","주제 칩에 수치 뱃지. 셋 이상인 주제만 라임",D5]]}
+];
+const TONES = [["t1","① 차분","흰 바탕 · 1px 선"],["t2","② 또렷","라임빛 바탕 · 큰 숫자"],["t3","③ 어두움","검정 바탕 · 라임 하나"]];
+
+document.getElementById("out").innerHTML = CATS.map(c => `
+  <section class="cat" id="${c.id}">
+    <div class="cat-head"><span class="cat-no">${c.no}</span><h2>${c.name}</h2></div>
+    <p class="cat-why">${c.why}</p>
+    <p class="cat-need">필요한 데이터 — ${c.need}</p>
+    ${c.rows.map(([no,name,desc,fn]) => `
+      <div class="row">
+        <div class="row-head"><span class="row-no">${no}</span><h3>${name}</h3><p>${desc}</p></div>
+        <div class="trio">${TONES.map(([cls,tn,td]) => `
+          <div class="cell">
+            <div class="cell-tag"><b>${no}-${tn}</b> ${td}</div>
+            <div class="stage ${cls === "t3" ? "dark" : ""} ${cls}">
+              <div class="ins-head">${fn()}</div>
+            </div>
+          </div>`).join("")}
+        </div>
+      </div>`).join("")}
+  </section>`).join("");
+</script>
+</body>
+</html>
