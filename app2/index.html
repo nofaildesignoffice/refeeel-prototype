@@ -338,6 +338,15 @@ body.clean .jumpbar{display:none;}
   scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
 .new-grid::-webkit-scrollbar{display:none;}
 .new-grid>.bigcard{flex:0 0 calc(85% - 10px);scroll-snap-align:start;}
+
+/* ── 걸치는 슬라이더는 오른쪽 끝까지 흐른다(리건, 2026-11-08) ──
+   섹션 오른쪽 여백(.sec 의 16px)만큼 트랙을 넘겨 빼고, 같은 값을 트랙 안쪽 여백으로
+   돌려준다. box-sizing:border-box 라 안쪽 폭은 그대로여서 카드 폭(85% · 1/1.1)은
+   변하지 않고, 보이는 자리만 16px 넓어진다 — 다음 장이 화면 가장자리에서 걸어 나온다.
+   안쪽 여백을 돌려주는 이유는 끝까지 밀었을 때 마지막 장이 화면에 딱 붙지 않게 하려는 것이다.
+   격자로 서는 .hscroll[data-grid2](시리즈)와 한 장이 폭을 다 쓰는 .hs-track(히어로)은
+   걸치는 장이 없어 뺀다. .pc-track 은 이미 자기 패딩으로 같은 일을 한다. */
+.hscroll[data-auto]:not([data-grid2]),.new-grid{margin-right:-16px;padding-right:16px;}
 .bigcard{cursor:pointer;}
 .bigcard .img-ph{width:100%;aspect-ratio:16/9;border-radius:var(--card-img-radius);}
 .bigcard-body{padding:13px 0 0;}
@@ -552,9 +561,14 @@ body.clean .jumpbar{display:none;}
 #scr-library:has(#memo-only:checked) .kitcard:not(.has-memo){display:none;}
 
 /* ── 나의 인사이트 ──
-   지표는 스크롤 밖에 고정한다. 어느 모드에 있든 내가 뭘 쌓았는지는 늘 보인다. */
-.ins-fixed{padding:16px 16px 0;}
-.ins-fixed .sec-head{margin-bottom:10px;}
+   제목·지표는 스크롤과 함께 올라가고, 두 갈래 전환만 위에 붙는다(리건, 2026-11-08).
+   그래서 전환 띠와 목록이 한 스크롤(.ins-scroll) 안에 있다 —
+   sticky 는 자기 스크롤 조상 안에서만 붙기 때문이다. */
+.ins-head{padding:16px 16px 0;}
+.ins-head .sec-head{margin-bottom:10px;}
+/* 띠에 바탕을 깔아야 올라오는 카드가 알약 옆 빈 자리로 지나가 보이지 않는다.
+   아래 10px 은 카드가 알약에 바로 붙지 않게 띄워 두는 자리다. */
+.seg-bar{position:sticky;top:0;z-index:20;background:var(--bg-white);padding-bottom:10px;}
 
 /* ── 모아보기 리더 ── */
 #scr-reader{position:relative;background:linear-gradient(180deg,#FBFAF8 0%,#F3F1ED 100%);}
@@ -2606,8 +2620,11 @@ body.free #scr-viewer .progress-thin{display:none;}
     </div>
   </div>
 
-  <!-- 스크롤 밖 고정 — 어느 모드에 있든 내가 뭘 쌓았는지는 늘 보인다. -->
-  <div class="ins-fixed">
+  <!-- 스크롤러는 여기 하나다(리건, 2026-11-08). 제목·지표는 함께 올라가고
+       두 갈래 전환만 위에 붙는다 — sticky 는 자기 스크롤 조상 안에서만 붙는다. -->
+  <div class="scroll ins-scroll">
+
+  <div class="ins-head">
     <div class="sec-head"><span class="sec-title">나의 인사이트</span></div>
     <div class="card ins-stat">
       <div><b>10</b><span>밑줄</span></div>
@@ -2618,14 +2635,16 @@ body.free #scr-viewer .progress-thin{display:none;}
   <!-- 읽기(모아보기)와 찾기(전체보기)는 화면 문법이 반대다.
        읽기는 한 번에 하나·스와이프, 찾기는 밀도 높은 목록·스크롤.
        한 화면에 겹치면 서로를 방해하므로 모드를 나눈다 — 검색탭의 '검색하기 · 둘러보기'와 같은 패턴. -->
-  <div class="seg">
-    <span class="seg-ink"></span>
-    <button data-lseg="all" class="on">전체보기</button>
-    <button data-lseg="collect">모아보기</button>
+  <div class="seg-bar">
+    <div class="seg">
+      <span class="seg-ink"></span>
+      <button data-lseg="all" class="on">전체보기</button>
+      <button data-lseg="collect">모아보기</button>
+    </div>
   </div>
 
   <!-- ── A. 전체보기 ── -->
-  <div class="scroll lseg-view on" id="lseg-all">
+  <div class="lseg-view on" id="lseg-all">
 
       <div class="tagbar">
         <button class="on">전체<b>10</b></button>
@@ -2784,7 +2803,7 @@ body.free #scr-viewer .progress-thin{display:none;}
        셋째 칸부터는 '지지난달' 대신 월 이름으로 부른다. 세는 말은 한 번에 안 읽힌다.
        ⚠ 오늘을 2026-08-19(수)로 잡은 화면이다. 실제로는 지난주 = 직전 월~일,
           지난달·전전달 = 달력 월 경계로 서버가 계산해 내려준다. -->
-  <div class="scroll lseg-view" id="lseg-collect">
+  <div class="lseg-view" id="lseg-collect">
 
       <div class="pc-wrap">
         <div class="pc-track">
@@ -2852,6 +2871,8 @@ body.free #scr-viewer .progress-thin{display:none;}
       </div>
 
   </div>
+
+  </div><!-- /.ins-scroll -->
 
   <nav class="bottomnav">
     <button class="nav-item" data-tab="scr-home"><i data-lucide="home"></i><span>홈</span></button>
@@ -4121,11 +4142,11 @@ if(hsTrack){
 /* 인사이트 탭 모드 — 검색탭의 sseg 와 같은 꼴이지만 스코프가 달라 따로 둔다 */
 function lseg(key){
   document.querySelectorAll("[data-lseg]").forEach(b=>b.classList.toggle("on", b.dataset.lseg===key));
-  document.querySelectorAll(".lseg-view").forEach(v=>{
-    const on = v.id==="lseg-"+key;
-    v.classList.toggle("on", on);
-    if(on) v.scrollTop = 0;
-  });
+  document.querySelectorAll(".lseg-view").forEach(v=>v.classList.toggle("on", v.id==="lseg-"+key));
+  /* 전환 뒤에는 새 목록의 처음부터 본다(리건, 2026-11-08).
+     두 갈래가 한 스크롤을 나눠 쓰게 되면서 되돌릴 자리가 뷰가 아니라 그 스크롤이 됐다. */
+  const sc = document.querySelector("#scr-library .ins-scroll");
+  if(sc) sc.scrollTop = 0;
 }
 /* 검색창에 적히는 말과 결과 수를 한 자리에서 바꾼다(리건, 2026-11-07).
    낙타 큐레이션에서 넘어오면 묶음 이름이 적히고, 평소 검색에서는 기본 문구로 돌아간다 —
