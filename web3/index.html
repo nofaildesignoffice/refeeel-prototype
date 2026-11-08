@@ -198,6 +198,43 @@ body.clean .jumptoggle{display:none!important;}
 .screen{display:none;position:relative;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
 
+/* ══════════ 화면 전환 ══════════
+   탭을 옮길 때는 좌우로, 더 깊이 들어갈 때는 오른쪽에서 밀려 들어오고 뒤로 나올 때는 그 반대다
+   (리건, 2026-11-09). 나가는 화면도 같이 움직여야 '툭' 끊기지 않고 한 장면이 다른 장면으로
+   넘어가는 것처럼 보인다. 방향은 tab/go/back 이 body[data-nav] 에 적어 둔다.
+   ⚠ 탭바는 움직이지 않는다 — 탭을 옮겨도 제자리에 있어야 '같은 집 안에서 방만 바꿨다'로 읽힌다.
+     그래서 움직임을 .screen 이 아니라 탭바를 뺀 자식들에 건다.
+   ⚠ 나가는 화면은 자리를 차지하면 안 되므로 띄워 두고, 누름도 막고, 탭바는 감춘다
+     (안 감추면 탭바가 두 장 겹쳐 보인다). */
+.screen.active{z-index:1;}
+.screen.scr-out{display:flex;position:absolute;inset:0;z-index:0;pointer-events:none;}
+.screen.scr-out .bottomnav{display:none;}
+.screen.active > :not(.bottomnav){
+  animation:var(--scr-in,scr-in-fade) 320ms cubic-bezier(.32,.72,0,1) both;}
+.screen.scr-out > :not(.bottomnav){
+  animation:var(--scr-out,scr-out-fade) 320ms cubic-bezier(.32,.72,0,1) both;}
+body[data-nav="next"]{--scr-in:scr-in-next;--scr-out:scr-out-next;}
+body[data-nav="prev"]{--scr-in:scr-in-prev;--scr-out:scr-out-prev;}
+body[data-nav="push"]{--scr-in:scr-in-push;--scr-out:scr-out-push;}
+body[data-nav="pop"]{ --scr-in:scr-in-pop; --scr-out:scr-out-pop;}
+/* 옆 탭으로 — 26px 은 '어느 쪽에서 왔는지'만 알려 주는 크기다. 더 크면 멀미가 난다. */
+@keyframes scr-in-next{from{opacity:0;transform:translate3d(26px,0,0);}to{opacity:1;transform:none;}}
+@keyframes scr-out-next{from{opacity:1;transform:none;}to{opacity:0;transform:translate3d(-26px,0,0);}}
+@keyframes scr-in-prev{from{opacity:0;transform:translate3d(-26px,0,0);}to{opacity:1;transform:none;}}
+@keyframes scr-out-prev{from{opacity:1;transform:none;}to{opacity:0;transform:translate3d(26px,0,0);}}
+/* 더 깊이 들어가기 — 새 화면이 오른쪽에서 통째로 밀려 들어오고 먼저 있던 화면은 뒤로 물러난다 */
+@keyframes scr-in-push{from{transform:translate3d(100%,0,0);}to{transform:none;}}
+@keyframes scr-out-push{from{opacity:1;transform:none;}to{opacity:.5;transform:translate3d(-24%,0,0);}}
+@keyframes scr-in-pop{from{opacity:.5;transform:translate3d(-24%,0,0);}to{opacity:1;transform:none;}}
+@keyframes scr-out-pop{from{transform:none;}to{transform:translate3d(100%,0,0);}}
+/* 방향을 알 수 없을 때 — 떠오르며 스며든다 */
+@keyframes scr-in-fade{from{opacity:0;transform:translate3d(0,10px,0);}to{opacity:1;transform:none;}}
+@keyframes scr-out-fade{from{opacity:1;}to{opacity:0;}}
+@media (prefers-reduced-motion:reduce){
+  .screen.active > :not(.bottomnav),.screen.scr-out > :not(.bottomnav){animation:none;}
+  .screen.scr-out{display:none;}
+}
+
 /* ══════════ 움직임 ══════════
    v1 에는 화면 전환에 아무 움직임이 없었다. 누르면 화면이 뚝 바뀌었다.
    들어오는 것은 조금 느리게(감속), 나가는 것은 빠르게(가속) — 그래야 앞뒤가 읽힌다.
@@ -215,7 +252,8 @@ body.clean .jumptoggle{display:none!important;}
   from{opacity:0;transform:translateY(12px);}
   to{opacity:1;transform:none;}
 }
-.screen.active{animation:scr-in var(--dur-medium) var(--ease-enter);}
+/* 화면 전환은 위쪽 '화면 전환' 칸으로 옮겼다(2026-11-09) — 방향까지 가리게 됐다.
+   여기 있던 .screen.active{animation:scr-in …} 은 그쪽 규칙과 겹쳐 지웠다. */
 
 /* 세그먼트로 갈아 끼우는 화면들도 스며들게 */
 .bseg-view.on,.lseg-view.on,.sseg-view.on,.myseg-view.on,.pseg-view.on,.nview.on,.browse-view.on,.fs-prev{
@@ -281,30 +319,51 @@ body.clean .jumptoggle{display:none!important;}
    max()로 감싸는 이유 — 인디케이터가 없는 기기에서 여백이 0이 되지 않게 하한을 준다.
    결과: 인디케이터 있음 = 라벨 아래 38px(iOS 기본 탭바와 같음) / 없음 = 12px(기존 그대로) */
 /* ── 하단 탭바 ──
-   켜진 탭은 브랜드색 원이고, 바의 윗선이 그 원을 떠받치듯 솔는다.
-   바탕도 윗선도 .nav-goo(SVG) 가 대신 그린다 — JS 가 붙인다.
+   켜진 탭은 브랜드색 원이고, 그 원이 들어앉을 만큼 바가 곡선으로 파인다.
+   원과 바는 서로 떨어져 있고, 원 안에 아이콘과 메뉴명이 함께 들어간다(리건, 2026-11-09).
+   탭을 바꾸면 원이 가라앉아 파임이 얕아지고, 그 얕은 파임이 목표 탭까지 흘러간 뒤
+   거기서 다시 솟는다.
+   바탕은 .nav-glass(유리), 윗선과 원은 .nav-goo(SVG) 가 그린다 — 둘 다 JS 가 붙이고
+   같은 길(path)로 오려 낸다.
    ⚠ 아래 기본값(흰 바탕 + 1px 윗선)은 그대로 두어야 한다 —
      JS 가 안 돌거나 폭을 못 재면 .goo 가 못 붙고 이 값으로 되돌아간다. */
-.bottomnav{position:relative;flex-shrink:0;display:flex;border-top:1px solid var(--border-light);background:var(--bg-white);padding-bottom:max(8px,env(safe-area-inset-bottom));}
+.bottomnav{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;
+  border-top:1px solid var(--border-light);background:var(--bg-white);
+  padding-bottom:max(8px,env(safe-area-inset-bottom));}
 .bottomnav.goo{background:none;border-top:none;}
-/* 바 위로 44px 더 뻗는다 — 솔은 원과 물결이 그 안에 들어간다.
+/* 바탕은 상단바와 같은 유리다(리건, 2026-11-09) — 같은 --glass-bg · --glass-blur 를 쓴다.
+   유리는 뒤로 지나갈 것이 있어야 보이므로 탭바를 띄웠다. 내용이 탭바 밑으로 흘러가도록
+   스크롤 쪽 아래 여백을 JS 가 탭바 높이만큼 준다.
+   ⚠ 굴절(backdrop-filter:url())은 여기서도 안 쓴다 — WKWebView 가 지원하지 않는다.
+   ⚠ 파인 모양대로 오리려면 clip-path 가 있어야 한다. JS 가 매 칸 그 길을 넣어 준다. */
+.nav-glass{position:absolute;left:0;right:0;top:-48px;bottom:0;pointer-events:none;
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
+/* 바 위로 48px 더 뻗는다 — 솟은 원이 그 안에 들어간다.
    내용 위를 덮지만 누름은 그대로 통과시킨다. */
-.nav-goo{position:absolute;left:0;right:0;top:-44px;bottom:0;width:100%;pointer-events:none;}
-.nav-goo .nv-fill{fill:var(--bg-white);}
+.nav-goo{position:absolute;left:0;right:0;top:-48px;bottom:0;width:100%;pointer-events:none;}
+.nav-goo .nv-fill{fill:none;}
 .nav-goo .nv-line{fill:none;stroke:var(--border-light);stroke-width:1;}
 .nav-goo .nv-blob{fill:var(--brand);}
-.bottomnav .nav-item{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 4px;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;transition:transform 220ms cubic-bezier(.34,1.4,.64,1),color var(--dur-short) var(--ease);}
-.bottomnav .nav-item i,.bottomnav .nav-item svg{width:22px;height:22px;transition:transform 220ms cubic-bezier(.34,1.4,.64,1);}
-.bottomnav .nav-item span{font-size:10px;font-weight:600;}
+/* 블러를 못 쓰는 브라우저에서는 유리를 걷고 SVG 가 흰 바탕을 직접 칠한다 */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .nav-glass{display:none;}
+  .nav-goo .nv-fill{fill:var(--bg-white);}
+}
+/* 꺼진 칸은 --text-muted 이 아니라 --text-light 이다(2026-11-09) — 바가 유리라
+   뒤로 사진이 지나가면 #BCBCBC 는 묻혀 안 보인다. */
+.bottomnav .nav-item{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 4px;color:var(--text-light);background:none;border:none;font-family:inherit;cursor:pointer;transition:transform 260ms cubic-bezier(.34,1.3,.64,1),color var(--dur-short) var(--ease);}
+.bottomnav .nav-item i,.bottomnav .nav-item svg{width:22px;height:22px;}
+.bottomnav .nav-item span{font-size:10px;font-weight:600;white-space:nowrap;}
 /* 원만 브랜드색이고 아이콘과 메뉴명은 진한 회색이다(리건, 2026-11-08).
    라임 위에 흰 글자를 올리지 않는다는 규칙 그대로다. */
 .bottomnav .nav-item.on{color:var(--text-dark);}
-/* 켜진 칸은 통째로 8px 올라서고, 아이콘만 10px 더 올라 원 한가운데에 앞는다.
-   메뉴명은 원 바로 아래에 따라붙는다 — 아이콘만 띄우면 이름이 홀로 남는다. */
-.bottomnav.goo .nav-item.on{transform:translateY(-10px);}
-.bottomnav.goo .nav-item.on i,.bottomnav.goo .nav-item.on svg{transform:translateY(-11px);}
+/* 켜진 칸은 통째로 올라가 원 한가운데에 앉는다 — 아이콘과 메뉴명이 같이 들어가야 해서
+   아이콘만 따로 띄우지 않는다. 자간을 조금 좁혀 네 글자('인사이트')가 원 안에 들어오게 한다. */
+.bottomnav.goo .nav-item.on{transform:translateY(-39px);}
+.bottomnav.goo .nav-item.on span{letter-spacing:-0.2px;}
 @media (prefers-reduced-motion:reduce){
-  .bottomnav .nav-item,.bottomnav .nav-item i,.bottomnav .nav-item svg{transition:none;}
+  .bottomnav .nav-item{transition:none;}
 }
 
 /* ===== 공통 ===== */
@@ -761,13 +820,16 @@ body.clean .jumptoggle{display:none!important;}
    sticky 는 자기 스크롤 조상 안에서만 붙기 때문이다. */
 .ins-head{padding:16px 16px 0;}
 .ins-head .sec-head{margin-bottom:10px;}
-/* 띠에 바탕을 깔아야 올라오는 카드가 알약 옆 빈 자리로 지나가 보이지 않는다.
-   아래 10px 은 카드가 알약에 바로 붙지 않게 띄워 두는 자리다. */
-/* ⚠ top 은 0 이다(리건, 2026-11-08). sticky 의 top 은 스크롤 컨테이너의
+/* 띠 자체는 비워 둔다(리건, 2026-11-09) — 알약만 유리로 뜨고 카드는 그 뒤로 지나간다.
+   위아래 10px 은 상단바·카드와 알약을 떨어뜨려 두는 자리다 — 붙어 있으면
+   유리 둘이 한 덩어리로 보인다. 위쪽을 padding 으로 주는 이유는 알약의 margin-top 이
+   띠 밖으로 빠져나가(margin collapsing) 간격이 안 생기기 때문이다.
+   ⚠ top 은 0 이다(리건, 2026-11-08). sticky 의 top 은 스크롤 컨테이너의
    padding box 기준이라, .ins-scroll 에 이미 padding-top:var(--topbar-h) 가 있으면
    그만큼은 이미 비워져 있다. 여기에 또 --topbar-h 를 주면 52px 가 두 번 들어가
-   띄가 상단바에서 52px 떨어진 허공에 매달린다. */
-.seg-bar{position:sticky;top:0;z-index:20;background:var(--bg-white);padding-bottom:10px;}
+   띠가 상단바에서 52px 떨어진 허공에 매달린다. */
+.seg-bar{position:sticky;top:0;z-index:20;background:none;padding:10px 0;}
+.seg-bar .seg{margin-top:0;}
 
 /* ── 모아보기 리더 ── */
 #scr-reader{position:relative;background:var(--bg-light);}
@@ -924,7 +986,8 @@ body.clean .jumptoggle{display:none!important;}
 .tagbar button{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:var(--radius-full);border:1px solid var(--border-light);background:var(--bg-white);font-size:12px;font-weight:700;color:var(--text-gray);font-family:inherit;cursor:pointer;white-space:nowrap;}
 .tagbar button b{font-weight:800;color:var(--text-muted);}
 .tagbar button.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
-.tagbar button.on b{color:rgba(255,255,255,.55);}
+/* 라임 위에는 흰 글자를 올리지 않는다 — 가끔 검정을 묽혀 쓴다(2026-11-09). */
+.tagbar button.on b{color:rgba(26,26,26,.45);}
 
 /* ── 시간순 : 날짜 레일 ──
    판정카드 프로토타입과 같은 뼈대다. 레일은 목록 전체를 관통하고 끊기지 않는다.
@@ -1007,7 +1070,10 @@ body.clean .jumptoggle{display:none!important;}
 .ch-note i,.ch-note svg{width:13px;height:13px;flex-shrink:0;margin-top:2px;}
 .ch-note.off{display:none;}
 .chip em{font-style:normal;color:var(--text-muted);font-size:10px;margin-left:2px;}
-.chip.toggle.on em{color:rgba(255,255,255,0.6);}
+/* 골라 놓은 칹에서는 숫자를 내린다(리건, 2026-11-09) — 골랐다는 표시가
+   이미 라임 바탕이라 숫자까지 얼히면 칹이 빠둑해진다.
+   겸하여 라임 위 흰 글자도 없어졌다 — 브랜드 규칙이다. */
+.chip.toggle.on em{display:none;}
 /* 최대 개수가 정해진 문항 — 다 채우면 나머지를 흐리게 해서 왜 안 눌리는지 보인다 */
 .chip-wrap.full .chip.toggle:not(.on){opacity:0.4;}
 /* 0개가 된 태그는 숨기지 않고 흐리게 — 숨기면 칩 배열이 튀어서 방금 보던 자리를 잃는다 */
@@ -1096,8 +1162,17 @@ body.clean .jumptoggle{display:none!important;}
    위 네비의 알약 통과 같은 꼴이다. 잉크 하나가 좌우로 옮겨 다니며 지금 있는 곳을 가리킨다.
    회색 홈에 흰 조각을 얹던 예전 방식은 '켜짐/꺼짐' 두 상태뿐이라 옮겨 간 방향이 안 보였다. */
 .seg{position:relative;display:flex;align-items:center;gap:2px;padding:5px;margin:14px 16px 0;
-  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-full);
-  box-shadow:var(--shadow-sm);}
+  background:var(--glass-bg);border:1px solid var(--border-light);border-radius:var(--radius-full);
+  box-shadow:var(--shadow-sm);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
+/* 알약은 상단바와 같은 유리다(리건, 2026-11-09) — 같은 --glass-bg · --glass-blur 를 쓴다.
+   ⚠ 굴절(backdrop-filter:url())은 여기서도 안 쓴다 — WKWebView 가 지원하지 않는다.
+   테두리는 --glass-line(흰색)이 아니라 --border-light 를 그대로 둔다 —
+   흰 바탕 위에서는 흰 테두리가 사라져 알약 모양이 안 잊힌다.
+   블러를 못 쓰는 브라우저에서는 반투명이 글씨를 먹는다 — 흰 바로 되돌린다. */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .seg{background:var(--bg-white);}
+}
 .seg-ink{position:absolute;top:5px;bottom:5px;left:0;width:0;z-index:0;
   background:var(--brand);border-radius:var(--radius-full);opacity:0;
   transition:transform var(--dur-medium) var(--ease),
@@ -2067,6 +2142,19 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 
 /* --- 데스크톱 --- */
 @media(min-width:1024px){
+  /* ── 데스크톱의 화면 전환 ──
+     넓은 화면에서 좌우로 밀면 눈이 따라가야 할 거리가 길어 멀미가 난다.
+     데스크톱은 제자리에서 옅게 떠오르며 바뀌는 쪽이 문법이다 — 대신 조금 길고 더 부드럽게.
+     나가는 화면은 띄우지 않는다 — 본문 길이가 화면마다 달라 겹쳐 두면 문서 높이가 튄다. */
+  body[data-nav]{--scr-in:scr-in-wide;--scr-out:scr-out-wide;}
+  .screen.scr-out{display:none;}
+  .screen.active > :not(.bottomnav){
+    animation:scr-in-wide 420ms cubic-bezier(.22,1,.36,1) both;}
+  @keyframes scr-in-wide{
+    from{opacity:0;transform:translate3d(0,16px,0) scale(.994);}
+    to{opacity:1;transform:none;}
+  }
+
   html,body{height:auto;}
   body{display:block;background:var(--bg-white);}
   /* ── 넓은 화면에서는 접어 둔다(리건, 2026-08-24) ──
@@ -7185,56 +7273,74 @@ const MODAL_SCREENS = ["scr-interest","scr-settings","scr-notiset","scr-lang","s
    ⚠ 탭바는 화면마다 하나씩 따로 있다. 탭을 누르면 화면이 먼저 바뀜 ‘새 화면의 탭바’가
      보이므로, 애니메이션은 새 탭바 위에서 ‘직전 자리 → 누른 자리’로 돌린다. */
 const NAVGOO = (function(){
-  const LIFT  = 44;           /* SVG 가 바 윗선 위로 더 뻗는 높이 (CSS 의 top:-44px 와 같아야 한다) */
-  const R     = 20;           /* 원 반지름 — 22px 아이콘을 넥넥히 담는다 */
-  const UP    = 0;            /* 솔았을 때 원 중심 — 윗선과 같은 높이다(위절반이 바 밖으로 나온다) */
-  const DOWN  = 20;           /* 가라쥚았을 때 원 중심 */
-  const RIM   = 4;            /* 원을 두르는 흰 테두리 두께 */
-  const FR    = 26;           /* 바닥으로 내려앉는 오목한 이음새의 반지름 */
-  const DEEP  = 0.45;         /* 골은 솔은 높이의 이만큼만 파인다 */
-  const DUR   = 460;          /* 전환 하나 — 참고 영상이 0.43초다 */
-  const A = 0.26, B = 0.62;   /* 가라쥚기 → 흘르기 → 솔기 */
+  /* ── 하단 탭바의 물방울(리건, 2026-11-08 · 모양은 2026-11-09 에 바뀌었다) ──
+     켜진 탭은 브랜드색 원이고, 그 원이 들어앉을 만큼 바가 곡선으로 파인다. 원과 바는 떨어져 있다.
+     탭을 바꾸면 ① 원이 가라앉아 파임이 얕아지고 ② 그 얕은 파임이 목표 탭까지 흘러간 뒤
+     ③ 거기서 다시 솟는다. 원이 떠 있는 채로 미끄러지지 않는 것이 이 모션의 핵심이다.
+     ⚠ 탭바는 화면마다 하나씩 따로 있다. 탭을 누르면 화면이 먼저 바뀌어 '새 화면의 탭바'가
+       보이므로, 애니메이션은 새 탭바 위에서 '직전 자리 → 누른 자리'로 돌린다. */
+  const LIFT = 48;      /* SVG·유리가 바 윗선 위로 더 뻗는 높이 (CSS 의 top:-48px 과 같아야 한다) */
+  const R    = 30;      /* 원 반지름 — 아이콘과 메뉴명이 함께 들어가야 해서 크다 */
+  const GAP  = 5;       /* 원과 바 사이의 틈 — 둘이 붙지 않고 떨어져 보이게 한다 */
+  const UP   = -10;     /* 솟았을 때 원 중심 (윗선보다 위) */
+  const DOWN = 14;      /* 가라앉았을 때 원 중심 (바 속) */
+  const FR   = 26;      /* 파인 자리의 어깨가 윗선으로 돌아오는 호의 반지름 */
+  const TRAV = 0.35;    /* 흐르는 동안 남겨 두는 파임의 깊이 비율 */
+  const DUR  = 460;     /* 전환 하나 — 참고 영상이 0.43초다 */
+  const A = 0.26, B = 0.62;   /* 가라앉기 → 흐르기 → 솟기 */
   const NS = "http://www.w3.org/2000/svg";
   const calm = matchMedia("(prefers-reduced-motion: reduce)");
 
-  const Q  = R + RIM;                                                 /* 흰 물방울의 반지름 */
-  const DX = Math.sqrt((FR + Q) * (FR + Q) - (FR + UP) * (FR + UP));   /* 물결이 바닥에 닿는 자리 */
-  const TX = Q * DX / (FR + Q);                                       /* 두 호가 맞닿는 자리 */
-  /* 윗선의 생김새 — 가운데는 원을 두른 호이고, 바깥은 바닥으로 내려앉는 오목한 호다.
-     두 호는 접선이 같은 자리에서 만나 이어지므로 꺾임이 없다. 이 오목한 이음새가
-     ‘물이 당겨진 자국’이고, 그래서 고체가 아니라 액체로 보인다.
-     값은 솔은 쪽이 음수다. amt 를 곱해 위아래로 눌러 쓴다 — 1 이면 솔고, 음수면 파인다. */
+  const Q  = R + GAP;                                                 /* 파인 자리의 반지름 */
+  const DX = Math.sqrt((FR + Q) * (FR + Q) - (FR - UP) * (FR - UP));  /* 파임이 윗선으로 돌아오는 자리 */
+  const TX = DX * Q / (Q + FR);                                       /* 두 호가 맞닿는 자리 */
+  /* 윗선의 생김새 — 가운데는 원을 띄워 두른 오목한 호이고, 바깥은 윗선으로 되돌아가는 볼록한 어깨다.
+     두 호는 접선이 같은 자리에서 만나 이어지므로 꺾임이 없다. 그래서 파인 자리가 깎아 낸 홈이
+     아니라 흘러내린 자국으로 보인다.
+     값은 파인 쪽이 양수다. amt 를 곱해 깊이를 조절한다 — 1 이면 다 파이고, 작을수록 얕다. */
   const prof = u => {
     u = Math.abs(u);
     if(u >= DX) return 0;
-    if(u >= TX) return -FR + Math.sqrt(Math.max(0, FR * FR - (u - DX) * (u - DX)));
-    return UP - Math.sqrt(Math.max(0, Q * Q - u * u));
+    if(u >= TX) return FR - Math.sqrt(Math.max(0, FR * FR - (u - DX) * (u - DX)));
+    return UP + Math.sqrt(Math.max(0, Q * Q - u * u));
   };
   const easeIn   = t => t * t;
   const easeOut  = t => 1 - Math.pow(1 - t, 3);
   const easeBoth = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const easeBack = t => 1 + 2.9 * Math.pow(t - 1, 3) + 1.9 * Math.pow(t - 1, 2);
 
+  let seq = 0;
   const made = new WeakMap();
   function of(nav){
     if(made.has(nav)) return made.get(nav);
     const items = Array.prototype.slice.call(nav.querySelectorAll(".nav-item"));
     if(!items.length) return null;
+    const id   = "nav-clip-" + (seq++);
+    const skin = document.createElement("div");
     const svg  = document.createElementNS(NS, "svg");
+    const defs = document.createElementNS(NS, "defs");
+    const clip = document.createElementNS(NS, "clipPath");
+    const cutp = document.createElementNS(NS, "path");
     const fill = document.createElementNS(NS, "path");
     const line = document.createElementNS(NS, "path");
     const blob = document.createElementNS(NS, "circle");
+    skin.className = "nav-glass";
+    skin.style.clipPath = skin.style.webkitClipPath = "url(#" + id + ")";
+    clip.setAttribute("id", id);
+    clip.appendChild(cutp); defs.appendChild(clip);
     svg.setAttribute("class", "nav-goo");
     svg.setAttribute("aria-hidden", "true");
     fill.setAttribute("class", "nv-fill");
     line.setAttribute("class", "nv-line");
     blob.setAttribute("class", "nv-blob");
-    svg.appendChild(fill); svg.appendChild(line); svg.appendChild(blob);
+    svg.appendChild(defs); svg.appendChild(fill); svg.appendChild(line); svg.appendChild(blob);
     nav.insertBefore(svg, nav.firstChild);
+    nav.insertBefore(skin, nav.firstChild);
 
     let W = 0, H = 0, raf = 0;
     /* 화면이 숨어 있으면 폭이 0 이다 — 그때는 .goo 를 떼어 CSS 기본 탭바로 두어야
-       바탕없는 탭바가 보이지 않는다(데스크톱 웹은 탭바 자체를 감춘다). */
+       바탕 없는 탭바가 보이지 않는다(데스크톱 웹은 탭바 자체를 감춘다).
+       탭바가 떠 있으므로 그만큼 스크롤 아래를 비워 둔다 — 마지막 줄이 탭바에 가리지 않게. */
     function measure(){
       const w = nav.clientWidth, h = nav.offsetHeight;
       const ok = w > 0 && h > 0;
@@ -7242,6 +7348,18 @@ const NAVGOO = (function(){
       if(ok && (w !== W || h !== H)){
         W = w; H = h;
         svg.setAttribute("viewBox", "0 0 " + W + " " + (H + LIFT));
+        const scr = nav.parentElement;
+        if(scr){
+          /* 마지막으로 놓인 것이 스크롤이면 그 안에 여백을 줌다 — 내용이 유리 밑으로 흘러가야
+             바탕이 비치는 게 보인다. 입력창처럼 고정된 것이 마지막이면 화면 아래를 비워
+             그것이 탭바 위에 서게 한다 — 안 그러면 둘이 겹쳐 버린다(낛타AI 화면). */
+          const flow = Array.prototype.filter.call(scr.children,
+            c => c !== nav && getComputedStyle(c).position !== "absolute");
+          const tail = flow[flow.length - 1];
+          const roomy = tail && tail.classList.contains("scroll");
+          scr.style.paddingBottom = roomy ? "" : H + "px";
+          scr.querySelectorAll(":scope > .scroll").forEach(s => s.style.paddingBottom = roomy ? H + "px" : "");
+        }
       }
       return ok;
     }
@@ -7252,8 +7370,10 @@ const NAVGOO = (function(){
       for(let x = x0; x < x1; x += 2)
         c += "L" + x.toFixed(1) + "," + (LIFT + amt * prof(x - cx)).toFixed(2);
       c += "L" + x1.toFixed(1) + "," + (LIFT + amt * prof(x1 - cx)).toFixed(2);
-      fill.setAttribute("d", "M0," + LIFT + c + "L" + W + "," + LIFT +
-                             "L" + W + "," + (H + LIFT) + "L0," + (H + LIFT) + "Z");
+      const d = "M0," + LIFT + c + "L" + W + "," + LIFT +
+                "L" + W + "," + (H + LIFT) + "L0," + (H + LIFT) + "Z";
+      fill.setAttribute("d", d);
+      cutp.setAttribute("d", d);
       line.setAttribute("d", "M0," + LIFT + c + "L" + W + "," + LIFT);
       blob.setAttribute("cx", cx.toFixed(1));
       blob.setAttribute("cy", (LIFT + cy).toFixed(1));
@@ -7272,20 +7392,20 @@ const NAVGOO = (function(){
       cancelAnimationFrame(raf);
       const x0 = mid(from), x1 = mid(to), t0 = performance.now();
       let lit = false;
-      mark(-1);                       /* 흘르는 동안엔 어느 칸도 켜지 않는다 */
+      mark(-1);                       /* 흐르는 동안엔 어느 칸도 켜지 않는다 */
       raf = requestAnimationFrame(function step(now){
         const p = Math.min(1, (now - t0) / DUR);
         let cx, amt, cy, sc;
-        if(p < A){                                   /* ① 가라쥚는다 */
+        if(p < A){                                   /* ① 가라앉는다 */
           const e = easeIn(p / A);
-          cx = x0; amt = 1 - (1 + DEEP) * e;
+          cx = x0; amt = 1 - (1 - TRAV) * e;
           cy = UP + (DOWN - UP) * e; sc = 1 - e;
-        }else if(p < B){                             /* ② 골이 흘러간다 */
+        }else if(p < B){                             /* ② 얕은 파임이 흘러간다 */
           const e = easeBoth((p - A) / (B - A));
-          cx = x0 + (x1 - x0) * e; amt = -DEEP; cy = DOWN; sc = 0;
-        }else{                                       /* ③ 다시 솔는다 */
+          cx = x0 + (x1 - x0) * e; amt = TRAV; cy = DOWN; sc = 0;
+        }else{                                       /* ③ 다시 솟는다 */
           const e = easeOut((p - B) / (1 - B));
-          cx = x1; amt = -DEEP + (1 + DEEP) * e;
+          cx = x1; amt = TRAV + (1 - TRAV) * e;
           cy = DOWN + (UP - DOWN) * e;
           sc = Math.max(0, easeBack(Math.min(1, e * 1.2)));
           if(!lit){ lit = true; mark(to); }          /* 여기서 아이콘과 이름이 따라 올라온다 */
@@ -7313,15 +7433,107 @@ const NAVGOO = (function(){
     last = i;
   }
   let rz;
-  addEventListener("resize", () => {   /* 폭이 바뀜면 다시 재야 한다 */
+  addEventListener("resize", () => {   /* 폭이 바뀌면 다시 재야 한다 */
     clearTimeout(rz);
     rz = setTimeout(() => { if(lastId) sync(lastId, false); }, 120);
   });
   return { sync };
 })();
-/* 화면이 바뀜면 물방울도 따라간다 — show() 를 고치지 않고 감싼다. */
+/* 화면이 바뀌면 탭바도 따라간다 — show() 를 고치지 않고 감싼다. */
 const _showNavGoo = show;
 show = function(id){ _showNavGoo(id); NAVGOO.sync(id, true); };
+
+/* ── 화면 전환 ──
+   show() 를 한 번 더 감싸 나가는 화면과 들어오는 화면이 같이 움직이게 한다.
+   어느 쪽으로 갔는지는 show() 혼자서는 알 수 없다 — tab/go/back 이 미리 적어 둔다. */
+const SCRMOVE = (function(){
+  const nav0 = document.querySelector(".bottomnav");
+  const TABS = nav0 ? Array.prototype.slice.call(nav0.querySelectorAll(".nav-item"))
+                            .map(b => b.dataset.tab) : [];
+  const calm = matchMedia("(prefers-reduced-motion: reduce)");
+  let want = "fade";
+  function lateral(fromId, toId){
+    const a = TABS.indexOf(fromId), b = TABS.indexOf(toId);
+    if(a < 0 || b < 0 || a === b) return "fade";
+    return b > a ? "next" : "prev";
+  }
+  return {
+    set(d){ want = d; },
+    play(prev, id){
+      const d = want; want = "fade";
+      if(calm.matches) return;
+      const next = document.getElementById(id);
+      if(!prev || !next || prev === next) return;
+      document.body.setAttribute("data-nav", d === "tab" ? lateral(prev.id, id) : d);
+      prev.classList.add("scr-out");
+      const off = () => prev.classList.remove("scr-out");
+      prev.addEventListener("animationend", off, {once:true});
+      setTimeout(off, 800);          /* 애니메이션이 안 돌 때를 받친다 */
+    }
+  };
+})();
+const _showMove = show;
+show = function(id){
+  const prev = document.querySelector(".screen.active");
+  _showMove(id);
+  SCRMOVE.play(prev, id);
+};
+const _tabMove = tab, _goMove = go, _backMove = back;
+tab  = function(id){ SCRMOVE.set("tab");  _tabMove(id); };
+go   = function(id){ SCRMOVE.set("push"); _goMove(id); };
+back = function(){   SCRMOVE.set("pop");  _backMove(); };
+
+/* ── 스크롤을 부드럽게(관성 스크롤) ──
+   휠은 한 번에 100px 씩 '툭' 뛴다. 그 값을 목표로 받아 두고 매 프레임 거리의 일부만 좁히면
+   멈춘 뒤에도 미끄러지듯 굴러간다.
+   ⚠ 손가락과 키보드는 건드리지 않는다 — 터치에는 이미 관성이 있고, 가로채면 되레 뻑뻑해진다.
+   ⚠ 끝에 닿았는데 더 밀면 가로채지 않는다 — 바깥 스크롤로 넘겨야 한다.
+   ⚠ 밖에서 scrollTop 을 바꾸면(화면이 바뀔 때처럼) 곧바로 손을 뗀다 — 안 그러면 되돌아간다. */
+(function(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if(matchMedia("(hover: none)").matches) return;   /* 손가락만 있는 기기는 그대로 둔다 */
+  const EASE = 0.15;
+  function roll(listen, el){
+    let target = null, raf = 0, mine = -1, hard = false;
+    /* ⚠ 웹에는 html{scroll-behavior:smooth} 가 걸려 있다. 그냥 scrollTop 에 넣으면
+       브라우저가 또 한 번 부드럽게 굴리려 들어 우리 루프와 서로 잡아당겨 멈춰 버린다.
+       behavior:"instant" 로 그 규칙을 비켜 가고, 그리고도 안 듣면 인라인으로 꺼 둔다. */
+    const put = v => {
+      if(!hard){
+        try{ el.scrollTo({top:v, behavior:"instant"}); }catch(e){ hard = true; }
+        if(!hard && Math.abs(el.scrollTop - v) <= 2) return;
+        hard = true;
+      }
+      el.style.scrollBehavior = "auto";
+      el.scrollTop = v;
+    };
+    function step(){
+      if(mine >= 0 && Math.abs(el.scrollTop - mine) > 2){ target = null; raf = 0; return; }
+      const cur = el.scrollTop, d = target - cur;
+      if(Math.abs(d) < 0.5){ put(target); target = null; raf = 0; mine = -1; return; }
+      put(cur + d * EASE);
+      mine = el.scrollTop;
+      raf = requestAnimationFrame(step);
+    }
+    listen.addEventListener("wheel", e => {
+      if(e.defaultPrevented || e.ctrlKey || e.deltaMode !== 0) return;
+      if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = el.scrollHeight - el.clientHeight;
+      if(max <= 1) return;
+      const base = target === null ? el.scrollTop : target;
+      const to = Math.max(0, Math.min(max, base + e.deltaY));
+      if(to === base) return;        /* 끝에 닿았다 — 바깥으로 넘긴다 */
+      e.preventDefault();
+      target = to; mine = -1;
+      if(!raf) raf = requestAnimationFrame(step);
+    }, {passive:false});
+  }
+  document.querySelectorAll(".scroll").forEach(el => {
+    if(getComputedStyle(el).scrollSnapType !== "none") return;
+    roll(el, el);
+  });
+  roll(window, document.scrollingElement || document.documentElement);
+})();
 
 function show(id){
   /* 관심사·설정은 보던 화면을 두고 그 위에 창으로 뜬다 */
