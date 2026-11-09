@@ -880,7 +880,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    저전력 모드 등으로 영상이 서면 poster(첫 프레임)가 그림처럼 남는다. */
 .ins-head{position:relative;display:flex;flex-direction:column;overflow:hidden;
   aspect-ratio:4/5;background:#141414;
-  margin-top:calc(-1 * var(--topbar-h));padding:calc(16px + var(--topbar-h)) 16px 16px;}
+  margin-top:calc(-1 * var(--topbar-h));padding:calc(16px + var(--topbar-h)) 16px 32px;}
 .ins-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   border:0;display:block;pointer-events:none;}
 /* ── 머리 전체가 3D 장면이다(리건, 2026-11-09) ──
@@ -921,12 +921,14 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    그만큼은 이미 비워져 있다. 여기에 또 --topbar-h 를 주면 52px 가 두 번 들어가
    띠가 상단바에서 52px 떨어진 허공에 매달린다. */
 /* 아래 내용이 영상 위로 20px 올라타고, 올라탄 모서리를 깎는다(리건, 2026-11-09).
-   ⚠ 바탕은 붙었을 때만 켠다(리건, 2026-11-09). 늘 깔아 두면 알약의 유리가
-     흰 판을 블러해서 유리가 아니라 그냥 흰 알약이 된다 — 떠 있을 때는
-     영상과 카드가 알약 뒤로 지나가야 한다. .stuck 은 아래 스크립트가 붙인다. */
-.seg-bar{position:sticky;top:0;z-index:20;background:none;padding:10px 0;
+   덮는 그림이라 흰 면이 있어야 한다 — 비어 있으면 깎을 모서리도, 덮을 것도 없다.
+   ⚠ 위아래 여백은 10px 그대로다. 한 번 16px 로 키웠다가 알약이 내려앉아 되돌렸다.
+   ⚠ 겹친 20px 만큼 머리의 아래 여백을 키워 두었다 — 안 그러면 지표 상자를 덮는다.
+   붙었을 때는 모서리를 편다 — 상단바에 물린 채 둥글면 떠 있는 것처럼 보인다.
+   .stuck 은 아래 스크립트가 붙인다. */
+.seg-bar{position:sticky;top:0;z-index:20;background:var(--bg-white);padding:10px 0;
   margin-top:-20px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
-.seg-bar.stuck{background:var(--bg-white);}
+.seg-bar.stuck{border-radius:0;}
 .seg-bar .seg{margin-top:0;}
 
 /* ── 모아보기 리더 ── */
@@ -8115,8 +8117,9 @@ function lseg(key){
     }
   }
 }
-/* 전환 띠가 위에 붙으면 그때만 바탕을 흰색으로 켠다(리건, 2026-11-09).
-   떠 있을 때 바탕을 깔면 알약의 유리가 흰 판을 블러해서 유리로 보이지 않는다. */
+/* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 깎은 모서리를 편다.
+   영상 위에 올라타 있을 때만 둥글어야 덮는 그림이 되고, 상단바에 물린 채
+   둥글면 띠가 떠 있는 것처럼 보인다. */
 (function(){
   const sc = document.querySelector("#scr-library .ins-scroll");
   const bar = sc && sc.querySelector(".seg-bar");
