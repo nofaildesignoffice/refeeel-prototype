@@ -8227,8 +8227,10 @@ function lseg(key){
     if(!drag) return;
     const dx = e.clientX - lx, dy = e.clientY - ly;
     lx = e.clientX; ly = e.clientY;
+    /* 먼 것이 손가락을 따라가게 맞춘다 — 가로는 그렇게 되는데 세로는 부호가
+       반대였다(2026-11-09). 아래로 쓸면 멀리 있는 것이 아래로 내려와야 한다. */
     yaw += dx * 0.011; spin = dx * 0.011;
-    pitch = Math.max(-TILT, Math.min(TILT, pitch + dy * 0.0045));
+    pitch = Math.max(-TILT, Math.min(TILT, pitch - dy * 0.0045));
   });
   ["pointerup", "pointercancel"].forEach(k =>
     grab.addEventListener(k, () => { drag = false; }));
