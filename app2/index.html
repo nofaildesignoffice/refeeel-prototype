@@ -768,12 +768,15 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    자리와 크기는 그대로고 보는 각도만 바뀐다.
    ⚠ 영상(ins-r3)에는 후광만 남기고 알갱이를 빼 두었다 — 두 번 그리면 두 배로 밝다.
      후광은 둥글어서 돌려도 같은 그림이라 영상에 두는 편이 싸다.
-   screen 합성이라 어두운 바탕 위에서 빛처럼 더해진다.
+   ⚠ 합성은 screen 이 아니라 normal 이다(2026-11-09 실측). 이 자리는 빛기둥이 지나서
+     바탕이 이미 0.63 쯤 밝다. 더하기(screen)로는 라임의 파랑을 끌어내릴 수 없어서
+     screen(0.63, 라임)의 파랑이 0.65 로 남는다 — 형광 라임이 아니라 누런 얼룩이 된다.
+     normal 이면 알갱이 색이 그대로 올라가 브랜드 라임이 라임으로 보인다.
    touch-action:none 이라 이 네모 안에서는 세로로 쓸어도 화면이 밀리지 않는다 —
    네모 바깥은 그대로 스크롤된다. 그래서 네모를 코어만큼만 잡았다. */
 .ins-core{position:absolute;left:52%;top:35.3%;width:64%;aspect-ratio:1;
   transform:translate(-50%,-50%);z-index:1;display:block;
-  mix-blend-mode:screen;touch-action:none;cursor:grab;}
+  touch-action:none;cursor:grab;}
 .ins-core:active{cursor:grabbing;}
 .ins-head .sec-head{position:relative;z-index:2;margin-bottom:0;}
 .ins-head .sec-title{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
@@ -4931,7 +4934,7 @@ function lseg(key){
              a: (0.78 - 0.50 * q) * (0.45 + Math.random() * 1.25),
              /* 라임은 바깥 껍질에만 둔다(2026-11-09 실측) — 가운데는 이미 하얗게
                 타 있어서 거기 섞으면 형광이 아니라 누런 얼룩이 된다 */
-             lime: q > 0.42 && Math.random() < 0.32,
+             lime: q > 0.42 && Math.random() < 0.13,
              m: 1 + (Math.random() * 3 | 0), ph: Math.random(),
              h1: Math.random() * 6.283185, h2: Math.random() * 6.283185,
              w: 0.020 + Math.random() * 0.045});
@@ -4998,8 +5001,8 @@ function lseg(key){
     /* 라임 속불은 가운데가 아니라 고리다 — 가운데에 깔면 흰빛에 먹혀 누레진다 */
     g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.45);
     g.addColorStop(0, "rgba(" + LIME + ",0)");
-    g.addColorStop(0.42, "rgba(" + LIME + ",0.10)");
-    g.addColorStop(0.72, "rgba(" + LIME + ",0.07)");
+    g.addColorStop(0.42, "rgba(" + LIME + ",0.07)");
+    g.addColorStop(0.72, "rgba(" + LIME + ",0.05)");
     g.addColorStop(1, "rgba(" + LIME + ",0)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
@@ -5012,7 +5015,7 @@ function lseg(key){
       const y2 = py * cp - z1 * sp,  z2 = py * sp + z1 * cp;
       const dep = 0.60 + 0.40 * (z2 + 1) * 0.5;     /* 앞이 크고 밝다 */
       const tw = 0.74 + 0.26 * Math.sin(6.283185 * (p.m * t + p.ph));
-      const a = p.a * dep * tw * (p.lime ? 1.25 : 1);
+      const a = p.a * dep * tw * (p.lime ? 0.80 : 1);
       if(a <= 0.01) continue;
       const s = Math.max(1.4, p.r * dpr * 2.6 * dep);
       ctx.globalAlpha = Math.min(1, a);
