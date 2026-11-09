@@ -8102,13 +8102,17 @@ function lseg(key){
   let queued = false;
   const read = () => {
     queued = false;
-    const top = sc.getBoundingClientRect().top
-              + parseFloat(getComputedStyle(sc).paddingTop || 0);
+    const box = sc.getBoundingClientRect();
+    /* 화면이 숨어 있으면 모든 사각형이 0 이다 — 그대로 재면 늘 붙은 것으로 나온다 */
+    if(box.height === 0) return;
+    const top = box.top + parseFloat(getComputedStyle(sc).paddingTop || 0);
     bar.classList.toggle("stuck", bar.getBoundingClientRect().top <= top + 0.5);
   };
   sc.addEventListener("scroll", () => {
     if(!queued){ queued = true; requestAnimationFrame(read); }
   }, {passive:true});
+  /* 탭을 눌러 이 화면이 다시 보이면 크기가 생긴다 — 그때 다시 잰다 */
+  if(window.ResizeObserver) new ResizeObserver(read).observe(sc);
   read();
 })();
 
