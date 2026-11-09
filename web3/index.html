@@ -8157,7 +8157,9 @@ function lseg(key){
     PT.push({x: s * Math.cos(th) * q, y: u * q, z: s * Math.sin(th) * q,
              r: 0.42 + Math.random() * 0.78 + (Math.random() < 0.03 ? 1.5 : 0),
              a: (0.78 - 0.50 * q) * (0.45 + Math.random() * 1.25),
-             lime: Math.random() < 0.20,
+             /* 라임은 바깥 껍질에만 둔다(2026-11-09 실측) — 가운데는 이미 하얗게
+                타 있어서 거기 섞으면 형광이 아니라 누런 얼룩이 된다 */
+             lime: q > 0.42 && Math.random() < 0.32,
              m: 1 + (Math.random() * 3 | 0), ph: Math.random(),
              h1: Math.random() * 6.283185, h2: Math.random() * 6.283185,
              w: 0.020 + Math.random() * 0.045});
@@ -8217,13 +8219,15 @@ function lseg(key){
     ctx.clearRect(0, 0, W, H);
     /* 속불 — 하얀 속과 옅은 라임 */
     let g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.05);
-    g.addColorStop(0, "rgba(255,255,255,0.50)");
-    g.addColorStop(0.45, "rgba(255,255,255,0.10)");
+    g.addColorStop(0, "rgba(255,255,255,0.38)");
+    g.addColorStop(0.45, "rgba(255,255,255,0.07)");
     g.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.30);
-    g.addColorStop(0, "rgba(" + LIME + ",0.13)");
-    g.addColorStop(0.55, "rgba(" + LIME + ",0.05)");
+    /* 라임 속불은 가운데가 아니라 고리다 — 가운데에 깔면 흰빛에 먹혀 누레진다 */
+    g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.45);
+    g.addColorStop(0, "rgba(" + LIME + ",0)");
+    g.addColorStop(0.42, "rgba(" + LIME + ",0.10)");
+    g.addColorStop(0.72, "rgba(" + LIME + ",0.07)");
     g.addColorStop(1, "rgba(" + LIME + ",0)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
@@ -8236,7 +8240,7 @@ function lseg(key){
       const y2 = py * cp - z1 * sp,  z2 = py * sp + z1 * cp;
       const dep = 0.60 + 0.40 * (z2 + 1) * 0.5;     /* 앞이 크고 밝다 */
       const tw = 0.74 + 0.26 * Math.sin(6.283185 * (p.m * t + p.ph));
-      const a = p.a * dep * tw;
+      const a = p.a * dep * tw * (p.lime ? 1.25 : 1);
       if(a <= 0.01) continue;
       const s = Math.max(1.4, p.r * dpr * 2.6 * dep);
       ctx.globalAlpha = Math.min(1, a);
