@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>인사이트 머리 — 참조 영상 그대로</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#1A1A1A; --ink-2:#333333; --gray:#666666; --light:#999999;
+  --white:#FFFFFF; --page:#EFEDE8;
+  --line:#E0E0E0; --line-2:#D0D0D0;
+  --brand:#DFF000; --brand-ink:#1A1A1A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:9999px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);color:var(--ink);
+  line-height:1.5;-webkit-font-smoothing:antialiased;}
+:where(a,button):focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+
+.bar{position:sticky;top:0;z-index:60;background:rgba(239,237,232,.94);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
+  border-bottom:1px solid var(--line-2);}
+.bar-in{max-width:1320px;margin:0 auto;padding:15px 22px 13px;}
+.bar h1{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
+.bar h1 span{color:var(--light);font-weight:700;}
+.bar p{font-size:12.5px;color:var(--gray);margin-top:5px;line-height:1.65;word-break:keep-all;}
+.bar p b{font-weight:800;color:var(--ink-2);}
+.bar .tools{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.bar button{font-family:inherit;font-size:12px;font-weight:700;padding:7px 13px;cursor:pointer;
+  border-radius:var(--r-full);border:1px solid var(--line-2);background:var(--white);color:var(--ink-2);}
+.bar button.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+.note{max-width:1320px;margin:22px auto 0;padding:0 22px;}
+.note div{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--brand);
+  border-radius:var(--r-md);padding:13px 15px;font-size:12.5px;color:var(--gray);line-height:1.8;word-break:keep-all;}
+.note b{color:var(--ink-2);font-weight:800;}
+.note table{border-collapse:collapse;margin-top:9px;font-size:12px;}
+.note td{padding:3px 14px 3px 0;color:var(--gray);}
+.note td:first-child{color:var(--ink-2);font-weight:700;white-space:nowrap;}
+
+.wrap{max-width:1320px;margin:0 auto;padding:22px 22px 24px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,405px);justify-content:center;gap:22px;}
+@media (max-width:460px){ .grid{grid-template-columns:1fr;} }
+
+figure{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+figcaption{padding:13px 15px 15px;}
+.tag{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.tag em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.4px;color:var(--brand-ink);
+  background:var(--brand);border-radius:var(--r-full);padding:3px 8px;text-align:center;}
+.tag strong{font-size:13.5px;font-weight:800;letter-spacing:-.2px;}
+.tag i{font-style:normal;margin-left:auto;font-size:10.5px;font-weight:700;color:var(--light);}
+figcaption p{font-size:12px;color:var(--gray);line-height:1.65;word-break:keep-all;}
+
+/* ── 앱 조각 — 4:5 로 늘린 .ins-head ── */
+.strip{position:relative;width:403px;line-height:normal;}
+.ins-head{position:relative;aspect-ratio:4/5;display:flex;flex-direction:column;
+  padding:16px;overflow:hidden;background:#141414;}
+.ins-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  pointer-events:none;border:0;display:block;}
+.sec-head{position:relative;z-index:2;display:flex;align-items:baseline;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:800;letter-spacing:-.2px;color:#fff;
+  text-shadow:0 1px 10px rgba(0,0,0,.5);}
+.ins-stat{position:relative;z-index:2;margin-top:auto;display:flex;padding:17px 8px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);border-radius:var(--r-sm);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);}
+.ins-stat>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.ins-stat>div+div{border-left:1px solid rgba(255,255,255,.2);}
+.ins-stat b{font-size:21px;font-weight:800;letter-spacing:-.5px;color:#fff;}
+.ins-stat span{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.7);}
+
+body.bare .sec-head,body.bare .ins-stat{display:none;}
+
+.foot{max-width:1320px;margin:0 auto;padding:4px 22px 70px;font-size:12.5px;color:var(--gray);
+  line-height:1.85;word-break:keep-all;}
+.foot b{color:var(--ink-2);font-weight:800;}
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="bar-in">
+  <h1>인사이트 머리 — 참조 영상 그대로 <span>4:5</span></h1>
+  <p>참조하신 영상을 <b>0.1초 간격 36장</b>으로 떠서 재고, 그 수치대로 다시 그렸습니다.
+     빛기둥 · 입자로 뭉친 코어 · 떠오르는 암석 파편 · 먼지 바닥 · 지평선 안개 ·
+     가운데 선 사람까지 같은 자리에 두었습니다.</p>
+  <div class="tools">
+    <button id="t-bare">글자 빼고 보기</button>
+    <button id="t-pause">멈춰 보기</button>
+  </div>
+</div></header>
+
+<div class="note"><div>
+  참조 영상에서 잰 값과 맞춘 자리입니다 — 화면 비율 기준입니다.
+  <table>
+    <tr><td>빛기둥</td><td>가운데 x 0.52 · 코어 높이에서 가장 좁은 모래시계꼴</td></tr>
+    <tr><td>코어</td><td>(0.52, 0.353) · 가로 반지름 0.115W · 세로 0.107H</td></tr>
+    <tr><td>지평선</td><td>y 0.705 · 바닥은 y 0.845 에서 가장 밝다</td></tr>
+    <tr><td>사람</td><td>x 0.48~0.56 · y 0.707~0.808 (키 0.10H)</td></tr>
+    <tr><td>파편</td><td>위로 오른다 — 0.1초에 세로 5.5%H · 반지름 중앙값 0.0027W</td></tr>
+    <tr><td>색</td><td>밝은 데는 중성 · 중간톤은 푸르다(참조에서 잰 값)</td></tr>
+  </table>
+  참조 영상은 앞 1.8초가 검은 화면이고 이후 빛이 가라앉습니다(바닥 0.537→0.350).
+  반복 영상이라 그 가라앉음은 빼고 <b>2.7초 이후의 안정된 그림</b>을 기준으로 삼았습니다.
+</div></div>
+
+<main class="wrap"><div class="grid" id="grid"></div></main>
+
+<p class="foot">
+  <b>7초 · 24fps · 600×750</b> · 끊김 없이 반복됩니다.<br>
+  사람을 빼거나, 파편을 늘리거나, 라임을 섞는 것도 말씀만 주시면 바로 바꿉니다.
+</p>
+
+<script>
+const BASE = "https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/";
+const V = [
+ ["r1","참조 그대로","잰 값을 그대로 옮겼습니다. 사람도 같은 자리에 섰습니다."],
+ ["r2","사람 없이","같은 장면에서 사람만 뺐습니다. 지표 카드와 겹치지 않습니다."]
+];
+const grid = document.getElementById("grid");
+V.forEach(([n, name, desc]) => {
+  const fig = document.createElement("figure");
+  fig.innerHTML =
+    '<div class="strip"><div class="ins-head">' +
+      '<video class="ins-vid" autoplay muted loop playsinline preload="none" ' +
+             'poster="' + BASE + 'ins-' + n + '.jpg" data-src="' + BASE + 'ins-' + n + '.mp4"></video>' +
+      '<div class="sec-head"><span class="sec-title">나의 인사이트</span></div>' +
+      '<div class="ins-stat"><div><b>10</b><span>밑줄</span></div><div><b>6</b><span>메모</span></div></div>' +
+    '</div></div>' +
+    '<figcaption><div class="tag"><em>' + n + '</em><strong>' + name + '</strong>' +
+      '<i>mp4 · 7초</i></div><p>' + desc + '</p></figcaption>';
+  grid.appendChild(fig);
+});
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    const v = e.target;
+    if(e.isIntersecting){ if(!v.src && v.dataset.src) v.src = v.dataset.src; v.play().catch(()=>{}); }
+    else v.pause();
+  });
+}, {rootMargin:"300px"});
+document.querySelectorAll("video").forEach(v => io.observe(v));
+
+const bB = document.getElementById("t-bare");
+bB.addEventListener("click", () => {
+  const on = document.body.classList.toggle("bare");
+  bB.classList.toggle("on", on);
+  bB.textContent = on ? "글자 다시 넣기" : "글자 빼고 보기";
+});
+let paused = false;
+const bP = document.getElementById("t-pause");
+bP.addEventListener("click", () => {
+  paused = !paused;
+  bP.classList.toggle("on", paused);
+  bP.textContent = paused ? "다시 재생" : "멈춰 보기";
+  document.querySelectorAll("video").forEach(v => paused ? v.pause() : v.play().catch(()=>{}));
+});
+</script>
+</body>
+</html>
