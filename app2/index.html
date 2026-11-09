@@ -191,24 +191,36 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
   height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;
   padding:0 16px;background:var(--glass-bg);border-bottom:1px solid var(--border-light);
   -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
-/* 사진 위에서는 선이 뜨면 거슬린다 */
-#scr-home>.topbar{border-bottom:none;}
+/* ── 홈 화면의 상단바 ──
+   히어로 사진이 상단바 밑까지 올라와 있다. 바탕·아래선·흐림을 걷어
+   사진을 그대로 보인다(리건, 2026-11-09). 흐림까지 걷는 이유는 인사이트와 같다 —
+   흐림만 남기면 바탕이 투명해도 사진이 뿌옇게 번진 띠로 남는다.
+   워드마크는 흰색이다(fill:currentColor 라 글자색만 주면 된다). */
+#scr-home>.topbar{background:none;border-bottom:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;}
+#scr-home>.topbar .logo{color:var(--bg-white);
+  filter:drop-shadow(0 1px 9px rgba(0,0,0,.45));}
+/* 앱의 홈 상단바에는 알림만 남는다(리건, 2026-11-09). 워드마크를 뺐으니
+   하나뿐인 아이콘이 왼쪽으로 가지 않게 오른쪽으로 붙인다. */
+#scr-home>.topbar{justify-content:flex-end;}
 /* ── 인사이트 화면의 상단바 ──
    영상이 상단바 아래까지 차 있다. 유리 띠가 끼면 그만큼 영상을 가린다(리건, 2026-11-09).
    바탕과 아래선을 비우고 흐림도 걷는다 — 흐림만 남기면 바탕이 투명해도
-   영상이 뿌옇게 번진 띠로 남아 '투명'이 되지 않는다. 화면 이름도 뺐다.
+   영상이 뿌옇게 번진 띠로 남아 '투명'이 되지 않는다.
    알림은 데스크톱 웹의 .wnav-ic 처럼 동그란 유리로 감싼다 — 영상 위에서는
    아이콘만 덩그러니 두면 뒤 밝기에 따라 보였다 안 보였다 한다. */
 #scr-library>.topbar{background:none;border-bottom-color:transparent;
-  justify-content:flex-end;
   -webkit-backdrop-filter:none;backdrop-filter:none;}
-#scr-library>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
+/* 화면 이름은 글자로 다시 넣었다(리건, 2026-11-09). 영상 위라 기본 검은 글자는
+   묻힌다 — 흰 글자에 옅은 그림자를 둔다. */
+#scr-library>.topbar .logo{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
+#scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
   align-items:center;justify-content:center;
   border:1px solid var(--glass-line);background:var(--glass-bg);
   -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
-#scr-library>.topbar .bell-dot{top:8px;right:9px;}
+#scr-library>.topbar .bell-dot,#scr-home>.topbar .bell-dot{top:8px;right:9px;}
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
-  #scr-library>.topbar .bell-wrap{background:var(--bg-white);border-color:var(--border-light);}
+  #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap{background:var(--bg-white);border-color:var(--border-light);}
 }
 /* 블러를 못 쓰는 브라우저에서는 반투명이 글씨를 먹는다 — 흰 바로 되돌린다 */
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
@@ -230,6 +242,13 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    붙은 자리에서는 틈이 되지 못한다 — .seg-bar .seg 와 같은 이유다. */
 .search-top .seg.seg-top{margin-top:0;}
 #scr-search>.scroll{padding-top:var(--topbar-h);}
+/* ── 검색 화면의 상단바는 스크롤과 함께 밀려 올라간다(리건, 2026-11-09) ──
+   내리면 내용과 같이 사라지고, 올리면 다시 나온다. JS 가 스크롤만큼 --tb-off 를 준다.
+   머리(알약·검색바)도 같은 만큼 따라 올라간다 — 상단바만 비키면 그 자리가
+   빈 띠로 남아 머리가 허공에 뜬다. 넓은 화면에는 상단바가 아예 없으니
+   (.topbar{display:none}) 여기 걸어도 데스크톱 위 네비는 그대로다. */
+#scr-search>.topbar,#scr-search .search-top,#scr-home>.topbar{
+  transform:translateY(calc(-1 * var(--tb-off, 0px)));}
 .topbar .logo{font-size:13px;font-weight:700;letter-spacing:0.8px;}
 .topbar-right{display:flex;align-items:center;gap:14px;}
 .topbar-right i,.topbar-right svg{width:20px;height:20px;color:var(--text-dark);}
@@ -242,6 +261,13 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .gnb .gnb-title{font-size:13px;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
 .gnb i,.gnb svg{width:20px;height:20px;color:var(--text-dark);}
 .gnb-side{display:flex;align-items:center;gap:12px;min-width:20px;}
+/* ── 내 코킷 화면의 머리 ──
+   제목을 왼쪽에 붙인다(리건, 2026-11-09). 가운데 정렬은 좌우의 빈 저울(.gnb-side)이
+   맞춰 주던 것이라, 왼쪽 저울을 치우고 제목이 남은 자리를 다 쓰게 한다.
+   아래 가로선은 좁은 화면에서만 걷는다. */
+#scr-my>.gnb{border-bottom:none;}
+#scr-my>.gnb .gnb-side:first-child{display:none;}
+#scr-my>.gnb .gnb-title{flex:1;max-width:none;text-align:left;}
 .progress-thin{flex-shrink:0;height:3px;background:var(--border-light);}
 .progress-thin>div{height:100%;background:var(--brand);}
 
@@ -1973,7 +1999,6 @@ body.free #scr-viewer .progress-thin{display:none;}
 <!-- ══════════ 홈 ══════════ -->
 <section class="screen" id="scr-home">
   <div class="topbar">
-    <span class="logo"><svg class="logo-mark" role="img" aria-label="commel"><use href="#logo-commel"/></svg></span>
     <div class="topbar-right">
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
     </div>
@@ -2946,6 +2971,7 @@ body.free #scr-viewer .progress-thin{display:none;}
 <!-- ══════════ 인사이트 ══════════ -->
 <section class="screen" id="scr-library">
   <div class="topbar">
+    <span class="logo">인사이트</span>
     <!-- 검색 아이콘은 뺐다 — 코킷을 찾는 건 검색탭이 하고, 여기서는 주제 칩으로 좁힌다. -->
     <div class="topbar-right">
       <span class="bell-wrap" data-go="scr-noti"><i data-lucide="bell"></i><span class="bell-dot"></span></span>
@@ -4914,6 +4940,36 @@ function lseg(key){
   const sc = document.querySelector("#scr-library .ins-scroll");
   if(sc) sc.scrollTop = 0;
 }
+/* 검색·홈 화면의 상단바 — 내리면 내용과 함께 사라지고, 올리면 돌아온다(리건, 2026-11-09).
+   스크롤한 만큼 1:1 로 밀어 올린다. '같이 사라지는' 느낌은 톡 숨는 것보다 이쪽이다.
+   넓은 화면에서는 상단바가 display:none 이라 높이가 0 이다 — 그때는 아무것도 하지 않는다. */
+(function(){
+  ["scr-search", "scr-home"].forEach(hide);
+  function hide(id){
+  const sec = document.getElementById(id);
+  const sc = sec && sec.querySelector(":scope > .scroll");
+  const bar = sec && sec.querySelector(":scope > .topbar");
+  if(!sc || !bar) return;
+  let off = 0, last = sc.scrollTop, queued = false;
+  const read = () => {
+    queued = false;
+    const H = bar.offsetHeight;
+    if(!H){                                  /* 데스크톱 — 치운 적도 없게 되돌린다 */
+      if(off){ off = 0; sec.style.setProperty("--tb-off", "0px"); }
+      last = sc.scrollTop; return;
+    }
+    const y = Math.max(0, sc.scrollTop);
+    off = Math.max(0, Math.min(H, off + (y - last)));
+    last = y;
+    if(y <= 0) off = 0;                      /* 맨 위에서는 늘 보인다 */
+    sec.style.setProperty("--tb-off", off + "px");
+  };
+  sc.addEventListener("scroll", () => {
+    if(!queued){ queued = true; requestAnimationFrame(read); }
+  }, {passive:true});
+  }
+})();
+
 /* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 바탕을 걷는다.
    떠 있을 때는 흰 면이 영상을 덮어야 하고, 붙었을 때는 그 흰 면이 없어야
    알약이 상단바와 같은 유리로 보인다(목록이 알약 뒤로 지나간다). */
