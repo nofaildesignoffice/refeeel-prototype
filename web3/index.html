@@ -924,11 +924,14 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    덮는 그림이라 흰 면이 있어야 한다 — 비어 있으면 깎을 모서리도, 덮을 것도 없다.
    ⚠ 위아래 여백은 10px 그대로다. 한 번 16px 로 키웠다가 알약이 내려앉아 되돌렸다.
    ⚠ 겹친 20px 만큼 머리의 아래 여백을 키워 두었다 — 안 그러면 지표 상자를 덮는다.
-   붙었을 때는 모서리를 편다 — 상단바에 물린 채 둥글면 떠 있는 것처럼 보인다.
+   ⚠ 위에 붙으면 바탕을 걷는다(리건, 2026-11-09). 흰 면을 깔아 둔 채로 붙으면
+     알약의 유리가 그 흰 면을 블러해서 유리가 아니라 그냥 흰 알약이 된다.
+     걷어야 목록이 알약 뒤로 지나가며 상단바와 같은 유리로 보인다.
+     알약 자체는 손대지 않는다 — 이미 --glass-bg · --glass-blur 로 상단바와 같다.
    .stuck 은 아래 스크립트가 붙인다. */
 .seg-bar{position:sticky;top:0;z-index:20;background:var(--bg-white);padding:10px 0;
   margin-top:-20px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
-.seg-bar.stuck{border-radius:0;}
+.seg-bar.stuck{background:none;}
 .seg-bar .seg{margin-top:0;}
 
 /* ── 모아보기 리더 ── */
@@ -8117,9 +8120,9 @@ function lseg(key){
     }
   }
 }
-/* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 깎은 모서리를 편다.
-   영상 위에 올라타 있을 때만 둥글어야 덮는 그림이 되고, 상단바에 물린 채
-   둥글면 띠가 떠 있는 것처럼 보인다. */
+/* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 바탕을 걷는다.
+   떠 있을 때는 흰 면이 영상을 덮어야 하고, 붙었을 때는 그 흰 면이 없어야
+   알약이 상단바와 같은 유리로 보인다(목록이 알약 뒤로 지나간다). */
 (function(){
   const sc = document.querySelector("#scr-library .ins-scroll");
   const bar = sc && sc.querySelector(".seg-bar");
