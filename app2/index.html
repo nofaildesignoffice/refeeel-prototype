@@ -769,14 +769,18 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
      좌우 — 세로축 둘레를 360도
      상하 — 20도까지만
    ⚠ 빛기둥·바닥·안개는 세로축에 대해 좌우 대칭이라, 좌우로 돌 때는 안 바뀌는 게
-     맞다. 그래서 그 넷은 영상(ins-r6)에 그대로 두고, 위아래로 젖힐 때만 민다.
+     맞다. 그래서 그 넷은 영상(ins-r7)에 그대로 두고, 위아래로 젖힐 때만 민다.
      파편과 코어만 실시간으로 그린다 — 파편이 시차로 쓸려야 '내가 돈다'가 보인다.
    .ins-scene 은 손을 받지 않는다. 손은 .ins-grab(코어 자리)만 받는다 —
    머리 전체가 손을 받으면 거기서는 화면을 세로로 밀 수 없다. */
 .ins-scene{position:absolute;inset:0;width:100%;height:100%;
   z-index:1;display:block;pointer-events:none;}
-.ins-grab{position:absolute;left:52%;top:35.3%;width:64%;aspect-ratio:1;
-  transform:translate(-50%,-50%);z-index:3;touch-action:none;cursor:grab;}
+/* 손잡이는 섹션 한가운데에 둔다(리건, 2026-11-09).
+   touch-action:none 은 이 안에서 손가락을 끌 때 화면이 밀리지 않게 한다.
+   글자 끌기(선택)도 막는다 — 휴대폰에서 끌면 선택이 먼저 잡혀 회전이 씹힌다. */
+.ins-grab{position:absolute;left:50%;top:50%;width:64%;aspect-ratio:1;
+  transform:translate(-50%,-50%);z-index:3;touch-action:none;cursor:grab;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
 .ins-grab:active{cursor:grabbing;}
 .ins-head .sec-head{position:relative;z-index:2;margin-bottom:0;}
 .ins-head .sec-title{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
@@ -2937,16 +2941,17 @@ body.free #scr-viewer .progress-thin{display:none;}
   <div class="scroll ins-scroll">
 
   <div class="ins-head">
-    <!-- 배경 영상 — 7초 · 끊김 없이 반복된다.
-         ins-r6 은 하늘·빛기둥·바닥·안개·자갈만 남긴 판이다. 이 넷은 세로축에 대해
+    <!-- 배경 영상 — 7초 · 끊김 없이 반복된다. 1208×1510 으로 굽는다 —
+         600 폭은 3배 화면에서 두 배로 늘어나 뭉갰다(리건, 2026-11-09).
+         ins-r7 은 하늘·빛기둥·바닥·안개·자갈만 남긴 판이다. 이 넷은 세로축에 대해
          좌우 대칭이라 카메라가 좌우로 돌 때 안 바뀌는 게 맞다.
          파편·코어·후광은 .ins-scene 이 실시간 3D 로 그린다.
          통째로 구운 판도 있다 — ins-r1(사람 있음) · ins-r2(사람 없음) ·
          ins-r3(사람·코어 없음). 성운은 ins-n1~n5, 첫 열 편은 ins-01~10.
          미리보기: /insreal/ · /insneb/ · /insvid/ -->
     <video class="ins-vid" autoplay muted loop playsinline preload="none"
-      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r6.jpg">
-      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r6.mp4" type="video/mp4">
+      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r7.jpg">
+      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r7.mp4" type="video/mp4">
     </video>
     <canvas class="ins-scene" aria-hidden="true"></canvas>
     <div class="ins-grab" aria-hidden="true"></div>
@@ -4920,7 +4925,7 @@ function lseg(key){
    코어가 제자리에서 도는 게 아니라, 보는 사람이 장면 둘레를 돈다(리건, 2026-11-09).
    코어는 화면에서 같은 자리·같은 크기를 지킨다 — 내가 그 둘레를 도는 중심이니까.
 
-   영상(ins-r6)에는 하늘·빛기둥·바닥·안개·자갈만 있다. 이 넷은 세로축에 대해
+   영상(ins-r7)에는 하늘·빛기둥·바닥·안개·자갈만 있다. 이 넷은 세로축에 대해
    좌우 대칭이라 좌우로 돌 때 안 바뀌는 게 맞다. 위아래로 젖힐 때만 민다.
    파편과 코어는 여기서 3D 로 그린다 — 파편이 시차로 쓸려야 '내가 돈다'가 보인다.
    코어 뒤의 파편은 앞의 파편과 반대로 흘러간다. 그게 가장 큰 신호다.
@@ -4990,28 +4995,49 @@ function lseg(key){
   function size(){
     const b = cvs.getBoundingClientRect();
     if(!b.width) return false;
-    dpr = Math.min(2, window.devicePixelRatio || 1);
+    /* 3배 화면에서 2배로 그리면 알갱이가 뭉갠다(리건, 2026-11-09) */
+    dpr = Math.min(3, window.devicePixelRatio || 1);
     S = Math.round(b.width * dpr); HC = Math.round(b.height * dpr);
     if(cvs.width !== S || cvs.height !== HC){ cvs.width = S; cvs.height = HC; }
     return true;
   }
 
   let yaw = 0, pitch = 0, spin = 0, drag = false, lx = 0, ly = 0, run = false;
-  grab.addEventListener("pointerdown", e => {
-    drag = true; spin = 0; lx = e.clientX; ly = e.clientY;
-    try { grab.setPointerCapture(e.pointerId); } catch(_){}
-  });
-  grab.addEventListener("pointermove", e => {
+
+  function start(x, y){ drag = true; spin = 0; lx = x; ly = y; }
+  function move(x, y){
     if(!drag) return;
-    const dx = e.clientX - lx, dy = e.clientY - ly;
-    lx = e.clientX; ly = e.clientY;
+    const dx = x - lx, dy = y - ly;
+    lx = x; ly = y;
     /* 먼 것이 손가락을 따라가게 맞춘다 — 가로는 그렇게 되는데 세로는 부호가
        반대였다(2026-11-09). 아래로 쓸면 멀리 있는 것이 아래로 내려와야 한다. */
     yaw += dx * 0.011; spin = dx * 0.011;
     pitch = Math.max(-TILT, Math.min(TILT, pitch - dy * 0.0045));
+  }
+  function end(){ drag = false; }
+
+  /* 휴대폰에서는 터치 이벤트로 받는다(리건, 2026-11-09 — 기기에서 안 돌아갔다).
+     포인터 이벤트는 마우스·펜만 받는다. 둘 다 받으면 한 번 쓴 것이 두 번 먹는다. */
+  grab.addEventListener("touchstart", e => {
+    const t = e.changedTouches[0]; start(t.clientX, t.clientY); e.preventDefault();
+  }, {passive: false});
+  grab.addEventListener("touchmove", e => {
+    const t = e.changedTouches[0]; move(t.clientX, t.clientY); e.preventDefault();
+  }, {passive: false});
+  ["touchend", "touchcancel"].forEach(k =>
+    grab.addEventListener(k, e => { end(); e.preventDefault(); }, {passive: false}));
+
+  grab.addEventListener("pointerdown", e => {
+    if(e.pointerType === "touch") return;
+    start(e.clientX, e.clientY);
+    try { grab.setPointerCapture(e.pointerId); } catch(_){}
+  });
+  grab.addEventListener("pointermove", e => {
+    if(e.pointerType === "touch") return;
+    move(e.clientX, e.clientY);
   });
   ["pointerup", "pointercancel"].forEach(k =>
-    grab.addEventListener(k, () => { drag = false; }));
+    grab.addEventListener(k, e => { if(e.pointerType !== "touch") end(); }));
 
   const far = [], near = [];
 
