@@ -2468,8 +2468,12 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .ins-head{margin-top:0;aspect-ratio:auto;height:auto;background:none;
     padding-top:26px;padding-bottom:0;}
   .ins-head .ins-vid,.ins-head .ins-scene,.ins-head .ins-grab{display:none;}
-  .ins-head .ins-title{margin-top:0;color:var(--text-black);text-shadow:none;}
-  .ins-head .ins-title+.ins-stat{margin-top:12px;}
+  /* 이름은 넓은 화면의 다른 섹션 제목과 같은 꼴이다 — 30px, 가운데.
+     지표가 가운데(margin-inline:auto)라 이름만 왼쪽에 있으면 짝이 안 맞는다.
+     머리가 생기기 전 .sec-head 가 서 있던 자리와 같다(리건, 2026-11-10). */
+  .ins-head .ins-title{margin-top:0;color:var(--text-black);text-shadow:none;
+    font-size:30px;letter-spacing:-0.8px;line-height:1.3;text-align:center;}
+  .ins-head .ins-title+.ins-stat{margin-top:18px;}
   .ins-head .ins-stat>div{background:var(--bg-white);border:var(--card-line);
     -webkit-backdrop-filter:none;backdrop-filter:none;}
   .ins-head .ins-stat b{color:var(--text-black);}
