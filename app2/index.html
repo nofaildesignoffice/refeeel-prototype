@@ -763,6 +763,18 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
   margin-top:calc(-1 * var(--topbar-h));padding:calc(16px + var(--topbar-h)) 16px 16px;}
 .ins-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   border:0;display:block;pointer-events:none;}
+/* ── 코어는 영상이 아니라 실시간 3D 점구름이다(리건, 2026-11-09) ──
+   좌우로 쓸면 360도 돌고, 위아래는 20도까지만 젖혀진다.
+   자리와 크기는 그대로고 보는 각도만 바뀐다.
+   ⚠ 영상(ins-r3)에는 후광만 남기고 알갱이를 빼 두었다 — 두 번 그리면 두 배로 밝다.
+     후광은 둥글어서 돌려도 같은 그림이라 영상에 두는 편이 싸다.
+   screen 합성이라 어두운 바탕 위에서 빛처럼 더해진다.
+   touch-action:none 이라 이 네모 안에서는 세로로 쓸어도 화면이 밀리지 않는다 —
+   네모 바깥은 그대로 스크롤된다. 그래서 네모를 코어만큼만 잡았다. */
+.ins-core{position:absolute;left:52%;top:35.3%;width:64%;aspect-ratio:1;
+  transform:translate(-50%,-50%);z-index:1;display:block;
+  mix-blend-mode:screen;touch-action:none;cursor:grab;}
+.ins-core:active{cursor:grabbing;}
 .ins-head .sec-head{position:relative;z-index:2;margin-bottom:0;}
 .ins-head .sec-title{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
 /* width:100% 가 필요하다 — 머리가 세로 flex 라서, 넓은 화면의 margin-inline:auto 와
@@ -2918,12 +2930,15 @@ body.free #scr-viewer .progress-thin{display:none;}
 
   <div class="ins-head">
     <!-- 배경 영상 — 5초 · 끊김 없이 반복된다. 다른 안으로 바꾸려면 파일 이름의 번호만 바꾼다
-         (ins-r1 참조 그대로 · ins-r2 사람 없이 · ins-n1~n5 성운 · ins-01~10 첫 열 편).
+         ins-r3 은 코어를 뺀 판이다 — 코어는 위 .ins-core 가 실시간으로 그린다.
+         알갱이까지 들어 있는 판은 ins-r1(사람 있음) · ins-r2(사람 없음)이고,
+         성운은 ins-n1~n5, 첫 열 편은 ins-01~10 이다.
          미리보기: /insreal/ · /insneb/ · /insvid/ -->
     <video class="ins-vid" autoplay muted loop playsinline preload="none"
-      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r1.jpg">
-      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r1.mp4" type="video/mp4">
+      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r3.jpg">
+      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r3.mp4" type="video/mp4">
     </video>
+    <canvas class="ins-core" aria-hidden="true"></canvas>
     <div class="sec-head"><span class="sec-title">나의 인사이트</span></div>
     <div class="ins-stat">
       <div><span>밑줄</span><b>10개</b></div>
@@ -4887,6 +4902,130 @@ function lseg(key){
   /* 탭을 눌러 이 화면이 다시 보이면 크기가 생긴다 — 그때 다시 잰다 */
   if(window.ResizeObserver) new ResizeObserver(read).observe(sc);
   read();
+})();
+
+/* ── 인사이트 머리의 3D 코어 ──
+   영상에서 알갱이를 빼고(ins-r3 는 후광만 있다) 여기서 실시간으로 그린다.
+   좌우로 쓸면 360도 돌고 위아래는 20도까지만 젖혀진다 — 자리는 그대로다.
+   알갱이는 공 안에 흩어져 있고, 각도마다 뻗은 길이가 달라 완전한 구슬은 아니다.
+   앞에 있는 알갱이가 더 크고 밝다 — 그래야 돌리는 맛이 난다.
+   라임은 알갱이 다섯에 하나꼴로만 섞고 속불도 옅게 깐다(리건: 은은하게).
+   영상과 같은 7초 주기로 흔들려서 둘이 따로 놀지 않는다. */
+(function(){
+  const cv = document.querySelector("#scr-library .ins-core");
+  if(!cv) return;
+  const ctx = cv.getContext("2d");
+  const TILT = 20 * Math.PI / 180;        /* 위아래는 여기까지만 */
+  const LIME = "223,240,0";
+
+  /* 알갱이 — 한 번만 만든다 */
+  const lobe = [];
+  for(let i = 0; i < 9; i++) lobe.push(0.72 + Math.random() * 0.42);
+  const PT = [];
+  for(let i = 0; i < 1500; i++){
+    const u = Math.random() * 2 - 1, th = Math.random() * 6.283185;
+    const s = Math.sqrt(1 - u * u);
+    const q = Math.pow(Math.random(), 0.62) * lobe[(th / 6.283185 * 9 | 0) % 9];
+    PT.push({x: s * Math.cos(th) * q, y: u * q, z: s * Math.sin(th) * q,
+             r: 0.42 + Math.random() * 0.78 + (Math.random() < 0.03 ? 1.5 : 0),
+             a: (0.78 - 0.50 * q) * (0.45 + Math.random() * 1.25),
+             lime: Math.random() < 0.20,
+             m: 1 + (Math.random() * 3 | 0), ph: Math.random(),
+             h1: Math.random() * 6.283185, h2: Math.random() * 6.283185,
+             w: 0.020 + Math.random() * 0.045});
+  }
+
+  /* 점 하나를 매번 그리면 느리다 — 번진 동그라미를 미리 구워 둔다 */
+  function sprite(rgb){
+    const n = 24, c = document.createElement("canvas");
+    c.width = c.height = n;
+    const g = c.getContext("2d").createRadialGradient(n/2, n/2, 0, n/2, n/2, n/2);
+    g.addColorStop(0, "rgba(" + rgb + ",1)");
+    g.addColorStop(0.42, "rgba(" + rgb + ",0.55)");
+    g.addColorStop(1, "rgba(" + rgb + ",0)");
+    const cc = c.getContext("2d");
+    cc.fillStyle = g; cc.fillRect(0, 0, n, n);
+    return c;
+  }
+  const SP_W = sprite("255,255,255"), SP_L = sprite(LIME);
+
+  let W = 0, H = 0, R = 0, dpr = 1;
+  function size(){
+    const b = cv.getBoundingClientRect();
+    if(!b.width) return false;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.round(b.width * dpr); H = Math.round(b.height * dpr);
+    if(cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
+    R = W * 0.236;                       /* 잰 값: 코어 가로 반지름 0.115W */
+    return true;
+  }
+
+  let yaw = 0, pitch = 0, spin = 0, drag = false, lx = 0, ly = 0, run = false;
+  cv.addEventListener("pointerdown", e => {
+    drag = true; spin = 0; lx = e.clientX; ly = e.clientY;
+    try { cv.setPointerCapture(e.pointerId); } catch(_){}
+  });
+  cv.addEventListener("pointermove", e => {
+    if(!drag) return;
+    const dx = e.clientX - lx, dy = e.clientY - ly;
+    lx = e.clientX; ly = e.clientY;
+    yaw += dx * 0.011; spin = dx * 0.011;
+    pitch = Math.max(-TILT, Math.min(TILT, pitch + dy * 0.0045));
+  });
+  ["pointerup", "pointercancel"].forEach(k =>
+    cv.addEventListener(k, () => { drag = false; }));
+
+  function draw(now){
+    if(!run) return;
+    requestAnimationFrame(draw);
+    if(!size()) return;
+    if(!drag){ yaw += spin; spin *= 0.94; if(Math.abs(spin) < 1e-4) spin = 0; }
+
+    const t = (now / 7000) % 1, w = t * 6.283185;
+    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const ox = W / 2, oy = H / 2;
+
+    ctx.clearRect(0, 0, W, H);
+    /* 속불 — 하얀 속과 옅은 라임 */
+    let g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.05);
+    g.addColorStop(0, "rgba(255,255,255,0.50)");
+    g.addColorStop(0.45, "rgba(255,255,255,0.10)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    g = ctx.createRadialGradient(ox, oy, 0, ox, oy, R * 1.30);
+    g.addColorStop(0, "rgba(" + LIME + ",0.13)");
+    g.addColorStop(0.55, "rgba(" + LIME + ",0.05)");
+    g.addColorStop(1, "rgba(" + LIME + ",0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    for(let i = 0; i < PT.length; i++){
+      const p = PT[i];
+      const px = p.x + p.w * Math.cos(w + p.h1);
+      const py = p.y + p.w * Math.sin(w + p.h2);
+      const pz = p.z + p.w * Math.cos(2 * w + p.h1);
+      const x1 = px * cy + pz * sy, z1 = pz * cy - px * sy;
+      const y2 = py * cp - z1 * sp,  z2 = py * sp + z1 * cp;
+      const dep = 0.60 + 0.40 * (z2 + 1) * 0.5;     /* 앞이 크고 밝다 */
+      const tw = 0.74 + 0.26 * Math.sin(6.283185 * (p.m * t + p.ph));
+      const a = p.a * dep * tw;
+      if(a <= 0.01) continue;
+      const s = Math.max(1.4, p.r * dpr * 2.6 * dep);
+      ctx.globalAlpha = Math.min(1, a);
+      ctx.drawImage(p.lime ? SP_L : SP_W,
+                    ox + x1 * R - s, oy + y2 * R - s, s * 2, s * 2);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* 화면에 들어와 있을 때만 돈다 */
+  if(window.IntersectionObserver){
+    new IntersectionObserver(es => {
+      const on = es.some(e => e.isIntersecting);
+      if(on && !run){ run = true; requestAnimationFrame(draw); }
+      else if(!on){ run = false; }
+    }, {threshold: 0}).observe(cv);
+  } else { run = true; requestAnimationFrame(draw); }
 })();
 
 /* 검색창에 적히는 말과 결과 수를 한 자리에서 바꾼다(리건, 2026-11-07).
