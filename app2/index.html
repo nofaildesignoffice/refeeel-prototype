@@ -215,14 +215,17 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 /* 동그라미가 가장자리에 붙어 보인다(리건, 2026-11-10). 아이콘 하나였을 때는
    16px 이 맞았는데, 40px 짜리 면이 되니 같은 값이 좁게 느껴진다 — 24px 로 띄운다.
    왼쪽(워드마크)은 그대로 16px 이다. */
-#scr-library>.topbar,#scr-home>.topbar{padding-right:24px;}
-#scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
+#scr-library>.topbar,#scr-home>.topbar,#scr-search>.topbar{padding-right:24px;}
+#scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap,
+#scr-search>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
   align-items:center;justify-content:center;
   border:1px solid var(--glass-line);background:var(--glass-bg);
   -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
-#scr-library>.topbar .bell-dot,#scr-home>.topbar .bell-dot{top:8px;right:9px;}
+#scr-library>.topbar .bell-dot,#scr-home>.topbar .bell-dot,
+#scr-search>.topbar .bell-dot{top:8px;right:9px;}
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
-  #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap{background:var(--bg-white);border-color:var(--border-light);}
+  #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap,
+  #scr-search>.topbar .bell-wrap{background:var(--bg-white);border-color:var(--border-light);}
 }
 /* 블러를 못 쓰는 브라우저에서는 반투명이 글씨를 먹는다 — 흰 바로 되돌린다 */
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
