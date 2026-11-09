@@ -242,9 +242,9 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    붙은 자리에서는 틈이 되지 못한다 — .seg-bar .seg 와 같은 이유다. */
 .search-top .seg.seg-top{margin-top:0;}
 #scr-search>.scroll{padding-top:var(--topbar-h);}
-/* 아래 가로선은 걷는다(리건, 2026-11-09). 좁은 화면에서만 걸리는 규칙이다 —
-   넓은 화면에는 상단바가 아예 없다(.topbar{display:none}). */
-#scr-search>.topbar{border-bottom:none;}
+/* 아래 가로선은 걷는다(리건, 2026-11-09 · 낙타AI 는 11-10). 좁은 화면에서만
+   걸리는 규칙이다 — 넓은 화면에는 상단바가 아예 없다(.topbar{display:none}). */
+#scr-search>.topbar,#scr-chat>.topbar{border-bottom:none;}
 /* ── 검색 화면의 상단바는 스크롤과 함께 밀려 올라간다(리건, 2026-11-09) ──
    내리면 내용과 같이 사라지고, 올리면 다시 나온다. JS 가 스크롤만큼 --tb-off 를 준다.
    머리(알약·검색바)도 같은 만큼 따라 올라간다 — 상단바만 비키면 그 자리가
