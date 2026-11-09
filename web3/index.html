@@ -361,8 +361,13 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    머리(알약·검색바)도 같은 만큼 따라 올라간다 — 상단바만 비키면 그 자리가
    빈 띠로 남아 머리가 허공에 뜬다. 넓은 화면에는 상단바가 아예 없으니
    (.topbar{display:none}) 여기 걸어도 데스크톱 위 네비는 그대로다. */
-#scr-search>.topbar,#scr-search .search-top,#scr-home>.topbar{
-  transform:translateY(calc(-1 * var(--tb-off, 0px)));}
+/* 상단바는 transform 이 아니라 top 으로 밀어 올린다 — 화면 전환 애니메이션
+   (scr-in-prev · animation-fill-mode:both)이 transform 을 이미 쓰고 있어서
+   애니메이션이 끝난 뒤에도 끝 키프레임 값이 내 값을 덮는다(실측, 2026-11-09).
+   머리(.search-top)는 애니메이션이 없으니 transform 으로 둔다 — sticky 라
+   top 은 제자리 울타리(부모 content box)보다 위로 못 올라간다. */
+#scr-search>.topbar,#scr-home>.topbar{top:calc(-1 * var(--tb-off, 0px));}
+#scr-search .search-top{transform:translateY(calc(-1 * var(--tb-off, 0px)));}
 .topbar .logo{font-size:13px;font-weight:700;letter-spacing:0.8px;}
 .topbar-right{display:flex;align-items:center;gap:12px;}
 /* 상단바의 멤버십 — 내 코킷 프로필의 것과 같은 알약이다. 높이만 상단바에 맞춘다 */
