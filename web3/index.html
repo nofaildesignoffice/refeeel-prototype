@@ -396,7 +396,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    제목을 왼쪽에 붙인다(리건, 2026-11-09). 가운데 정렬은 좌우의 빈 저울(.gnb-side)이
    맞춰 주던 것이라, 왼쪽 저울을 치우고 제목이 남은 자리를 다 쓰게 한다.
    아래 가로선은 좁은 화면에서만 걷는다. */
-#scr-my>.gnb{border-bottom:none;}
+/* 머리의 안쪽 여백은 12px 인데 아래 내용은 16px 이다 — 제목만 4px 왼쪽으로
+   튀어나와 보였다(리건, 2026-11-10). 왼쪽만 16px 로 맞춘다. 오른쪽 톱니는
+   아이콘이라 가장자리에 가까운 편이 자연스러워 그대로 둔다. */
+#scr-my>.gnb{border-bottom:none;padding-left:16px;}
 #scr-my>.gnb .gnb-side:first-child{display:none;}
 #scr-my>.gnb .gnb-title{flex:1;max-width:none;text-align:left;}
 .progress-thin{flex-shrink:0;height:3px;background:var(--border-light);}
