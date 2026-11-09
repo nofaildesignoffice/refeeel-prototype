@@ -760,7 +760,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    저전력 모드 등으로 영상이 서면 poster(첫 프레임)가 그림처럼 남는다. */
 .ins-head{position:relative;display:flex;flex-direction:column;overflow:hidden;
   aspect-ratio:4/5;background:#141414;
-  margin-top:calc(-1 * var(--topbar-h));padding:calc(16px + var(--topbar-h)) 16px 36px;}
+  margin-top:calc(-1 * var(--topbar-h));padding:calc(16px + var(--topbar-h)) 16px 16px;}
 .ins-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   border:0;display:block;pointer-events:none;}
 .ins-head .sec-head{position:relative;z-index:2;margin-bottom:0;}
@@ -786,12 +786,12 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    그만큼은 이미 비워져 있다. 여기에 또 --topbar-h 를 주면 52px 가 두 번 들어가
    띠가 상단바에서 52px 떨어진 허공에 매달린다. */
 /* 아래 내용이 영상 위로 20px 올라타고, 올라탄 모서리를 깎는다(리건, 2026-11-09).
-   그러려면 띠에 바탕이 있어야 한다 — 비어 있으면 깎을 면이 없다. 그 대신
-   전처럼 카드가 띠 뒤로 비쳐 보이지는 않는다. 바탕색은 화면과 같은 흰색이라
-   띠 아래로 이어지는 목록과 경계가 생기지 않는다.
-   ⚠ 겹친 만큼 머리의 아래 여백을 키워 두었다 — 안 그러면 지표 상자를 덮는다. */
-.seg-bar{position:sticky;top:0;z-index:20;background:var(--bg-white);
-  margin-top:-20px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:16px 0 10px;}
+   ⚠ 바탕은 붙었을 때만 켠다(리건, 2026-11-09). 늘 깔아 두면 알약의 유리가
+     흰 판을 블러해서 유리가 아니라 그냥 흰 알약이 된다 — 떠 있을 때는
+     영상과 카드가 알약 뒤로 지나가야 한다. .stuck 은 아래 스크립트가 붙인다. */
+.seg-bar{position:sticky;top:0;z-index:20;background:none;padding:10px 0;
+  margin-top:-20px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.seg-bar.stuck{background:var(--bg-white);}
 .seg-bar .seg{margin-top:0;}
 
 /* ── 모아보기 리더 ── */
@@ -4865,6 +4865,25 @@ function lseg(key){
   const sc = document.querySelector("#scr-library .ins-scroll");
   if(sc) sc.scrollTop = 0;
 }
+/* 전환 띠가 위에 붙으면 그때만 바탕을 흰색으로 켠다(리건, 2026-11-09).
+   떠 있을 때 바탕을 깔면 알약의 유리가 흰 판을 블러해서 유리로 보이지 않는다. */
+(function(){
+  const sc = document.querySelector("#scr-library .ins-scroll");
+  const bar = sc && sc.querySelector(".seg-bar");
+  if(!sc || !bar) return;
+  let queued = false;
+  const read = () => {
+    queued = false;
+    const top = sc.getBoundingClientRect().top
+              + parseFloat(getComputedStyle(sc).paddingTop || 0);
+    bar.classList.toggle("stuck", bar.getBoundingClientRect().top <= top + 0.5);
+  };
+  sc.addEventListener("scroll", () => {
+    if(!queued){ queued = true; requestAnimationFrame(read); }
+  }, {passive:true});
+  read();
+})();
+
 /* 검색창에 적히는 말과 결과 수를 한 자리에서 바꾼다(리건, 2026-11-07).
    낙타 큐레이션에서 넘어오면 묶음 이름이 적히고, 평소 검색에서는 기본 문구로 돌아간다 —
    돌려놓지 않으면 다음에 검색창을 눌렀을 때 지난 묶음 이름이 그대로 남아 있다. */
