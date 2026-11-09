@@ -205,7 +205,12 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    안에 넣고 머리를 sticky 로 붙였다. 전환 띠(.seg-bar)와 똑같은 방식이다.
    ⚠ top 은 0 이다 — 스크롤러에 이미 padding-top:var(--topbar-h) 가 있어서
      sticky 기준 사각형이 그만큼 내려와 있다. .seg-bar 와 같은 이유다. */
-.search-top{position:sticky;top:0;z-index:25;padding-bottom:10px;}
+.search-top{position:sticky;top:0;z-index:25;padding:10px 0;}
+/* 위에도 10px 을 둔다(리건, 2026-11-09) — 붙었을 때 상단바와 맞붙어 버리던 자리다.
+   인사이트 띠(.seg-bar)가 쓰는 간격과 같은 값이다.
+   알약의 margin-top 은 여기서 걷는다. 그대로 두면 마진이 겹쳐 밖으로 흘러 나가
+   붙은 자리에서는 틈이 되지 못한다 — .seg-bar .seg 와 같은 이유다. */
+.search-top .seg.seg-top{margin-top:0;}
 #scr-search>.scroll{padding-top:var(--topbar-h);}
 .topbar .logo{font-size:13px;font-weight:700;letter-spacing:0.8px;}
 .topbar-right{display:flex;align-items:center;gap:14px;}
@@ -596,13 +601,20 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .nk-cta .btn{display:inline-flex;width:auto;margin-top:18px;
   border-radius:var(--radius-full);padding:12px 20px;font-size:13px;font-weight:800;}
 .nk-cta .btn i,.nk-cta .btn svg{width:15px;height:15px;}
-.ai-card{position:relative;background:var(--bg-light);border:none;border-radius:var(--card-radius);padding:16px;}
+/* ── 낙타AI 권유 카드 ──
+   바탕은 진한 회색이다(리건, 2026-11-09). 목록 사이에서 혼자 어둡게 서서 눈에 걸린다.
+   글자는 바탕을 따라 뒤집었다 — 제목은 흰색, 본문은 흰색을 묽혀 한 단 낮춘다.
+   머리 아이콘만 브랜드 라임이다. 어두운 바탕 위라 라임이 가장 밝게 뜬다
+   (라임 '위에' 흰 글자를 올리는 것과는 다른 이야기다). */
+.ai-card{position:relative;background:var(--bg-dark);border:none;border-radius:var(--card-radius);padding:16px;}
 .ac-close{position:absolute;top:10px;right:10px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;}
-.ac-close i,.ac-close svg{width:14px;height:14px;color:var(--text-light);}
+.ac-close i,.ac-close svg{width:14px;height:14px;color:rgba(255,255,255,.45);}
 .ai-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-right:26px;}
-.ai-card .ac-head i,.ai-card .ac-head svg{width:16px;height:16px;}
-.ai-card .ac-head b{font-size:13px;font-weight:800;}
-.ai-card p{font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:12px;}
+.ai-card .ac-head i,.ai-card .ac-head svg{width:16px;height:16px;color:var(--brand);}
+.ai-card .ac-head b{font-size:13px;font-weight:800;color:var(--bg-white);}
+.ai-card p{font-size:12px;color:rgba(255,255,255,.72);line-height:1.6;margin-bottom:12px;}
+/* 버튼은 흰 바탕 그대로다 — 어두운 카드 위에서 눌릴 곳이 가장 또렷하다 */
+.ai-card .btn-secondary{border-color:transparent;}
 
 /* 검색 */
 .search-input{display:flex;align-items:center;gap:8px;background:var(--bg-white);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-light);cursor:pointer;}
