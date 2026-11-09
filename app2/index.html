@@ -769,7 +769,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
      좌우 — 세로축 둘레를 360도
      상하 — 20도까지만
    ⚠ 빛기둥·바닥·안개는 세로축에 대해 좌우 대칭이라, 좌우로 돌 때는 안 바뀌는 게
-     맞다. 그래서 그 넷은 영상(ins-r7)에 그대로 두고, 위아래로 젖힐 때만 민다.
+     맞다. 그래서 그 넷은 영상(ins-r8)에 그대로 두고, 위아래로 젖힐 때만 민다.
      파편과 코어만 실시간으로 그린다 — 파편이 시차로 쓸려야 '내가 돈다'가 보인다.
    .ins-scene 은 손을 받지 않는다. 손은 .ins-grab(코어 자리)만 받는다 —
    머리 전체가 손을 받으면 거기서는 화면을 세로로 밀 수 없다. */
@@ -2943,15 +2943,17 @@ body.free #scr-viewer .progress-thin{display:none;}
   <div class="ins-head">
     <!-- 배경 영상 — 7초 · 끊김 없이 반복된다. 1208×1510 으로 굽는다 —
          600 폭은 3배 화면에서 두 배로 늘어나 뭉갰다(리건, 2026-11-09).
-         ins-r7 은 하늘·빛기둥·바닥·안개·자갈만 남긴 판이다. 이 넷은 세로축에 대해
+         ins-r8 은 빛기둥을 가로 정중앙으로 옮긴 판이다 — 잰 값은 0.52 였는데
+         화면에서 오른쪽으로 쏠려 보였다. 하늘·빛기둥·바닥·안개·자갈만 있고,
+         이 넷은 세로축에 대해
          좌우 대칭이라 카메라가 좌우로 돌 때 안 바뀌는 게 맞다.
          파편·코어·후광은 .ins-scene 이 실시간 3D 로 그린다.
          통째로 구운 판도 있다 — ins-r1(사람 있음) · ins-r2(사람 없음) ·
          ins-r3(사람·코어 없음). 성운은 ins-n1~n5, 첫 열 편은 ins-01~10.
          미리보기: /insreal/ · /insneb/ · /insvid/ -->
     <video class="ins-vid" autoplay muted loop playsinline preload="none"
-      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r7.jpg">
-      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r7.mp4" type="video/mp4">
+      poster="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r8.jpg">
+      <source src="https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/ins-r8.mp4" type="video/mp4">
     </video>
     <canvas class="ins-scene" aria-hidden="true"></canvas>
     <div class="ins-grab" aria-hidden="true"></div>
@@ -4925,7 +4927,7 @@ function lseg(key){
    코어가 제자리에서 도는 게 아니라, 보는 사람이 장면 둘레를 돈다(리건, 2026-11-09).
    코어는 화면에서 같은 자리·같은 크기를 지킨다 — 내가 그 둘레를 도는 중심이니까.
 
-   영상(ins-r7)에는 하늘·빛기둥·바닥·안개·자갈만 있다. 이 넷은 세로축에 대해
+   영상(ins-r8)에는 하늘·빛기둥·바닥·안개·자갈만 있다. 이 넷은 세로축에 대해
    좌우 대칭이라 좌우로 돌 때 안 바뀌는 게 맞다. 위아래로 젖힐 때만 민다.
    파편과 코어는 여기서 3D 로 그린다 — 파편이 시차로 쓸려야 '내가 돈다'가 보인다.
    코어 뒤의 파편은 앞의 파편과 반대로 흘러간다. 그게 가장 큰 신호다.
@@ -4958,6 +4960,14 @@ function lseg(key){
                m: 1 + (Math.random() * 3 | 0), ph: Math.random(),
                h1: Math.random() * 6.283185, h2: Math.random() * 6.283185,
                w: 0.020 + Math.random() * 0.045});
+  }
+  /* 각도마다 뻗은 길이를 달리했더니 덩이의 무게중심이 한쪽으로 쏠린다.
+     밝기로 가중한 중심을 빼서 화면 가운데에 오게 맞춘다(리건, 2026-11-09). */
+  {
+    let sx = 0, sy = 0, sz = 0, sw = 0;
+    for(const p of CORE){ sx += p.x * p.a; sy += p.y * p.a; sz += p.z * p.a; sw += p.a; }
+    sx /= sw; sy /= sw; sz /= sw;
+    for(const p of CORE){ p.x -= sx; p.y -= sy; p.z -= sz; }
   }
 
   /* 파편 — 처음 각도에서 잰 분포 그대로 보이도록 화면에 뿌리고 깊이를 준다.
@@ -5078,7 +5088,7 @@ function lseg(key){
     const t = (now / 7000) % 1, w = t * 6.283185;
     const ct = Math.cos(yaw), st = Math.sin(yaw);
     const cp = Math.cos(pitch), sp = Math.sin(pitch);
-    const cx = 0.52 * S, cy = 0.353 * HC;
+    const cx = 0.50 * S, cy = 0.353 * HC;   /* 가로 정중앙(리건, 2026-11-09) */
     const D = 2.0 * S;                       /* 카메라까지 거리 */
     const R = 0.151 * S;                     /* 잰 값: 코어 가로 반지름 */
     const PX = S / 604;                      /* 잰 값은 604 폭 기준이다 */
