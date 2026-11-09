@@ -212,6 +212,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-library>.topbar{background:none;border-bottom-color:transparent;
   justify-content:flex-end;
   -webkit-backdrop-filter:none;backdrop-filter:none;}
+/* 동그라미가 가장자리에 붙어 보인다(리건, 2026-11-10). 아이콘 하나였을 때는
+   16px 이 맞았는데, 40px 짜리 면이 되니 같은 값이 좁게 느껴진다 — 24px 로 띄운다.
+   왼쪽(워드마크)은 그대로 16px 이다. */
+#scr-library>.topbar,#scr-home>.topbar{padding-right:24px;}
 #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
   align-items:center;justify-content:center;
   border:1px solid var(--glass-line);background:var(--glass-bg);
