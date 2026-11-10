@@ -404,6 +404,28 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    튀어나와 보였다(리건, 2026-11-10). 왼쪽만 16px 로 맞춘다. 오른쪽 톱니는
    아이콘이라 가장자리에 가까운 편이 자연스러워 그대로 둔다. */
 #scr-my>.gnb{border-bottom:none;padding-left:16px;}
+/* ── 내 코킷의 머리와 두 탭 띠(리건, 2026-11-10) ──
+   머리는 위에 고정하지 않는다 — 내리면 사라지고 올리면 돌아온다. 다른 화면의
+   상단바와 같은 방식이라 같은 --tb-off 를 쓴다. 밀어 올리려면 떠 있어야 하니
+   제자리에서 떼어 내고, 그 높이만큼 스크롤러를 비워 둔다.
+   ⚠ transform 이 아니라 top 으로 민다 — .gnb 는 .screen 의 바로 아래 자식이라
+     화면 전환 애니메이션(scr-in-prev · fill-mode:both)의 끝 키프레임 transform:none
+     이 내 transform 을 덮는다. 상단바에서 겪은 것과 같은 자리다.
+   탭 띠는 프로필 아래 붙어 있던 것을 떼어 내 제 띠로 세운다 — 위 띠(코킷·시리즈)가
+   맨 위에 붙고, 아래 띠(읽는 중·완독·저장)가 그 바로 밑에 붙는다. 아래 띠가 붙을
+   자리는 위 띠의 높이다 — 재서 --myseg-h 로 넣는다(아래 스크립트). 글꼴이 달라지면
+   66px 이 아니기 때문이다.
+   ⚠ sticky 의 top 은 0 이다 — 스크롤러에 padding-top 이 있어 기준 사각형이
+     그만큼 내려와 있다. .search-top · .seg-bar 와 같은 이유다.
+   ⚠ 두 띠 모두 머리와 같은 만큼 따라 올라간다 — 머리만 비키면 그 자리가 빈 띠로
+     남아 띠들이 허공에 뜬다. 띠는 애니메이션이 없으니 transform 으로 둔다. */
+#scr-my>.gnb{position:absolute;top:calc(-1 * var(--tb-off, 0px));left:0;right:0;z-index:30;}
+#scr-my>.scroll{padding-top:var(--topbar-h);}
+#scr-my .my-segbar{position:sticky;top:0;z-index:20;background:var(--bg-white);padding:10px 0;
+  transform:translateY(calc(-1 * var(--tb-off, 0px)));}
+#scr-my .my-segbar .seg{margin-top:0;}
+#scr-my .seg2{position:sticky;top:var(--myseg-h, 66px);z-index:19;background:var(--bg-white);
+  transform:translateY(calc(-1 * var(--tb-off, 0px)));}
 #scr-my>.gnb .gnb-side:first-child{display:none;}
 #scr-my>.gnb .gnb-title{flex:1;max-width:none;text-align:left;}
 .progress-thin{flex-shrink:0;height:3px;background:var(--border-light);}
@@ -2473,6 +2495,13 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   .bottomnav,.topbar,.mfoot{display:none;}
   /* 가로선을 걷은 것은 좁은 화면에서다(리건, 2026-11-09) — 여기서는 되돌린다 */
   #scr-my>.gnb{border-bottom:1px solid var(--border-light);}
+  /* 머리를 띄우고 두 띠를 붙인 것은 좁은 화면이다(리건, 2026-11-10) — 여기서는
+     되돌린다. 넓은 화면의 머리는 제자리에 있는 큰 제목이고, 위 네비가 따로 있다. */
+  #scr-my>.gnb{position:static;top:auto;}
+  #scr-my>.scroll{padding-top:0;}
+  #scr-my .my-segbar{position:static;background:none;padding:0;transform:none;}
+  #scr-my .my-segbar .seg{margin-top:14px;}
+  #scr-my .seg2{position:static;background:none;transform:none;}
   /* 상단바가 없으니 그 자리를 비워 둘 이유도 없다(모바일 쪽 규칙을 되돌린다). */
   #scr-chat>.scroll,#scr-library>.ins-scroll{padding-top:0;}
   /* 넓은 화면에는 상단바가 없다 — 위로 당기지 않는다. 4:5 그대로면 750px 이라 너무 깊다 */
@@ -6044,10 +6073,12 @@ body.modal-open #scr-interest .ord-sub,
     <!-- 코킷과 시리즈는 세는 단위가 다르다(리건, 2026-08-19).
          코킷은 한 편씩 읽고 끝나지만 시리즈는 여러 편을 이어 듣는 묶음이라
          '읽는 중·완독·저장'이라는 축이 애초에 걸리지 않는다. 그래서 축을 하나 위로 올렸다. -->
-    <div class="seg">
-      <span class="seg-ink"></span>
-      <button data-myseg="kit" class="on">코킷</button>
-      <button data-myseg="series">시리즈</button>
+    <div class="my-segbar">
+      <div class="seg">
+        <span class="seg-ink"></span>
+        <button data-myseg="kit" class="on">코킷</button>
+        <button data-myseg="series">시리즈</button>
+      </div>
     </div>
 
     <div class="myseg-view on" id="myseg-kit">
@@ -8216,17 +8247,21 @@ function lseg(key){
    스크롤한 만큼 1:1 로 밀어 올린다. '같이 사라지는' 느낌은 톡 숨는 것보다 이쪽이다.
    넓은 화면에서는 상단바가 display:none 이라 높이가 0 이다 — 그때는 아무것도 하지 않는다. */
 (function(){
-  ["scr-search", "scr-home", "scr-library"].forEach(hide);
+  ["scr-search", "scr-home", "scr-library", "scr-my"].forEach(hide);
   function hide(id){
   const sec = document.getElementById(id);
   const sc = sec && sec.querySelector(":scope > .scroll");
-  const bar = sec && sec.querySelector(":scope > .topbar");
+  /* 내 코킷의 머리는 .topbar 가 아니라 .gnb 다(2026-11-10) */
+  const bar = sec && sec.querySelector(":scope > .topbar, :scope > .gnb");
   if(!sc || !bar) return;
   let off = 0, last = sc.scrollTop, queued = false;
   const read = () => {
     queued = false;
     const H = bar.offsetHeight;
-    if(!H){                                  /* 데스크톱 — 치운 적도 없게 되돌린다 */
+    /* 떠 있지 않은 머리는 밀 수 없다 — 넓은 화면의 내 코킷은 머리가 제자리에 있는
+       큰 제목이라 손대지 않는다(2026-11-10). 상단바는 거기서 아예 display:none 이라
+       높이가 0 이다. 둘 중 하나라도 걸리면 치운 적도 없게 되돌린다. */
+    if(!H || getComputedStyle(bar).position !== "absolute"){
       if(off){ off = 0; sec.style.setProperty("--tb-off", "0px"); }
       last = sc.scrollTop; return;
     }
@@ -8240,6 +8275,18 @@ function lseg(key){
     if(!queued){ queued = true; requestAnimationFrame(read); }
   }, {passive:true});
   }
+})();
+
+/* 아래 띠(읽는 중·완독·저장)는 위 띠(코킷·시리즈) 높이만큼 내려가 붙는다(리건, 2026-11-10).
+   높이는 재서 넣는다 — 글꼴이나 글자 크기가 달라지면 66px 이 아니다.
+   넓은 화면에서는 두 띠가 제자리에 있어 이 값이 쓰이지 않는다. */
+(function(){
+  const sec = document.getElementById("scr-my");
+  const bar = sec && sec.querySelector(".my-segbar");
+  if(!bar) return;
+  const put = () => sec.style.setProperty("--myseg-h", bar.offsetHeight + "px");
+  put();
+  if(window.ResizeObserver) new ResizeObserver(put).observe(bar);
 })();
 
 /* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 바탕을 걷는다.
