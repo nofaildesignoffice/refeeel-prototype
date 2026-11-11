@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>읽는 서비스에서 만드는 서비스로 — 코멜 AI 방향 제안</title>
+<meta name="description" content="고객이 쌓는 기록으로 코멜이 만들 수 있는 AI 솔루션. 리텐션 관점의 방향 제안 리포트.">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.22);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);
+  color:var(--text-black);-webkit-font-smoothing:antialiased;
+  font-size:15px;line-height:1.8;letter-spacing:-0.25px;}
+a{color:inherit;}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px 120px;}
+
+/* ── 머리 ── */
+.hd{padding:52px 0 30px;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--text-light);}
+.hd h1{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.35;margin-top:12px;}
+.hd h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--brand-soft) 62%);}
+.hd .sub{font-size:15px;line-height:1.85;color:var(--text-gray);margin-top:16px;}
+.hd .meta{margin-top:20px;padding-top:16px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);display:flex;flex-wrap:wrap;gap:6px 16px;}
+.hd .meta b{font-weight:700;color:var(--text-gray);}
+
+/* ── 차례 ── */
+.toc{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:18px 20px;margin-bottom:34px;}
+.toc h2{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+.toc ol{margin:10px 0 0;padding-left:0;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2px 20px;}
+.toc li{font-size:13.5px;}
+.toc a{text-decoration:none;color:var(--text-dark);}
+.toc a:hover{color:var(--text-black);background:var(--brand-soft);}
+.toc span{display:inline-block;width:22px;font-weight:800;color:var(--text-muted);}
+
+/* ── 절 ── */
+section{margin-bottom:46px;scroll-margin-top:18px;}
+h2.sec{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+h2.sec b{display:inline-block;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 6px;margin-right:8px;letter-spacing:0.4px;}
+h3.ttl{font-size:22px;font-weight:800;letter-spacing:-0.7px;line-height:1.4;margin-top:9px;}
+h4{font-size:16px;font-weight:800;letter-spacing:-0.4px;margin-top:26px;}
+p{margin-top:13px;color:var(--text-dark);}
+p.lead{font-size:16px;color:var(--text-black);}
+.muted{color:var(--text-gray);font-size:13.5px;}
+b.k{font-weight:800;color:var(--text-black);}
+mark{background:var(--brand-soft);color:inherit;padding:0 2px;border-radius:2px;}
+
+/* 카드 */
+.card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:20px 22px;margin-top:16px;}
+.card.lime{border-color:var(--brand);background:var(--bg-light);}
+.card.dark{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.card.dark p,.card.dark li{color:#E8E8E8;}
+.card.dark b.k{color:var(--bg-white);}
+.card.dark .cap{color:#9A9A9A;}
+.card.line{border-style:dashed;border-color:var(--border-default);background:none;}
+.card h4{margin-top:0;}
+.card p:first-child{margin-top:0;}
+.cap{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+
+/* 한 줄 결론 */
+.punch{font-size:19px;font-weight:800;line-height:1.65;letter-spacing:-0.6px;}
+.punch .lime{background:linear-gradient(transparent 60%,var(--brand) 60%);}
+
+/* 표 */
+.tb{width:100%;border-collapse:collapse;margin-top:16px;font-size:13.5px;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;}
+.tb th,.tb td{text-align:left;padding:11px 13px;border-bottom:var(--card-line);
+  vertical-align:top;line-height:1.65;}
+.tb th{background:var(--bg-light);font-weight:800;font-size:12px;
+  letter-spacing:-0.2px;color:var(--text-black);white-space:nowrap;}
+.tb tr:last-child td{border-bottom:0;}
+.tb td b{font-weight:800;}
+.tb .num{white-space:nowrap;color:var(--text-gray);}
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.scrollx .tb{min-width:620px;}
+
+/* 꼬리표 */
+.pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:-0.2px;
+  border-radius:var(--radius-full);padding:2px 9px;border:1px solid var(--border-default);
+  color:var(--text-gray);background:var(--bg-white);white-space:nowrap;}
+.pill.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.pill.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.pill.hi{border-color:var(--text-black);color:var(--text-black);}
+
+/* 목록 */
+ul.li,ol.li{margin-top:12px;padding-left:19px;}
+ul.li li,ol.li li{margin-top:7px;color:var(--text-dark);}
+ul.li li::marker{color:var(--text-muted);}
+ol.li li::marker{font-weight:800;color:var(--text-muted);}
+
+/* 솔루션 카드 */
+.sol{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:0;margin-top:14px;overflow:hidden;}
+.sol-hd{padding:16px 20px 14px;border-bottom:var(--card-line);}
+.sol-hd .no{display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:24px;padding:0 6px;border-radius:var(--radius-full);
+  background:var(--bg-black);color:var(--bg-white);font-size:11px;font-weight:800;}
+.sol-hd h4{display:inline;font-size:16.5px;margin-left:9px;}
+.sol-hd .one{margin-top:11px;font-size:14.5px;font-weight:700;color:var(--text-black);
+  line-height:1.65;letter-spacing:-0.4px;}
+.sol-hd .one::before{content:"“";display:block;font-size:24px;font-weight:800;line-height:.7;
+  color:var(--brand-press);margin-bottom:6px;}
+.sol-bd{padding:14px 20px 18px;display:grid;gap:9px;}
+.sol-bd .row{display:grid;grid-template-columns:76px 1fr;gap:12px;font-size:13px;line-height:1.7;}
+.sol-bd .row>span{font-size:11px;font-weight:800;letter-spacing:0.3px;color:var(--text-light);
+  padding-top:3px;}
+.sol-bd .row>div{color:var(--text-dark);}
+.sol-tags{padding:12px 20px;border-top:var(--card-line);background:var(--bg-light);
+  display:flex;flex-wrap:wrap;gap:6px;}
+.sol.pick{border-color:var(--brand);border-width:2px;}
+.sol.pick .sol-hd{background:var(--bg-light);}
+
+/* 세 기둥 */
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:16px;}
+.three .c{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);padding:16px 17px;}
+.three .c .n{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+.three .c h5{font-size:15px;font-weight:800;letter-spacing:-0.4px;margin-top:7px;}
+.three .c p{font-size:13px;line-height:1.75;color:var(--text-gray);margin-top:8px;}
+
+/* 흐름도 */
+.flow{background:var(--bg-black);border-radius:var(--radius-lg);padding:22px 20px;margin-top:16px;
+  overflow-x:auto;}
+.flow pre{font-family:'Pretendard',monospace;font-size:12.5px;line-height:2;color:#E8E8E8;
+  white-space:pre;letter-spacing:0;}
+.flow pre b{color:var(--brand);font-weight:800;}
+
+/* 위험 */
+.risk{border-left:3px solid var(--text-black);padding-left:16px;margin-top:20px;}
+.risk h5{font-size:15px;font-weight:800;letter-spacing:-0.4px;}
+.risk p{margin-top:8px;font-size:14px;}
+.risk .fix{margin-top:9px;padding:11px 13px;background:var(--bg-light);
+  border:var(--card-line);border-radius:var(--radius-sm);font-size:13px;line-height:1.75;}
+.risk .fix b{font-weight:800;}
+
+/* 단계 */
+.step{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:18px 0;border-top:var(--card-line);}
+.step:first-of-type{border-top:0;}
+.step .when{font-size:13px;font-weight:800;letter-spacing:-0.3px;}
+.step .when span{display:block;font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
+.step h5{font-size:16px;font-weight:800;letter-spacing:-0.4px;}
+.step p{margin-top:9px;font-size:14px;}
+
+/* 출처 */
+.src{font-size:12.5px;line-height:1.85;color:var(--text-gray);}
+.src li{margin-top:7px;}
+.src a{color:var(--text-dark);text-decoration:underline;text-underline-offset:2px;}
+
+.foot{margin-top:60px;padding-top:22px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);line-height:1.8;}
+
+@media (max-width:560px){
+  .hd{padding:36px 0 24px;}
+  .hd h1{font-size:24px;}
+  h3.ttl{font-size:19px;}
+  .wrap{padding:0 16px 90px;}
+  .step{grid-template-columns:1fr;gap:4px;}
+  .sol-bd .row{grid-template-columns:1fr;gap:1px;}
+  .sol-bd .row>span{padding-top:6px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hd">
+  <div class="kick">COMMEL · 방향 제안</div>
+  <h1>읽는 서비스에서 <em>만드는 서비스</em>로<br>— 고객이 쌓는 기록으로 무엇을 할 것인가</h1>
+  <p class="sub">리건의 질문: <b class="k">"지식 사업이라 리텐션이 떨어질 것 같다. 고객이 사업가라 지식을 원하긴 하지만, 실질적인 아웃풋이 없으면 이용하지 않을 것 같다. 고객이 쌓는 메모 같은 DB 와 우리가 더 얻을 수 있는 DB 로 제공할 AI 솔루션이 무엇일까."</b><br>
+  이 리포트는 그 질문에 <b class="k">방향</b>을 대는 문서다. 기능 명세서가 아니라, 무엇부터 고를지를 정하기 위한 재료다.</p>
+  <div class="meta">
+    <span><b>작성</b> 2026-11-12</span>
+    <span><b>대상</b> 리건 (기획 담당)</span>
+    <span><b>근거</b> 폴더 내 기획 문서 7종 · 코킷 89편 분석 · 웹 리서치 · 코덱스 교차 검토</span>
+  </div>
+</div>
+
+<nav class="toc">
+  <h2>차례</h2>
+  <ol>
+    <li><span>01</span><a href="#s1">결론 한 장</a></li>
+    <li><span>02</span><a href="#s2">리텐션이 떨어지는 진짜 자리</a></li>
+    <li><span>03</span><a href="#s3">우리가 이미 가진 데이터</a></li>
+    <li><span>04</span><a href="#s4">데이터를 솔루션으로 바꾸는 세 층</a></li>
+    <li><span>05</span><a href="#s5">AI 솔루션 열다섯 가지</a></li>
+    <li><span>06</span><a href="#s6">고른 셋과 그 이유</a></li>
+    <li><span>07</span><a href="#s7">제품 정의가 어떻게 바뀌나</a></li>
+    <li><span>08</span><a href="#s8">반대 의견 — 이 방향의 함정</a></li>
+    <li><span>09</span><a href="#s9">90일 · 6개월 · 1년</a></li>
+    <li><span>10</span><a href="#s10">리건이 정해야 할 것</a></li>
+    <li><span>11</span><a href="#s11">코덱스 교차 검토</a></li>
+    <li><span>12</span><a href="#s12">출처</a></li>
+  </ol>
+</nav>
+
+<!-- ───────────── 1 ───────────── -->
+<section id="s1">
+  <h2 class="sec"><b>01</b>결론 한 장</h2>
+  <h3 class="ttl">읽을거리를 더 좋게 만들어도 리텐션은 안 올라간다</h3>
+  <p class="lead">리건의 직감이 맞다. 다만 원인을 한 칸 더 들어가야 한다. 지식 서비스가 버려지는 이유는 <b class="k">콘텐츠가 부족해서가 아니라 쓸 일이 없어서</b>다. 읽은 것은 기억에 저장되고, 기억은 일주일이면 증발한다. 증발한 뒤에는 구독을 유지할 근거가 남지 않는다.</p>
+
+  <div class="card lime">
+    <p class="punch">코멜이 팔아야 하는 것은 <span class="lime">"좋은 글 89편"이 아니라 "이 사람의 사업에 맞게 쓰인 89편"</span>이다.<br>
+    그 차이를 만드는 재료가 이미 우리 안에 쌓이고 있다 — 밑줄, 메모, 완독, 온보딩 응답.</p>
+  </div>
+
+  <h4>제안의 뼈대</h4>
+  <div class="three">
+    <div class="c">
+      <div class="n">① 다시 오게</div>
+      <h5>적용 루프</h5>
+      <p>"실제로 썼어요"를 묻고, 2주 뒤 결과를 본다. 재방문 이유가 <b class="k">발행 주기에서 분리</b>된다.</p>
+    </div>
+    <div class="c">
+      <div class="n">② 오늘 쓰게</div>
+      <h5>초안 만들기</h5>
+      <p>내 밑줄과 내 업종으로 이번 주 올릴 글의 초안을 뽑는다. 들고 나가는 <b class="k">결과물</b>이 생긴다.</p>
+    </div>
+    <div class="c">
+      <div class="n">③ 못 떠나게</div>
+      <h5>내 브랜드 북</h5>
+      <p>쌓인 기록이 한 장의 문서가 된다. 해지하면 <b class="k">잃는 게 생긴다</b>.</p>
+    </div>
+  </div>
+
+  <p>이 셋은 따로 노는 기능이 아니라 한 고리다. 읽으면 기록이 쌓이고, 기록이 할 일이 되고, 할 일이 결과물이 되고, 결과물이 다시 기록이 된다. <b class="k">지금 코멜에는 이 고리에서 "읽으면 기록이 쌓인다" 한 칸만 있다.</b></p>
+
+  <div class="card line">
+    <div class="cap">가장 먼저 할 일 하나만 고른다면</div>
+    <p><b class="k">"이번 주에 올릴 인스타 게시물 하나"를 끝까지 완성해 주는 것 하나만 만든다.</b> 열두 가지를 다 열지 않고, 채널 하나 · 작업 하나 · 고객 한 묶음으로 좁힌다. 고객이 받는 것은 조언이 아니라 <b class="k">복사해서 올릴 수 있는 문안</b>이어야 한다.</p>
+    <p>그리고 그 끝에 <b class="k">"실제로 올렸어요"</b> 한 번 누르기를 붙인다. 이 한 번이 <b class="k">우리가 지금 못 가진 가장 비싼 데이터</b>(무엇을 만들어 실제로 썼는가)를 만든다. 고객이 고친 문장까지 남으면 그게 다음 결과물의 재료가 된다.</p>
+    <p class="muted">초안에서는 "완독 화면에 실행안 3개를 달자"를 먼저 꼽았는데, 코덱스 교차 검토 뒤에 순서를 바꿨다. 이유는 <a href="#s11">§11</a> 에 적었다.</p>
+  </div>
+</section>
+
+<!-- ───────────── 2 ───────────── -->
+<section id="s2">
+  <h2 class="sec"><b>02</b>리텐션이 떨어지는 진짜 자리</h2>
+  <h3 class="ttl">시장도 같은 방향으로 움직이고 있다</h3>
+
+  <p>오픈서베이 <b class="k">구독 서비스 트렌드 리포트 2026</b> 기준으로, 생성형 AI 유료 구독률은 <b class="k">22.7%</b> 로 전년 대비 <b class="k">8.4%p</b> 올라 조사 카테고리 중 상승 폭이 가장 컸다. 같은 조사에서 도서·웹툰 등을 포함한 <b class="k">콘텐츠 멤버십은 5.7%p 줄었다</b>. 사람들이 구독을 줄이는 게 아니라, <mark>읽는 구독을 끊고 시키는 구독을 남긴다</mark>.</p>
+
+  <p>해외 수치는 반대 방향의 경고도 같이 준다. 한 집계는 AI 네이티브 제품의 매출 유지율 중앙값이 일반 B2B SaaS 보다 낮고, <b class="k">월 250달러 이상 구간에서만</b> 일반 SaaS 수준으로 유지된다고 본다. 즉 <b class="k">AI 를 붙인다고 리텐션이 저절로 오르지 않는다.</b> 값이 싸고 대체 가능한 AI 기능은 더 빨리 버려진다. 벤치마크 수치들은 출처마다 정의가 달라 그대로 인용하기보다 방향만 읽는 게 맞다.</p>
+
+  <h4>지식 상품의 수명 곡선</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:150px">시점</th><th>고객에게 일어나는 일</th><th style="width:140px">지금 코멜의 대응</th></tr>
+    <tr><td><b>읽는 중</b></td><td>재미있다. 밑줄을 긋는다. 가치가 가장 높은 순간</td><td>있음 (리더기)</td></tr>
+    <tr><td><b>읽고 3일</b></td><td>내용이 흐려진다. "좋았는데 뭐였지"</td><td>없음</td></tr>
+    <tr><td><b>읽고 2주</b></td><td>적용 안 함. 사업은 그대로. 변화의 증거가 없다</td><td>없음</td></tr>
+    <tr><td><b>다음 결제일</b></td><td>"지난달에 이걸로 뭐가 달라졌지?" → 답이 없으면 해지</td><td>없음</td></tr>
+  </table>
+  </div>
+
+  <p>재방문 이유가 <b class="k">새 코킷 발행</b> 하나뿐이면, 방문 횟수의 상한은 발행 주기가 정한다. 주 1편이면 주 1회가 최대고, 그 1회를 놓친 주가 쌓이면 그대로 이탈이다. 외부 자료들도 공통적으로 <b class="k">이탈의 선행 지표는 "쓸모가 줄었다는 체감"</b>이라고 본다. 카테고리가 사라져서 떠나는 게 아니다.</p>
+
+  <div class="card dark">
+    <div class="cap">그래서 리텐션 질문을 이렇게 바꾼다</div>
+    <p class="punch" style="color:var(--bg-white)">"어떻게 더 자주 읽게 할까"가 아니라<br>
+    <span style="color:var(--brand)">"읽지 않는 날에도 열 이유가 무엇인가"</span></p>
+    <p>이 질문의 답은 콘텐츠가 아니라 <b class="k">고객 자신의 데이터</b>에서만 나온다. 남의 글은 다 읽으면 끝이지만, 내 기록은 쌓일수록 무거워진다.</p>
+  </div>
+</section>
+
+<!-- ───────────── 3 ───────────── -->
+<section id="s3">
+  <h2 class="sec"><b>03</b>우리가 이미 가진 데이터</h2>
+  <h3 class="ttl">재료는 생각보다 많고, 한 칸이 비어 있다</h3>
+
+  <div class="card line">
+    <div class="cap">먼저 — 코덱스 교차 검토에서 고친 것</div>
+    <p>초안에서는 이 절을 "지금 쌓이고 있는 것"으로 적었는데, <b class="k">그렇게 쓰면 안 된다.</b> 코덱스가 짚은 대로 우리가 가진 건 세 종류가 섞여 있고 성격이 전혀 다르다.</p>
+    <ul class="li">
+      <li><b class="k">문서상 구현되어 있는 것</b> — 재기획 문서가 기존 구현으로 적어 둔 것(리더기 하이라이트·저장, 완독·이탈 집계). 실제 적재량과 누락률은 <b class="k">운영 DB 를 열어 봐야</b> 안다.</li>
+      <li><b class="k">기획만 된 것</b> — 온보딩은 <b class="k">draft</b> 다. 그래서 <b class="k">기존 회원 6,021명의 업종·채널·고민 데이터는 없다고 보는 게 맞다</b>. 미니 컨설팅도 현재 개발 범위 밖이다.</li>
+      <li><b class="k">프로토타입 화면에만 있는 것</b> — 메모 숫자와 기록 목록은 <b class="k">샘플 값</b>이다. 화면에 있다는 게 DB 가 돈다는 증거가 아니다.</li>
+    </ul>
+    <p>그래서 아래 표의 "있다"는 <b class="k">문서가 그렇게 적어 뒀다</b>는 뜻이다. 90일 과제의 1번이 <b class="k">실제 적재 현황 확인</b>인 이유이기도 하다.</p>
+  </div>
+
+  <h4>A. 문서상 이미 있는 것</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:132px">데이터</th><th>내용</th><th style="width:200px">이걸로 알 수 있는 것</th></tr>
+    <tr><td><b>코킷 89편</b></td><td>본문 · 제목 · 소제목 · 사례. 가장 확실한 자산</td><td>답변의 <b>근거</b>와 제작 원칙</td></tr>
+    <tr><td><b>밑줄</b></td><td>문장 단위. <span class="muted">리더기 하이라이트로 구현 명시</span></td><td>이 사람이 <b>무엇에 반응</b>하는가<br><span class="muted">다만 감탄인지 반대인지 나중에 볼 것인지는 구분 못 한다</span></td></tr>
+    <tr><td><b>완독 · 이탈</b></td><td>어디까지 읽고 덮었는지. <span class="muted">관리자 분석에 있음</span></td><td>관심의 <b>깊이</b>와 콘텐츠 품질</td></tr>
+    <tr><td><b>태그</b></td><td>채널 5 · 유형 4 · 주제. <span class="muted">템플릿 유형 17편</span></td><td>작업에 맞는 <b>근거를 골라내는 축</b></td></tr>
+    <tr><td><b>회원 원장</b></td><td>6,021명 · 권한 · 구독 상태</td><td>집계로 <b>비교 기준</b>을 만들 최소 모수</td></tr>
+  </table>
+  </div>
+  <p class="muted">주의 — 태그 문서의 주제 12개는 <b>옛 체계</b>다. 지금 기준은 AGENTS.md 의 여덟 가지(콘텐츠 · 브랜딩 · 전환 · 매출 · 소비자 심리 · AI · 프롬프트 · 사업 성장)이고, 새 기능은 이쪽을 따라야 한다. 그리고 콘텐츠에 적힌 <b>4 MIN READ</b> 는 89편 중 76편이 템플릿 기본값이라 실제 읽기 시간으로 쓰면 안 된다.</p>
+
+  <h4>A-2. 기획은 됐지만 아직 없는 것 — 있다고 전제하면 안 된다</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:132px">데이터</th><th>지금 상태</th><th style="width:170px">영향</th></tr>
+    <tr><td><b>온보딩 응답</b></td><td>업종 · 단계 · 채널 · 고민(C1~C9) 설계는 끝. 문서는 draft, 기존 회원은 미경험</td><td>맥락 층의 <b>모수가 0 에 가깝다</b></td></tr>
+    <tr><td><b>메모</b></td><td>화면은 있으나 운영 저장·동기화 미확인</td><td>메모를 전제한 기능은 <b>전부 가정 위에 선다</b></td></tr>
+    <tr><td><b>검색어 · 대화</b></td><td>검색 동작 기록 여부 미확인. 챗봇은 외부 위젯이라 회원 연결 가능 여부부터 확인해야 함</td><td>수요 지도의 재료가 비어 있을 수 있다</td></tr>
+    <tr><td><b>미니 컨설팅</b></td><td>기획 v1 은 있으나 현재 개발 범위 밖</td><td>제공 중인 서비스로 취급하면 안 된다</td></tr>
+  </table>
+  </div>
+
+  <h4>B. 조금만 더 하면 얻는 것 — 고객에게 더 묻지 않아도 되는 것</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:132px">데이터</th><th>얻는 방법</th><th style="width:120px">드는 품</th></tr>
+    <tr><td><b>실행 의향</b></td><td>완독 화면에서 실행안 3개 중 하나 고르기. 고르는 행위가 곧 데이터</td><td><span class="pill on">낮음</span></td></tr>
+    <tr><td><b>적용 여부</b></td><td>2주 뒤 "했다 / 안 했다 / 하다 말았다" 한 번 누르기</td><td><span class="pill on">낮음</span></td></tr>
+    <tr><td><b>막힌 지점</b></td><td>"안 했다"를 누르면 이유 한 줄. 이게 다음 코킷 주제가 된다</td><td><span class="pill on">낮음</span></td></tr>
+    <tr><td><b>기록 밀도</b></td><td>밑줄·메모 수를 주 단위로 집계. 이탈 예측의 선행 지표</td><td><span class="pill on">낮음</span></td></tr>
+    <tr><td><b>재방문 간격</b></td><td>이미 있는 접속 로그를 개인 화면으로 되돌려 주기만 하면 됨</td><td><span class="pill on">낮음</span></td></tr>
+  </table>
+  </div>
+
+  <h4>C. 고객에게 달라고 해야 하는 것 — 값을 주고 받아야 한다</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:132px">데이터</th><th>내용 · 받는 대가</th><th style="width:120px">받는 난이도</th></tr>
+    <tr><td><b>내 채널 주소</b></td><td>인스타 계정 · 상세페이지 URL. <span class="muted">미니 컨설팅 기획 2단계에 이미 설계됨</span>. 대가 = 진단</td><td><span class="pill hi">중간</span></td></tr>
+    <tr><td><b>내 숫자 3개</b></td><td>팔로워 · 문의 수 · 전환 같은 지표. 대가 = 2주 뒤 비교 리포트</td><td><span class="pill hi">중간</span></td></tr>
+    <tr><td><b>내 글 샘플</b></td><td>최근 올린 콘텐츠 몇 개. 대가 = 내 톤으로 쓰는 초안</td><td><span class="pill hi">중간</span></td></tr>
+    <tr><td><b>브랜드 기준</b></td><td>누구에게 · 왜 우리인가. 한 번 쓰면 계속 재사용</td><td><span class="pill ink">높음</span></td></tr>
+  </table>
+  </div>
+
+  <div class="card">
+    <h4>비어 있는 한 칸</h4>
+    <p>A 는 <b class="k">읽기 데이터</b>, C 는 <b class="k">사업 데이터</b>다. 둘을 잇는 게 B 의 <b class="k">"해봤는가"</b>인데, 지금 이 칸이 통째로 비어 있다. 그래서 코멜은 고객이 <b class="k">무엇을 읽었는지는 알지만 무엇이 달라졌는지는 모른다</b>. 리텐션을 설명할 수 없는 이유도, AI 가 똑똑해질 수 없는 이유도 같은 자리다.</p>
+    <p class="muted">재기획 문서 §2-4 가 이미 같은 말을 하고 있다 — 지표는 모이는데 관리자 분석용으로만 쓰이고, 고객 개인에게 되돌아가지 않는다.</p>
+  </div>
+</section>
+
+<!-- ───────────── 4 ───────────── -->
+<section id="s4">
+  <h2 class="sec"><b>04</b>데이터를 솔루션으로 바꾸는 세 층</h2>
+  <h3 class="ttl">AI 를 어디에 넣을지보다, 무엇을 먹일지가 먼저다</h3>
+  <p>아이디어를 나열하기 전에 층을 나눈다. 층을 건너뛰면 윗층이 재료 없이 돌아가 품질이 무너진다.</p>
+
+  <div class="flow"><pre>  <b>3층 · 실행</b>      내 사업에 쓸 결과물을 만든다     → 초안 · 진단 · 프롬프트
+       ↑        (3층은 2층 없이는 범용 챗봇과 같아진다)
+  <b>2층 · 맥락</b>      이 사람이 누구인지 AI 가 안다     → 프로필 · 밑줄 · 메모 · 적용 이력
+       ↑        (2층은 1층이 없으면 재료가 텅 빈다)
+  <b>1층 · 기억</b>      읽은 것이 증발하지 않게 한다      → 다시 꺼내기 · 묶어 보기 · 되짚기</pre></div>
+
+  <div class="three">
+    <div class="c">
+      <div class="n">1층 · 기억</div>
+      <h5>지금 거의 다 됐다</h5>
+      <p>밑줄·메모·보관함이 이미 있다. 빠진 건 <b class="k">다시 꺼내 주는 장치</b> 하나다. 비용이 가장 싸고 효과가 가장 빨리 보인다.</p>
+    </div>
+    <div class="c">
+      <div class="n">2층 · 맥락</div>
+      <h5>반쯤 있다</h5>
+      <p>온보딩 프로필은 있는데 <b class="k">적용 이력이 없다</b>. 2층이 얇으면 3층 아웃풋이 "일반론"이 되고, 그건 챗GPT 로도 나온다.</p>
+    </div>
+    <div class="c">
+      <div class="n">3층 · 실행</div>
+      <h5>아직 없다</h5>
+      <p>미니 컨설팅 기획이 유일한 3층 설계다. 여기가 <b class="k">리건이 말한 "실질적 아웃풋"</b>이 사는 층이다.</p>
+    </div>
+  </div>
+
+  <p>순서를 뒤집으면 흔한 실패로 간다. 3층부터 만들면 그럴듯한 데모가 빨리 나오지만, 먹일 맥락이 없어서 <b class="k">누가 써도 같은 답</b>이 나온다. 그 순간 코멜의 AI 는 공짜 챗봇과 구별되지 않고, 구독을 지킬 근거가 사라진다.</p>
+</section>
+
+<!-- ───────────── 5 ───────────── -->
+<section id="s5">
+  <h2 class="sec"><b>05</b>AI 솔루션 열다섯 가지</h2>
+  <h3 class="ttl">가능한 것을 다 펼쳐 놓고, 다음 절에서 셋으로 줄인다</h3>
+  <p class="muted">난이도는 기존 스택(Supabase + React + Capacitor) 위에서의 상대 평가다. <b>아웃풋</b> 칸은 리건의 기준 — "고객이 들고 나가서 실제 사업에 쓰는 물건인가".</p>
+
+  <!-- 1층 -->
+  <h4>1층 · 기억 — 읽은 것이 증발하지 않게</h4>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">01</span><h4>지난 기록 다시 꺼내기</h4>
+      <p class="one">3주 전에 밑줄 친 이 문장, 지금 다시 보기 좋은 때입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>밑줄 · 메모 · 읽은 날짜</div></div>
+      <div class="row"><span>작동</span><div>발행이 없는 날에도 열 이유를 만든다. 재방문이 발행 주기에서 떨어져 나온다</div></div>
+      <div class="row"><span>메모</span><div>AI 없이 규칙만으로도 70%는 된다. AI 는 "지금 이 사람 상황에 맞는 걸 고르기"에만 쓴다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 약함</span><span class="pill hi">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">02</span><h4>흩어진 기록 묶어 주기</h4>
+      <p class="one">콘텐츠 주제로 밑줄 11개를 치셨어요. 한 줄로 정리하면 이렇습니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>밑줄 + 주제 태그 12종</div></div>
+      <div class="row"><span>작동</span><div>기록이 쌓일수록 결과가 좋아진다 — 오래 쓴 사람이 더 못 떠난다</div></div>
+      <div class="row"><span>메모</span><div>요약이 아니라 <b>내가 반복해서 반응한 것</b>을 알려주는 게 핵심이다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 중간</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">03</span><h4>내 기록까지 같이 찾는 검색</h4>
+      <p class="one">"상세페이지" 로 검색하면 코킷 6편과 내가 쓴 메모 3개가 같이 나옵니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>코킷 본문 89편 + 내 밑줄·메모 (임베딩 검색)</div></div>
+      <div class="row"><span>작동</span><div>검색이 내 것을 찾는 통로가 되면, 기록을 쌓을 이유가 생긴다</div></div>
+      <div class="row"><span>메모</span><div>2층 전체의 토대이기도 하다. 한 번 깔면 아래 것들이 다 이 위에 선다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill">아웃풋 약함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <!-- 2층 -->
+  <h4>2층 · 맥락 — 이 사람이 누구인지 AI 가 알게</h4>
+
+  <div class="sol pick">
+    <div class="sol-hd"><span class="no">04</span><h4>메모를 할 일로 바꾸기</h4>
+      <p class="one">이번 주에 할 것 세 가지를 골라 뒀어요. 다 읽은 코킷에서 뽑았습니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>메모 · 밑줄 · 업종 · 고민(C1~C9)</div></div>
+      <div class="row"><span>작동</span><div>읽기가 <b>할 일</b>로 번역된다. 체크박스가 생기면 돌아올 약속이 생긴다</div></div>
+      <div class="row"><span>메모</span><div>고객이 고른 실행안이 곧 §03-B 의 빠진 데이터다. <b>이 기능이 다음 기능들의 연료를 만든다</b></div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill on">아웃풋 강함</span><span class="pill ink">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol pick">
+    <div class="sol-hd"><span class="no">05</span><h4>내 브랜드 북</h4>
+      <p class="one">기록 42개로 만든, 우리 브랜드의 기준 한 장입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>온보딩 프로필 + 전체 밑줄·메모 + 적용 이력</div></div>
+      <div class="row"><span>작동</span><div>해지하면 <b>잃는 게 생긴다</b>. 기록이 쌓일수록 문서가 두꺼워진다</div></div>
+      <div class="row"><span>메모</span><div>고객이 밖에서도 쓰는 물건(직원 교육 · 외주 브리핑)이 되면 가치가 한 단계 올라간다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill on">아웃풋 강함</span><span class="pill ink">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">06</span><h4>비슷한 사장님은 어떻게 했나</h4>
+      <p class="one">같은 업종 사장님들이 이 편에서 가장 많이 밑줄 친 문장입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>전체 회원의 밑줄 집계 × 업종 · 단계 세그먼트 (익명)</div></div>
+      <div class="row"><span>작동</span><div>혼자 하는 사업자에게 <b>비교 기준</b>이 생긴다. 숫자가 쌓일수록 정확해진다</div></div>
+      <div class="row"><span>메모</span><div>남의 메모 본문은 절대 노출하지 않는다. 집계만. 동의 문구가 필요하다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 중간</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">07</span><h4>월간 나의 기록 리포트</h4>
+      <p class="one">11월에 7편을 읽고 2개를 실행했어요. 다음 달 볼 숫자는 이것입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>읽기 이력 + 적용 이력 + 메모</div></div>
+      <div class="row"><span>작동</span><div>결제일마다 "이걸로 뭐가 달라졌지"에 <b>답을 쥐여 준다</b></div></div>
+      <div class="row"><span>메모</span><div>해지 직전에 보이는 화면이다. 이것 하나로도 해지율은 움직인다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 중간</span><span class="pill ink">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">08</span><h4>읽기 전 한 줄 맞춤</h4>
+      <p class="one">이 편은 사장님처럼 인스타로 전문 서비스를 파는 분에게 이렇게 읽힙니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>코킷 본문 + 온보딩 프로필</div></div>
+      <div class="row"><span>작동</span><div>같은 글이 <b>내 글처럼</b> 읽힌다. 완독률이 올라가면 뒤의 모든 데이터가 늘어난다</div></div>
+      <div class="row"><span>메모</span><div>본문을 고치는 게 아니라 머리에 한 줄을 덧대는 것이다. 원문의 신뢰를 건드리지 않는다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 약함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <!-- 3층 -->
+  <h4>3층 · 실행 — 들고 나가는 결과물</h4>
+
+  <div class="sol pick">
+    <div class="sol-hd"><span class="no">09</span><h4>이번 주 콘텐츠 초안</h4>
+      <p class="one">사장님이 밑줄 친 방법으로, 이번 주 올릴 게시물 초안 세 개를 썼습니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>밑줄·메모 + 업종·채널 + 코킷의 방법론(훅 템플릿 · 퍼널 구조 등)</div></div>
+      <div class="row"><span>작동</span><div>읽는 날이 아니라 <b>올리는 날마다</b> 연다. 주 1회가 주 3회가 된다</div></div>
+      <div class="row"><span>메모</span><div>범용 AI 와 갈리는 지점은 <b>근거를 대는 것</b>이다 — "41편 3단계 퍼널 구조로 썼습니다"</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill ink">난이도 상</span><span class="pill on">아웃풋 강함</span><span class="pill ink">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">10</span><h4>내 사업으로 채운 프롬프트</h4>
+      <p class="one">이 템플릿의 빈칸을 사장님 사업 정보로 채워 뒀어요. 복사해서 바로 쓰세요.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>유형 태그 "템플릿" 이 붙은 코킷 + 프로필</div></div>
+      <div class="row"><span>작동</span><div>구현이 가장 싸면서 <b>아웃풋 체감은 가장 즉각적</b>이다. 빈칸만 치환해도 성립한다</div></div>
+      <div class="row"><span>메모</span><div>태그 체계에 이미 "템플릿" 유형이 있다. 재료가 이미 분류돼 있다는 뜻이다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill on">아웃풋 강함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">11</span><h4>내 채널 진단 (미니 컨설팅)</h4>
+      <p class="one">프로필과 최근 콘텐츠 5개를 봤습니다. 진짜 문제는 이것입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>계정·상세페이지 URL + 프로필 + 2주 뒤 숫자 3개</div></div>
+      <div class="row"><span>작동</span><div>진단 → 실행 → 재점검이 도는 유일한 설계. <span class="muted">미니 컨설팅 기획 v1 에 이미 4블록까지 있음</span></div></div>
+      <div class="row"><span>메모</span><div>결제 구조(C7)가 안 풀리면 앱에서 못 판다. §08 참조</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill ink">난이도 상</span><span class="pill on">아웃풋 강함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">12</span><h4>내 페이지 고쳐쓰기</h4>
+      <p class="one">지금 쓰는 소개글을, 고객이 이해하고 문의하게 고쳐 드려요.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>현재 문안(붙여넣기) + 파는 것 + 목표 고객 + 증거</div></div>
+      <div class="row"><span>작동</span><div>상품·행사가 바뀔 때마다 다시 온다. 09 와 <b>같은 사업 정보를 재사용</b>한다</div></div>
+      <div class="row"><span>메모</span><div>"고객 중심으로 써보세요"가 아니라 <b>"이 문단을 이 문장으로 바꾸세요"</b>가 되어야 한다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill on">아웃풋 강함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">13</span><h4>고객 질문으로 답변·FAQ 만들기</h4>
+      <p class="one">반복되는 고객 질문을, 바로 쓸 답변과 FAQ 로 정리해 드려요.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>실제 문의(개인정보 지운 것) + 제공 조건 + 소비자 심리·전환 근거</div></div>
+      <div class="row"><span>작동</span><div>새 문의가 계속 들어온다 — <b>업무 주기가 곧 방문 주기</b>가 된다</div></div>
+      <div class="row"><span>메모</span><div>여기서 얻는 건 <b>사장님의 고객이 사기 전에 묻는 말</b>이다. 우리가 가진 어떤 데이터보다 귀하다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill on">아웃풋 강함</span><span class="pill ink">리텐션 강함</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">14</span><h4>반복 업무 절차 만들기</h4>
+      <p class="one">매번 고민하던 일을, 다음엔 그대로 따라 할 절차와 양식으로 만들어 드려요.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>실제 업무 설명 + 채택한 결과물 + 시간·도구 제약</div></div>
+      <div class="row"><span>작동</span><div>직원에게 넘기거나 방식을 바꿀 때 다시 연다. <b>혼자 하는 사업자의 가장 큰 고민(C9)</b>과 맞닿는다</div></div>
+      <div class="row"><span>메모</span><div>체크리스트·입력 양식까지. 외부 자동 실행은 전혀 다른 난이도라 여기 안 넣는다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill hi">난이도 중</span><span class="pill on">아웃풋 강함</span><span class="pill hi">리텐션 중간</span></div>
+  </div>
+
+  <div class="sol">
+    <div class="sol-hd"><span class="no">15</span><h4>수요 지도 (우리가 보는 화면)</h4>
+      <p class="one">이번 달 메모와 검색어에서 가장 많이 막힌 지점은 여기입니다.</p></div>
+    <div class="sol-bd">
+      <div class="row"><span>재료</span><div>메모 · 검색어 · "안 했다" 이유 · 고민 분포</div></div>
+      <div class="row"><span>작동</span><div>고객이 아니라 <b>우리가</b> 쓰는 도구다. 다음 코킷 주제를 데이터가 정한다</div></div>
+      <div class="row"><span>메모</span><div>온보딩 기획 §5 가 이미 "어떤 고민이 많은데 코킷이 적은가 = 제작 우선순위"로 적어 뒀다</div></div>
+    </div>
+    <div class="sol-tags"><span class="pill on">난이도 하</span><span class="pill">아웃풋 — 내부</span><span class="pill hi">리텐션 간접</span></div>
+  </div>
+</section>
+
+<!-- ───────────── 6 ───────────── -->
+<section id="s6">
+  <h2 class="sec"><b>06</b>고른 셋과 그 이유</h2>
+  <h3 class="ttl">04 · 05 · 09 — 다시 오는 이유, 못 떠나는 이유, 오늘 쓰는 이유</h3>
+  <p>열다섯 개를 다 하면 아무것도 안 된다. 셋만 고른 기준은 <b class="k">"고객이 들고 나가는 물건이 있는가"</b> 하나다.</p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:150px">고른 것</th><th>맡는 역할</th><th style="width:210px">이게 없으면</th></tr>
+    <tr><td><b>04 메모 → 할 일</b></td><td>다시 오는 이유. 읽기와 재방문을 발행 주기에서 떼어 낸다</td><td>방문 상한이 발행 수에 묶인다</td></tr>
+    <tr><td><b>09 콘텐츠 초안</b></td><td>오늘 쓰는 이유. 리건이 말한 "실질적 아웃풋"의 정면</td><td>끝까지 "읽을거리"로 남는다</td></tr>
+    <tr><td><b>05 내 브랜드 북</b></td><td>못 떠나는 이유. 쌓인 기록이 자산이 된다</td><td>해지 비용이 0 이라 언제든 떠난다</td></tr>
+  </table>
+  </div>
+
+  <h4>셋이 서로를 먹인다</h4>
+  <div class="flow"><pre>  읽는다 → 밑줄            (지금 있는 것 · 없어도 시작은 된다)
+            ↓
+  <b>09</b>  이번 주 게시물 문안 완성      ← 파는 것·알릴 것만 받는다
+            ↓
+  <b>04</b>  "실제로 썼어요" · 고친 문장    ← 여기서 <b>적용 데이터</b>가 생긴다
+            ↓
+  <b>05</b>  채택한 표현이 모여 기준 문서    ← 쌓일수록 두꺼워지고 못 버린다
+            ↓
+       다음 게시물이 더 빠르고 정확해진다 (돌아감)</pre></div>
+
+  <div class="card lime">
+    <h4>지식 서비스가 도구 서비스로 넘어가는 지점</h4>
+    <p>정확히 <b class="k">04 와 09 사이</b>다. 04 까지는 "읽은 걸 정리해 주는 서비스"고, 09 부터는 "내 사업의 결과물을 만들어 주는 서비스"다. 고객이 지갑을 여는 이유도 그 선에서 바뀐다 — <b class="k">읽을 게 있어서 → 이걸로 일이 되니까</b>.</p>
+    <p>단계로 끊어 보면 이렇다. ① 코킷 추천·요약 = <b class="k">지식</b> → ② 내 상황에 맞는 조언 = <b class="k">중간</b> → ③ 바로 쓸 문안 완성 = <b class="k">도구</b> → ④ 고친 것·쓴 것을 이어받아 다음이 빨라짐 = <b class="k">계속 쓰는 업무 도구</b>. 지금 코멜은 ①에 있고, 승부는 ③에서 난다.</p>
+  </div>
+
+  <div class="card">
+    <h4>그런데 셋 중 무엇부터인가 — 여기서 의견이 갈렸다</h4>
+    <p>초안은 <b class="k">04 → 09</b> 였다. 적용 데이터 없이 09 를 띄우면 "업종만 아는 챗봇"이 된다는 이유였다. 코덱스는 반대로 <b class="k">09 부터</b>를 권했다. 요지는 이렇다 — 04 가 내놓는 건 결국 <b class="k">할 일 목록</b>이라 "실질적 아웃풋"을 증명하지 못하고, 09 에 필요한 맥락은 <b class="k">그 작업에 꼭 필요한 사실 몇 개</b>만 그 자리에서 받으면 된다. 적용 데이터도 09 안에서 <b class="k">"실제로 썼어요"</b> 한 번으로 더 정확하게 모인다.</p>
+    <p><b class="k">이 지적이 맞다고 본다.</b> 04 를 먼저 하면 90일을 체크박스 하나에 쓰고도 <mark>도구 수요가 있는지는 여전히 모른다</mark>. 그래서 순서를 바꿨다.</p>
+    <ul class="li">
+      <li><b class="k">09 를 아주 좁게 먼저</b> — 채널 하나(인스타), 작업 하나(이번 주 게시물), 입력은 붙여넣기. 메모가 0 인 사람도 쓸 수 있어야 한다.</li>
+      <li><b class="k">04 는 09 안에 접어 넣는다</b> — 따로 만들지 않고, 결과물 끝의 "썼어요 / 안 썼어요 · 왜"로 둔다.</li>
+      <li><b class="k">05 는 뒤로</b> — 브랜드 북은 처음부터 쓰게 하는 물건이 아니라, 고객이 고친 문장과 채택한 표현이 쌓였을 때 <b class="k">저절로 생기는</b> 물건이다.</li>
+      <li><b class="k">01 · 07 은 곁들여</b> — 다시 꺼내기와 월간 리포트는 밑줄만 있으면 되고 호출 비용이 거의 없다. 09 검증과 부딪치지 않는다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────── 7 ───────────── -->
+<section id="s7">
+  <h2 class="sec"><b>07</b>제품 정의가 어떻게 바뀌나</h2>
+  <h3 class="ttl">문장 하나가 바뀌면 화면 전체가 따라 바뀐다</h3>
+  <div class="card line">
+    <div class="cap">지금</div>
+    <p class="punch">사업자에게 필요한 글을 모아 주는 구독 서비스</p>
+  </div>
+  <div class="card lime">
+    <div class="cap">제안</div>
+    <p class="punch">읽고 → <span class="lime">내 것으로 만들고</span> → 그걸로 만들어 내는 서비스</p>
+  </div>
+
+  <p>재기획 문서 §2-1 이 이미 <b class="k">"읽을거리가 아니라 내 상황에 맞는 답을 주는 도구"</b>라고 적어 뒀다. 이 리포트는 그 문장을 데이터 관점에서 구체화한 것에 가깝다. 바뀌는 것은 방향이 아니라 <b class="k">순서</b>다 — 추천을 더 잘하는 쪽이 아니라, 적용을 기록하는 쪽부터.</p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:130px">화면</th><th>지금</th><th>바뀌면</th></tr>
+    <tr><td><b>완독 화면</b></td><td>다 읽었습니다 + 다음 추천</td><td>이 중에 하나만 이번 주에 해보기 <span class="muted">(데이터가 여기서 생긴다)</span></td></tr>
+    <tr><td><b>인사이트</b></td><td>밑줄 10 · 메모 6 을 보여 줌</td><td>이번 주 할 일 + 지난 기록 다시 꺼내기</td></tr>
+    <tr><td><b>낙타AI</b></td><td>고민을 말하면 코킷을 찾아 줌</td><td>내 기록까지 읽고 답한다 — 초안·프롬프트를 내놓는다</td></tr>
+    <tr><td><b>홈</b></td><td>새 코킷 중심</td><td>새 코킷 + 내가 하다 만 것</td></tr>
+  </table>
+  </div>
+  <p class="muted">화면 변경은 이 리포트의 범위가 아니다. 방향이 정해지면 프로토타입에서 따로 그린다.</p>
+</section>
+
+<!-- ───────────── 8 ───────────── -->
+<section id="s8">
+  <h2 class="sec"><b>08</b>반대 의견 — 이 방향의 함정</h2>
+  <h3 class="ttl">좋아 보이는 쪽만 적으면 제안서가 아니다</h3>
+
+  <div class="risk">
+    <h5>⓪ 가장 센 반론 — 리텐션이 왜 떨어지는지 아직 확인되지 않았다</h5>
+    <p>이 리포트는 <b class="k">"적용할 게 없어서 떠난다"</b>를 전제로 서 있다. 그런데 손에 있는 자료에는 실제 잔존율도, 해지 사유도, 메모 작성 분포도, 고객별 재방문 주기도 <b class="k">없다</b>. 떠나는 이유가 적용의 어려움이 아니라 <b class="k">읽을 시간이 없어서</b>거나 <b class="k">기대한 주제가 없어서</b>라면, 아래 제안 전부가 엉뚱한 곳을 고치는 일이 된다.</p>
+    <div class="fix"><b>대응</b> — AI 도구는 <b>유망한 가설</b>이지 검증된 답이 아니다. 그래서 90일 과제의 첫 칸이 기능 개발이 아니라 <b>실제 데이터 확인과 이탈 고객 인터뷰</b>다. 지금 숫자를 못 보는 상태에서 1년짜리 로드맵을 확정하면 안 된다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>① 메모가 안 쌓인다 — 콜드 스타트</h5>
+    <p>이 리포트 전체가 "기록이 쌓인다"를 전제로 선다. 그런데 기존 회원 6,021명 대부분은 온보딩도 안 거쳤고, 밑줄조차 안 그은 사람이 다수일 가능성이 높다. <b class="k">메모를 요구하는 기능은 메모를 쓰는 소수에게만 작동한다.</b></p>
+    <div class="fix"><b>대응 — 데이터를 먼저 모으는 캠페인이 아니라 제품 흐름으로 푼다.</b> ① 메모가 없어도 지금 만들 것을 고른다 → ② 이번 작업에 필요한 사실만 받는다(파는 것 · 이번에 알릴 것 · 원하는 행동) → ③ 쓸 만한 첫 초안을 받는다 → ④ 고객이 고친 표현이 다음 작업에 얹힌다. 이러면 <b>결과물을 받으려고 입력한 정보가 그대로 자산이 된다</b>. 개인화의 보상을 받으려고 미리 DB 를 채우라고 요구하는 구조가 아니다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>② 틀린 처방 한 번이면 신뢰가 0 이 된다</h5>
+    <p>사업자 대상이라 아웃풋이 곧 돈과 연결된다. 일반론을 "사장님 맞춤"이라고 내놓으면 바로 들킨다. 한 번 들키면 그 뒤의 모든 AI 화면을 안 본다.</p>
+    <div class="fix"><b>대응</b> — <b>근거 없는 문장을 못 쓰게 막는다.</b> 모든 AI 출력에 "어느 코킷의 어느 대목에서 나왔는지"를 붙인다. 이건 품질 장치이자 동시에 <b>경쟁 해자</b>다. 범용 AI 는 코멜 89편을 인용할 수 없다. 초기에는 자유 서술 대신 <b>고정 블록</b>(미니 컨설팅 기획의 4블록처럼)으로 묶어 품질 편차를 줄인다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>③ 챗GPT 가 공짜로 해 준다</h5>
+    <p>"인스타 게시물 초안 써줘"는 누구나 공짜로 한다. 우리가 그걸 유료로 팔면 비교당한다.</p>
+    <div class="fix"><b>대응</b> — 우리가 가진 것 중 범용 AI 에 <b>없는 것</b>만으로 승부한다. ⓐ 검증된 방법론 89편, ⓑ 이 사람이 무엇에 반응했는지의 기록, ⓒ 무엇을 해보고 뭐가 됐는지의 이력. 셋 다 우리만 가진다. <b>초안의 품질이 아니라 초안의 근거가 상품</b>이다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>④ 리더 앱 규정과 정면으로 부딪친다</h5>
+    <p>AGENTS.md 와 재기획 문서의 확정 사항 — 앱 빌드에는 결제·가격·구독·요금제 요소를 넣지 않는다. 그런데 <b class="k">AI 생성 기능은 "열람"이 아니라 앱 안에서 소비되는 디지털 서비스</b>다. 미니 컨설팅 기획 §5 가 이미 같은 위험(C7)을 적어 뒀고, AI 기능은 그 위험을 더 키운다. 리더 앱 조항은 이미 구입한 콘텐츠의 열람을 전제로 하고, 앱 안에서 기능을 푸는 판매는 별도 조항(3.1.1)의 영역이다. 2025년 이후 미국 스토어프론트의 외부 링크 관련 완화가 있었지만, <b class="k">앱 내 기능 판매에 결제 수단을 면제해 주는 변화는 아니다</b>.</p>
+    <div class="fix"><b>대응 — 결정이 필요하다.</b> 미니 컨설팅 기획의 세 선택지가 AI 기능 전체에 그대로 적용되는데, <b>어느 것도 안전하다고 단정할 수 없다</b>는 게 교차 검토의 결론이다.<br>
+    ⓐ <b>웹에서만 제공</b> — 지금의 "결제 말고는 웹·앱이 같다"는 작업 규칙(AGENTS §1)과 <b>정면으로 부딪친다</b>. 제품 원칙을 바꾸는 결정이다.<br>
+    ⓑ <b>앱에서 인앱결제</b> — 리더 앱 지위를 다시 따져야 하고, 현재 내부 원칙상 채택 불가다.<br>
+    ⓒ <b>구독 등급에 포함</b> — 초안에서는 이게 가장 안전하다고 적었는데, <b>묶어 판다고 기능의 성격이 바뀌지는 않는다</b>. 리더 앱 조항은 "지정된 콘텐츠 열람이 주된 기능인 앱"을 전제하고, 생성 기능이 제품의 핵심이 될수록 그 전제에서 멀어진다. 이름을 "리포트"로 붙이는 것도 해결책이 아니다 — 심사는 명칭이 아니라 실제 기능을 본다.<br>
+    <b>그러니 "앱에서 결제 문구만 빼면 된다"로 끝내면 안 된다.</b> 도구가 제품의 중심이 되는 순간 제품·결제 구조 자체를 리건이 다시 정해야 한다. 90일 검증을 <b>제한된 범위로 먼저</b> 돌리자는 것도 그래서다 — 출시 구조를 정하기 전에 효용부터 본다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>④-2 메모를 외부 AI 에 보내는 것도 별도 동의 문제다</h5>
+    <p>앱 심사 규정은 개인정보를 제3자에게 전달할 때 <b class="k">전달처를 명확히 알리고 사전에 명시적 허락</b>을 받도록 한다. 고객이 메모를 썼다는 사실이 "이걸 외부 AI 에 보내도 좋다"는 동의가 되지는 않는다.</p>
+    <div class="fix"><b>대응</b> — 처리 범위와 전달처를 약관·동의 화면에 적고, 사업 기밀이 섞이는 메모는 <b>고객이 작업마다 포함 여부를 고르게</b> 한다. 이건 개발 착수 전 확인 항목이다 <span class="muted">(AGENTS §6)</span>.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑤ 비용이 구독가를 넘을 수 있다</h5>
+    <p>생성 기능은 호출당 돈이 나간다. 많이 쓰는 고객일수록 적자가 커지는 구조가 되면, 가장 지키고 싶은 고객이 가장 비싼 고객이 된다.</p>
+    <div class="fix"><b>대응</b> — 생성은 <b>주기 제한</b>으로 설계한다(주 1회 초안, 월 1회 리포트). 제한이 오히려 재방문 리듬을 만든다. 1층·2층 기능 대부분은 집계와 규칙이라 호출 비용이 거의 없다 — <b>싼 것부터 쌓는 이유가 하나 더 있다</b>.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑥ 고객의 메모를 쓰려면 동의가 필요하다</h5>
+    <p>메모는 사업 기밀이 섞인다. 집계·학습·타인 노출의 경계를 약관에 적어 두지 않으면 나중에 못 쓴다. <b>06 비슷한 사장님</b>은 특히 그렇다.</p>
+    <div class="fix"><b>대응</b> — 기본은 <b>내 데이터는 나에게만</b>. 집계는 익명·세그먼트 단위로만, 남의 메모 본문은 어떤 화면에도 띄우지 않는다. 데이터 처리 범위는 개발 착수 전 확인 항목이다 <span class="muted">(AGENTS.md §6)</span>.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑦ 운영 부하가 기획을 이긴다</h5>
+    <p>코킷 한 편마다 실행안 3개를 달고, 생성 결과를 감수하면 사람 손이 든다. 미니 컨설팅 기획의 C2(감수 범위)가 미정인 것도 같은 이유다.</p>
+    <div class="fix"><b>대응</b> — 작업 범위와 결과물 형식을 좁혀 두고, 감수는 전량이 아니라 <b>표본 + 오류 신고 기반</b>으로 시작한다. 다만 한 가지는 솔직히 봐야 한다 — <b>매번 운영자가 손을 봐야 쓸 만해진다면, 그건 제품의 품질이 검증된 게 아니다</b>. 감수 전과 후의 결과물, 그리고 들어간 시간을 따로 재야 한다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑧ 없는 사실을 지어내면 고객의 사업이 다친다</h5>
+    <p>읽을거리는 틀려도 고객이 안 믿으면 그만이지만, <b class="k">문안은 그대로 올라간다</b>. AI 가 없는 혜택·실적·후기를 지어내고 고객이 그걸 게시하면, 피해는 코멜이 아니라 <b class="k">고객의 사업 신뢰</b>에서 난다. 사업자 대상 제품에서 이건 가장 비싼 사고다.</p>
+    <div class="fix"><b>대응</b> — <b>고객이 준 사실만 쓴다.</b> 근거가 없으면 그 주장을 지우거나 "이 숫자가 필요합니다"라고 되묻는다. 출력 안에서 <b>원문 인용 · 고객이 쓴 말 · AI 의 추정</b>을 눈에 보이게 갈라 둔다. 채널 운영이나 검색 관련 내용은 시점을 타니, 오래된 코킷의 주장은 발행 시점을 같이 보여 준다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑨ 밑줄·메모를 "이 사람 사업의 사실"로 읽으면 안 된다</h5>
+    <p>"할인을 줄여야 한다"에 밑줄을 쳤다고 지금 할인 중인 사업이 아니다. 메모의 "유튜브를 접을까?"도 결정이 아니라 <b class="k">검토 중인 생각</b>이다. 이걸 프로필처럼 쓰면 AI 가 틀린 전제 위에서 말하기 시작한다.</p>
+    <div class="fix"><b>대응</b> — 기록은 <b>관심의 신호</b>로만 쓰고, 사업의 사실로 승격시키기 전에 <b>고객에게 한 번 확인</b>받는다. 한 사람이 여러 사업을 하는 경우도 흔하니, 작업마다 <b>어느 사업 건인지</b>를 먼저 정하고 다른 사업의 기록을 섞지 않는다.</div>
+  </div>
+
+  <div class="risk">
+    <h5>⑩ 읽을거리 과부하가 초안 과부하로 바뀔 수 있다</h5>
+    <p>초안을 많이 뽑아 주는 게 목표가 되면, 고르고 검토하고 고치는 시간이 더 든다. 안 올린 초안이 쌓이는 건 안 읽은 코킷이 쌓이는 것과 똑같은 실패다.</p>
+    <div class="fix"><b>대응</b> — 생성 횟수가 아니라 <b>실제로 쓴 결과물 수</b>와 <b>고치는 데 든 부담</b>을 본다. 한 번에 여러 안을 뿌리지 말고 <b>한 작업에 쓸 하나</b>를 제대로 만든다.</div>
+  </div>
+</section>
+
+<!-- ───────────── 9 ───────────── -->
+<section id="s9">
+  <h2 class="sec"><b>09</b>90일 · 6개월 · 1년</h2>
+  <h3 class="ttl">전체 AI 서비스를 짓지 말고, 반복 업무 하나가 진짜 풀리는지부터 본다</h3>
+
+  <div class="card">
+    <div class="step">
+      <div class="when">~90일<span>하나로 증명</span></div>
+      <div>
+        <h5>"읽기에서 사용까지"를 게시물 제작 하나로 검증한다</h5>
+        <p><b class="k">1~30일</b> — 기능을 만들기 전에 <b class="k">실제 데이터를 연다</b>. 무엇이 얼마나 쌓여 있는지(밑줄·완독·메모의 실제 적재량), 최근 이용 현황, 그리고 <b class="k">떠난 사람들이 왜 떠났는지</b>. 같이 코킷에서 게시물 제작 원칙과 예시를 추려 둔다.</p>
+        <p><b class="k">31~60일</b> — <b class="k">메모 없이도 시작되는</b> 게시물·대본 초안 흐름을 좁은 범위로 돌린다. 대상은 <b class="k">인스타를 주력으로 쓰고 이번에 알릴 게 있는 고객</b>. 고객이 고친 문장과 실제 사용 여부를 본다.</p>
+        <p><b class="k">61~90일</b> — 두 번째 작업에서 <b class="k">앞서 받은 사업 정보와 고친 기준을 다시 쓴다</b>. 재사용이 되는지, 운영 비용이 얼마인지로 확대·수정·중단을 정한다. 같은 기간에 <b class="k">01 다시 꺼내기</b>와 <b class="k">07 월간 리포트</b>를 곁들인다(호출 비용 거의 없음).</p>
+        <p class="muted">앱 배포 범위 검토는 이 기간에 <b>병행</b>한다. 정식 출시로 밀어붙이지 말고, 제한된 검증에서 효용부터 확인한다.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when">~6개월<span>잘 쓰인 것만 확장</span></div>
+      <div>
+        <h5>메뉴를 늘리지 말고, 한 번 만든 것의 재사용을 늘린다</h5>
+        <p>① 사업 정보·채택한 문안·표현 기준을 <b class="k">다음 작업이 물려받게</b> 한다(05 의 씨앗). ② <b class="k">프로필·상세페이지 핵심 문단 고쳐쓰기</b>를 붙인다 — 같은 사업 정보를 그대로 쓰므로 추가 입력이 거의 없다. ③ 문의가 많은 고객에게 <b class="k">답변·FAQ 만들기</b>를 연다. ④ <b class="k">03 내 기록까지 찾는 검색</b>과 <b class="k">12 수요 지도</b>를 깐다.</p>
+        <p class="muted">③ 은 코덱스가 따로 꼽은 것이다 — 여기서 얻는 건 "사장님이 관심 있는 지식"이 아니라 <b>사장님의 고객이 사기 전에 실제로 묻는 말</b>이다. 콘텐츠 소재와 판매 문안 양쪽에 다시 쓰인다.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when">~1년<span>도구로 넘어가기</span></div>
+      <div>
+        <h5>반복 사용이 확인된 업무에 한해서만 넓힌다</h5>
+        <p>적용한 버전·기간·결과를 이어받아 <b class="k">다음 초안이 더 정확해지는</b> 고리를 닫는다. <b class="k">05 내 브랜드 북</b>과 <b class="k">반복 업무 절차·양식</b>이 이 시점에 저절로 성립한다. <b class="k">11 미니 컨설팅</b>은 처음부터 긴 리포트로 만들지 말고, <b class="k">이미 만든 결과물이 실제로 쓰였는지를 점검하는 자리</b>로 붙인다. 외부 채널 연동은 고객이 같은 걸 반복 입력하는 게 확인된 뒤에만 한다.</p>
+        <p class="muted">1년이 됐다는 이유로 자동 게시·자율 실행으로 갈 필요는 없다. <b>고객이 검토하고 쓰는 도구</b>만으로도 충분히 성립한다.</p>
+      </div>
+    </div>
+  </div>
+
+  <h4>무엇으로 판단할 것인가</h4>
+  <p>목표 수치는 지금 자료로 정하지 않는다. 대신 <b class="k">볼 것</b>을 정해 둔다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:170px">지표</th><th>정의 · 해석할 때 조심할 것</th></tr>
+    <tr><td><b>첫 사용까지의 시간</b></td><td>시작부터 쓸 수 있는 결과물을 손에 쥘 때까지</td></tr>
+    <tr><td><b>결과물 사용률</b></td><td>받은 사람 중 <b>실제로 썼다고 확인된</b> 비율. 복사와 사용은 구분한다</td></tr>
+    <tr><td><b>다음 업무 재사용</b></td><td>다른 날, 다음 작업에서 또 왔는가 — <b>이게 리텐션의 본체</b>다</td></tr>
+    <tr><td><b>수정 부담</b></td><td>쓰기 전에 고쳐야 했던 양과 시간. 고친 글자 수만으로 품질을 재지 않는다</td></tr>
+    <tr><td><b>폐기 이유</b></td><td>없는 사실 / 말투 안 맞음 / 실행 불가로 나눈다</td></tr>
+    <tr><td><b>운영 비용</b></td><td>실제 쓰인 결과물 하나당 생성비 + 검수·지원 시간</td></tr>
+    <tr><td><b>읽기 경험에 준 영향</b></td><td>읽기·저장이 같이 좋아지는가, 도구가 오히려 산만하게 하는가</td></tr>
+    <tr><td><b>구독 유지와의 관계</b></td><td>쓰기 전 활동 수준이 비슷한 집단과 비교한다. 가능하면 <b>순차 제공</b>으로 검증</td></tr>
+  </table>
+  </div>
+
+  <div class="card lime">
+    <p class="punch">가장 먼저 볼 질문은 "AI 를 눌렀는가"가 아니라<br>
+    <span class="lime">"만든 걸 실제로 썼고, 다음 일에도 다시 왔는가"</span>다.</p>
+    <p>그리고 첫 제품 약속은 이 한 줄로 충분하다 — <b class="k">"코킷에서 찾은 방법을, 내 사업에 바로 쓸 문장으로 완성해 드립니다."</b> <span class="muted">(코덱스가 제안한 문장을 그대로 가져왔다)</span></p>
+  </div>
+</section>
+
+<!-- ───────────── 10 ───────────── -->
+<section id="s10">
+  <h2 class="sec"><b>10</b>리건이 정해야 할 것</h2>
+  <h3 class="ttl">이 리포트가 임의로 정하지 않은 것들</h3>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:52px">#</th><th style="width:210px">결정</th><th>왜 리건이 정해야 하나</th></tr>
+    <tr><td class="num"><b>D1</b></td><td>AI 기능을 <b>구독에 포함</b>할 것인가, 별도로 팔 것인가</td><td>리더 앱 심사와 직결. 미니 컨설팅 C7 과 같은 문제이고 범위만 넓어졌다</td></tr>
+    <tr><td class="num"><b>D2</b></td><td>첫 검증 대상을 <b>인스타 게시물 하나</b>로 좁히는 데 동의하는가</td><td>좁히면 빨리 알고, 넓히면 아무것도 증명 못 한다. 대상 고객 묶음도 같이 정해진다</td></tr>
+    <tr><td class="num"><b>D3</b></td><td>생성 결과를 <b>감수</b>할 것인가 (전량 / 표본 / 무감수)</td><td>품질과 단가를 동시에 정한다. 미니 컨설팅 C2 와 같은 질문</td></tr>
+    <tr><td class="num"><b>D4</b></td><td>기존 6,021명에게 <b>언제 프로필을 물을</b> 것인가</td><td>맥락 층의 모수가 여기서 정해진다. 온보딩 OB4 와 연결</td></tr>
+    <tr><td class="num"><b>D5</b></td><td>메모·밑줄의 <b>집계 활용 범위</b>와 외부 AI 전달 동의</td><td>약관·동의 문구. 06 을 할 수 있는지, 메모를 쓸 수 있는지가 여기서 갈린다</td></tr>
+    <tr><td class="num"><b>D6</b></td><td>셋 중 <b>무엇부터</b>인가 — 04 · 05 · 09</td><td>초안은 04 를 권했고, 코덱스 교차 검토 뒤 <b>09 먼저</b>로 바꿨다. 최종은 리건이 정한다 <span class="muted">(§11 ②)</span></td></tr>
+    <tr><td class="num"><b>D7</b></td><td>90일 1~30일에 <b>운영 DB 를 열어 실제 적재 현황을 확인</b>할 것인가</td><td>지금 우리는 무엇이 얼마나 쌓여 있는지 모른다. 이걸 건너뛰면 그 뒤가 전부 가정 위에 선다</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- ───────────── 11 ───────────── -->
+<section id="s11">
+  <h2 class="sec"><b>11</b>코덱스 교차 검토</h2>
+  <h3 class="ttl">같은 질문을 코덱스에게 따로 던졌다</h3>
+  <p class="muted">같은 폴더의 기획 문서를 읽게 하고 동일한 질문(데이터 목록 · 솔루션 아이디어 · 반대 의견 · 단계)을 독립적으로 답하게 한 뒤, 이 리포트와 대조했다.</p>
+  <h4>① 코덱스가 잡아낸 사실 오류 — 초안을 고쳤다</h4>
+  <p>이게 교차 검토의 가장 큰 수확이다. 초안은 <b class="k">기획 문서에 적힌 것을 이미 돌아가는 것으로</b> 읽고 있었다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:190px">초안이 적은 것</th><th>실제</th></tr>
+    <tr><td>"온보딩 응답이 쌓이고 있다"</td><td>온보딩 문서는 <b>draft</b> 다. 기존 회원 6,021명은 온보딩 미경험 — <b>업종·채널·고민 데이터는 없다고 봐야 한다</b></td></tr>
+    <tr><td>"메모가 쌓이고 있다"</td><td>프로토타입의 메모·기록 숫자는 <b>샘플 값</b>이다. 운영 저장 여부는 확인되지 않았다</td></tr>
+    <tr><td>"미니 컨설팅 기획이 있다"</td><td>맞지만 <b>현재 개발 범위 밖</b>이다. 제공 중인 서비스로 취급하면 안 된다</td></tr>
+    <tr><td>"주제 태그 12개"</td><td>그건 <b>옛 체계</b>다. 지금 기준은 AGENTS.md 의 여덟 가지다. 고민 코드 C1~C9 는 또 다른 축이라 섞으면 안 된다</td></tr>
+    <tr><td>읽기 시간을 데이터로 쓸 수 있다</td><td>콘텐츠에 적힌 <b>4 MIN READ 는 89편 중 76편이 템플릿 기본값</b>이다. 행동 데이터가 아니다</td></tr>
+  </table>
+  </div>
+  <p class="muted">§03 을 이 지적에 맞춰 "문서상 있는 것 / 기획만 된 것 / 화면에만 있는 것"으로 다시 갈랐다.</p>
+
+  <h4>② 의견이 갈린 곳 — 무엇부터 만들 것인가</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th style="width:92px"></th><th style="width:230px">초안(클로드)</th><th>코덱스</th></tr>
+    <tr><td><b>첫 기능</b></td><td>04 메모 → 할 일. 싸게 적용 데이터부터 만든다</td><td><b>게시물·릴스 대본 제작</b>. 처음부터 쓸 수 있는 문안을 준다</td></tr>
+    <tr><td><b>근거</b></td><td>맥락 없이 생성하면 일반론이 나온다</td><td>할 일 목록은 아웃풋이 아니다. 필요한 사실은 <b>그 작업 자리에서</b> 받으면 되고, 적용 데이터는 "썼어요" 한 번으로 더 정확히 모인다</td></tr>
+    <tr><td><b>메모</b></td><td>핵심 재료</td><td><b>선택 재료</b>. 필수로 만들면 가장 도움이 필요한 신규·저활성 고객이 제외된다</td></tr>
+  </table>
+  </div>
+  <div class="card lime">
+    <p><b class="k">코덱스 쪽이 맞다고 보고 순서를 바꿨다.</b> 04 를 먼저 하면 90일을 체크박스 하나에 쓰고도 <b class="k">도구 수요가 있는지는 여전히 모른다</b>. 바뀐 결론 — <b class="k">09 를 아주 좁게 먼저, 04 는 그 안에 접어 넣는다.</b> (<a href="#s6">§06</a> · <a href="#s9">§09</a> 에 반영)</p>
+    <p>다만 초안의 주장 하나는 그대로 둔다 — <b class="k">근거를 대지 않는 출력은 공짜 챗봇과 구별되지 않는다</b>. 코덱스도 "코킷의 적용 기준과 실제 상품 사실을 함께 쓰라"며 같은 자리를 짚었다.</p>
+  </div>
+
+  <h4>③ 코덱스가 더 본 것 — 리포트에 넣었다</h4>
+  <ul class="li">
+    <li><b class="k">리텐션 원인이 미확인</b>이라는 반론. 잔존율·해지 사유·메모 분포가 손에 없다 → <a href="#s8">§08 ⓪</a> 로 넣고, 90일 1~30일 과제를 <b class="k">데이터 확인과 이탈 인터뷰</b>로 바꿨다.</li>
+    <li><b class="k">"구독에 포함하면 안전하다"는 단정은 위험</b>. 묶어 판다고 기능의 성격이 바뀌지 않는다 → <a href="#s8">§08 ④</a> 를 다시 썼다. "AI 는 웹에만"도 <b class="k">웹·앱이 같아야 한다는 작업 규칙과 충돌</b>한다는 지적을 받아 적었다.</li>
+    <li><b class="k">개인정보 제3자 전달 동의</b> — 메모를 외부 AI 에 보내는 건 별도 허락이 필요하다 → <a href="#s8">§08 ④-2</a> 로 추가.</li>
+    <li><b class="k">없는 사실 생성 · 밑줄을 사실로 오인 · 초안 과부하</b> → <a href="#s8">§08 ⑧⑨⑩</a> 으로 추가.</li>
+    <li><b class="k">솔루션 3개 추가</b> — 12 페이지 고쳐쓰기, 13 고객 문의로 FAQ 만들기, 14 반복 업무 절차 만들기. 특히 13 은 <b class="k">사장님의 고객이 사기 전에 묻는 말</b>을 얻는 통로라 따로 꼽을 만하다.</li>
+    <li><b class="k">4블록 진단 리포트를 그대로 만들면 위험</b>하다는 지적 — "업종 대비 위치"는 비교할 자료가 없고, "진짜 문제"는 적은 자료로 단정할 수 없고, "2주에 3개"는 한꺼번에 바꾸면 무엇이 효과였는지 알 수 없다. <b class="k">우선 하나만 정하고 필요한 문안까지 준다</b>로 바꾸는 게 맞다.</li>
+  </ul>
+
+  <h4>④ 둘이 완전히 같았던 곳</h4>
+  <p>방향 자체는 갈리지 않았다. 둘 다 <b class="k">"읽을거리에서 쓸 물건으로"</b>가 맞다고 봤고, 둘 다 <b class="k">메뉴를 늘리는 대신 한 작업을 끝까지</b>를 권했고, 둘 다 <b class="k">리더 앱 규정이 이 방향의 가장 큰 제도적 장애</b>라고 봤다. 그리고 둘 다 같은 말을 했다 — <b class="k">근거를 대지 못하는 AI 는 코멜이 만들 이유가 없다.</b></p>
+</section>
+
+<!-- ───────────── 12 ───────────── -->
+<section id="s12">
+  <h2 class="sec"><b>12</b>출처</h2>
+  <h3 class="ttl">근거로 쓴 것</h3>
+  <h4>안에서 — 이 폴더의 기획 문서</h4>
+  <ul class="li muted">
+    <li><b>AGENTS.md</b> — 리더 앱 규정, 주제 분류, 코드 규칙</li>
+    <li><b>2026-08-08 유저앱 재기획</b> — 스택(Supabase·React·Capacitor), 구현 현황, 데이터가 관리자 분석용으로만 쓰인다는 기록(§2-4)</li>
+    <li><b>2026-08-09 온보딩 기획 v1</b> — 수집 항목과 저장 매핑, 고민 C1~C9, 회원 6,021명, 코킷 89편 분석</li>
+    <li><b>2026-08-11 태그 체계 v1 · 2026-08-13 태깅표</b> — 채널 5 · 주제 12 · 유형 4</li>
+    <li><b>2026-08-13 낙타AI 미니 컨설팅 기획 v1</b> — 4블록 리포트, 2주 재점검, 결제 구조 위험(C7), 감수 범위(C2)</li>
+    <li><b>2026-10-06 프로토타입 v2 · v3</b> — 인사이트·보관함에 쌓이는 것(밑줄·메모·완독)</li>
+  </ul>
+  <h4>밖에서 — 웹 리서치</h4>
+  <ul class="li src">
+    <li><a href="https://blog.opensurvey.co.kr/article/subscription-economy-2026-2/" target="_blank" rel="noopener">오픈서베이 — AI 구독은 늘고, 콘텐츠 멤버십은 빠진다 (구독 서비스 트렌드 리포트 2026)</a> · 생성형 AI 유료 구독률 22.7%(+8.4%p), 콘텐츠 멤버십 −5.7%p</li>
+    <li><a href="https://userpilot.com/blog/customer-churn/" target="_blank" rel="noopener">Userpilot — Customer Churn in 2026</a> · AI 네이티브 제품의 낮은 매출 유지율, 가격대에 따른 차이</li>
+    <li><a href="https://konabayev.com/blog/b2b-customer-retention-2026/" target="_blank" rel="noopener">B2B Customer Retention Statistics 2026</a> · 이탈의 선행 지표는 "쓸모 체감의 하락"</li>
+    <li><a href="https://saasbuyerguide.com/saas-churn-retention-metrics-2026-benchmarks-every-founder-must-know/" target="_blank" rel="noopener">SaaS Churn &amp; Retention Metrics 2026</a> · 벤치마크 수치는 출처마다 정의가 달라 직접 인용은 피했다</li>
+    <li><a href="https://notes.andymatuschak.org/zAt1K9ARQYguinoHH8cfaqQ" target="_blank" rel="noopener">Andy Matuschak — Readwise</a> · 수동적 사용자에게도 약간의 가치가 가고, 투자한 사용자는 더 얹을 수 있게 설계된 구조</li>
+    <li><a href="https://docs.readwise.io/readwise" target="_blank" rel="noopener">Readwise Docs</a> · 밑줄 되살리기(간격 반복) 방식 — 솔루션 01 의 참고</li>
+    <li><a href="https://developer.apple.com/support/downloads/terms/app-review-guidelines/App-Review-Guidelines-English-UK.pdf" target="_blank" rel="noopener">App Review Guidelines (PDF)</a> · 3.1.3(a) 리더 앱의 범위, 3.1.1 앱 내 기능 해제와 결제</li>
+    <li><a href="https://appfollow.io/blog/app-store-review-guidelines" target="_blank" rel="noopener">App Store Review Guidelines 2026 해설</a> · AI 기능 포함 시 심사 질의가 늘어난다는 업계 관측 (벤더 자료라 참고만)</li>
+  </ul>
+  <p class="muted">웹 리서치에서 <b>지식 콘텐츠 구독에 AI 를 붙여 리텐션을 올린 국내 사례(수치 포함)</b>는 찾지 못했다. 없다는 뜻은 아니고, 공개된 자료가 없다는 뜻이다. 이 리포트의 수치 인용을 두 건으로 줄인 이유다 — 나머지는 우리 문서와 제품 논리에서 끌어왔다.</p>
+</section>
+
+<div class="foot">
+  COMMEL 내부 검토용 · 2026-11-12 작성 · 기획 리건 / 정리 클로드 코드 · 코덱스 교차 검토<br>
+  이 문서는 결정을 대신하지 않는다. §10 의 여섯 가지는 리건이 정한다.
+</div>
+
+</div>
+</body>
+</html>
