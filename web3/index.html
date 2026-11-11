@@ -959,11 +959,24 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 
 /* 인사이트 */
 .memo-card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:14px;cursor:pointer;}
-.memo-quote{border-left:3px solid var(--border-default);padding:2px 0 2px 10px;font-size:12px;color:var(--text-gray);line-height:1.6;margin-bottom:10px;}
-.memo-mine{display:flex;gap:8px;align-items:flex-start;}
-.memo-mine i,.memo-mine svg{width:12px;height:12px;color:var(--text-muted);margin-top:4px;flex-shrink:0;}
-.memo-mine p{font-size:13px;font-weight:600;line-height:1.55;}
-.memo-src{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--text-light);}
+/* 큰 인용 꼴(리건, 2026-11-11 — 미리보기 G). 모아 둔 문장을 다시 읽게 만드는 쪽에
+   무게를 둔다. 그어 둔 문장이 먼저 크게, 내 메모는 옅은 라임 판에 받쳐 아래에 둔다.
+   .memo-card 라는 이름은 온보딩 추천 카드도 함께 쓴다 — 그래서 그 규칙은 그대로 두고
+   인용이 든 카드만 :has 로 골라 여백과 모서리를 키운다. */
+.memo-card:has(.memo-quote){border-radius:var(--radius-md);padding:18px 16px 14px;}
+.memo-quote{font-size:15.5px;font-weight:700;line-height:1.6;letter-spacing:-0.4px;
+  color:var(--text-black);}
+/* 따옴표는 ::before 로 그린다 — 문장 위에 얹는 표지라 읽어서 옮길 값이 아니다 */
+.memo-quote::before{content:"C";display:block;font-size:30px;font-weight:800;
+  line-height:0.8;color:var(--brand-press);margin-bottom:8px;}
+.memo-mine{margin-top:13px;padding:11px 12px;background:var(--bg-light);
+  border-radius:var(--radius-sm);}
+.memo-mine b{display:block;font-size:10px;font-weight:800;letter-spacing:0.6px;
+  color:var(--text-light);margin-bottom:5px;}
+.memo-mine p{font-size:12.5px;line-height:1.65;color:var(--text-dark);}
+.memo-src{display:flex;align-items:center;justify-content:space-between;
+  margin-top:13px;padding-top:11px;border-top:var(--card-line);
+  font-size:11px;color:var(--text-light);}
 .type-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--bg-light);border-radius:var(--radius-xs);padding:2px 7px;color:var(--text-gray);}
 .type-tag i,.type-tag svg{width:10px;height:10px;}
 .series-card{padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);}
@@ -5691,8 +5704,8 @@ body.modal-open #scr-interest .ord-sub,
           <div class="tl-ev has-memo">
             <span class="tl-when"><b>8/16</b><span>어제</span></span>
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자.</p></div>
               <div class="memo-quote">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</div>
+              <div class="memo-mine"><b>내 기록</b><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 41</span><span>전환·매출</span></div>
             </div>
           </div>
@@ -5705,8 +5718,8 @@ body.modal-open #scr-interest .ord-sub,
           <div class="tl-ev has-memo">
             <span class="tl-when"><b>8/14</b><span>3일 전</span></span>
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다. 후기를 먼저 올리고 경력은 그 아래로.</p></div>
               <div class="memo-quote">이력을 먼저 나열하면 고객은 스펙을 비교하기 시작합니다. 감정이 열리지 않았으니까요.</div>
+              <div class="memo-mine"><b>내 기록</b><p>상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다. 후기를 먼저 올리고 경력은 그 아래로.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 51</span><span>소비자 심리</span></div>
             </div>
           </div>
@@ -5719,8 +5732,8 @@ body.modal-open #scr-interest .ord-sub,
           <div class="tl-ev has-memo">
             <span class="tl-when"><b>8/12</b><span>5일 전</span></span>
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>우리 프로필도 수상 이력만 늘어놨다. 숫자 하나로 바꾸자 — 재방문율이면 충분할 듯.</p></div>
               <div class="memo-quote">자격증을 나열하는 것보다 '3개월 평균 -12kg'이라는 결과 하나가 훨씬 강력합니다.</div>
+              <div class="memo-mine"><b>내 기록</b><p>우리 프로필도 수상 이력만 늘어놨다. 숫자 하나로 바꾸자 — 재방문율이면 충분할 듯.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 15</span><span>브랜딩</span></div>
             </div>
           </div>
@@ -5733,23 +5746,23 @@ body.modal-open #scr-interest .ord-sub,
           <div class="tl-ev has-memo">
             <span class="tl-when"><b>8/10</b><span>1주 전</span></span>
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>블로그·유튜브·뉴스레터 셋 다 3개월 멈춰도 별일 없을 것 같다. 하나만 남기고 정리하자.</p></div>
               <div class="memo-quote">'3개월 멈추면 어떻게 되는가?' 결과가 치명적이지 않은 가지는 쳐낼 후보예요.</div>
+              <div class="memo-mine"><b>내 기록</b><p>블로그·유튜브·뉴스레터 셋 다 3개월 멈춰도 별일 없을 것 같다. 하나만 남기고 정리하자.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 57</span><span>사업 성장</span></div>
             </div>
           </div>
           <div class="tl-ev has-memo">
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>강의 기획만 두 달째다. 완성도는 나중에 올리고 이번 주에 한 번 열어보자.</p></div>
               <div class="memo-quote">준비하는 시간이 길어질수록 아직 시작하지 않았다는 사실이 가려집니다.</div>
+              <div class="memo-mine"><b>내 기록</b><p>강의 기획만 두 달째다. 완성도는 나중에 올리고 이번 주에 한 번 열어보자.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 57</span><span>사업 성장</span></div>
             </div>
           </div>
           <div class="tl-ev has-memo">
             <span class="tl-when"><b>8/3</b><span>2주 전</span></span>
             <div class="card memo-card" data-go="scr-viewer">
-              <div class="memo-mine"><i data-lucide="pen-line"></i><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
               <div class="memo-quote">이력서가 AI를 통과해야 면접관을 만나듯, 브랜드도 AI의 기준을 통과해야 고객을 만날 수 있는 시대가 된 거예요.</div>
+              <div class="memo-mine"><b>내 기록</b><p>우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다.</p></div>
               <div class="memo-src"><span class="src-kit">CO:KIT 34</span><span>AEO·AI검색</span></div>
             </div>
           </div>
@@ -5925,12 +5938,12 @@ body.modal-open #scr-interest .ord-sub,
     </div>
     <div class="sec note-list">
       <div class="card memo-card has-memo" data-go="scr-viewer">
-        <div class="memo-mine"><i data-lucide="pen-line"></i><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자.</p></div>
-        <div class="memo-quote">"사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다."</div>
+        <div class="memo-quote">사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.</div>
+        <div class="memo-mine"><b>내 기록</b><p>내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자.</p></div>
         <div class="memo-src"><span class="src-kit">CO:KIT 41</span><span>전환·매출</span></div>
       </div>
       <div class="card memo-card" data-go="scr-viewer">
-        <div class="memo-quote">"공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요."</div>
+        <div class="memo-quote">공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.</div>
         <div class="memo-src"><span class="src-kit">CO:KIT 41</span><span>콘텐츠</span></div>
       </div>
     </div>
