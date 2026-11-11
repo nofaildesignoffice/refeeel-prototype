@@ -2296,6 +2296,21 @@ mark.hl mark.hl{background:none;box-shadow:none;}
    그대로 두면 검은 판에 검은 글씨가 된다. 그래서 아래에서 다섯 줄을 한꺼번에 밝은 쪽으로 돌린다. */
 .login-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;
   position:relative;background:var(--bg-black);}
+/* ── 좁은 화면의 로그인 바탕 — 유리 사진 + 검은 막 (리건, 2026-11-11) ──
+   모바일 웹은 앱과 같아야 하는데, 앱이 2026-10-07 에 사진을 깔 때 여기만 검은 판으로
+   남아 있었다. 앱의 값을 그대로 옮긴다.
+   넓은 화면은 사진을 왼쪽 칸(.login-img)에 따로 두므로 여기 걸지 않는다 —
+   오른쪽 칸(.login-wrap)은 검은 판 그대로다.
+   ⚠ 막 농도는 글자 때문에 정해진 숫자다. 사진에서 가장 밝은 라임 띠 위에서도 흰 글자가
+     읽혀야 한다 — 0.72 에서 가장 작은 줄이 3.8:1 쯤이다. */
+@media (max-width:1023px){
+  .login-wrap{overflow:hidden;
+    background:url("login-glass.jpg?v=2") center/cover no-repeat var(--bg-black);}
+  .login-wrap::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:rgba(0,0,0,0.72);}
+  /* 글자와 버튼은 막보다 위에 */
+  .login-wrap>*{position:relative;z-index:1;}
+}
 
 /* 검은 판 위의 글자 — 큰 제목만 완전한 흰색, 나머지는 단계를 둬서 위계를 남긴다 */
 #scr-login .login-logo,#scr-login .login-side-copy{color:#fff;}
@@ -2311,7 +2326,11 @@ mark.hl mark.hl{background:none;box-shadow:none;}
   box-shadow:none;
   color:#fff;
   border-color:rgba(255,255,255,0.55);
-  background-color:transparent;
+  /* 투명이 아니라 검은 판이다(리건, 2026-11-11 — 앱은 10-07 에 같은 이유로 바꿨다).
+     좁은 화면은 버튼 뒤로 사진이 비쳐 글자가 사진 무늬와 겹친다. 판을 깔아 떼어 놓는다.
+     넓은 화면은 이 칸 바탕이 이미 #1A1A1A 라 보이는 그림이 달라지지 않는다.
+     차오르는 라임은 background-image 라 이 색보다 위에 깔린다 — 동작은 그대로다. */
+  background-color:var(--bg-black);
   background-image:linear-gradient(var(--brand),var(--brand));
   background-repeat:no-repeat;
   background-position:left center;
@@ -2321,7 +2340,7 @@ mark.hl mark.hl{background:none;box-shadow:none;}
              border-color .22s ease;}
 /* Apple 버튼도 같은 모양으로 맞춘다 — 검은 판에서는 검은 버튼이 사라진다.
    ⚠ 실제 구현에서는 Apple 브랜드 규격(검정 또는 흰색 버튼)을 다시 확인해야 한다. */
-#scr-login .lbtn.apple{background-color:transparent;border-color:rgba(255,255,255,0.55);color:#fff;}
+#scr-login .lbtn.apple{background-color:var(--bg-black);border-color:rgba(255,255,255,0.55);color:#fff;}
 #scr-login .lbtn:hover,#scr-login .lbtn.apple:hover{
   background-size:100% 100%;
   color:var(--brand-ink);
