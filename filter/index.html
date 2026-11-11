@@ -23,24 +23,23 @@ body{font-family:'Pretendard',-apple-system,sans-serif;
 button{font-family:inherit;cursor:pointer;}
 
 /* ── 페이지 머리 ── */
-.hd{padding:40px 20px 26px;max-width:900px;margin:0 auto;}
+.hd{padding:40px 20px 24px;max-width:900px;margin:0 auto;}
 .hd .kick{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
 .hd h1{font-size:26px;font-weight:800;letter-spacing:-0.8px;margin-top:10px;line-height:1.3;}
 .hd p{font-size:14px;line-height:1.75;color:var(--text-gray);margin-top:14px;}
-.hd .how{margin-top:18px;padding:14px 16px;background:var(--bg-white);
+.hd .how{margin-top:16px;padding:14px 16px;background:var(--bg-white);
   border:var(--card-line);border-radius:var(--radius-md);font-size:13px;line-height:1.75;color:var(--text-dark);}
-.hd .how+.how{margin-top:10px;}
 .hd .how b{font-weight:800;}
 .hd .how ul{margin:8px 0 0 0;padding-left:16px;}
 .hd .how li{margin-top:5px;}
+.hd .how.live{border-color:var(--brand);background:var(--bg-light);}
 
-/* 지금 꼴 — 무엇이 문제인지 먼저 보여 준다 */
+/* 지금 꼴 */
 .before{max-width:900px;margin:0 auto 26px;padding:0 20px;}
 .before .bx{max-width:424px;background:var(--bg-white);border:1px dashed var(--border-default);
   border-radius:var(--radius-lg);overflow:hidden;}
 .before .bhd{padding:14px 16px;border-bottom:var(--card-line);font-size:13px;font-weight:800;}
-.before .bhd span{font-weight:600;color:var(--text-gray);margin-left:7px;font-size:12px;}
-.before .bbd{padding:14px 0 16px;max-width:392px;}
+.before .bhd span{display:block;font-weight:600;color:var(--text-gray);margin-top:4px;font-size:12px;}
 
 /* ── 열 가지를 나란히 ── */
 /* 칸은 420px 에서 멈춘다 — 앱의 .phone 과 같은 폭이라야 비율이 거짓말을 안 한다 */
@@ -57,14 +56,23 @@ button{font-family:inherit;cursor:pointer;}
 .col-hd p{font-size:12px;line-height:1.7;color:var(--text-gray);margin-top:9px;}
 .col-hd .mk{display:block;margin-top:9px;font-size:11px;line-height:1.65;color:var(--text-light);}
 .col-hd .mk b{font-weight:800;color:var(--text-gray);}
-.col-bd{padding:14px 0 16px;background:var(--bg-white);}
 
-/* ══════════════════════════════════════════════════════════
-   공통 부품 — 가로 여백 16px 은 앱의 .sec 과 같다
-   ══════════════════════════════════════════════════════════ */
+/* ── 전화기 한 대 ── */
+.ph{position:relative;height:600px;display:flex;flex-direction:column;
+  background:var(--bg-white);overflow:hidden;}
+.ph .top{flex:0 0 auto;padding-top:14px;}
+.ph .list{flex:1;min-height:0;overflow-y:auto;padding:14px 16px 20px;scrollbar-width:thin;}
+.ph .list::-webkit-scrollbar{width:4px;}
+.ph .list::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:2px;}
+/* 아래 탭바 — 손가락이 닿는 자리를 가늠하게 둔다 */
+.ph .tabbar{flex:0 0 auto;display:flex;justify-content:space-around;align-items:center;
+  height:52px;border-top:var(--card-line);background:var(--bg-white);}
+.ph .tabbar span{font-size:9.5px;font-weight:700;color:var(--text-muted);}
+.ph .tabbar span.on{color:var(--text-black);}
+
+/* ── 공통 부품 ── */
 .ic{width:14px;height:14px;flex-shrink:0;}
 
-/* 알약 단추 */
 .bt{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 13px;
   border:1px solid var(--border-light);border-radius:var(--radius-full);
   background:var(--bg-white);font-size:12.5px;font-weight:700;color:var(--text-dark);
@@ -79,7 +87,6 @@ button{font-family:inherit;cursor:pointer;}
 .bt.gh{border-color:transparent;background:none;color:var(--text-gray);padding:0 5px;}
 .bt.gh .ic{color:var(--text-light);}
 
-/* 칩 줄 — 앱의 .tagbar 와 같은 치수다 */
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 16px;}
 .chips::-webkit-scrollbar{display:none;}
 .chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;
@@ -91,14 +98,14 @@ button{font-family:inherit;cursor:pointer;}
 .chip.on b{color:rgba(26,26,26,.45);}
 .chip.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
 .chip.ink .ic{color:var(--brand);}
+.chip.off{color:var(--text-muted);border-color:#EFEFEF;cursor:default;}
+.chip.off b{color:#DDD;}
 .sep{flex-shrink:0;width:1px;align-self:stretch;margin:5px 3px;background:var(--border-light);}
 
-/* 글자 단추 */
 .lnk{display:inline-flex;align-items:center;gap:3px;background:none;border:0;
   font-size:12px;font-weight:700;color:var(--text-gray);}
 .lnk .ic{width:13px;height:13px;color:var(--text-light);}
 
-/* 위 두 갈래 탭 — 지금 화면에 이미 있는 것이다 */
 .tabs{display:flex;gap:18px;padding:0 16px;border-bottom:var(--card-line);}
 .tabs button{position:relative;background:none;border:0;padding:0 0 11px;
   font-size:14px;font-weight:700;color:var(--text-light);}
@@ -107,7 +114,6 @@ button{font-family:inherit;cursor:pointer;}
   border-radius:2px;background:var(--brand-ink);}
 
 /* 기록 카드 — 리건이 고른 '큰 인용' 꼴이다. 여기서는 줄 위쪽만 달라진다. */
-.list{padding:14px 16px 0;}
 .ev+.ev{margin-top:14px;}
 .when{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;}
 .when b{font-size:11.5px;font-weight:800;color:var(--text-dark);}
@@ -126,35 +132,94 @@ button{font-family:inherit;cursor:pointer;}
   font-size:11px;color:var(--text-light);}
 .card .src .kit{font-weight:800;letter-spacing:0.3px;color:var(--text-gray);}
 
+/* 코킷별 묶음 — 밑줄 수와 메모 수는 더하지 않고 따로 센다 */
+.grp+.grp{margin-top:20px;}
+.ghd{display:flex;align-items:baseline;gap:7px;padding:0 2px 9px;min-width:0;}
+.ghd .kit{flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:0.4px;color:var(--text-gray);}
+.ghd .ti{font-size:12.5px;font-weight:700;color:var(--text-black);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ghd .cnt{flex-shrink:0;margin-left:auto;font-size:10.5px;font-weight:700;color:var(--text-light);}
+.ghd .cnt em{font-style:normal;color:var(--brand-press);font-weight:800;}
+.grp .ev+.ev{margin-top:10px;}
+.grp .card .src .kit{font-weight:700;letter-spacing:0;color:var(--text-light);}
+
+/* 아무것도 안 걸렸을 때 */
+.none{padding:40px 10px;text-align:center;}
+.none p{font-size:13px;font-weight:700;color:var(--text-gray);line-height:1.7;}
+.none span{display:block;font-size:11.5px;color:var(--text-light);margin-top:6px;}
+.none button{margin-top:14px;height:34px;padding:0 15px;border-radius:var(--radius-full);
+  border:1px solid var(--border-default);background:none;font-size:12px;font-weight:700;color:var(--text-dark);}
+
+/* 모아보기 자리 */
+.mode-note{padding:36px 14px;text-align:center;}
+.mode-note p{font-size:13px;font-weight:700;color:var(--text-gray);line-height:1.7;}
+.mode-note span{display:block;font-size:11.5px;color:var(--text-light);margin-top:7px;line-height:1.65;}
+
+/* ── 시트와 메뉴 — 전화기 안에만 뜬다 ── */
+.scrim{position:absolute;inset:0;z-index:4;background:rgba(0,0,0,.32);}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:5;max-height:86%;
+  display:flex;flex-direction:column;
+  background:var(--bg-white);border-top:var(--card-line);border-radius:16px 16px 0 0;}
+.sheet .shd{flex:0 0 auto;padding:16px 16px 10px;}
+.sheet .shd .grab{width:34px;height:4px;border-radius:2px;background:var(--border-default);margin:0 auto 13px;}
+.sheet .shd h3{font-size:15px;font-weight:800;letter-spacing:-0.3px;}
+.sheet .sbd{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 12px;}
+.sheet .sft{flex:0 0 auto;display:flex;gap:8px;align-items:center;
+  padding:12px 16px 16px;border-top:var(--card-line);}
+.sheet .sft .go{flex:1;height:44px;border:0;border-radius:var(--radius-full);
+  background:var(--brand);color:var(--brand-ink);font-size:13.5px;font-weight:800;}
+.sheet .sft .clr2{height:44px;padding:0 14px;border:1px solid var(--border-default);
+  border-radius:var(--radius-full);background:none;font-size:12.5px;font-weight:700;color:var(--text-dark);}
+.opt{display:flex;align-items:center;gap:10px;width:100%;padding:12px 2px;
+  background:none;border:0;border-bottom:var(--card-line);text-align:left;}
+.opt:last-child{border-bottom:0;}
+.opt .nm{flex:1;font-size:13.5px;font-weight:700;color:var(--text-dark);}
+.opt .n{font-size:11.5px;font-weight:700;color:var(--text-light);}
+.opt .box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border-default);
+  display:flex;align-items:center;justify-content:center;color:transparent;}
+.opt.sel .box{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.opt.sel .nm{color:var(--text-black);font-weight:800;}
+.opt.dim .nm,.opt.dim .n{color:var(--text-muted);}
+.opt .rd{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border-default);flex-shrink:0;}
+.opt.sel .rd{border:5.5px solid var(--brand-ink);}
+.slab{padding:14px 2px 5px;font-size:10.5px;font-weight:800;letter-spacing:0.5px;color:var(--text-light);}
+.slab:first-child{padding-top:4px;}
+
+.menu{position:absolute;z-index:5;top:0;right:12px;min-width:132px;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);
+  padding:5px;overflow:hidden;}
+.menu button{display:flex;align-items:center;gap:7px;width:100%;padding:9px 9px;
+  background:none;border:0;border-radius:var(--radius-sm);text-align:left;
+  font-size:12.5px;font-weight:700;color:var(--text-dark);}
+.menu button.on{background:var(--bg-light);}
+.menu button .ic{width:13px;height:13px;color:transparent;}
+.menu button.on .ic{color:var(--brand-press);}
+
 /* ══════════════════════════════════════════════════════════
    지금 꼴 — 네 가지 문법이 쌓여 있다
    ══════════════════════════════════════════════════════════ */
-.v-now .nbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 18px;}
+.v-now .nbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 16px;}
 .v-now .sw-wrap{display:flex;align-items:center;gap:8px;}
-.v-now .sw{position:relative;flex-shrink:0;width:44px;height:24px;border-radius:12px;background:var(--bg-dark);}
+.v-now .sw{position:relative;flex-shrink:0;width:44px;height:24px;border-radius:12px;
+  background:var(--bg-dark);transition:background .18s ease;}
 .v-now .sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;
-  border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);}
-.v-now .sw-wrap>span:last-child{font-size:12.5px;font-weight:600;color:var(--text-dark);}
+  border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .18s ease;}
+.v-now .sw.on{background:var(--brand);}
+.v-now .sw.on::after{background:var(--brand-ink);transform:translateX(20px);}
+.v-now .sw-wrap .lb{font-size:12.5px;font-weight:600;color:var(--text-dark);}
 .v-now .nseg{display:flex;gap:2px;background:var(--bg-dark);border-radius:6px;padding:2px;}
 .v-now .nseg button{font-size:11px;font-weight:700;padding:5px 11px;border:none;border-radius:4px;
   background:none;color:rgba(255,255,255,.55);}
-.v-now .nseg button.on{background:var(--bg-white);color:var(--text-black);box-shadow:0 1px 3px rgba(0,0,0,.14);}
-.v-now .tagbar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:16px 16px 12px;}
-.v-now .tagbar::-webkit-scrollbar{display:none;}
+.v-now .nseg button.on{background:var(--bg-white);color:var(--text-black);}
+.v-now .chips{padding-top:16px;padding-bottom:0;}
 
 /* ══════════════════════════════════════════════════════════
    변형별 — 달라지는 건 목록 위의 줄뿐이다
    ══════════════════════════════════════════════════════════ */
-
-/* A. 한 줄 도구막대 */
-.v-a .bar{display:flex;align-items:center;gap:6px;padding:14px 16px 2px;}
+.v-a .bar{display:flex;align-items:center;gap:6px;padding:0 16px;}
 .v-a .bar .last{margin-left:auto;}
 
-/* B. 칩 한 줄 */
-.v-b .chips{padding:14px 16px 2px;}
-
-/* C. 필터 단추 + 바텀시트 */
-.v-c .bar{display:flex;align-items:center;gap:6px;padding:14px 16px 10px;}
+.v-c .bar{display:flex;align-items:center;gap:6px;padding:0 16px 10px;}
 .v-c .bar .last{margin-left:auto;}
 .v-c .bt.pri b{display:inline-flex;align-items:center;justify-content:center;
   min-width:17px;height:17px;border-radius:9px;background:var(--brand);
@@ -166,9 +231,9 @@ button{font-family:inherit;cursor:pointer;}
 .v-c .ap .ic{width:13px;height:13px;color:var(--text-gray);}
 .v-c .clr{background:none;border:0;font-size:11.5px;font-weight:700;
   color:var(--text-light);text-decoration:underline;text-underline-offset:2px;margin-left:2px;}
+.v-c .quiet{padding:0 16px;font-size:11.5px;color:var(--text-light);font-weight:600;}
 
-/* D. 칩줄 + 보기 아이콘 */
-.v-d .bar{display:flex;align-items:center;padding:14px 0 2px;}
+.v-d .bar{display:flex;align-items:center;}
 .v-d .fade{flex:1;min-width:0;position:relative;}
 .v-d .fade::after{content:"";position:absolute;top:0;bottom:0;right:0;width:26px;
   background:linear-gradient(to right,rgba(255,255,255,0),var(--bg-white));pointer-events:none;}
@@ -179,19 +244,16 @@ button{font-family:inherit;cursor:pointer;}
 .v-d .vw button .ic{width:17px;height:17px;}
 .v-d .vw button.on{background:var(--bg-light);color:var(--text-black);}
 
-/* E. 제목줄 + 칩줄 */
-.v-e .hdl{display:flex;align-items:baseline;justify-content:space-between;padding:16px 16px 12px;}
+.v-e .hdl{display:flex;align-items:baseline;justify-content:space-between;padding:2px 16px 12px;}
 .v-e .hdl .ti{font-size:16px;font-weight:800;letter-spacing:-0.3px;}
 .v-e .hdl .ti span{font-size:12px;font-weight:700;color:var(--text-light);margin-left:6px;}
 
-/* F. 탭이 모드를 흡수 */
-.v-f .tabs{padding-top:2px;}
+.v-f .top{padding-top:2px;}
 .v-f .chips{padding-top:14px;}
 
-/* G. 세그먼트를 하나로 */
-.v-g .tabs{padding-top:2px;}
+.v-g .top{padding-top:2px;}
 .v-g .chips{padding-top:14px;}
-.v-g .sub{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 2px;}
+.v-g .sub{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 0;}
 .v-g .seg2{display:flex;gap:14px;}
 .v-g .seg2 button{position:relative;background:none;border:0;padding:0 0 7px;
   font-size:12.5px;font-weight:700;color:var(--text-light);}
@@ -199,41 +261,29 @@ button{font-family:inherit;cursor:pointer;}
 .v-g .seg2 button.on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
   border-radius:2px;background:var(--brand);}
 .v-g .tog{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 11px;
-  border-radius:var(--radius-full);border:1px solid var(--bg-black);background:var(--bg-black);
-  font-size:11.5px;font-weight:700;color:var(--bg-white);}
-.v-g .tog .ic{width:12px;height:12px;color:var(--brand);}
+  border-radius:var(--radius-full);border:1px solid var(--border-light);background:var(--bg-white);
+  font-size:11.5px;font-weight:700;color:var(--text-gray);}
+.v-g .tog .ic{width:12px;height:12px;color:var(--text-muted);}
+.v-g .tog.on{border-color:var(--bg-black);background:var(--bg-black);color:var(--bg-white);}
+.v-g .tog.on .ic{color:var(--brand);}
 
-/* H. 요약 띠 */
-.v-h .strip{display:flex;align-items:center;gap:10px;padding:15px 16px 3px;flex-wrap:wrap;}
+.v-h .strip{display:flex;align-items:center;gap:10px;padding:1px 16px 0;flex-wrap:wrap;}
 .v-h .strip .dot{width:3px;height:3px;border-radius:50%;background:var(--text-muted);}
 .v-h .strip .cnt{font-size:12.5px;font-weight:800;color:var(--text-black);}
 .v-h .strip .lnk.act{color:var(--text-black);font-weight:800;}
 .v-h .strip .lnk.act .ic{color:var(--text-dark);}
+.v-h .chips{padding-top:12px;}
 
-/* I. 아래 고정 막대 */
-.v-i .chips{padding:14px 16px 2px;}
-.v-i .floor{margin:16px 16px 0;}
+.v-i .floor{position:absolute;left:16px;right:16px;bottom:64px;z-index:3;}
 .v-i .pill{display:flex;align-items:center;gap:6px;justify-content:center;
-  height:44px;border-radius:var(--radius-full);background:var(--bg-black);
-  box-shadow:0 6px 20px rgba(0,0,0,.18);}
+  height:44px;border-radius:var(--radius-full);background:var(--bg-black);}
 .v-i .pill button{display:inline-flex;align-items:center;gap:5px;background:none;border:0;
   font-size:12.5px;font-weight:700;color:var(--bg-white);padding:0 10px;}
 .v-i .pill .ic{color:var(--brand);}
 .v-i .pill .vr{width:1px;height:16px;background:rgba(255,255,255,.22);}
 .v-i .pill b{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;
   border-radius:8px;background:var(--brand);color:var(--brand-ink);font-size:10px;font-weight:800;}
-.v-i .note{font-size:10.5px;color:var(--text-light);text-align:center;margin-top:7px;}
-
-/* J. 고르는 걸 없앤다 */
-.v-j .chips{padding:14px 16px 2px;}
-.v-j .ghd{display:flex;align-items:center;gap:7px;padding:0 0 9px;min-width:0;}
-.v-j .ghd .kit{flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:0.4px;color:var(--text-gray);}
-.v-j .ghd .ti{font-size:12.5px;font-weight:700;color:var(--text-black);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.v-j .grp+.grp{margin-top:18px;}
-.v-j .grp .ev+.ev{margin-top:10px;}
-/* 묶음 머리글이 코킷을 이미 말했다 — 카드 아래 왼쪽은 날짜가 대신 선다 */
-.v-j .card .src .kit{font-weight:700;letter-spacing:0;color:var(--text-light);}
+.v-i .list{padding-bottom:74px;}
 </style>
 </head>
 <body>
@@ -244,6 +294,12 @@ button{font-family:inherit;cursor:pointer;}
   <p>지금은 한 화면에 <b>네 가지 문법</b>이 쌓여 있습니다. 위 두 갈래 탭(전체보기·모아보기), 라임 칩 줄(주제),
     켜고 끄는 스위치(메모 쓴 것만), 검은 알약 세그먼트(시간순·코킷별). 넷이 생김새도 다르고 하는 일도 다른데
     한 뼘 안에 붙어 있어서, 어느 것이 <b>목록을 좁히는 것</b>이고 어느 것이 <b>보는 방식을 바꾸는 것</b>인지가 안 갈립니다.</p>
+  <div class="how live">
+    <b>전부 눌러집니다.</b> 칩·스위치·필터 시트·정렬 메뉴가 다 살아 있고, 누르면 아래 목록이 실제로 바뀝니다.
+    기록 열 개는 앱에 들어 있는 것과 같은 값입니다(밑줄 10 · 메모 6).
+    조건이 세면 <b>아무것도 안 걸리는 화면</b>도 나옵니다 — 그것도 같이 보시라고 그대로 뒀습니다.
+    열 칸은 각자 따로 기억하니 마음껏 눌러 보시고, 머리글의 <b>처음으로</b>로 되돌리면 됩니다.
+  </div>
   <div class="how">
     <b>어떻게 고르나</b> — 아래 점선 상자가 <b>지금 꼴</b>입니다. 그 아래 A~J 가 고친 것입니다.
     목록(큰 인용 카드)은 열 가지가 모두 같습니다 — <b>달라지는 건 목록 위의 줄뿐</b>입니다.
@@ -269,28 +325,52 @@ button{font-family:inherit;cursor:pointer;}
 <div class="before">
   <div class="bx">
     <div class="bhd">지금 꼴<span>네 가지 문법이 쌓여 있다 — 탭 · 칩 · 스위치 · 검은 세그먼트</span></div>
-    <div class="bbd v-now" id="now"></div>
+    <div class="ph v-now" data-v="NOW"></div>
   </div>
 </div>
 
 <div class="grid" id="grid"></div>
 
 <script>
-/* 쓰는 글은 프로토타입의 실제 값 그대로다 — 생김새만 비교하게 한다 */
-/* day 는 시간순 목록의 날짜 머리다 — 같은 날 둘째 기록에는 안 붙는다.
-   date 는 그 기록 자체의 날짜라 모든 줄에 있다(J 가 쓴다). */
+/* ══════════════════════════════════════════════════════════
+   기록 — 앱에 들어 있는 값 그대로다. 밑줄 10 · 메모 6.
+   ══════════════════════════════════════════════════════════ */
 const EV = [
-  { day:"8/16", ago:"어제", date:"8/16", kit:"CO:KIT 41", tag:"전환·매출",
+  { date:"8/16", ago:"어제",   kit:"CO:KIT 41", tag:"전환·매출",
     q:"사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.",
-    m:"내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네." },
-  { day:"", ago:"", date:"8/16", kit:"CO:KIT 41", tag:"콘텐츠",
+    m:"내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자." },
+  { date:"8/16", ago:"어제",   kit:"CO:KIT 41", tag:"콘텐츠",
     q:"공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.", m:"" },
-  { day:"8/14", ago:"3일 전", date:"8/14", kit:"CO:KIT 51", tag:"소비자 심리",
+  { date:"8/14", ago:"3일 전", kit:"CO:KIT 51", tag:"소비자 심리",
     q:"이력을 먼저 나열하면 고객은 스펙을 비교하기 시작합니다. 감정이 열리지 않았으니까요.",
-    m:"상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다." }
+    m:"상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다. 후기를 먼저 올리고 경력은 그 아래로." },
+  { date:"8/14", ago:"3일 전", kit:"CO:KIT 51", tag:"소비자 심리",
+    q:"패턴이 매끄러우면 뇌는 그걸 검증하지 않고 진실로 받아들인다는 것.", m:"" },
+  { date:"8/12", ago:"5일 전", kit:"CO:KIT 15", tag:"브랜딩",
+    q:"자격증을 나열하는 것보다 '3개월 평균 -12kg'이라는 결과 하나가 훨씬 강력합니다.",
+    m:"우리 프로필도 수상 이력만 늘어놨다. 숫자 하나로 바꾸자 — 재방문율이면 충분할 듯." },
+  { date:"8/12", ago:"5일 전", kit:"CO:KIT 15", tag:"타겟·차별화",
+    q:"프로필에서 '나에게 무엇을 해줄 수 있는 사람인지' 답을 찾지 못했기 때문입니다.", m:"" },
+  { date:"8/10", ago:"1주 전", kit:"CO:KIT 57", tag:"사업 성장",
+    q:"'3개월 멈추면 어떻게 되는가?' 결과가 치명적이지 않은 가지는 쳐낼 후보예요.",
+    m:"블로그·유튜브·뉴스레터 셋 다 3개월 멈춰도 별일 없을 것 같다. 하나만 남기고 정리하자." },
+  { date:"8/10", ago:"1주 전", kit:"CO:KIT 57", tag:"사업 성장",
+    q:"준비하는 시간이 길어질수록 아직 시작하지 않았다는 사실이 가려집니다.",
+    m:"강의 기획만 두 달째다. 완성도는 나중에 올리고 이번 주에 한 번 열어보자." },
+  { date:"8/3",  ago:"2주 전", kit:"CO:KIT 34", tag:"AEO·AI검색",
+    q:"이력서가 AI를 통과해야 면접관을 만나듯, 브랜드도 AI의 기준을 통과해야 고객을 만날 수 있는 시대가 된 거예요.",
+    m:"우리 소개글부터 한 문장으로 정리해서 다시 쓰자. 지금은 수식어만 많고 무슨 회사인지 안 나온다." },
+  { date:"8/3",  ago:"2주 전", kit:"CO:KIT 34", tag:"AEO·AI검색",
+    q:"소제목 바로 아래 첫 두 문장 안에 핵심 답변이 나와야 합니다. 서론이 길면 AI는 그 글을 건너뜁니다.", m:"" }
 ];
-const TAGS = [["전체",10],["소비자 심리",2],["사업 성장",2],["AEO·AI검색",2],
-              ["전환·매출",1],["콘텐츠",1],["브랜딩",1],["타겟·차별화",1]];
+const TITLE = {
+  "CO:KIT 41":"팔지 않으면 팔리는 3단계 콘텐츠 퍼널",
+  "CO:KIT 51":"뇌는 왜 이야기에 속는가",
+  "CO:KIT 15":"사업자의 인스타 프로필 설정법",
+  "CO:KIT 57":"빼는 게 먼저, 더하는 게 나중",
+  "CO:KIT 34":"AI 검색에서 내 브랜드가 추천되게 만드는 법"
+};
+const TAGS = ["전체","소비자 심리","사업 성장","AEO·AI검색","전환·매출","콘텐츠","브랜딩","타겟·차별화"];
 
 const sv = d => '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
 const CHEV  = sv('<path d="m6 9 6 6 6-6"/>');
@@ -302,133 +382,287 @@ const XI    = sv('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>');
 const SORT  = sv('<path d="M11 5h10"/><path d="M11 12h7"/><path d="M11 19h4"/><path d="m3 8 3-3 3 3"/><path d="M6 5v14"/>');
 
 const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const SORTNAME = {time:"시간순", kit:"코킷별"};
 
-/* 목록은 열 가지가 같다 */
+/* ══════════════════════════════════════════════════════════
+   상태 — 칸마다 따로 기억한다
+   ══════════════════════════════════════════════════════════ */
+const ST = {};
+const st = v => ST[v] || (ST[v] = {topic:"전체", memo:false, view:"time",
+                                   tab:"all", sheet:"", menu:false, chipsOpen:false});
+const reset = v => { ST[v] = null; st(v); };
+
+/* 거른 결과 */
+const rows = s => EV.filter(e => (s.topic === "전체" || e.tag === s.topic) && (!s.memo || e.m));
+/* 주제별 수 — '메모만' 이 켜져 있으면 그 안에서 센다. 켜 놓고 0 인 주제를 흐리게 보여 준다. */
+const countOf = (s,t) => EV.filter(e => (t === "전체" || e.tag === t) && (!s.memo || e.m)).length;
+
+/* ══════════════════════════════════════════════════════════
+   목록 그리기
+   ══════════════════════════════════════════════════════════ */
 const card = (e,left) => `<div class="card"><span class="mark">&ldquo;</span><p class="q">${esc(e.q)}</p>
   ${e.m?`<div class="mine"><b>내 기록</b><p>${esc(e.m)}</p></div>`:""}
   <div class="src"><span class="kit">${left||e.kit}</span><span>${e.tag}</span></div></div>`;
-const LISTHTML = `<div class="list">${EV.map(e => `<div class="ev">
-  ${e.day?`<span class="when"><b>${e.day}</b><span>${e.ago}</span></span>`:""}${card(e)}</div>`).join("")}</div>`;
 
-const chips = lead => `<div class="chips">${lead||""}${
-  TAGS.map(([t,n],i) => `<button class="chip${i===0?" on":""}">${t}<b>${n}</b></button>`).join("")}</div>`;
-const MEMO_CHIP = `<button class="chip ink">${CHECK}메모만</button><span class="sep"></span>`;
+function listTime(r){
+  let last = "";
+  return r.map(e => {
+    const head = e.date !== last ? `<span class="when"><b>${e.date}</b><span>${e.ago}</span></span>` : "";
+    last = e.date;
+    return `<div class="ev">${head}${card(e)}</div>`;
+  }).join("");
+}
 
-/* ── 지금 꼴 ── */
-document.getElementById("now").innerHTML = `
-  <div class="tabs"><button class="on">전체보기</button><button>모아보기</button></div>
-  <div class="tagbar">${TAGS.map(([t,n],i) =>
-    `<button class="chip${i===0?" on":""}">${t}<b>${n}</b></button>`).join("")}</div>
+function listKit(r){
+  const g = {};
+  r.forEach(e => { (g[e.kit] = g[e.kit] || []).push(e); });
+  return Object.keys(g).map(k => {
+    const rs = g[k], mm = rs.filter(x => x.m).length;
+    /* 밑줄 수와 메모 수는 더하지 않는다 — 메모는 밑줄에 딸린 것일 수 있다 */
+    return `<div class="grp"><div class="ghd">
+        <span class="kit">${k}</span><span class="ti">${TITLE[k]}</span>
+        <span class="cnt">밑줄 ${rs.length}${mm?` · <em>메모 ${mm}</em>`:""}</span>
+      </div>${rs.map(e => `<div class="ev">${card(e, e.date)}</div>`).join("")}</div>`;
+  }).join("");
+}
+
+function listHTML(v,s,forceView){
+  if(s.tab === "collect")
+    return `<div class="mode-note"><p>모아보기</p>
+      <span>한 번에 하나씩 넘겨 보는 화면입니다.<br>여기서는 거르는 줄만 견줍니다.</span></div>`;
+  const r = rows(s);
+  if(!r.length) return `<div class="none"><p>걸린 기록이 없습니다</p>
+    <span>${s.memo?"메모를 쓴 것 중에 ":""}‘${s.topic}’ 주제가 없습니다.</span>
+    <button data-act="clear">조건 지우기</button></div>`;
+  const view = forceView || s.view;
+  return view === "kit" ? listKit(r) : listTime(r);
+}
+
+/* ══════════════════════════════════════════════════════════
+   부품 — 칩 줄, 시트, 메뉴
+   ══════════════════════════════════════════════════════════ */
+function chipRow(s,{memoChip=false,cls=""}={}){
+  const lead = memoChip
+    ? `<button class="chip${s.memo?" ink":""}" data-act="memo">${s.memo?CHECK:""}메모만</button><span class="sep"></span>`
+    : "";
+  /* 걸릴 게 없는 주제는 흐리게 두고 누르지 못하게 한다 — 눌러 봐야 빈 화면이다 */
+  return `<div class="chips ${cls}">${lead}${TAGS.map(t => {
+    const n = countOf(s,t), off = n === 0 && t !== s.topic;
+    return `<button class="chip${s.topic===t?" on":""}${off?" off":""}"${off?"":` data-act="topic:${t}"`}>${t}<b>${n}</b></button>`;
+  }).join("")}</div>`;
+}
+
+function sheetTopic(s){
+  return `<div class="scrim" data-act="close"></div>
+  <div class="sheet"><div class="shd"><div class="grab"></div><h3>주제 고르기</h3></div>
+    <div class="sbd">${TAGS.map(t => {
+      const n = countOf(s,t), off = n === 0 && t !== s.topic;
+      return `<button class="opt${s.topic===t?" sel":""}${off?" dim":""}"${off?"":` data-act="topic:${t}"`}>
+        <span class="rd"></span><span class="nm">${t}</span><span class="n">${n}</span></button>`;
+    }).join("")}</div>
+    <div class="sft"><button class="go" data-act="close">닫기</button></div></div>`;
+}
+
+function sheetFilter(s){
+  const n = rows(s).length;
+  return `<div class="scrim" data-act="close"></div>
+  <div class="sheet"><div class="shd"><div class="grab"></div><h3>거르기</h3></div>
+    <div class="sbd">
+      <!-- 켜고 끄는 것은 네모, 하나만 고르는 것은 동그라미 — 생김새로 갈라 둔다 -->
+      <div class="slab">켜고 끄기</div>
+      <button class="opt${s.memo?" sel":""}" data-act="memo">
+        <span class="box">${CHECK}</span><span class="nm">메모 쓴 것만</span>
+        <span class="n">${EV.filter(e=>e.m).length}</span></button>
+      <div class="slab">주제 — 하나만</div>
+      ${TAGS.map(t => {
+        const c = countOf(s,t), off = c === 0 && t !== s.topic;
+        return `<button class="opt${s.topic===t?" sel":""}${off?" dim":""}"${off?"":` data-act="topic:${t}"`}>
+          <span class="rd"></span><span class="nm">${t}</span><span class="n">${c}</span></button>`;
+      }).join("")}
+    </div>
+    <div class="sft"><button class="clr2" data-act="clear">모두 지우기</button>
+      <button class="go" data-act="close">기록 ${n}개 보기</button></div></div>`;
+}
+
+/* 메뉴는 누른 단추 가까이 떠야 한다 — 아래 막대(I)만 아래에서 올라온다 */
+const sortMenu = (s,pos) => `<div class="scrim" data-act="close" style="background:transparent"></div>
+  <div class="menu" style="${pos||"top:46px"}">
+    ${["time","kit"].map(k => `<button class="${s.view===k?"on":""}" data-act="view:${k}">
+      ${CHECK}${SORTNAME[k]}</button>`).join("")}</div>`;
+
+const tabbar = `<div class="tabbar"><span>홈</span><span>검색</span><span>낙타AI</span>
+  <span class="on">인사이트</span><span>내 코킷</span></div>`;
+
+/* ══════════════════════════════════════════════════════════
+   열 가지 + 지금 꼴
+   ══════════════════════════════════════════════════════════ */
+const BAR = {
+
+NOW: s => `<div class="tabs">
+    <button class="${s.tab==="all"?"on":""}" data-act="tab:all">전체보기</button>
+    <button class="${s.tab==="collect"?"on":""}" data-act="tab:collect">모아보기</button></div>
+  ${chipRow(s)}
   <div class="nbar">
-    <span class="sw-wrap"><span class="sw"></span><span>메모 쓴 것만</span></span>
-    <div class="nseg"><button class="on">시간순</button><button>코킷별</button></div>
-  </div>` + LISTHTML;
+    <span class="sw-wrap"><span class="sw${s.memo?" on":""}" data-act="memo"></span>
+      <span class="lb" data-act="memo">메모 쓴 것만</span></span>
+    <div class="nseg">
+      <button class="${s.view==="time"?"on":""}" data-act="view:time">시간순</button>
+      <button class="${s.view==="kit"?"on":""}" data-act="view:kit">코킷별</button></div>
+  </div>`,
 
-/* ── 열 가지 ── */
+A: s => `<div class="bar">
+    <button class="bt${s.topic!=="전체"?" on":""}" data-act="sheet:topic">주제 ${s.topic} ${CHEV}</button>
+    <button class="bt${s.memo?" ink":""}" data-act="memo">${s.memo?CHECK:""}메모만</button>
+    <button class="bt gh last" data-act="menu">${SORTNAME[s.view]} ${CHEV}</button>
+  </div>${s.menu?sortMenu(s):""}${s.sheet==="topic"?sheetTopic(s):""}`,
+
+B: s => chipRow(s,{memoChip:true}),
+
+C: s => {
+  const n = (s.topic!=="전체"?1:0) + (s.memo?1:0);
+  return `<div class="bar">
+    <button class="bt pri" data-act="sheet:filter">${FLT}필터${n?`<b>${n}</b>`:""}</button>
+    <button class="bt gh last" data-act="menu">${SORTNAME[s.view]} ${CHEV}</button>
+  </div>
+  <div class="applied">${
+    n ? `${s.memo?`<span class="ap">메모만 <span data-act="memo">${XI}</span></span>`:""}
+         ${s.topic!=="전체"?`<span class="ap">${s.topic} <span data-act="topic:전체">${XI}</span></span>`:""}
+         <button class="clr" data-act="clear">모두 지우기</button>`
+      : `<span class="quiet">거른 것 없음 · 기록 10개</span>`
+  }</div>${s.menu?sortMenu(s):""}${s.sheet==="filter"?sheetFilter(s):""}`;
+},
+
+D: s => `<div class="bar">
+    <div class="fade">${chipRow(s,{memoChip:true})}</div>
+    <div class="vw">
+      <button class="${s.view==="time"?"on":""}" data-act="view:time" title="시간순">${LIST}</button>
+      <button class="${s.view==="kit"?"on":""}" data-act="view:kit" title="코킷별">${LAYER}</button>
+    </div></div>`,
+
+E: s => `<div class="hdl">
+    <span class="ti">내 기록<span>${rows(s).length}개</span></span>
+    <button class="lnk" data-act="menu">${SORT}${SORTNAME[s.view]} ${CHEV}</button>
+  </div>${chipRow(s,{memoChip:true})}${s.menu?sortMenu(s):""}`,
+
+F: s => `<div class="tabs">
+    <button class="${s.tab==="all"&&s.view==="time"?"on":""}" data-act="ftab:time">시간순</button>
+    <button class="${s.tab==="all"&&s.view==="kit"?"on":""}" data-act="ftab:kit">코킷별</button>
+    <button class="${s.tab==="collect"?"on":""}" data-act="tab:collect">모아보기</button></div>
+  ${chipRow(s,{memoChip:true})}`,
+
+G: s => `<div class="tabs">
+    <button class="${s.tab==="all"?"on":""}" data-act="tab:all">전체보기</button>
+    <button class="${s.tab==="collect"?"on":""}" data-act="tab:collect">모아보기</button></div>
+  ${chipRow(s)}
+  <div class="sub">
+    <div class="seg2">
+      <button class="${s.view==="time"?"on":""}" data-act="view:time">시간순</button>
+      <button class="${s.view==="kit"?"on":""}" data-act="view:kit">코킷별</button></div>
+    <button class="tog${s.memo?" on":""}" data-act="memo">${s.memo?CHECK:""}메모만</button>
+  </div>`,
+
+H: s => {
+  const r = rows(s), mm = r.filter(e=>e.m).length;
+  return `<div class="strip">
+    <span class="cnt">밑줄 ${r.length} · 메모 ${mm}</span>
+    <span class="dot"></span>
+    <button class="lnk${s.chipsOpen||s.topic!=="전체"?" act":""}" data-act="chips">주제 ${s.topic} ${CHEV}</button>
+    <span class="dot"></span>
+    <button class="lnk" data-act="menu">${SORTNAME[s.view]} ${CHEV}</button>
+  </div>${s.chipsOpen?chipRow(s,{memoChip:true}):""}${s.menu?sortMenu(s):""}`;
+},
+
+I: s => {
+  const n = (s.topic!=="전체"?1:0) + (s.memo?1:0);
+  return `${chipRow(s)}
+  <div class="floor"><div class="pill">
+    <button data-act="sheet:filter">${FLT}필터${n?`<b>${n}</b>`:""}</button>
+    <span class="vr"></span>
+    <button data-act="menu">${SORT}${SORTNAME[s.view]}</button>
+  </div></div>${s.menu?sortMenu(s,"bottom:114px;right:16px"):""}${s.sheet==="filter"?sheetFilter(s):""}`;
+},
+
+J: s => chipRow(s,{memoChip:true})
+};
+
+/* J 는 늘 코킷별로 묶는다 — 고르는 걸 없앤 꼴이다 */
+const FORCE = { J:"kit" };
+
 const V = [
 ["A","한 줄 도구막대",
  "칩 줄·스위치·세그먼트를 걷고 <b>이름 붙은 알약 단추 셋</b>만 한 줄에 둔다. 주제는 눌러서 시트로 고른다. 가장 조용하고, 스크롤에 붙여 두기도 쉽다.",
- "좁히기 둘(주제·메모만) + 정렬 하나(시간순). 셋이 같은 생김새라 '여기가 거르는 줄'로 한 번에 읽힌다.",
- `<div class="bar">
-    <button class="bt">주제 전체 ${CHEV}</button>
-    <button class="bt ink">${CHECK}메모만</button>
-    <button class="bt gh last">시간순 ${CHEV}</button>
-  </div>`],
-
+ "좁히기 둘(주제·메모만) + 정렬 하나. 셋이 같은 생김새라 '여기가 거르는 줄'로 한 번에 읽힌다."],
 ["B","칩 한 줄",
- "<b>한 줄이 전부다.</b> 메모만도 칩이 되어 주제 칩들 앞에 서고, 시간순·코킷별은 위 탭이 맡는다(F 와 짝이다). 스위치와 검은 세그먼트가 화면에서 사라진다.",
- "불리언은 스위치보다 칩 — 둘 다 '목록을 좁히는' 일이니 생김새도 같아야 한다. 라임은 주제, 검정은 메모만으로 색을 갈랐다.",
- chips(MEMO_CHIP)],
-
+ "<b>한 줄이 전부다.</b> 메모만도 칩이 되어 주제 칩들 앞에 선다. 시간순·코킷별은 위 탭이 맡는다(F 와 짝이다). 스위치와 검은 세그먼트가 화면에서 사라진다.",
+ "불리언은 스위치보다 칩 — 둘 다 '목록을 좁히는' 일이니 생김새도 같아야 한다. 라임은 주제, 검정은 메모만으로 색을 갈랐다."],
 ["C","필터 단추 + 바텀시트",
- "거르는 건 전부 <b>시트 뒤로</b> 넣고, 줄에는 '필터 2'와 정렬만 남긴다. 켜 둔 것은 아래에 <b>뗄 수 있는 칩</b>으로 늘 보인다. 주제가 더 늘어날 때 가장 안 무너진다.",
- "복잡한 거르기는 시트 뒤 · 적용된 것은 늘 보이게 · 하나씩 떼기 + 모두 지우기. 베이마드가 말하는 꼴 그대로다.",
- `<div class="bar">
-    <button class="bt pri">${FLT}필터<b>2</b></button>
-    <button class="bt gh last">시간순 ${CHEV}</button>
-  </div>
-  <div class="applied">
-    <span class="ap">메모만 ${XI}</span>
-    <span class="ap">소비자 심리 ${XI}</span>
-    <button class="clr">모두 지우기</button>
-  </div>`],
-
+ "거르는 건 전부 <b>시트 뒤로</b> 넣고, 줄에는 '필터'와 정렬만 남긴다. 켜 둔 것은 아래에 <b>뗄 수 있는 칩</b>으로 늘 보인다. 주제가 더 늘어날 때 가장 안 무너진다.",
+ "복잡한 거르기는 시트 뒤 · 적용된 것은 늘 보이게 · 하나씩 떼기 + 모두 지우기. 베이마드가 말하는 꼴 그대로다."],
 ["D","칩줄 + 보기 아이콘",
  "칩 줄은 그대로 두고, 시간순·코킷별만 <b>작은 아이콘 둘</b>로 바꿔 오른쪽에 붙인다. 글자가 사라지니 '이건 거르는 게 아니라 보는 방식'이 생김새로 구별된다.",
- "칩은 좁히기, 아이콘은 보기. 지금 꼴에서 가장 적게 건드리면서 둘을 갈라 놓는 길이다.",
- `<div class="bar">
-    <div class="fade">${chips(MEMO_CHIP)}</div>
-    <div class="vw"><button class="on">${LIST}</button><button>${LAYER}</button></div>
-  </div>`],
-
+ "칩은 좁히기, 아이콘은 보기. 지금 꼴에서 가장 적게 건드리면서 둘을 갈라 놓는 길이다."],
 ["E","제목줄 + 칩줄",
- "<b>두 줄로 끝낸다.</b> 첫 줄은 「내 기록 10개 … 시간순」, 둘째 줄은 칩. 몇 개가 걸렸는지가 늘 보여서 거른 뒤 결과를 바로 확인할 수 있다.",
- "거르는 것은 목록 바로 위에 · 결과 수를 보여 준다. 정렬을 제목 줄로 올리면 칩 줄이 온전히 '좁히기' 한 가지가 된다.",
- `<div class="hdl">
-    <span class="ti">내 기록<span>10개</span></span>
-    <button class="lnk">${SORT}시간순 ${CHEV}</button>
-  </div>
-  ${chips(MEMO_CHIP)}`],
-
+ "<b>두 줄로 끝낸다.</b> 첫 줄은 「내 기록 n개 … 시간순」, 둘째 줄은 칩. 몇 개가 걸렸는지가 늘 보여서 거른 뒤 결과를 바로 확인할 수 있다.",
+ "거르는 것은 목록 바로 위에 · 결과 수를 보여 준다. 정렬을 제목 줄로 올리면 칩 줄이 온전히 '좁히기' 한 가지가 된다."],
 ["F","탭이 모드를 흡수",
  "위 두 갈래 탭을 <b>시간순 · 코킷별 · 모아보기</b> 셋으로 늘려, 검은 세그먼트를 통째로 없앤다. 아래에는 칩 한 줄만 남는다. 줄 하나가 줄어든다.",
- "세그먼트는 한 화면에 하나 · 둘~다섯 개. 같은 일(보는 방식 고르기)을 하는 두 컨트롤을 하나로 합치는 것이다.",
- `<div class="tabs"><button class="on">시간순</button><button>코킷별</button><button>모아보기</button></div>
-  ${chips(MEMO_CHIP)}`],
-
+ "세그먼트는 한 화면에 하나 · 둘~다섯 개. 같은 일(보는 방식 고르기)을 하는 두 컨트롤을 하나로 합치는 것이다."],
 ["G","세그먼트를 하나로",
- "둘 다 남기되 <b>생김새를 통일한다.</b> 검은 알약을 걷고 위 탭과 같은 라임 밑줄 꼴로 바꾼다. 스위치는 작은 검정 칩이 된다. 화면 구조는 그대로, 문법만 넷 → 둘.",
- "같은 일에는 같은 부품. 지금 문제의 절반은 '검은 알약'이 이 화면의 다른 어떤 것과도 안 닮은 데서 온다.",
- `<div class="tabs"><button class="on">전체보기</button><button>모아보기</button></div>
-  ${chips("")}
-  <div class="sub">
-    <div class="seg2"><button class="on">시간순</button><button>코킷별</button></div>
-    <button class="tog">${CHECK}메모만</button>
-  </div>`],
-
+ "둘 다 남기되 <b>생김새를 통일한다.</b> 검은 알약을 걷고 위 탭과 같은 라임 밑줄 꼴로 바꾼다. 스위치는 작은 칩이 된다. 화면 구조는 그대로, 문법만 넷 → 둘.",
+ "같은 일에는 같은 부품. 지금 문제의 절반은 '검은 알약'이 이 화면의 다른 어떤 것과도 안 닮은 데서 온다."],
 ["H","요약 띠",
- "줄이 아니라 <b>한 문장</b>이다. 「밑줄 10 · 메모 6 … 주제 전체 · 시간순」. 칩 줄은 '주제 전체'를 눌렀을 때만 펴진다. 목록이 가장 빨리 시작되는 꼴이다.",
- "붙여 둘 영역을 짧게 · 요약 띠로 대신하기. 다만 주제가 한 번에 안 보이니 탐색이 한 번 늘어난다 — 트레이드오프다.",
- `<div class="strip">
-    <span class="cnt">밑줄 10 · 메모 6</span>
-    <span class="dot"></span>
-    <button class="lnk act">주제 전체 ${CHEV}</button>
-    <span class="dot"></span>
-    <button class="lnk">시간순 ${CHEV}</button>
-  </div>`],
-
+ "줄이 아니라 <b>한 문장</b>이다. 「밑줄 10 · 메모 6 … 주제 전체 · 시간순」. 칩 줄은 '주제'를 눌렀을 때만 펴진다. 목록이 가장 빨리 시작되는 꼴이다.",
+ "붙여 둘 영역을 짧게 · 요약 띠로 대신하기. 다만 주제가 한 번에 안 보이니 탐색이 한 번 늘어난다 — 트레이드오프다."],
 ["I","아래 고정 막대",
  "거르는 걸 <b>아래로 내린다.</b> 위에는 칩 줄만 두고, 필터·정렬은 탭바 위에 뜬 검은 알약이 맡는다. 스크롤을 한참 내려도 손가락 가까이 있다.",
- "붙여 두는 단추는 스크롤 중에도 닿는 자리에 · 전화기에서는 아래 동작 막대. 다만 탭바와 겹쳐 아래가 두꺼워진다.",
- `${chips("")}
-  <div class="floor"><div class="pill">
-    <button>${FLT}필터<b>2</b></button>
-    <span class="vr"></span>
-    <button>${SORT}시간순</button>
-  </div><p class="note">— 탭바 위에 떠 있다 —</p></div>`],
-
+ "붙여 두는 단추는 스크롤 중에도 닿는 자리에 · 전화기에서는 아래 동작 막대. 다만 탭바와 겹쳐 아래가 두꺼워진다."],
 ["J","고르는 걸 없앤다",
  "시간순·코킷별을 <b>아예 묻지 않는다.</b> 목록은 늘 코킷별로 묶고 각 줄에 날짜를 둔다. 둘이 한 화면에 함께 있으니 전환할 이유가 사라진다. 남는 건 칩 한 줄.",
- "안 쓰는 선택지는 비용이다. 묶음 머리글의 밑줄 수와 메모 수는 더하지 않고 따로 센다.",
- chips(MEMO_CHIP)]
+ "안 쓰는 선택지는 비용이다. 묶음 머리글의 밑줄 수와 메모 수는 더하지 않고 따로 센다."]
 ];
 
-/* J 는 목록을 묶어서 그린다 */
-function listJ(){
-  const g = {};
-  EV.forEach(e => { (g[e.kit] = g[e.kit] || []).push(e); });
-  const TI = {"CO:KIT 41":"팔지 않으면 팔리는 3단계 콘텐츠 퍼널","CO:KIT 51":"뇌는 왜 이야기에 속는가"};
-  return `<div class="list">${Object.keys(g).map(k =>
-    `<div class="grp"><div class="ghd"><span class="kit">${k}</span><span class="ti">${TI[k]}</span></div>
-      ${g[k].map(e => `<div class="ev">${card(e, e.date)}</div>`).join("")}</div>`).join("")}</div>`;
-}
-
-document.getElementById("grid").innerHTML = V.map(([tag,name,why,mk,bar]) =>
+/* ══════════════════════════════════════════════════════════
+   그리기
+   ══════════════════════════════════════════════════════════ */
+document.getElementById("grid").innerHTML = V.map(([tag,name,why,mk]) =>
   `<div class="col">
     <div class="col-hd"><span class="tag">${tag}</span><h2>${name}</h2>
+      <button class="lnk" data-v="${tag}" data-act="reset" style="float:right;margin-top:-22px">처음으로</button>
       <p>${why}</p><span class="mk"><b>근거</b> · ${mk}</span></div>
-    <div class="col-bd v-${tag.toLowerCase()}">${bar}${tag === "J" ? listJ() : LISTHTML}</div>
+    <div class="ph v-${tag.toLowerCase()}" data-v="${tag}"></div>
   </div>`).join("");
+
+function paint(v){
+  const el = document.querySelector(`.ph[data-v="${v}"]`);
+  if(!el) return;
+  const s = st(v), keep = el.querySelector(".list");
+  const top = el.scrollTopSaved = keep ? keep.scrollTop : 0;
+  el.innerHTML = `<div class="top">${BAR[v](s)}</div>
+    <div class="list">${listHTML(v,s,FORCE[v])}</div>${tabbar}`;
+  const nl = el.querySelector(".list"); if(nl) nl.scrollTop = top;
+}
+
+document.addEventListener("click", ev => {
+  const hit = ev.target.closest("[data-act]"); if(!hit) return;
+  const host = hit.closest("[data-v]"); if(!host) return;
+  const v = host.dataset.v, s = st(v), a = hit.dataset.act;
+
+  if(a === "reset"){ reset(v); paint(v); return; }
+  const [k,arg] = a.split(":");
+  if(k === "topic"){ s.topic = arg; s.sheet = ""; }
+  else if(k === "memo"){ s.memo = !s.memo; if(countOf(s,s.topic) === 0 && s.topic !== "전체"){} }
+  else if(k === "view"){ s.view = arg; s.menu = false; }
+  else if(k === "tab"){ s.tab = arg; }
+  else if(k === "ftab"){ s.tab = "all"; s.view = arg; }
+  else if(k === "sheet"){ s.sheet = arg; s.menu = false; }
+  else if(k === "menu"){ s.menu = !s.menu; }
+  else if(k === "chips"){ s.chipsOpen = !s.chipsOpen; }
+  else if(k === "clear"){ s.topic = "전체"; s.memo = false; }
+  else if(k === "close"){ s.sheet = ""; s.menu = false; }
+  paint(v);
+});
+
+["NOW", ...V.map(x => x[0])].forEach(paint);
 </script>
 </body>
 </html>
