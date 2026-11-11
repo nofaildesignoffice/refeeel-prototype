@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>밑줄·메모 모아보기 — 카드 열 가지</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+/* 토큰은 프로토타입에서 그대로 가져왔다 — 여기서 고르면 바로 옮겨 붙일 수 있어야 한다 */
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.20); --brand-ring:rgba(223,240,0,0.55);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:var(--page);color:var(--text-black);-webkit-font-smoothing:antialiased;}
+
+/* ── 페이지 머리 ── */
+.hd{padding:40px 20px 26px;max-width:860px;margin:0 auto;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+.hd h1{font-size:26px;font-weight:800;letter-spacing:-0.8px;margin-top:10px;line-height:1.3;}
+.hd p{font-size:14px;line-height:1.75;color:var(--text-gray);margin-top:14px;}
+.hd .how{margin-top:18px;padding:14px 16px;background:var(--bg-white);
+  border:var(--card-line);border-radius:var(--radius-md);font-size:13px;line-height:1.7;color:var(--text-dark);}
+.hd .how b{font-weight:800;}
+
+/* ── 열 가지를 나란히 ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+  gap:18px;padding:0 20px 80px;max-width:1700px;margin:0 auto;align-items:start;}
+.col{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);overflow:hidden;}
+.col-hd{padding:16px 18px 14px;border-bottom:var(--card-line);}
+.col-hd .tag{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:var(--radius-full);
+  background:var(--brand);color:var(--brand-ink);font-size:12px;font-weight:800;}
+.col-hd h2{display:inline-block;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-left:8px;
+  vertical-align:middle;}
+.col-hd p{font-size:12px;line-height:1.65;color:var(--text-gray);margin-top:9px;}
+.col-bd{padding:14px;background:var(--bg-white);}
+
+/* ══════════════════════════════════════════════════════════
+   공통 부품 — 아이콘과 출처 줄은 열 가지가 같이 쓴다
+   ══════════════════════════════════════════════════════════ */
+.ic{width:12px;height:12px;flex-shrink:0;}
+.src{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font-size:11px;color:var(--text-light);}
+.src .kit{font-weight:800;letter-spacing:0.3px;color:var(--text-gray);}
+.when{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;}
+.when b{font-size:11.5px;font-weight:800;color:var(--text-dark);}
+.when span{font-size:10.5px;font-weight:600;color:var(--text-light);}
+
+/* ══════════════════════════════════════════════════════════
+   A. 형광펜 — 그은 자리를 그대로 보여 준다
+   ══════════════════════════════════════════════════════════ */
+.v-a .ev+.ev{margin-top:10px;}
+.v-a .card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:13px 14px;}
+.v-a .q{font-size:13px;line-height:1.75;color:var(--text-dark);
+  background:linear-gradient(var(--brand-soft),var(--brand-soft));
+  background-size:100% 100%;box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  display:inline;padding:2px 4px;margin-left:-4px;border-radius:3px;}
+.v-a .mine{display:flex;gap:7px;align-items:flex-start;margin-top:12px;
+  padding-top:11px;border-top:1px dashed var(--border-light);}
+.v-a .mine svg{color:var(--text-muted);margin-top:3px;}
+.v-a .mine p{font-size:12.5px;font-weight:600;line-height:1.6;color:var(--text-black);}
+.v-a .src{margin-top:11px;}
+
+/* ══════════════════════════════════════════════════════════
+   B. 내 말이 먼저 — 모은 것은 문장이 아니라 내 생각이다
+   ══════════════════════════════════════════════════════════ */
+.v-b .ev+.ev{margin-top:10px;}
+.v-b .card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);padding:14px;}
+.v-b .mine{font-size:14.5px;font-weight:700;line-height:1.55;letter-spacing:-0.2px;}
+.v-b .q{margin-top:11px;padding-left:10px;border-left:2px solid var(--border-light);
+  font-size:12px;line-height:1.65;color:var(--text-light);}
+.v-b .only{display:flex;gap:7px;align-items:flex-start;}
+.v-b .only svg{color:var(--brand-press);margin-top:3px;}
+.v-b .only p{font-size:13px;line-height:1.7;color:var(--text-dark);}
+.v-b .src{margin-top:12px;}
+
+/* ══════════════════════════════════════════════════════════
+   C. 쪽지 — 붙여 둔 종이처럼
+   ══════════════════════════════════════════════════════════ */
+.v-c .ev+.ev{margin-top:12px;}
+.v-c .card{position:relative;background:var(--bg-light);border:1px solid #EDF2C9;
+  border-radius:var(--radius-sm);padding:14px;}
+.v-c .card::after{content:"";position:absolute;right:0;top:0;width:18px;height:18px;
+  background:linear-gradient(225deg,var(--page) 50%,#E4EBAE 50%);
+  border-top-right-radius:var(--radius-sm);}
+.v-c .mine{font-size:13.5px;font-weight:700;line-height:1.6;padding-right:18px;}
+.v-c .q{margin-top:10px;font-size:12px;line-height:1.7;color:var(--text-gray);}
+.v-c .q::before{content:"";display:block;width:22px;height:2px;background:var(--brand-press);
+  margin-bottom:8px;}
+.v-c .src{margin-top:12px;}
+
+/* ══════════════════════════════════════════════════════════
+   D. 민무늬 목록 — 상자를 걷고 글만 남긴다
+   ══════════════════════════════════════════════════════════ */
+.v-d{padding:2px 4px;}
+.v-d .ev{padding:14px 0;border-bottom:var(--card-line);}
+.v-d .ev:last-child{border-bottom:none;}
+.v-d .when{margin:4px 0 10px;}
+.v-d .q{padding-left:11px;border-left:3px solid var(--brand);
+  font-size:13px;line-height:1.7;color:var(--text-dark);}
+.v-d .mine{display:flex;gap:7px;align-items:flex-start;margin-top:10px;padding-left:14px;}
+.v-d .mine svg{color:var(--text-muted);margin-top:3px;}
+.v-d .mine p{font-size:12.5px;font-weight:600;line-height:1.6;}
+.v-d .src{margin-top:10px;padding-left:14px;}
+
+/* ══════════════════════════════════════════════════════════
+   E. 말풍선 — 책이 건넨 말과 내가 되돌려준 말
+   ══════════════════════════════════════════════════════════ */
+.v-e .ev+.ev{margin-top:16px;}
+.v-e .q{background:#F4F4F4;border-radius:14px 14px 14px 4px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--text-dark);}
+.v-e .mine{margin-top:7px;margin-left:24px;background:var(--brand);color:var(--brand-ink);
+  border-radius:14px 14px 4px 14px;padding:12px 14px;
+  font-size:12.5px;font-weight:600;line-height:1.65;}
+.v-e .src{margin-top:8px;padding:0 2px;}
+
+/* ══════════════════════════════════════════════════════════
+   F. 색인 카드 — 도서관 카드처럼 줄 맞춰
+   ══════════════════════════════════════════════════════════ */
+.v-f .ev+.ev{margin-top:10px;}
+.v-f .card{background:var(--bg-white);border:1px solid var(--border-default);
+  border-radius:var(--radius-xs);padding:0;overflow:hidden;}
+.v-f .meta{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px 13px;background:#FAFAF7;border-bottom:1px solid var(--border-light);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;letter-spacing:0.2px;color:var(--text-gray);text-transform:uppercase;}
+.v-f .meta .dot{width:6px;height:6px;border-radius:50%;background:var(--brand);flex-shrink:0;}
+.v-f .bd{padding:13px;}
+.v-f .q{font-size:13.5px;line-height:1.7;color:var(--text-black);
+  font-family:"Apple SD Gothic Neo",Pretendard,serif;}
+.v-f .mine{margin-top:12px;padding-top:11px;border-top:1px solid var(--border-light);
+  font-size:12px;line-height:1.65;color:var(--text-gray);}
+.v-f .mine b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:9.5px;letter-spacing:0.4px;color:var(--text-light);display:block;margin-bottom:5px;}
+
+/* ══════════════════════════════════════════════════════════
+   G. 큰 인용 — 한 문장을 크게 세운다
+   ══════════════════════════════════════════════════════════ */
+.v-g .ev+.ev{margin-top:14px;}
+.v-g .card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);padding:18px 16px 14px;}
+.v-g .mark{font-size:30px;font-weight:800;line-height:0.8;color:var(--brand-press);
+  display:block;margin-bottom:8px;}
+.v-g .q{font-size:15.5px;font-weight:700;line-height:1.6;letter-spacing:-0.4px;color:var(--text-black);}
+.v-g .mine{margin-top:13px;padding:11px 12px;background:var(--bg-light);border-radius:var(--radius-sm);}
+.v-g .mine b{display:block;font-size:10px;font-weight:800;letter-spacing:0.6px;
+  color:var(--text-light);margin-bottom:5px;}
+.v-g .mine p{font-size:12.5px;line-height:1.65;color:var(--text-dark);}
+.v-g .src{margin-top:13px;padding-top:11px;border-top:var(--card-line);}
+
+/* ══════════════════════════════════════════════════════════
+   H. 코킷별 묶음 — 어느 글에서 나온 것인지로 묶는다
+   ══════════════════════════════════════════════════════════ */
+.v-h .grp+.grp{margin-top:14px;}
+.v-h .grp{border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;}
+.v-h .ghd{padding:12px 13px;background:var(--bg-light);border-bottom:var(--card-line);}
+.v-h .ghd .num{font-size:10px;font-weight:800;letter-spacing:0.5px;color:var(--text-light);}
+.v-h .ghd .ti{font-size:13px;font-weight:700;line-height:1.45;margin-top:4px;}
+.v-h .ghd .cnt{display:flex;gap:10px;margin-top:8px;font-size:10.5px;font-weight:700;color:var(--text-gray);}
+.v-h .ghd .cnt span{display:flex;align-items:center;gap:4px;}
+.v-h .ghd .cnt .memo{color:var(--brand-press);}
+.v-h .row{padding:12px 13px;}
+.v-h .row+.row{border-top:1px dashed var(--border-light);}
+.v-h .q{font-size:12.5px;line-height:1.7;color:var(--text-dark);
+  background:linear-gradient(transparent 62%,var(--brand-soft) 62%);}
+.v-h .mine{display:flex;gap:6px;align-items:flex-start;margin-top:9px;}
+.v-h .mine svg{color:var(--text-muted);margin-top:3px;}
+.v-h .mine p{font-size:12px;font-weight:600;line-height:1.6;}
+.v-h .day{font-size:10px;color:var(--text-muted);margin-top:8px;}
+
+/* ══════════════════════════════════════════════════════════
+   I. 왼쪽 라임 기둥 — 상자 없이 줄 하나로 묶는다
+   ══════════════════════════════════════════════════════════ */
+.v-i{padding:4px 2px;}
+.v-i .ev+.ev{margin-top:18px;}
+.v-i .body{padding-left:13px;border-left:4px solid var(--brand);}
+.v-i .body.plain{border-left-color:var(--border-light);}
+.v-i .q{font-size:13px;line-height:1.75;color:var(--text-black);}
+.v-i .mine{margin-top:9px;font-size:12.5px;line-height:1.65;color:var(--text-gray);}
+.v-i .mine::before{content:"내 기록";display:inline-block;margin-right:6px;
+  font-size:9.5px;font-weight:800;letter-spacing:0.4px;color:var(--brand-ink);
+  background:var(--brand);border-radius:3px;padding:2px 5px;vertical-align:1px;}
+.v-i .src{margin-top:10px;padding-left:13px;}
+
+/* ══════════════════════════════════════════════════════════
+   J. 두 단 타일 — 한눈에 많이 훑는다
+   ══════════════════════════════════════════════════════════ */
+.v-j .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.v-j .tile{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-sm);
+  padding:11px;display:flex;flex-direction:column;gap:8px;}
+.v-j .tile.has::before{content:"";width:16px;height:3px;border-radius:2px;background:var(--brand);}
+.v-j .q{font-size:11.5px;line-height:1.65;color:var(--text-dark);
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
+.v-j .mine{font-size:11px;font-weight:700;line-height:1.55;color:var(--text-black);
+  padding-top:8px;border-top:1px dashed var(--border-light);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.v-j .src{margin-top:auto;font-size:10px;}
+.v-j .src span:last-child{display:none;}
+
+.foot{max-width:860px;margin:0 auto;padding:0 20px 70px;font-size:13px;line-height:1.8;color:var(--text-gray);}
+.foot b{color:var(--text-black);font-weight:800;}
+@media(max-width:560px){
+  .hd{padding:28px 16px 20px;} .hd h1{font-size:21px;}
+  .grid{grid-template-columns:1fr;padding:0 16px 60px;gap:14px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="kick">COMMEL · 인사이트</div>
+  <h1>밑줄·메모 모아보기<br>카드 열 가지</h1>
+  <p>인사이트 화면의 '시간순' 목록에 쓰는 카드입니다. 지금은 인용과 메모가 같은 무게로 쌓여
+     있어 무엇을 모은 건지 한눈에 안 들어옵니다. 열 가지는 <b>무엇을 먼저 보여 주는가</b>로 갈립니다 —
+     그은 문장이 먼저냐, 내가 쓴 말이 먼저냐, 아니면 어느 글에서 나왔는지가 먼저냐.</p>
+  <div class="how">
+    다섯 개의 같은 기록을 열 가지 꼴로 그렸습니다. 글·날짜·출처는 전부 같은 값입니다 —
+    <b>달라지는 건 생김새뿐</b>이라 나란히 두고 고르시면 됩니다.
+    고르신 글자(A~J)만 알려 주시면 앱과 웹에 같이 넣겠습니다. 섞어도 됩니다(예: "G인데 출처 줄은 A처럼").
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="foot">
+  <b>지킨 것</b> — 라임은 '내가 남긴 것'을 가리키는 데만 썼습니다. 라임 위 글자는 전부 잉크색이고,
+  흰 글자는 올리지 않았습니다. 그림자는 어디에도 쓰지 않았고, 사진이 없는 카드는 1px 선으로 둘렀습니다.
+  밑줄 수와 메모 수는 더하지 않고 따로 셉니다(H).
+</div>
+
+<script>
+/* ── 같은 기록 다섯 개. 열 가지가 전부 이 데이터를 쓴다 ── */
+const EV = [
+  { day:"8/16", ago:"어제", kit:"CO:KIT 41", tag:"전환·매출",
+    title:"팔지 않으면 팔리는 3단계 콘텐츠 퍼널",
+    q:"사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.",
+    m:"내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네. 판매 콘텐츠는 전부 스토리로 내리자." },
+  { day:"", ago:"", kit:"CO:KIT 41", tag:"콘텐츠",
+    title:"팔지 않으면 팔리는 3단계 콘텐츠 퍼널",
+    q:"공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.", m:"" },
+  { day:"8/14", ago:"3일 전", kit:"CO:KIT 51", tag:"소비자 심리",
+    title:"뇌는 왜 이야기에 속는가",
+    q:"이력을 먼저 나열하면 고객은 스펙을 비교하기 시작합니다. 감정이 열리지 않았으니까요.",
+    m:"상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다. 후기를 먼저 올리고 경력은 그 아래로." },
+  { day:"", ago:"", kit:"CO:KIT 51", tag:"소비자 심리",
+    title:"뇌는 왜 이야기에 속는가",
+    q:"패턴이 매끄러우면 뇌는 그걸 검증하지 않고 진실로 받아들인다는 것.", m:"" },
+  { day:"8/12", ago:"5일 전", kit:"CO:KIT 15", tag:"브랜딩",
+    title:"사업자의 인스타 프로필 설정법",
+    q:"자격증을 나열하는 것보다 '3개월 평균 -12kg'이라는 결과 하나가 훨씬 강력합니다.",
+    m:"우리 프로필도 수상 이력만 늘어놨다. 숫자 하나로 바꾸자 — 재방문율이면 충분할 듯." }
+];
+
+const PEN  = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>';
+const MARK = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>';
+
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const when = e => e.day ? `<div class="when"><b>${e.day}</b><span>${e.ago}</span></div>` : "";
+const src  = e => `<div class="src"><span class="kit">${e.kit}</span><span>${e.tag}</span></div>`;
+
+/* ── 열 가지 ── */
+const V = [
+["A","형광펜","그은 자리를 그대로 보여 준다. 문장에 라임이 칠해져 있어 '내가 그었다'가 글 안에서 보인다. 내 메모는 점선 아래에 따라붙는다.",
+  e => `${when(e)}<div class="card"><p><span class="q">${esc(e.q)}</span></p>
+    ${e.m?`<div class="mine">${PEN}<p>${esc(e.m)}</p></div>`:""}${src(e)}</div>`],
+
+["B","내 말이 먼저","모으는 건 남의 문장이 아니라 내 생각이다. 내가 쓴 말을 제목처럼 크게 세우고, 인용은 그 근거로 작게 아래 둔다.",
+  e => `${when(e)}<div class="card">
+    ${e.m?`<p class="mine">${esc(e.m)}</p><p class="q">${esc(e.q)}</p>`
+         :`<div class="only">${MARK}<p>${esc(e.q)}</p></div>`}${src(e)}</div>`],
+
+["C","쪽지","책에 붙여 둔 종이쪽지처럼. 옅은 라임 종이에 모서리를 접었다. 메모가 있는 것만 종이가 되니 '내가 손댄 것'이 눈에 띈다.",
+  e => `${when(e)}<div class="card">
+    ${e.m?`<p class="mine">${esc(e.m)}</p><p class="q">${esc(e.q)}</p>`
+         :`<p class="mine" style="font-weight:600;color:var(--text-gray)">${esc(e.q)}</p>`}${src(e)}</div>`],
+
+["D","민무늬 목록","상자를 걷는다. 줄 하나로 나누고 인용 왼쪽에 라임 기둥만 세운다. 카드가 열 장 넘게 쌓일 때 가장 가볍게 읽힌다.",
+  e => `${when(e)}<p class="q">${esc(e.q)}</p>
+    ${e.m?`<div class="mine">${PEN}<p>${esc(e.m)}</p></div>`:""}${src(e)}`],
+
+["E","말풍선","책이 건넨 말과 내가 되돌려준 말. 왼쪽 회색이 인용, 오른쪽 라임이 내 메모다. 메모가 '대답'처럼 읽혀 둘의 관계가 분명해진다.",
+  e => `${when(e)}<p class="q">${esc(e.q)}</p>
+    ${e.m?`<p class="mine">${esc(e.m)}</p>`:""}${src(e)}`],
+
+["F","색인 카드","도서관 카드처럼. 위에 작은 글씨로 출처와 날짜를 먼저 박고 그 아래 문장을 둔다. 자료를 모아 둔 느낌이 가장 강하다.",
+  e => `<div class="card">
+    <div class="meta"><span>${e.kit} · ${e.tag}</span><span>${e.day?`<span class="dot" style="display:inline-block;margin-right:5px"></span>${e.day}`:""}</span></div>
+    <div class="bd"><p class="q">${esc(e.q)}</p>
+    ${e.m?`<div class="mine"><b>MY NOTE</b>${esc(e.m)}</div>`:""}</div></div>`],
+
+["G","큰 인용","한 문장을 크게 세운다. 모아 둔 문장을 다시 읽게 만드는 쪽에 무게를 둔 꼴이다. 내 메모는 옅은 라임 판에 받쳐 둔다.",
+  e => `${when(e)}<div class="card"><span class="mark">“</span><p class="q">${esc(e.q)}</p>
+    ${e.m?`<div class="mine"><b>내 기록</b><p>${esc(e.m)}</p></div>`:""}${src(e)}</div>`],
+
+["H","코킷별 묶음","날짜가 아니라 어느 글에서 나왔는지로 묶는다. 머리글에 글 제목과 밑줄·메모 수가 따로 적힌다. 다시 찾아갈 때 가장 빠르다.",
+  null],
+
+["I","라임 기둥","상자도 없고 머리글도 없다. 왼쪽 기둥 하나로 묶고, 메모에만 작은 라임 이름표를 붙인다. 가장 조용한 꼴이다.",
+  e => `${when(e)}<div class="body${e.m?"":" plain"}"><p class="q">${esc(e.q)}</p>
+    ${e.m?`<p class="mine">${esc(e.m)}</p>`:""}</div>${src(e)}`],
+
+["J","두 단 타일","두 줄로 세워 한 화면에 두 배로 담는다. 긴 글은 잘라 두고 눌러서 펴 본다. 쌓인 게 많을수록 유리하다.",
+  null]
+];
+
+/* H 는 묶음이라 따로 그린다 — 밑줄 수와 메모 수는 더하지 않고 따로 센다 */
+function renderH(){
+  const groups = {};
+  EV.forEach(e => { (groups[e.kit] = groups[e.kit] || {ti:e.title, rows:[]}).rows.push(e); });
+  return Object.keys(groups).map(k => {
+    const g = groups[k];
+    const hl = g.rows.length, mm = g.rows.filter(r => r.m).length;
+    return `<div class="grp"><div class="ghd">
+        <div class="num">${k}</div><div class="ti">${esc(g.ti)}</div>
+        <div class="cnt"><span>${MARK}밑줄 ${hl}</span><span class="memo">${PEN}메모 ${mm}</span></div>
+      </div>
+      ${g.rows.map(r => `<div class="row"><p><span class="q">${esc(r.q)}</span></p>
+        ${r.m?`<div class="mine">${PEN}<p>${esc(r.m)}</p></div>`:""}
+        ${r.day?`<div class="day">${r.day} · ${r.ago}</div>`:""}</div>`).join("")}
+    </div>`;
+  }).join("");
+}
+
+function renderJ(){
+  return `<div class="tiles">${EV.map(e => `<div class="tile${e.m?" has":""}">
+    <p class="q">${esc(e.q)}</p>
+    ${e.m?`<p class="mine">${esc(e.m)}</p>`:""}${src(e)}</div>`).join("")}</div>`;
+}
+
+document.getElementById("grid").innerHTML = V.map(([tag,name,why,fn]) => {
+  let body;
+  if(tag === "H") body = renderH();
+  else if(tag === "J") body = renderJ();
+  else body = EV.map(e => `<div class="ev">${fn(e)}</div>`).join("");
+  return `<div class="col">
+    <div class="col-hd"><span class="tag">${tag}</span><h2>${name}</h2><p>${why}</p></div>
+    <div class="col-bd v-${tag.toLowerCase()}">${body}</div>
+  </div>`;
+}).join("");
+</script>
+</body>
+</html>
