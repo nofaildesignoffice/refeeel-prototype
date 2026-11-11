@@ -36,15 +36,17 @@ button{font-family:inherit;cursor:pointer;}
 
 /* 지금 꼴 — 무엇이 문제인지 먼저 보여 준다 */
 .before{max-width:900px;margin:0 auto 26px;padding:0 20px;}
-.before .bx{background:var(--bg-white);border:1px dashed var(--border-default);
+.before .bx{max-width:424px;background:var(--bg-white);border:1px dashed var(--border-default);
   border-radius:var(--radius-lg);overflow:hidden;}
 .before .bhd{padding:14px 16px;border-bottom:var(--card-line);font-size:13px;font-weight:800;}
 .before .bhd span{font-weight:600;color:var(--text-gray);margin-left:7px;font-size:12px;}
 .before .bbd{padding:14px 0 16px;max-width:392px;}
 
 /* ── 열 가지를 나란히 ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(356px,1fr));
-  gap:18px;padding:0 20px 80px;max-width:1700px;margin:0 auto;align-items:start;}
+/* 칸은 420px 에서 멈춘다 — 앱의 .phone 과 같은 폭이라야 비율이 거짓말을 안 한다 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(356px,420px));
+  gap:18px;padding:0 20px 80px;max-width:1760px;margin:0 auto;
+  align-items:start;justify-content:center;}
 .col{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);overflow:hidden;}
 .col-hd{padding:16px 18px 14px;border-bottom:var(--card-line);}
 .col-hd .tag{display:inline-flex;align-items:center;justify-content:center;
@@ -230,7 +232,8 @@ button{font-family:inherit;cursor:pointer;}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .v-j .grp+.grp{margin-top:18px;}
 .v-j .grp .ev+.ev{margin-top:10px;}
-.v-j .card .src .kit{display:none;}
+/* 묶음 머리글이 코킷을 이미 말했다 — 카드 아래 왼쪽은 날짜가 대신 선다 */
+.v-j .card .src .kit{font-weight:700;letter-spacing:0;color:var(--text-light);}
 </style>
 </head>
 <body>
@@ -274,13 +277,15 @@ button{font-family:inherit;cursor:pointer;}
 
 <script>
 /* 쓰는 글은 프로토타입의 실제 값 그대로다 — 생김새만 비교하게 한다 */
+/* day 는 시간순 목록의 날짜 머리다 — 같은 날 둘째 기록에는 안 붙는다.
+   date 는 그 기록 자체의 날짜라 모든 줄에 있다(J 가 쓴다). */
 const EV = [
-  { day:"8/16", ago:"어제", kit:"CO:KIT 41", tag:"전환·매출",
+  { day:"8/16", ago:"어제", date:"8/16", kit:"CO:KIT 41", tag:"전환·매출",
     q:"사람들은 너무 팔고 싶은 사람에게 아무것도 사고 싶지 않습니다.",
     m:"내 피드 9칸이 전부 오픈 안내랑 후기다. 파는 계정으로 보이고 있었네." },
-  { day:"", ago:"", kit:"CO:KIT 41", tag:"콘텐츠",
+  { day:"", ago:"", date:"8/16", kit:"CO:KIT 41", tag:"콘텐츠",
     q:"공감하며 보다가 갑자기 '사세요'가 나오면, 그 전에 쌓인 공감까지 소급 취소되거든요.", m:"" },
-  { day:"8/14", ago:"3일 전", kit:"CO:KIT 51", tag:"소비자 심리",
+  { day:"8/14", ago:"3일 전", date:"8/14", kit:"CO:KIT 51", tag:"소비자 심리",
     q:"이력을 먼저 나열하면 고객은 스펙을 비교하기 시작합니다. 감정이 열리지 않았으니까요.",
     m:"상세페이지 순서부터 갈아엎기. 지금은 스펙이 맨 위에 있다." }
 ];
@@ -299,9 +304,9 @@ const SORT  = sv('<path d="M11 5h10"/><path d="M11 12h7"/><path d="M11 19h4"/><p
 const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 
 /* 목록은 열 가지가 같다 */
-const card = e => `<div class="card"><span class="mark">&ldquo;</span><p class="q">${esc(e.q)}</p>
+const card = (e,left) => `<div class="card"><span class="mark">&ldquo;</span><p class="q">${esc(e.q)}</p>
   ${e.m?`<div class="mine"><b>내 기록</b><p>${esc(e.m)}</p></div>`:""}
-  <div class="src"><span class="kit">${e.kit}</span><span>${e.tag}</span></div></div>`;
+  <div class="src"><span class="kit">${left||e.kit}</span><span>${e.tag}</span></div></div>`;
 const LISTHTML = `<div class="list">${EV.map(e => `<div class="ev">
   ${e.day?`<span class="when"><b>${e.day}</b><span>${e.ago}</span></span>`:""}${card(e)}</div>`).join("")}</div>`;
 
@@ -415,7 +420,7 @@ function listJ(){
   const TI = {"CO:KIT 41":"팔지 않으면 팔리는 3단계 콘텐츠 퍼널","CO:KIT 51":"뇌는 왜 이야기에 속는가"};
   return `<div class="list">${Object.keys(g).map(k =>
     `<div class="grp"><div class="ghd"><span class="kit">${k}</span><span class="ti">${TI[k]}</span></div>
-      ${g[k].map(e => `<div class="ev">${card(e)}</div>`).join("")}</div>`).join("")}</div>`;
+      ${g[k].map(e => `<div class="ev">${card(e, e.date)}</div>`).join("")}</div>`).join("")}</div>`;
 }
 
 document.getElementById("grid").innerHTML = V.map(([tag,name,why,mk,bar]) =>
