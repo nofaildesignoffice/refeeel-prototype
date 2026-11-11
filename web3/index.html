@@ -2392,6 +2392,15 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 .wnav,.wfoot{display:none;}
 /* 좁은 화면에서는 감싸개가 없는 셈 친다 — 안의 화면들이 앱처럼 그대로 동작한다 */
 .nk-widget,.noti-pop{display:contents;}
+/* 감싸개가 없는 셈이 되면 안의 화면은 .phone 의 자식이 되는데, 그 앞에 있는
+   .stage 가 이미 .phone 을 가득 채운다(height:100%). 그래서 낙타AI 세 화면과
+   알림 화면이 .stage 바로 아래 — 화면 밖에 그려졌고, .phone{overflow:hidden}
+   이 잘라내 아무것도 안 보였다(리건, 2026-11-11).
+   .stage 안의 화면들과 같은 자리에 겹쳐 둔다. 나가는 화면(.scr-out)이 쓰는
+   방식과 같다. 넓은 화면은 이 감싸개를 제 칸에 세워 쓰므로 건드리지 않는다. */
+@media (max-width:1023px){
+  .nk-widget>.screen.active,.noti-pop>.screen.active{position:absolute;inset:0;}
+}
 .noti-bd{display:none;}
 /* 좁은 화면에서도 말할 자리를 둔다(리건, 2026-08-23).
    전에는 넓은 화면 전용이었는데, 말을 거는 화면에 말할 자리가 없는 셈이었다. */
