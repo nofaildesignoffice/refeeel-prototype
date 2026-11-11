@@ -326,10 +326,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-library>.topbar{background:none;border-bottom-color:transparent;
   justify-content:flex-end;
   -webkit-backdrop-filter:none;backdrop-filter:none;}
-/* 동그라미가 가장자리에 붙어 보인다(리건, 2026-11-10). 아이콘 하나였을 때는
-   16px 이 맞았는데, 40px 짜리 면이 되니 같은 값이 좁게 느껴진다 — 24px 로 띄운다.
-   왼쪽(워드마크)은 그대로 16px 이다. */
-#scr-library>.topbar,#scr-home>.topbar,#scr-search>.topbar{padding-right:24px;}
+/* 24px 은 너무 떨어져 보인다(리건, 2026-11-11). 16px 으로 되돌린다 —
+   본문(.sec)의 좌우 여백도 16px 이라, 동그라미의 오른쪽 끝이 그 아래 카드들의
+   끝과 한 줄로 맞는다. 왼쪽(워드마크)과도 같은 값이다. */
+#scr-library>.topbar,#scr-home>.topbar,#scr-search>.topbar{padding-right:16px;}
 #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap,
 #scr-search>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
   align-items:center;justify-content:center;

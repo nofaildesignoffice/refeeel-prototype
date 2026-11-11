@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>COMMEL 유저앱 클릭 프로토타입 v2</title>
+<!-- 홈 화면에 깔아 앱처럼 띄운다(리건, 2026-11-11 — 안드로이드).
+     manifest·sw.js·아이콘은 올리는 쪽(repo)에만 있다. 이 파일을 그냥 열면
+     셋 다 없지만 아무 일도 일어나지 않는다 — 깔기만 못 할 뿐이다. -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="COMMEL">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -212,10 +222,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-library>.topbar{background:none;border-bottom-color:transparent;
   justify-content:flex-end;
   -webkit-backdrop-filter:none;backdrop-filter:none;}
-/* 동그라미가 가장자리에 붙어 보인다(리건, 2026-11-10). 아이콘 하나였을 때는
-   16px 이 맞았는데, 40px 짜리 면이 되니 같은 값이 좁게 느껴진다 — 24px 로 띄운다.
-   왼쪽(워드마크)은 그대로 16px 이다. */
-#scr-library>.topbar,#scr-home>.topbar,#scr-search>.topbar{padding-right:24px;}
+/* 24px 은 너무 떨어져 보인다(리건, 2026-11-11). 16px 으로 되돌린다 —
+   본문(.sec)의 좌우 여백도 16px 이라, 동그라미의 오른쪽 끝이 그 아래 카드들의
+   끝과 한 줄로 맞는다. 왼쪽(워드마크)과도 같은 값이다. */
+#scr-library>.topbar,#scr-home>.topbar,#scr-search>.topbar{padding-right:16px;}
 #scr-library>.topbar .bell-wrap,#scr-home>.topbar .bell-wrap,
 #scr-search>.topbar .bell-wrap{width:40px;height:40px;border-radius:50%;
   align-items:center;justify-content:center;
@@ -6403,6 +6413,14 @@ document.addEventListener("click", e=>{
 });
 /* 폭이 바뀌면 버튼 자리도 바뀐다 */
 window.addEventListener("resize", moveAllSegInk);
+
+/* 서비스 워커 — 안드로이드 크롬이 '앱 설치'를 띄우려면 있어야 한다.
+   https 에서만 걸린다. 파일을 그냥 열었을 때(file://)는 조용히 지나간다. */
+if("serviceWorker" in navigator && location.protocol === "https:"){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
