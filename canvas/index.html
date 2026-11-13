@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>한 장으로 정리하는 사업 — 코멜 캔버스</title>
+<meta name="description" content="린 캔버스 · 비즈니스 모델 캔버스 · 밸류 프로포지션 캔버스. 칸마다 질문에 답하면 채워지고, 흐린 말은 바로 잡아 준다. 처음 쓰는 사람을 위해 만들었다.">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.22);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+  --warn:#B45309; --warn-bg:#FEF7E6;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);
+  color:var(--text-black);-webkit-font-smoothing:antialiased;
+  font-size:15px;line-height:1.8;letter-spacing:-0.25px;}
+a{color:inherit;}
+button,input,textarea{font-family:inherit;letter-spacing:inherit;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 140px;}
+.narrow{max-width:820px;margin:0 auto;}
+
+/* ── 상단 ───────────────────────────── */
+.top{position:sticky;top:0;z-index:40;background:rgba(242,242,242,0.92);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:var(--card-line);}
+.top-in{max-width:1180px;margin:0 auto;padding:11px 18px;display:flex;align-items:center;gap:14px;}
+.logo{font-size:13px;font-weight:800;letter-spacing:-0.3px;white-space:nowrap;}
+.logo i{font-style:normal;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 5px;margin-right:5px;}
+.tabs{display:flex;gap:5px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;border:1px solid var(--border-default);background:var(--bg-white);
+  color:var(--text-gray);font-size:12.5px;font-weight:700;border-radius:var(--radius-full);
+  padding:6px 13px;cursor:pointer;min-height:34px;}
+.tab:hover{border-color:var(--text-black);color:var(--text-black);}
+.tab.on{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.prog{flex:0 0 auto;display:flex;align-items:center;gap:8px;font-size:11.5px;
+  font-weight:800;color:var(--text-gray);white-space:nowrap;}
+.prog .bar{width:62px;height:6px;border-radius:var(--radius-full);background:var(--border-light);overflow:hidden;}
+.prog .bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .25s;}
+.top-r{flex:0 0 auto;display:flex;gap:6px;}
+.ib{border:1px solid var(--border-default);background:var(--bg-white);color:var(--text-dark);
+  font-size:12px;font-weight:700;border-radius:var(--radius-sm);padding:7px 11px;
+  cursor:pointer;min-height:34px;white-space:nowrap;}
+.ib:hover{border-color:var(--text-black);color:var(--text-black);}
+.ib.key{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.ib.key:hover{background:var(--brand-press);border-color:var(--brand-press);}
+.ib.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+@media (max-width:860px){.prog .bar{display:none;}.logo span{display:none;}}
+
+/* ── 머리말 ─────────────────────────── */
+.hd{padding:46px 0 8px;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--text-light);}
+.hd h1{font-size:30px;font-weight:800;letter-spacing:-1.1px;line-height:1.36;margin-top:12px;}
+.hd h1 em{font-style:normal;background:linear-gradient(transparent 60%,var(--brand-soft) 60%);}
+.hd .sub{font-size:16px;line-height:1.9;color:var(--text-dark);margin-top:16px;}
+@media (max-width:600px){.hd h1{font-size:25px;}.hd{padding-top:34px;}}
+
+h2.sec{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);margin-top:4px;}
+h2.sec b{display:inline-block;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 6px;margin-right:8px;letter-spacing:0.4px;}
+h3.ttl{font-size:22px;font-weight:800;letter-spacing:-0.8px;line-height:1.45;margin-top:9px;}
+section{margin-bottom:44px;scroll-margin-top:70px;}
+p{margin-top:13px;color:var(--text-dark);}
+.muted{color:var(--text-gray);font-size:13.5px;}
+b.k{font-weight:800;color:var(--text-black);}
+mark{background:var(--brand-soft);color:inherit;padding:0 2px;border-radius:2px;}
+.cap{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+
+.card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:19px 21px;margin-top:16px;}
+.card.lime{border-color:var(--brand);background:var(--bg-light);}
+.card.dark{background:var(--bg-black);border-color:var(--bg-black);}
+.card.dark p,.card.dark li{color:#E8E8E8;}
+.card.dark b.k{color:var(--bg-white);}
+.card.line{border-style:dashed;border-color:var(--border-default);background:none;}
+.card p:first-child{margin-top:0;}
+ul.li,ol.li{margin-top:12px;padding-left:19px;}
+ul.li li,ol.li li{margin-top:7px;color:var(--text-dark);}
+ul.li li::marker{color:var(--text-muted);}
+ol.li li::marker{font-weight:800;color:var(--text-muted);}
+
+/* ── 왜 쓰나 ────────────────────────── */
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px;}
+.wc{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:17px 18px;cursor:pointer;text-align:left;display:flex;flex-direction:column;}
+.wc:hover{border-color:var(--text-black);}
+.wc .wn{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+.wc h4{font-size:17px;font-weight:800;letter-spacing:-0.5px;margin-top:7px;}
+.wc .wq{font-size:13.5px;font-weight:700;color:var(--text-black);margin-top:10px;line-height:1.7;}
+.wc .wq i{font-style:normal;background:var(--brand-soft);padding:0 3px;border-radius:2px;}
+.wc .wd{font-size:13px;color:var(--text-gray);margin-top:9px;line-height:1.75;flex:1;}
+.wc .wgo{margin-top:13px;font-size:12px;font-weight:800;color:var(--text-black);}
+.wc .wgo::after{content:" →";}
+.wc.on{border-color:var(--brand);background:var(--bg-light);}
+
+/* ── 모드 전환 ──────────────────────── */
+.modes{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:18px;}
+.seg{display:inline-flex;background:var(--bg-white);border:1px solid var(--border-default);
+  border-radius:var(--radius-full);padding:3px;}
+.seg button{border:0;background:none;font-size:12.5px;font-weight:700;color:var(--text-gray);
+  border-radius:var(--radius-full);padding:6px 14px;cursor:pointer;min-height:32px;}
+.seg button.on{background:var(--bg-black);color:var(--bg-white);}
+.nmwrap{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.nmwrap label{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+.nm{border:1px solid var(--border-default);background:var(--bg-white);border-radius:var(--radius-sm);
+  padding:7px 11px;font-size:13px;font-weight:700;width:190px;min-height:34px;}
+.nm:focus{outline:2px solid var(--brand);outline-offset:-1px;}
+@media (max-width:600px){.nmwrap{margin-left:0;width:100%;}.nm{flex:1;width:auto;}}
+
+/* ── 한 칸씩 ────────────────────────── */
+.steps{margin-top:6px;}
+.fld{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:14px;overflow:hidden;}
+.fld.done{border-color:var(--brand);}
+.fld-hd{padding:17px 20px 0;}
+.fld-no{display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.6px;
+  background:var(--bg-black);color:var(--bg-white);border-radius:var(--radius-xs);padding:1px 7px;}
+.fld.done .fld-no{background:var(--brand);color:var(--brand-ink);}
+.fld-nm{font-size:19px;font-weight:800;letter-spacing:-0.6px;margin-top:9px;}
+.fld-nm small{font-size:11.5px;font-weight:700;color:var(--text-light);margin-left:7px;letter-spacing:0;}
+.fld-why{font-size:13.5px;color:var(--text-gray);margin-top:8px;line-height:1.75;}
+.fld-why b{font-weight:800;color:var(--text-dark);}
+.fld-q{margin:14px 20px 0;background:var(--bg-light);border:1px solid var(--brand);
+  border-radius:var(--radius-md);padding:13px 15px;}
+.fld-q .cap{display:block;margin-bottom:6px;}
+.fld-q .qt{font-size:15px;font-weight:800;line-height:1.72;letter-spacing:-0.4px;color:var(--text-black);}
+.fld-q .qs{font-size:13px;color:var(--text-gray);margin-top:7px;line-height:1.7;}
+.fld-bd{padding:14px 20px 18px;}
+textarea.in{width:100%;border:1px solid var(--border-default);border-radius:var(--radius-md);
+  background:var(--bg-white);padding:13px 14px;font-size:14.5px;line-height:1.8;
+  color:var(--text-black);resize:vertical;min-height:112px;}
+textarea.in::placeholder{color:var(--text-muted);}
+textarea.in:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:var(--brand);}
+.tpls{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center;}
+.tpls .tl{font-size:10.5px;font-weight:800;letter-spacing:0.8px;color:var(--text-light);margin-right:2px;}
+.tpl{border:1px dashed var(--border-default);background:var(--bg-white);color:var(--text-dark);
+  font-size:12.5px;font-weight:700;border-radius:var(--radius-full);padding:6px 12px;
+  cursor:pointer;min-height:32px;text-align:left;}
+.tpl:hover{border-style:solid;border-color:var(--brand-press);background:var(--bg-light);}
+.chks{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.chk{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+  border:1px solid var(--border-default);border-radius:var(--radius-full);
+  padding:4px 10px;color:var(--text-light);background:var(--bg-white);}
+.chk i{font-style:normal;font-weight:800;}
+.chk.on{border-color:var(--brand);background:var(--bg-light);color:var(--text-black);}
+.chk.on i{color:var(--brand-press);}
+.warn{margin-top:11px;background:var(--warn-bg);border:1px solid #F3DFA8;
+  border-radius:var(--radius-md);padding:11px 13px;font-size:13px;line-height:1.72;color:#6B4A0B;}
+.warn b{font-weight:800;color:var(--warn);}
+.exs{margin-top:13px;border-top:var(--card-line);padding-top:12px;}
+.exbtn{border:0;background:none;padding:0;cursor:pointer;font-size:12.5px;font-weight:800;
+  color:var(--text-gray);display:inline-flex;align-items:center;gap:5px;min-height:28px;}
+.exbtn:hover{color:var(--text-black);}
+.exbtn i{font-style:normal;display:inline-block;width:14px;text-align:center;color:var(--text-muted);}
+.exbox{display:none;margin-top:11px;}
+.exbox.open{display:block;}
+.exrow{border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;margin-top:9px;}
+.exrow .r{padding:11px 13px;font-size:13.5px;line-height:1.75;}
+.exrow .r.bad{background:#FAFAFA;color:var(--text-gray);border-bottom:var(--card-line);}
+.exrow .r.good{background:var(--bg-light);color:var(--text-dark);}
+.exrow .r b{display:block;font-size:10.5px;font-weight:800;letter-spacing:1px;margin-bottom:5px;}
+.exrow .r.bad b{color:var(--text-light);}
+.exrow .r.good b{color:var(--brand-press);}
+.exrow .r.good span{font-weight:700;color:var(--text-black);}
+.exuse{margin-top:8px;}
+.mine{background:var(--bg-black);border-radius:var(--radius-md);padding:13px 15px;margin-top:9px;}
+.mine b{display:block;font-size:10.5px;font-weight:800;letter-spacing:1px;color:#9A9A9A;margin-bottom:6px;}
+.mine p{margin:0;font-size:13.5px;line-height:1.75;color:#E8E8E8;}
+.mine p + p{margin-top:7px;}
+.mine em{font-style:normal;color:var(--brand);font-weight:700;}
+
+/* ── 한눈에 (격자) ──────────────────── */
+.cvwrap{margin-top:18px;}
+.cvhint{font-size:13px;color:var(--text-gray);margin-bottom:10px;}
+.cv{display:grid;gap:8px;}
+.cv.lean{grid-template-columns:repeat(10,1fr);
+  grid-template-areas:
+    "f1 f1 f4 f4 f3 f3 f9 f9 f2 f2"
+    "f1 f1 f8 f8 f3 f3 f5 f5 f2 f2"
+    "f7 f7 f7 f7 f7 f6 f6 f6 f6 f6";}
+.cv.bmc{grid-template-columns:repeat(10,1fr);
+  grid-template-areas:
+    "g8 g8 g7 g7 g2 g2 g4 g4 g1 g1"
+    "g8 g8 g6 g6 g2 g2 g3 g3 g1 g1"
+    "g9 g9 g9 g9 g9 g5 g5 g5 g5 g5";}
+.cv.vpc{grid-template-columns:repeat(2,1fr);
+  grid-template-areas:"v1 v4" "v2 v5" "v3 v6";}
+.cell{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);
+  display:flex;flex-direction:column;min-height:168px;overflow:hidden;}
+.cell.done{border-color:var(--brand);}
+.cell-hd{padding:10px 12px 0;display:flex;align-items:baseline;gap:7px;}
+.cell-no{font-size:10px;font-weight:800;background:var(--bg-black);color:var(--bg-white);
+  border-radius:var(--radius-xs);padding:0 5px;flex:0 0 auto;}
+.cell.done .cell-no{background:var(--brand);color:var(--brand-ink);}
+.cell-nm{font-size:12.5px;font-weight:800;letter-spacing:-0.3px;line-height:1.5;}
+.cell-q{padding:5px 12px 0;font-size:11px;color:var(--text-light);line-height:1.6;}
+.cell textarea{flex:1;width:100%;border:0;background:none;padding:9px 12px 11px;
+  font-size:13px;line-height:1.72;resize:none;color:var(--text-black);min-height:72px;}
+.cell textarea:focus{outline:2px solid var(--brand);outline-offset:-2px;}
+.cell textarea::placeholder{color:var(--text-muted);}
+@media (max-width:900px){
+  .cv.lean,.cv.bmc,.cv.vpc{grid-template-columns:1fr;grid-template-areas:none!important;}
+  .cv > .cell{grid-area:auto!important;min-height:150px;}
+}
+
+/* ── 마무리 ─────────────────────────── */
+.fin{background:var(--bg-black);border-radius:var(--radius-lg);padding:22px 23px;margin-top:20px;}
+.fin .cap{color:#9A9A9A;}
+.fin h4{font-size:19px;font-weight:800;letter-spacing:-0.6px;color:var(--bg-white);margin-top:8px;line-height:1.5;}
+.fin h4 em{font-style:normal;background:linear-gradient(transparent 58%,var(--brand) 58%);color:var(--bg-white);}
+.fin ol{margin:14px 0 0;padding-left:19px;}
+.fin li{color:#E8E8E8;font-size:14px;line-height:1.8;margin-top:8px;}
+.fin li b{color:var(--brand);font-weight:800;}
+.fin .mini{margin-top:15px;font-size:12.5px;color:#9A9A9A;line-height:1.7;}
+
+/* ── 내보내기 판 ────────────────────── */
+.sheet{position:fixed;inset:0;z-index:60;display:none;}
+.sheet.open{display:block;}
+.sheet .bg{position:absolute;inset:0;background:rgba(26,26,26,0.5);}
+.sheet .pan{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(680px,calc(100% - 32px));max-height:86vh;overflow:auto;
+  background:var(--bg-white);border-radius:var(--radius-lg);padding:22px;}
+.sheet h4{font-size:19px;font-weight:800;letter-spacing:-0.6px;}
+.sheet .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+.sheet textarea{width:100%;margin-top:14px;min-height:260px;border:var(--card-line);
+  border-radius:var(--radius-md);padding:13px;font-size:12.5px;line-height:1.75;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:0;resize:vertical;}
+.sheet .x{position:absolute;right:16px;top:14px;border:0;background:none;font-size:20px;
+  font-weight:800;color:var(--text-light);cursor:pointer;line-height:1;padding:4px 8px;}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);
+  background:var(--bg-black);color:var(--bg-white);font-size:13px;font-weight:700;
+  padding:11px 18px;border-radius:var(--radius-full);z-index:80;opacity:0;
+  transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.foot{margin-top:50px;padding-top:20px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);line-height:1.8;}
+.foot b{font-weight:700;color:var(--text-gray);}
+
+@media print{
+  .top,.modes,.why,.hd .sub,.fin,.foot,.sheet,.tpls,.chks,.exs,.warn,.cvhint{display:none!important;}
+  body{background:#fff;font-size:11px;}
+  .wrap{padding:0;max-width:none;}
+  .cv{gap:4px;}
+  .cell{min-height:132px;break-inside:avoid;}
+  .steps{display:none!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <div class="logo"><i>코멜</i><span>캔버스</span></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="prog"><div class="bar"><i id="pbar"></i></div><span id="ptxt">0/9</span></div>
+    <div class="top-r">
+      <button class="ib" id="btnOut">내보내기</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hd narrow">
+    <div class="kick">사업을 한 장으로</div>
+    <h1>머릿속에 있는 걸 <em>칸에 넣으면</em>, 무엇을 모르는지 보인다</h1>
+    <p class="sub">캔버스는 보고용 서류가 아니다. <b class="k">지금 내가 확인하지 않은 채로 믿고 있는 것</b>을 찾아내는 종이다.
+      칸을 채우다 막히는 자리가 있다면, 그 자리가 이번 주에 확인해야 할 일이다.</p>
+    <p class="sub muted">아래 세 가지 중 하나만 고르면 된다. 전부 쓸 필요 없다. 쓴 내용은 이 브라우저에 자동 저장된다.</p>
+  </div>
+
+  <section id="pick">
+    <h2 class="sec"><b>00</b>어느 걸 쓸까</h2>
+    <h3 class="ttl">지금 상황에 맞는 것 하나만</h3>
+    <div class="why" id="why"></div>
+    <div class="card line">
+      <p class="muted"><b class="k">셋 다 모르겠으면 맨 왼쪽(린 캔버스).</b>
+        가장 적게 쓰고 가장 많이 알게 된다. 한 번에 다 못 써도 된다 — 모르는 칸은 <b class="k">"모른다"</b>고 적는 게 빈칸보다 낫다.
+        그 칸이 바로 다음에 할 일이 된다.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2 class="sec"><b id="secno">01</b><span id="secnm">린 캔버스</span></h2>
+    <h3 class="ttl" id="worktitle">칸마다 질문에 답하면 채워진다</h3>
+    <p class="muted" id="workdesc"></p>
+
+    <div class="modes">
+      <div class="seg">
+        <button id="mGuide" class="on">한 칸씩 쓰기</button>
+        <button id="mGrid">한눈에 보기</button>
+      </div>
+      <button class="ib" id="btnPrint">인쇄 · PDF</button>
+      <div class="nmwrap">
+        <label for="nm">이 캔버스 이름</label>
+        <input class="nm" id="nm" placeholder="예: 코멜 2026년 1분기" maxlength="40">
+      </div>
+    </div>
+
+    <div class="steps" id="steps"></div>
+
+    <div class="cvwrap" id="cvwrap" style="display:none">
+      <p class="cvhint">칸을 눌러 바로 고칠 수 있다. 번호는 <b class="k">쓰는 순서</b>다. 인쇄하면 이 화면이 한 장으로 나온다.</p>
+      <div class="cv" id="cv"></div>
+    </div>
+
+    <div class="fin" id="fin"></div>
+  </section>
+
+  <section id="help">
+    <h2 class="sec"><b>99</b>처음 쓰는 사람에게</h2>
+    <h3 class="ttl">세 가지만 기억하면 된다</h3>
+
+    <div class="card">
+      <p><b class="k">하나. 예쁘게 쓰려고 하지 않는다.</b>
+        캔버스는 남에게 보여 주는 문서가 아니다. 멋있는 말로 채우면 읽을 때 기분은 좋은데 아무 결정도 못 내린다.
+        <mark>"다양한 고객에게 편리한 가치를 제공한다"</mark>처럼 쓰면 틀린 말은 아니지만, 내일 뭘 할지가 안 나온다.</p>
+      <p><b class="k">둘. 사실과 짐작을 갈라 적는다.</b>
+        확인한 건 그냥 쓰고, 짐작은 앞에 <mark>(짐작)</mark>을 붙인다. 처음 쓰면 거의 다 짐작이다 — 정상이다.
+        짐작이 많은 게 문제가 아니라, 짐작을 사실로 착각하는 게 문제다.</p>
+      <p><b class="k">셋. 한 번 쓰고 끝내지 않는다.</b>
+        2주에 한 번 열어서 고친다. 고칠 게 없다면 그동안 아무것도 확인하지 않았다는 뜻이다.</p>
+    </div>
+
+    <div class="card lime">
+      <p class="cap">칸이 막힐 때</p>
+      <p>머리로 쓰지 말고 <b class="k">지난 7일을 떠올린다.</b> 실제로 누가 뭘 물었고, 누가 돈을 냈고, 어디서 시간을 가장 많이 썼는지.
+        캔버스의 모든 칸은 결국 <b class="k">지난주에 실제로 있었던 일</b>로 채워진다.</p>
+    </div>
+  </section>
+
+  <div class="foot">
+    <b>코멜(COMMEL) 캔버스</b> — 린 캔버스는 애시 모리아(Ash Maurya), 비즈니스 모델 캔버스와 밸류 프로포지션 캔버스는
+    알렉산더 오스터왈더(Alexander Osterwalder)가 만든 양식이다. 이 페이지는 그 양식을 처음 쓰는 사람이 혼자서도 채울 수 있게
+    질문·예시·점검을 붙인 입력 도구다.<br>
+    쓴 내용은 서버로 보내지 않고 <b>이 브라우저에만</b> 저장된다. 브라우저 기록을 지우면 사라지니, 중요한 건 내보내기로 따로 받아 둔다.
+  </div>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="bg" id="sheetbg"></div>
+  <div class="pan">
+    <button class="x" id="sheetx">×</button>
+    <h4>내보내기</h4>
+    <p class="muted">아래 글을 그대로 복사해서 메모·문서·메일에 붙이면 된다.</p>
+    <div class="row">
+      <button class="ib key" id="btnCopy">전체 복사</button>
+      <button class="ib" id="btnFile">파일로 저장(.txt)</button>
+      <button class="ib" id="btnJson">저장 파일(.json)</button>
+      <button class="ib" id="btnLoad">불러오기</button>
+      <button class="ib" id="btnClear">이 캔버스 비우기</button>
+      <input type="file" id="fileIn" accept=".json" style="display:none">
+    </div>
+    <textarea id="outtext" readonly></textarea>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ───────── 흐린 말 사전 ───────── */
+var VAGUE = ["다양한","여러가지","여러 가지","편리한","편리하게","효율적","효율성","혁신적","혁신","최고의","최적의","최상의",
+  "좋은 서비스","많은 사람","모든 사람","모든 고객","누구나","아무나","전반적","등등","적절한","니즈","솔루션을 제공",
+  "시너지","고객 만족","고객만족","차별화된","퀄리티","가성비","원스톱","올인원","통합적","맞춤형","스마트한",
+  "체계적으로","전문적인","극대화","활성화","도움이 되는","유용한","가치를 제공","경험을 제공","간편한","손쉽게"];
+
+function vagueHits(v){ var r=[]; for(var i=0;i<VAGUE.length;i++){ if(v.indexOf(VAGUE[i])>-1) r.push(VAGUE[i]); } return r; }
+function nchar(v){ return v.replace(/\s/g,"").length; }
+function nlines(v){ return v.split(/\n+/).filter(function(s){return s.trim().length>1;}).length; }
+
+/* ───────── 점검 항목 ───────── */
+var CK = {
+  len20:{t:"20자 이상", f:function(v){ return nchar(v)>=20; }},
+  len30:{t:"30자 이상", f:function(v){ return nchar(v)>=30; }},
+  vague:{t:"흐린 말이 없다", f:function(v){ return vagueHits(v).length===0; }},
+  num:{t:"숫자가 있다", f:function(v){ return /[0-9]/.test(v); }},
+  money:{t:"금액이 있다", f:function(v){ return /[0-9][0-9,.]*\s*(원|만원|천원|억|달러)/.test(v); }},
+  one:{t:"하나로 끊었다", f:function(v){ return nlines(v)<=1 && nchar(v)>0; }},
+  few:{t:"세 개 이하", f:function(v){ var n=nlines(v); return n>=1 && n<=3; }},
+  scene:{t:"언제·몇 번인지 있다", f:function(v){ return /지난|이번|주 ?[0-9]|하루|매주|매일|매달|월 ?[0-9]|[0-9] ?(번|회|분|시간|일|주|달)|요일|아침|저녁|밤/.test(v); }},
+  who:{t:"어떤 사람인지 있다", f:function(v){ return /사장|대표|셀러|운영|창업|직원|혼자|1인|강사|디자이너|작가|작업자|가게|매장|공방|쇼핑몰|카페|브랜드|병원|학원|농장|식당|업체|스튜디오|프리랜서|회원/.test(v); }},
+  act:{t:"동작으로 썼다", f:function(v){ return /누르|보내|보여|쓴다|적는다|찍|올리|받는|묻|고치|연다|열린|나온다|띄운|띄워|비교|확인|알려|뽑아|정한다|한다|된다/.test(v); }},
+  hard:{t:"왜 못 베끼는지 있다", f:function(v){ return /못|없|걸린|걸려|쌓|모은|모아|[0-9] ?(년|개월)|직접|우리만|유일|먼저/.test(v); }},
+  pair:{t:"짝을 번호로 적었다", f:function(v){ return /[0-9]번|[0-9]\)|①|②|③|④|⑤|→|↔/.test(v); }},
+  period:{t:"기간이 있다", f:function(v){ return /주|달|월|분기|년|일|매번/.test(v); }}
+};
+
+/* ───────── 캔버스 ───────── */
+var CANVAS = {};
+
+CANVAS.lean = {
+  tab:"린 캔버스", no:"01", name:"린 캔버스", grid:"lean",
+  when:"아직 안 팔아 봤다 · 막 시작했다",
+  q:"내가 <i>확인도 안 하고</i> 믿고 있는 게 뭔가",
+  wd:"사업 전체를 한 장에 올려놓고, 가장 위험한 짐작부터 찾는다. 아홉 칸. 20분이면 1차가 나온다.",
+  desc:"아홉 칸을 순서대로 채운다. 1번 고객군과 2번 문제가 흔들리면 나머지 일곱 칸은 전부 아무 뜻이 없으니, 앞 두 칸에 시간을 가장 많이 쓴다.",
+  fields:[
+    { k:"f2", no:1, nm:"고객군", sub:"Customer Segments",
+      why:"여기가 뭉개지면 아래 여덟 칸이 전부 <b>아무나를 위한 말</b>이 된다. 사람 여러 종류를 적지 말고, 실제로 아는 한 사람을 떠올려 그 사람을 적는다.",
+      q:"이 문제를 지금 겪고 있는 사람 <b>한 명</b>을 떠올려 보세요. 그 사람은 무슨 일을 하고, 규모가 어떻고, 요즘 어떤 상황인가요?",
+      qs:"그리고 그중에서 완성도가 낮아도 지금 당장 써 볼 사람(얼리 어답터)을 마지막 줄에 따로 적는다.",
+      ph:"예) 직원 없이 혼자 하는 1인 공방 사장\n인스타 팔로워 500~3,000명, 주문은 거의 DM 으로 받는다\n얼리 어답터: 이미 유료 강의를 한 번 이상 산 사람",
+      tpl:["□□를 하는 □□ 사장. 규모는 □□.","요즘 □□ 때문에 □□하고 있다.","얼리 어답터: □□를 이미 □□해 본 사람"],
+      checks:["len30","who","num","vague"],
+      bad:"20~40대 소상공인, 자영업자, 1인 기업가",
+      good:"직원 없이 혼자 하는 1인 공방 사장. 인스타 팔로워 500~3,000명. 주문은 거의 DM 으로 받고, 사진은 폰으로 직접 찍는다.",
+      goodwhy:"이렇게 적으면 다음 칸부터 답이 저절로 좁혀진다. 위처럼 적으면 무슨 말을 붙여도 다 맞는 말이 된다.",
+      mine:["이미 돈을 낸 유료 회원 6,021명. 대부분 혼자 또는 두세 명으로 사업을 한다.",
+            "(짐작) 그중 매주 글을 읽는 사람은 일부다 — 숫자를 아직 안 봤다. <em>확인할 일 1번</em>"] },
+
+    { k:"f1", no:2, nm:"문제", sub:"Problem",
+      why:"해결책이 먼저 떠오르는 건 정상이다. 하지만 문제가 틀리면 잘 만든 해결책도 안 팔린다. <b>지금은 이걸 어떻게 버티고 있나</b>까지 같이 적는 게 핵심이다.",
+      q:"그 사람이 <b>지난 7일 안에 실제로 겪은 장면</b>으로 적어 보세요. 몇 번 있었고, 몇 분을 썼나요?",
+      qs:"문제는 많아도 세 개까지만. 그리고 마지막 줄에 기존 대안 — 지금은 그걸 어떻게 버티는지(엑셀·메모장·지인한테 묻기·그냥 포기)를 적는다. <b>없다고 적으면 거의 거짓말이다.</b> 아무것도 안 하는 상태도 경쟁자다.",
+      ph:"예) 주 2~3번, 뭘 먼저 고쳐야 할지 몰라서 30~60분 화면만 보다 아무것도 안 올린다\n저장해 둔 팁을 다시 찾느라 매번 10분씩 검색한다\n기존 대안: 그냥 감으로 올리거나, 아는 사람에게 물어본다",
+      tpl:["주 □번, □□하려다 □□에서 막혀서 □분을 쓴다.","□□를 몰라서 결국 □□하지 못했다.","기존 대안: 지금은 □□로 버틴다."],
+      checks:["len30","scene","few","vague"],
+      bad:"마케팅이 어렵다. 홍보 방법을 모른다. 시간이 없다.",
+      good:"주 2~3번, 뭘 먼저 고쳐야 할지 몰라서 30~60분을 화면만 보다 아무것도 안 올린다.",
+      goodwhy:"왼쪽은 들어도 뭘 만들지 안 떠오른다. 오른쪽은 만들 것이 바로 보인다 — 무엇부터 고칠지 정해 주는 화면.",
+      mine:["(짐작) 좋은 말은 많이 봤는데 서로 충돌하고, 어디서 봤는지 못 찾아 다시 검색한다.",
+            "기존 대안: 저장해 둔 글을 다시 뒤지거나, 챗GPT 에 상황을 처음부터 다시 설명한다. <em>이건 확인됨</em>"] },
+
+    { k:"f3", no:3, nm:"고유의 가치 제안", sub:"Unique Value Proposition",
+      why:"이 한 줄이 광고 첫 문장이 되고, 안 될 때 <b>접을 기준</b>이 된다. 우리가 뭘 만들었는지가 아니라, 고객의 무엇이 달라지는지로 쓴다.",
+      q:"<b>□□할 때, □□에서 □□를 바로 □□해 준다</b> — 한 문장으로 적어 보세요.",
+      qs:"길면 틀린 것이다. 둘째 줄에는 아는 것에 비유한 한마디(하이레벨 컨셉)를 적는다. 예: 사업 글의 녹취록.",
+      ph:"예) 홍보하다 막혔을 때, 내가 읽은 것에서 지금 확인할 기준 하나를 바로 꺼내 준다\n비유: 내가 그은 밑줄로 만든 점검표",
+      tpl:["□□할 때, □□를 바로 □□해 준다.","□□ 없이도 □□할 수 있다.","비유: □□의 □□"],
+      checks:["one","len20","vague","act"],
+      bad:"소상공인을 위한 올인원 마케팅 솔루션. 누구나 쉽게 쓸 수 있는 맞춤형 플랫폼.",
+      good:"홍보하다 막혔을 때, 내가 읽은 것에서 지금 확인할 기준 하나를 바로 꺼내 준다.",
+      goodwhy:"왼쪽 문장은 어느 회사에 붙여도 된다. 그래서 아무 약속도 안 한 것이다. 오른쪽은 못 지키면 바로 티가 난다 — 그래야 약속이다.",
+      mine:["홍보하다 막혔을 때, 내가 읽은 것에서 지금 확인할 기준 하나를 바로 꺼내 준다.",
+            "못 하겠다고 적어 둔 것: 촬영, 광고 운영, 말투 흉내, 매출 보장. <em>약속에 넣지 않는다</em>"] },
+
+    { k:"f4", no:4, nm:"해결책", sub:"Solution",
+      why:"문제 하나에 해결책 하나씩만. <b>해결책이 문제보다 많으면 안 쓰일 기능을 만들고 있다는 뜻</b>이다. 기능 이름이 아니라 고객이 뭘 누르면 뭐가 나오는지로 쓴다.",
+      q:"2번에 적은 문제 하나하나에, <b>고객이 보게 되는 화면</b>으로 짝을 지어 보세요.",
+      qs:"기능 이름(AI 추천, 자동화, 대시보드)만 적으면 아무것도 정해지지 않는다. 무엇을 누르고 무엇이 나오는지 적는다.",
+      ph:"예) 1번 문제 → 올리기 전에 확인 질문 3개를 띄운다. 내가 밑줄 그은 문장에서 뽑아서\n2번 문제 → 밑줄을 원문 그 자리에서 다시 연다",
+      tpl:["□번 문제 → □□를 누르면 □□가 나온다.","□□ 전에 □□를 보여 준다.","□□를 □□ 자리에서 바로 □□한다."],
+      checks:["few","act","pair","vague"],
+      bad:"AI 기반 개인화 추천 시스템, 데이터 분석 대시보드, 자동화된 콘텐츠 생성",
+      good:"올리기 전에 확인 질문 3개를 띄운다. 내가 밑줄 그은 문장에서 뽑아서.",
+      goodwhy:"오른쪽은 그대로 그려서 만들 수 있다. 왼쪽은 열 사람이 열 가지로 상상한다.",
+      mine:["올리기 전 확인 질문 3개 · 이번 주 한 곳만 확인하기 · 밑줄을 원문 자리에서 다시 열기 · 충돌하는 조언 비교",
+            "(짐작) 이 중 어느 것이 먼저인지는 고객에게 물어봐야 안다. <em>확인할 일 2번</em>"] },
+
+    { k:"f5", no:5, nm:"채널", sub:"Channels",
+      why:"안 쓰는 첫째 이유는 비싸서가 아니라 <b>몰라서</b>다. 광고 이름을 적는 칸이 아니라, 그 사람이 이미 하루에 한 번 이상 보는 자리를 적는 칸이다.",
+      q:"1번에 적은 그 사람이 <b>이미 매일 보는 곳</b>은 어디인가요? 그중 오늘 당장 쓸 수 있는 건?",
+      qs:"처음에는 수가 적어도 내 손으로 직접 만나는 쪽이 낫다. 20명을 직접 만나는 게 10만 노출보다 많이 알려 준다.",
+      ph:"예) 이미 결제한 회원에게 보내는 주 1회 메일 — 여기서 20명 먼저 모집\n인스타 DM 으로 아는 사장 10명에게 직접 요청",
+      tpl:["이미 □□하는 □□명에게 □□로 알린다.","□□에서 □□명을 직접 만나 먼저 써 보게 한다.","□□할 때 □□ 화면에서 알려 준다."],
+      checks:["len20","num","vague"],
+      bad:"SNS 마케팅, 바이럴, 인플루언서 협업, 퍼포먼스 광고",
+      good:"이미 결제한 회원 6,021명에게 보내는 주 1회 메일. 그 안에서 20명을 모아 먼저 쓰게 한다.",
+      goodwhy:"오른쪽은 이번 주에 실행된다. 왼쪽은 예산과 담당자가 생길 때까지 아무 일도 일어나지 않는다.",
+      mine:["회원 6,021명에게 보내는 메일. 그리고 앱·웹 안에서 읽던 자리에 바로 띄우기.",
+            "돈을 새로 쓰지 않고 쓸 수 있는 채널이 이미 있다는 게 가장 큰 자산이다."] },
+
+    { k:"f6", no:6, nm:"수익 흐름", sub:"Revenue Streams",
+      why:"<b>한 사람이 한 번에 얼마를 내는가</b>와 <b>몇 명이 내야 버티는가</b>, 이 두 숫자가 없으면 나머지는 취미다.",
+      q:"한 사람이 한 번에 얼마를 내나요? 한 달에 몇 명이 내야 버티나요?",
+      qs:"공짜로 시작할 생각이면 언제 돈을 받기 시작하는지와, 그때 떠날 사람 비율까지 적어 둔다.",
+      ph:"예) 월 19,000원 구독. 유지 회원 250명이면 월 475만원\n이 기능은 구독에 포함(별도 과금 없음)\n버티는 선: 월 600만원 → 회원 316명",
+      tpl:["월 □□원 × □□명 = 월 □□원","버티는 선은 월 □□원, 그러면 □□명이 필요하다.","처음 □주는 무료, 그 뒤 □□원."],
+      checks:["money","num","vague"],
+      bad:"구독 모델 + 광고 + 추후 B2B 확장",
+      good:"월 19,000원 구독. 유지 회원 250명이면 월 475만원. 버티는 선은 월 600만원이라 316명이 필요하다.",
+      goodwhy:"오른쪽은 다음 달에 성공·실패를 판정할 수 있다. 왼쪽은 1년 뒤에도 판정이 안 된다.",
+      mine:["기존 구독료 안에 넣을지, 따로 받을지 아직 안 정했다. <em>리건이 정할 일</em>",
+            "앱에는 결제·가격 요소를 넣지 않는다 — 결제는 웹에서만. 이건 규정이라 바뀌지 않는다."] },
+
+    { k:"f7", no:7, nm:"비용 구조", sub:"Cost Structure",
+      why:"큰 것 세 개면 충분하다. 작은 걸 다 적다가 <b>제일 큰 돈이 어디로 나가는지</b>를 놓치는 게 흔한 실수다.",
+      q:"이걸 한 달 돌리는 데 드는 돈을 <b>큰 것 세 개만</b> 적어 보세요. 내 시간도 돈으로 적습니다.",
+      qs:"매달 똑같이 나가는 돈(고정비)과 팔릴 때만 나가는 돈(변동비)을 갈라 적으면, 안 팔릴 때 얼마나 버티는지가 바로 보인다.",
+      ph:"예) 고정: 서버·도구 월 10만원\n변동: AI 호출 1인당 월 300원 → 250명이면 7만 5천원\n내 시간: 주 10시간 (= 월 40시간)",
+      tpl:["고정: □□ 월 □□원","변동: □□당 □□원 × □□개","내 시간: 주 □시간"],
+      checks:["money","few","num"],
+      bad:"인건비, 서버비, 마케팅비 등",
+      good:"고정: 서버·도구 월 10만원 / 변동: AI 호출 1인당 월 300원 / 내 시간: 주 10시간",
+      goodwhy:"오른쪽처럼 쓰면 수익 칸과 바로 뺄셈이 된다. 왼쪽은 뺄셈이 안 된다.",
+      mine:["가장 큰 비용은 돈이 아니라 <em>코킷 89편에 다섯 줄씩 손으로 붙이는 시간</em>이다. 89 × 5줄.",
+            "(짐작) 한 편에 20분이면 30시간. 누가 쓸지 정해야 시작된다."] },
+
+    { k:"f8", no:8, nm:"핵심 지표", sub:"Key Metrics",
+      why:"지표가 여러 개면 전부 안 본다. <b>하나만</b> 고른다. 그리고 읽은 분량은 지표가 아니다 — 고객의 일이 끝났는지를 본다.",
+      q:"하나만 본다면 어떤 숫자를 매주 볼 건가요? <b>지금 값</b>과 <b>4주 뒤 목표</b>까지 적어 보세요.",
+      qs:"올라가도 기쁘지 않은 숫자라면 지표가 아니다. 가입자 수·조회 수가 올라도 고객의 일이 안 끝났으면 아무 일도 안 일어난 것이다.",
+      ph:"예) 확인 질문을 보고 올렸다를 누른 사람 수\n지금 0명 → 4주 뒤 주 15명\n보는 날: 매주 월요일 아침",
+      tpl:["□□한 사람 수. 지금 □명 → □주 뒤 □명","매주 □요일에 □□를 본다.","□□가 □□보다 늘었는지를 본다."],
+      checks:["one","num","period","vague"],
+      bad:"DAU, MAU, 리텐션, 전환율, 매출, 만족도",
+      good:"확인 질문을 보고 올렸다를 누른 사람 수. 지금 0명 → 4주 뒤 주 15명. 매주 월요일 아침에 본다.",
+      goodwhy:"오른쪽은 4주 뒤에 맞았는지 틀렸는지가 나온다. 왼쪽은 숫자가 여섯 개라서 아무 결정도 안 된다.",
+      mine:["읽은 분량·진행률은 지표로 쓰지 않는다. <em>독서 진행률은 업무 진행률이 아니다.</em>",
+            "볼 숫자: 확인 질문을 받고 실제로 올렸다고 누른 사람 수."] },
+
+    { k:"f9", no:9, nm:"경쟁 우위", sub:"Unfair Advantage",
+      why:"기능은 2주면 베낀다. 여기에 기능을 적었다면 아직 우위가 없다는 뜻이고, <b>그건 괜찮다</b> — 비워 두고 무엇을 쌓을지 적으면 된다.",
+      q:"경쟁자가 돈을 써도 <b>당장은 못 가지는 것</b>을 적어 보세요. 왜 못 가지는지까지.",
+      qs:"우위가 되는 것: 오래 쌓인 것, 모아 둔 기록, 신뢰, 독점 계약, 이미 돈 낸 회원. 우위가 아닌 것: 좋은 UI, 특허 출원 중, 열정, 먼저 시작함.",
+      ph:"예) 4년치 원문 89편과, 회원들이 어느 문장에 밑줄 그었는지의 기록\n새로 만들려면 콘텐츠부터 4년을 써야 한다\n(아직 없다면) 지금부터 쌓을 것: □□",
+      tpl:["□□년치 □□와 □□ 기록. 새로 만들려면 □□부터 해야 한다.","이미 □□명이 □□해 준 기록.","지금은 우위가 없다. 앞으로 □□를 쌓는다."],
+      checks:["len20","hard","vague"],
+      bad:"뛰어난 UI/UX, 특허 출원 중, 열정적인 팀, 선점 효과",
+      good:"4년치 원문 89편과, 회원들이 어느 문장에 밑줄 그었는지의 기록. 새로 만들려면 콘텐츠부터 써야 한다.",
+      goodwhy:"오른쪽은 돈으로 당장 살 수 없다. 왼쪽은 전부 2주에서 두 달이면 따라잡힌다.",
+      mine:["원문 89편 + 회원 6,021명 + 누가 어느 문장에 밑줄을 그었는지. 이걸 아는 곳은 우리뿐이다.",
+            "(짐작) 이 우위가 고객에게 값을 치를 만큼 중요한지는 아직 모른다. <em>확인할 일 3번</em>"] }
+  ],
+  fin:{ t:"다 썼다면, 마지막으로 이것만",
+    li:["<b>가장 자신 없는 칸 하나</b>에 동그라미를 친다. 전부 자신 있다면 거짓말이다.",
+        "그 칸 하나를 확인하려고 <b>이번 주에 만날 사람 3명</b>의 이름을 적는다. 설문이 아니라 통화나 만남이다.",
+        "<b>물어볼 질문 하나</b>만 정한다. 지난 7일에 실제로 한 일을 묻는다 — 쓰시겠어요가 아니라.",
+        "2주 뒤에 이 캔버스를 다시 열어 고친다. 고칠 게 없으면 그동안 아무것도 확인하지 않은 것이다."],
+    mini:"가장 흔한 실패는 캔버스를 다 채우고 나서 만들기부터 시작하는 것이다. 캔버스는 만들 것을 정해 주는 종이가 아니라, 물어볼 것을 정해 주는 종이다." }
+};
+
+CANVAS.bmc = {
+  tab:"비즈니스 모델 캔버스", no:"02", name:"비즈니스 모델 캔버스", grid:"bmc",
+  when:"이미 팔고 있다 · 구조를 정리하고 싶다",
+  q:"돈이 <i>어디서 들어오고</i> 어디로 나가나",
+  wd:"이미 돌아가는 사업을 아홉 칸으로 분해해서, 어디가 새고 어디가 비어 있는지 본다. 린 캔버스의 원래 양식이다.",
+  desc:"오른쪽(고객)에서 왼쪽(우리 살림)으로 쓴다. 고객 세그먼트부터 시작해서 비용 구조로 끝난다. 이미 하고 있는 일을 적는 칸이니, 하고 싶은 일을 적지 않도록 조심한다.",
+  fields:[
+    { k:"g1", no:1, nm:"고객 세그먼트", sub:"Customer Segments",
+      why:"<b>돈을 내는 사람과 쓰는 사람이 다르면 따로 적는다.</b> 이걸 한 칸에 섞어 적으면 아래 모든 칸이 어긋난다.",
+      q:"지금 <b>실제로 돈을 낸 사람들</b>을 묶음으로 나눠 보세요. 각 묶음이 몇 명인가요?",
+      qs:"묶음이 네 개 이상이면 아직 안 나눈 것이다. 가장 많이 내는 묶음과 가장 많이 쓰는 묶음에 표시한다.",
+      ph:"예) ① 혼자 사업하는 사장 — 유료 회원 6,021명 (대부분)\n② 직원 1~5명 두고 하는 대표 — (짐작) 소수\n돈 내는 사람 = 쓰는 사람 (같다)",
+      tpl:["① □□하는 □□ — □□명","돈 내는 사람과 쓰는 사람: □□","가장 많이 내는 묶음: □□"],
+      checks:["len30","who","num","vague"],
+      bad:"B2C 일반 소비자 및 B2B 기업 고객",
+      good:"① 혼자 사업하는 사장 6,021명(대부분) ② 직원 1~5명 둔 대표(소수). 돈 내는 사람과 쓰는 사람이 같다.",
+      goodwhy:"오른쪽은 각 묶음에 다른 말을 걸 수 있다. 왼쪽은 한 묶음에도 말을 못 건다.",
+      mine:["유료 회원 6,021명. 전부 개인이 자기 돈으로 결제한 사람이고, 회사가 사 준 경우는 없다.",
+            "(짐작) 업종이 제각각이라 하나로 묶기 어렵다. 업종보다 <em>어디서 주문이 생기는가</em>로 나누는 게 나을 수 있다."] },
+
+    { k:"g2", no:2, nm:"가치 제안", sub:"Value Propositions",
+      why:"묶음마다 한 줄씩. <b>우리가 만든 것이 아니라 고객의 무엇이 달라지는지</b>로 쓴다. 여기가 흐리면 광고도 가격도 못 정한다.",
+      q:"각 묶음에게 우리는 <b>무엇을 약속하나요?</b> 그 약속을 못 지키면 바로 티가 나는 말로 적어 보세요.",
+      qs:"덧붙여, 우리가 <b>약속하지 않는 것</b>도 적는다. 못 하는 걸 적어 두면 고객이 실망할 일이 줄고, 우리도 안 만들 걸 안 만든다.",
+      ph:"예) 혼자 하는 사장에게: 홍보하다 막혔을 때 확인할 기준 하나를 바로 꺼내 준다\n약속하지 않는 것: 촬영, 광고 운영, 매출 보장",
+      tpl:["□□에게: □□할 때 □□를 □□해 준다.","약속하지 않는 것: □□, □□","□□ 없이도 □□할 수 있게 한다."],
+      checks:["len30","vague","act"],
+      bad:"고객에게 최고의 가치와 편리한 경험을 제공한다",
+      good:"혼자 하는 사장에게: 홍보하다 막혔을 때, 읽은 것에서 지금 확인할 기준 하나를 바로 꺼내 준다.",
+      goodwhy:"오른쪽은 지켰는지 안 지켰는지 판정이 된다. 왼쪽은 영원히 판정이 안 된다.",
+      mine:["읽은 것을 쌓아 두는 곳이 아니라, <em>막혔을 때 꺼내 쓰는 곳</em>이 되는 것.",
+            "약속하지 않는 것: 원인 분석, 말투 흉내, 대신 쓰기, 매출."] },
+
+    { k:"g3", no:3, nm:"채널", sub:"Channels",
+      why:"채널은 하나가 아니라 <b>네 단계</b>다. 알게 되는 곳 · 사는 곳 · 쓰는 곳 · 문제 생겼을 때 오는 곳. 한 단계가 비어 있으면 거기서 사람이 샌다.",
+      q:"① 어디서 우리를 알게 되나요 ② 어디서 결제하나요 ③ 어디서 쓰나요 ④ 문제가 생기면 어디로 오나요",
+      qs:"네 번째 칸을 비워 두는 곳이 많다. 물어볼 자리가 없으면 고객은 말없이 떠난다.",
+      ph:"예) 알게 됨: 인스타, 지인 소개\n결제: 홈페이지(웹에서만)\n씀: 앱과 모바일 웹\n문제: 카카오 채널",
+      tpl:["알게 됨: □□","결제: □□","씀: □□","문제 생기면: □□"],
+      checks:["len20","few","vague"],
+      bad:"온라인 및 오프라인 다채널 전략",
+      good:"알게 됨: 인스타·지인 소개 / 결제: 웹 / 씀: 앱·모바일 웹 / 문제: 카카오 채널",
+      goodwhy:"오른쪽은 어느 단계가 막혔는지 짚을 수 있다. 왼쪽은 짚을 자리가 없다.",
+      mine:["결제는 웹에서만 한다 — 앱에는 결제·가격 요소를 두지 않는다(규정).",
+            "쓰는 자리는 앱과 모바일 웹이 똑같아야 한다. 구성도 순서도 같다."] },
+
+    { k:"g4", no:4, nm:"고객 관계", sub:"Customer Relationships",
+      why:"처음 한 명을 데려오는 일과, 떠나려는 사람을 붙잡는 일은 <b>완전히 다른 일</b>이다. 둘을 같이 적으면 둘 다 안 한다.",
+      q:"① 처음 한 명을 어떻게 데려오나요 ② 계속 쓰게 하는 건 무엇인가요 ③ 떠나려는 사람은 어떻게 알아채나요",
+      qs:"③번이 가장 중요하다. 떠나기 전에 보내는 신호를 적어 둔다 — 안 열어 본 날 수, 중간에 멈춘 글, 답 없는 문의.",
+      ph:"예) 데려오기: 지인 소개와 무료 1편 열기\n계속: 매주 새 글 한 편 + 내가 그은 밑줄이 쌓인다\n떠날 신호: 3주 연속 안 열어 봄",
+      tpl:["데려오기: □□","계속 쓰는 이유: □□","떠날 신호: □□주 동안 □□하지 않음"],
+      checks:["len20","few","act","vague"],
+      bad:"고객 만족도를 높여 충성도를 관리한다",
+      good:"떠날 신호를 3주 연속 미열람으로 정하고, 그때 읽던 글의 다음 한 편을 보낸다.",
+      goodwhy:"오른쪽은 이번 주에 자동으로 돌릴 수 있다. 왼쪽은 아무 동작도 없다.",
+      mine:["쌓이는 기록(밑줄·기록)이 계속 쓰는 이유가 되기를 바라고 있다. <em>(짐작)</em>",
+            "그 짐작이 맞는지는 떠난 사람에게 물어봐야 안다 — 남은 사람에게 물으면 전부 좋다고 한다."] },
+
+    { k:"g5", no:5, nm:"수익원", sub:"Revenue Streams",
+      why:"종류마다 <b>금액과 비중</b>을 적는다. 비중을 적어 보면 거의 늘 하나가 거의 전부라는 게 드러난다. 그러면 나머지에 쓰는 시간이 아깝다는 것도 드러난다.",
+      q:"지난 한 달에 들어온 돈을 <b>종류별로</b> 적어 보세요. 각각 전체의 몇 퍼센트인가요?",
+      qs:"짐작으로 적지 말고 실제 입금을 본다. 여기만은 짐작이 섞이면 전부 무용지물이다.",
+      ph:"예) 월 구독 19,000원 × □□명 = □□원 (전체의 □□%)\n단건 강의 판매 = □□원 (□□%)",
+      tpl:["□□ □□원 × □□명 = □□원 (□□%)","가장 큰 수익원: □□ (□□%)","가장 작은 수익원에 쓰는 시간: 주 □시간"],
+      checks:["money","num","vague"],
+      bad:"구독료, 광고, 제휴, 추후 B2B",
+      good:"월 구독이 전체의 92%. 단건 판매 8%. 그런데 단건 판매에 주 6시간을 쓰고 있다.",
+      goodwhy:"오른쪽처럼 적고 나면 당장 그만둘 일이 하나 보인다. 그게 이 칸의 목적이다.",
+      mine:["구독이 거의 전부다. 새 AI 기능을 구독에 포함할지 따로 받을지가 <em>리건이 정할 일</em>.",
+            "회원 6,021명 중 지금 유지 중인 수를 먼저 본다 — 그 숫자가 모든 계산의 바닥이다."] },
+
+    { k:"g6", no:6, nm:"핵심 자원", sub:"Key Resources",
+      why:"<b>없어지면 내일 장사가 멈추는 것</b>만 적는다. 있으면 좋은 것을 적는 칸이 아니다.",
+      q:"내일 아침에 사라지면 <b>장사가 멈추는 것</b>은 무엇인가요? 사람·자료·장비·권리 중에서.",
+      qs:"한 사람에게만 있는 지식이나 한 사람의 계정에 걸린 것이 있으면 그게 가장 위험한 자원이다. 꼭 적어 둔다.",
+      ph:"예) 원문 89편과 그 저작권\n회원 명부와 결제 정보\n(위험) 도메인·결제 계정이 한 사람 이름으로 되어 있다",
+      tpl:["□□ □□개와 그 □□","없으면 멈추는 것: □□","(위험) □□가 한 사람에게만 있다."],
+      checks:["len20","few","num"],
+      bad:"우수한 인재, 브랜드 파워, 기술력",
+      good:"원문 89편과 저작권, 회원 명부. 위험: 결제 계정이 한 사람 이름으로 되어 있다.",
+      goodwhy:"오른쪽은 이번 주에 처리할 일이 생긴다. 왼쪽은 읽고 기분만 좋다.",
+      mine:["원문 89편, 회원 6,021명, 밑줄 기록. 그리고 콘텐츠를 쓰는 사람의 시간.",
+            "소유권·계정·키가 누구 이름인지는 손대기 전에 반드시 확인한다."] },
+
+    { k:"g7", no:7, nm:"핵심 활동", sub:"Key Activities",
+      why:"매주 <b>반드시 누군가 해야 하는 일</b> 세 개와 담당자를 적는다. 담당자 없는 활동은 적지 않은 것과 같다.",
+      q:"이번 주에도 반드시 일어나야 하는 일은 무엇인가요? <b>누가, 몇 시간</b> 쓰나요?",
+      qs:"다 적고 나서, 이 중에 <b>가치 제안과 관계없는 일</b>이 있으면 표시한다. 그게 줄일 일 1순위다.",
+      ph:"예) 새 글 한 편 쓰기 — 리건, 주 8시간\n문의 답하기 — 리건, 주 2시간\n코킷 다섯 줄 붙이기 — 담당 미정 (여기가 막힌 자리)",
+      tpl:["□□ — □□, 주 □시간","담당 미정: □□","가치 제안과 상관없는 일: □□"],
+      checks:["len20","few","period","num"],
+      bad:"서비스 운영, 콘텐츠 제작, 마케팅, CS",
+      good:"새 글 한 편 — 리건, 주 8시간 / 문의 답하기 — 주 2시간 / 코킷 다섯 줄 붙이기 — 담당 미정",
+      goodwhy:"오른쪽은 담당 미정이 보인다. 거기서 모든 일이 멈춘다는 것도 같이 보인다.",
+      mine:["코킷 89편에 다섯 줄(관련 업무·적용 조건·적용하면 안 되는 조건·확인 질문·근거 문단)을 붙이는 일.",
+            "<em>이걸 누가 쓸지 정해지지 않으면 AI 기능은 시작되지 않는다.</em>"] },
+
+    { k:"g8", no:8, nm:"핵심 파트너", sub:"Key Partners",
+      why:"우리가 안 하고 남이 해 주는 일. <b>없으면 내가 다 한다고 적는다</b> — 그게 사실이면 그게 가장 중요한 정보다.",
+      q:"우리 대신 해 주는 곳이 어디인가요? 그 곳이 그만두면 무엇이 멈추나요?",
+      qs:"플랫폼도 파트너다. 수수료와 규정이 바뀌면 사업이 바뀐다면, 그건 파트너가 아니라 집주인이다. 어느 쪽인지 적어 둔다.",
+      ph:"예) 결제 대행 — 바뀌면 결제가 멈춘다\nAI 모델 제공사 — 가격이 오르면 원가가 오른다\n앱 심사 규정 — 결제 요소를 넣으면 반려된다\n그 외는 전부 내가 한다",
+      tpl:["□□ — 그만두면 □□가 멈춘다.","□□의 규정에 걸리는 것: □□","그 외는 전부 내가 한다."],
+      checks:["len20","few","vague"],
+      bad:"다양한 파트너사와의 전략적 제휴",
+      good:"결제 대행(멈추면 결제 불가) · AI 모델 제공사(가격 오르면 원가 상승) · 앱 심사 규정. 그 외는 내가 다 한다.",
+      goodwhy:"오른쪽은 남의 손에 쥐어진 부분이 어디인지 보인다. 그게 이 칸의 목적이다.",
+      mine:["앱 스토어 규정이 가장 센 파트너다 — 앱에 결제·가격·구독 요소를 넣으면 반려된다.",
+            "그래서 결제는 웹에서만. 이건 우리가 고를 수 있는 게 아니다."] },
+
+    { k:"g9", no:9, nm:"비용 구조", sub:"Cost Structure",
+      why:"고정비와 변동비를 갈라 적는다. <b>가장 큰 비용이 가치 제안과 상관없으면 줄인다</b> — 이 칸은 그걸 찾기 위해 쓴다.",
+      q:"매달 똑같이 나가는 돈과, 팔릴 때만 나가는 돈을 갈라 적어 보세요. 큰 것 세 개씩만.",
+      qs:"사람 시간도 돈으로 적는다. 내 시간을 0원으로 적으면 모든 계산이 거짓이 된다.",
+      ph:"예) 고정: 서버·도구 월 □□원, 내 시간 주 □시간\n변동: AI 호출 1인당 월 □□원\n가장 큰 비용: □□ — 가치 제안과 관계: 있음/없음",
+      tpl:["고정: □□ 월 □□원","변동: □□당 □□원","가장 큰 비용은 □□이고, 가치 제안과 □□하다."],
+      checks:["money","few","num"],
+      bad:"인건비, 운영비, 마케팅비, 기타",
+      good:"고정: 서버 월 10만원 + 내 시간 주 10시간 / 변동: AI 호출 1인당 월 300원. 가장 큰 비용은 내 시간이다.",
+      goodwhy:"오른쪽은 줄일 데가 보인다. 왼쪽은 네 칸으로 나눈 것 외에 아무 일도 하지 않았다.",
+      mine:["가장 큰 비용은 돈이 아니라 콘텐츠를 쓰고 손으로 붙이는 시간이다.",
+            "그래서 <em>AI 로 줄일 것은 고객의 일이 아니라 우리 일일 수도 있다</em> — 이것도 한 번 따져 볼 만하다."] }
+  ],
+  fin:{ t:"다 썼다면, 세 가지를 비교해 본다",
+    li:["<b>수익원 1위와 핵심 활동 1위가 맞물려 있나?</b> 돈은 구독에서 오는데 시간은 다른 데 쓰고 있다면 그게 지금 가장 큰 문제다.",
+        "<b>비용 1위가 가치 제안과 상관있나?</b> 상관없으면 줄인다. 상관있으면 더 쓴다.",
+        "<b>담당자 없는 활동</b>이 있나? 거기서 모든 일이 멈춰 있다.",
+        "<b>고객 관계 ③번(떠날 신호)</b>이 비어 있나? 비어 있으면 지금 조용히 떠나는 중인 사람을 못 보고 있다."],
+    mini:"비즈니스 모델 캔버스는 꿈을 적는 종이가 아니라 지금 사실을 적는 종이다. 하고 싶은 일을 적고 싶어지면, 그건 린 캔버스 쪽이다." }
+};
+
+CANVAS.vpc = {
+  tab:"밸류 프로포지션 캔버스", no:"03", name:"밸류 프로포지션 캔버스", grid:"vpc",
+  when:"만들었는데 안 팔린다 · 왜 안 사는지 모른다",
+  q:"고객 머릿속과 <i>우리 제품이</i> 어디서 어긋났나",
+  wd:"고객 쪽 세 칸과 제품 쪽 세 칸을 짝지어 본다. 짝이 안 맞는 줄이 곧 안 팔리는 이유다.",
+  desc:"반드시 고객 쪽(1~3)을 먼저 다 쓰고 나서 제품 쪽(4~6)을 쓴다. 제품을 보면서 고객을 적으면, 우리 제품에 맞는 고객을 상상해서 적게 된다 — 그러면 이 캔버스는 아무것도 못 알려 준다.",
+  fields:[
+    { k:"v1", no:1, nm:"고객이 해야 하는 일", sub:"Customer Jobs",
+      why:"우리 제품이 없어도 <b>고객이 어차피 해야 하는 일</b>이다. 우리 기능을 쓰는 일이 아니다. 여기에 우리 기능이 들어가면 이미 틀렸다.",
+      q:"고객이 이번 주에 <b>끝내야 하는 일</b>은 무엇인가요? 그 일이 끝났다는 걸 고객은 무엇으로 아나요?",
+      qs:"끝났다는 기준을 꼭 적는다. 그 기준이 우리가 만들 화면의 마지막 버튼이 된다.",
+      ph:"예) 이번 주에 올릴 홍보 글 한 개를 올린다 — 끝: 올렸다\n문의가 왔을 때 10분 안에 답한다 — 끝: 답장 보냄\n(감정) 아마추어처럼 보이지 않기 — 끝: 없음",
+      tpl:["□□를 □□한다 — 끝났다는 기준: □□","(감정) □□하게 보이고 싶다.","(사회적) □□에게 □□로 보이고 싶다."],
+      checks:["len30","few","act","vague"],
+      bad:"우리 앱으로 콘텐츠를 저장하고 관리한다",
+      good:"이번 주에 올릴 홍보 글 한 개를 올린다. 끝났다는 기준: 실제로 올렸다.",
+      goodwhy:"왼쪽은 우리 기능 설명이다. 오른쪽은 우리가 없어도 고객이 하는 일이고, 그래서 우리가 끼어들 자리가 보인다.",
+      mine:["이번 주 홍보 글을 올린다 / 문의에 답한다 / 뭘 고칠지 정한다.",
+            "<em>읽는 것 자체는 고객의 일이 아니다.</em> 읽는 건 일을 하려고 하는 짓이다 — 이걸 헷갈리면 전부 어긋난다."] },
+
+    { k:"v2", no:2, nm:"불만 · 막히는 자리", sub:"Pains",
+      why:"그 일을 하다 <b>어디에서 몇 분 멈추는지</b>를 적는다. 막연한 불만이 아니라 멈추는 자리다. 멈추는 자리마다 제품이 들어갈 틈이 있다.",
+      q:"그 일을 하다가 <b>어디에서 가장 오래 멈추나요?</b> 그때 들이는 시간과, 틀렸을 때 생기는 손해는?",
+      qs:"멈추는 자리를 셋으로 나눠 보면 거의 다 여기 들어간다 — ① 자료를 못 찾아서 ② 뭘 할지 못 정해서 ③ 틀렸는지 확인이 안 돼서. 셋 중 어디인지 적는다.",
+      ph:"예) ② 뭘 할지 못 정해서 — 주 2~3번, 30~60분 멈춘다\n① 전에 본 걸 못 찾아서 — 매번 10분 검색\n손해: 결국 아무것도 안 올려서 그 주가 비어 버린다",
+      tpl:["① 자료를 못 찾아서 — □□분","② 뭘 할지 못 정해서 — 주 □번, □□분","③ 틀렸는지 확인이 안 돼서 — □□","틀렸을 때 손해: □□"],
+      checks:["len30","scene","num","vague"],
+      bad:"사용이 불편하고 정보가 부족하다",
+      good:"② 뭘 할지 못 정해서 주 2~3번, 30~60분 멈춘다. 결국 아무것도 안 올려 그 주가 빈다.",
+      goodwhy:"오른쪽은 어디에 무엇을 만들지가 바로 나온다. 왼쪽은 열 가지로 해석된다.",
+      mine:["(짐작) 코멜 고객은 ①과 ③에서 멈춘다 — 좋은 말을 봤는데 어디서 봤는지 못 찾고, 서로 충돌해서 뭘 믿을지 모른다.",
+            "<em>어디서 멈추는지를 물어봐야 한다.</em> 답이 ①이면 다시 찾아 주는 기능, ②면 정해 주는 기능, ③이면 점검해 주는 기능 — 셋은 완전히 다른 제품이다."] },
+
+    { k:"v3", no:3, nm:"기대 · 바라는 결과", sub:"Gains",
+      why:"말로는 안 하지만 바라는 것. <b>편해지면 좋겠다는 기대가 아니다</b> — 그건 아무것도 안 알려 준다. 숫자나 장면으로 적는다.",
+      q:"그 일이 가장 잘 끝났을 때, 고객은 <b>무엇을 보고 잘됐다고 느끼나요?</b>",
+      qs:"기대는 세 종류다 — 꼭 있어야 하는 것 / 있으면 좋은 것 / 있을 줄 몰랐는데 있으면 놀라는 것. 어느 쪽인지 적으면 우선순위가 바로 나온다.",
+      ph:"예) (꼭) 올린 글에 문의가 한 건이라도 온다\n(좋으면) 30분 걸리던 걸 10분에 끝낸다\n(놀람) 내가 작년에 그었던 밑줄이 지금 상황에 맞춰 나온다",
+      tpl:["(꼭) □□","(있으면 좋은) □□가 □□분에서 □□분으로","(놀람) □□"],
+      checks:["len30","num","vague"],
+      bad:"더 나은 사용자 경험과 높은 만족도",
+      good:"(꼭) 올린 글에 문의가 한 건이라도 온다. (좋으면) 30분이 10분으로 줄어든다.",
+      goodwhy:"오른쪽은 됐는지 안 됐는지 고객 스스로 판정한다. 그 판정이 재구매로 이어진다.",
+      mine:["(짐작) 가장 바라는 것은 시간 단축보다 <em>틀리지 않았다는 확신</em>일 수 있다.",
+            "국내 조사에서 AI 로 실제 얻은 것은 시간 단축 69.8%, 매출 증대는 25.5% 였다. 매출을 기대로 적으면 넷 중 셋이 실망한다."] },
+
+    { k:"v4", no:4, nm:"제품 · 서비스", sub:"Products & Services",
+      why:"고객이 실제로 보고 만지는 것만 적는다. <b>내부 기술은 적지 않는다</b> — 고객은 그걸 사지 않는다.",
+      q:"고객이 돈을 내면 <b>무엇을 받나요?</b> 화면과 물건 단위로 적어 보세요.",
+      qs:"다 적은 뒤에, 각 줄 옆에 2번·3번의 몇 번과 짝인지 번호를 적는다. 짝이 없는 줄이 나오면 그게 버릴 것이다.",
+      ph:"예) 매주 새 글 한 편 (→ 1번 일)\n밑줄과 기록이 쌓이는 내 서랍 (→ 2번 ① 불만)\n올리기 전 확인 질문 3개 (→ 2번 ③ 불만)",
+      tpl:["□□ (→ □번 □□와 짝)","짝이 없는 것: □□","고객이 보는 화면 이름: □□"],
+      checks:["few","pair","act","vague"],
+      bad:"AI 엔진, 추천 알고리즘, 데이터 파이프라인",
+      good:"올리기 전 확인 질문 3개 (→ 2번 ③과 짝) · 밑줄 다시 열기 (→ 2번 ①과 짝)",
+      goodwhy:"오른쪽은 각 기능이 왜 있는지 한 줄로 설명된다. 설명이 안 되는 기능은 안 만들면 된다.",
+      mine:["코킷 원문 · 밑줄 · 내 기록 · 낙타AI · 인사이트.",
+            "(짐작) 이 중 2번 불만과 짝이 분명한 건 밑줄 다시 열기 하나뿐일 수 있다."] },
+
+    { k:"v5", no:5, nm:"불만을 줄이는 것", sub:"Pain Relievers",
+      why:"2번의 각 줄에 <b>하나씩</b> 짝을 지어 쓴다. 짝이 없는 불만이 남으면, 고객이 안 사는 이유가 거기 있다.",
+      q:"2번에 적은 막히는 자리를 <b>어떻게 없애거나 줄이나요?</b> 몇 분을 몇 분으로 줄이나요?",
+      qs:"줄여 준다고 적기는 쉽다. 숫자로 적으면 거짓말을 못 한다. 모르면 (모름)이라고 적는다 — 그게 다음에 확인할 일이다.",
+      ph:"예) 2번 ② → 확인 질문 3개로 뭘 볼지 정해 준다. 30분 → (모름)\n2번 ① → 밑줄을 원문 자리에서 바로 연다. 10분 → 10초",
+      tpl:["□번 → □□해서 □□를 줄인다. □분 → □분","□번 → (모름) — 확인해야 함","없애지 못하는 불만: □□"],
+      checks:["pair","num","vague"],
+      bad:"AI 가 자동으로 처리해 드립니다",
+      good:"2번 ① → 밑줄을 원문 자리에서 바로 연다. 10분 검색이 10초가 된다.",
+      goodwhy:"오른쪽은 고객에게 그대로 말해도 되는 문장이다. 왼쪽은 말하면 기대가 커지고 실망이 따라온다.",
+      mine:["촬영·광고 운영·반복 응대는 우리가 줄이지 못한다. <em>그게 가장 큰 괴로움일 수도 있다.</em>",
+            "우리가 닿는 건 판단이 막힌 자리 하나뿐이다. 그걸 먼저 인정하고 적는 게 정직하다."] },
+
+    { k:"v6", no:6, nm:"기대를 만드는 것", sub:"Gain Creators",
+      why:"3번의 각 줄에 짝을 지어 쓴다. <b>꼭 있어야 하는 기대</b>에 짝이 없으면, 나머지를 다 잘해도 안 산다.",
+      q:"3번에 적은 결과를 <b>무엇이 만들어 주나요?</b> 그게 우리만 할 수 있는 건가요?",
+      qs:"마지막 질문이 중요하다. 다른 데서도 되는 것이라면, 고객은 이미 쓰고 있는 것을 계속 쓴다. 바꿔야 할 이유를 한 줄로 못 쓰면 안 바꾼다.",
+      ph:"예) 3번 (꼭) → 확인 질문을 통과하고 올리니 문의가 온다. (아직 확인 안 됨)\n우리만 되는 이유: 내가 그은 밑줄에서 뽑기 때문에\n다른 데서도 되는 것: 글 초안 쓰기",
+      tpl:["□번 → □□가 □□를 만든다.","우리만 되는 이유: □□","다른 데서도 되는 것: □□"],
+      checks:["pair","len30","hard","vague"],
+      bad:"차별화된 AI 기술로 최고의 결과를 제공한다",
+      good:"우리만 되는 이유: 내가 그은 밑줄에서 뽑기 때문에. 글 초안 쓰기는 다른 데서도 된다.",
+      goodwhy:"오른쪽처럼 우리만 되는 것과 아닌 것을 갈라 두면, 광고에 무슨 말을 쓸지가 바로 정해진다.",
+      mine:["우리만 되는 것: 읽은 자리가 이미 있으니 자료를 다시 옮기지 않아도 된다.",
+            "(짐작) 그 편의 하나로 충분한지는 모른다. <em>실험으로 확인해야 한다.</em>"] }
+  ],
+  fin:{ t:"다 썼다면, 짝이 안 맞는 줄을 센다",
+    li:["<b>짝 없는 불만</b>(2번에 있는데 5번에 없음) — 고객이 안 사는 이유가 여기 있다.",
+        "<b>짝 없는 기능</b>(4번에 있는데 2·3번과 연결 안 됨) — 만들었지만 아무 괴로움도 안 줄이는 것이다. 지우거나 숨긴다.",
+        "<b>꼭 있어야 하는 기대에 짝이 있나?</b> 없으면 나머지가 아무리 좋아도 결제까지 안 온다.",
+        "짝이 다 맞는데도 안 팔린다면, 1번(고객의 일)을 우리 제품 쪽에서 상상해서 적었을 가능성이 높다. 고객 한 명에게 다시 물어본다."],
+    mini:"이 캔버스는 혼자 앉아서 채우면 거의 틀린다. 고객 쪽 세 칸은 고객의 말로 채워야 한다 — 한 명과 20분 통화하면 세 칸이 거의 다 채워진다." }
+};
+
+/* ───────── 상태 ───────── */
+var ORDER = ["lean","bmc","vpc"];
+var KEY = "commel.canvas.v1";
+var cur = "lean", mode = "guide";
+var DB = {};
+
+function blank(){
+  var d = {};
+  for(var i=0;i<ORDER.length;i++){
+    var c = CANVAS[ORDER[i]], o = {_nm:""};
+    for(var j=0;j<c.fields.length;j++) o[c.fields[j].k] = "";
+    d[ORDER[i]] = o;
+  }
+  return d;
+}
+function load(){
+  DB = blank();
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    var p = JSON.parse(raw);
+    for(var i=0;i<ORDER.length;i++){
+      var k = ORDER[i];
+      if(p && p[k]) for(var f in DB[k]) if(typeof p[k][f] === "string") DB[k][f] = p[k][f];
+    }
+  }catch(e){}
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){}
+}
+function val(k){ return DB[cur][k] || ""; }
+
+/* ───────── 작은 도구 ───────── */
+function el(t,c,h){ var n=document.createElement(t); if(c) n.className=c; if(h!=null) n.innerHTML=h; return n; }
+var tmo;
+function toast(m){
+  var t=document.getElementById("toast"); t.textContent=m; t.classList.add("on");
+  clearTimeout(tmo); tmo=setTimeout(function(){ t.classList.remove("on"); },1900);
+}
+function fieldOf(k){
+  var fs=CANVAS[cur].fields;
+  for(var i=0;i<fs.length;i++) if(fs[i].k===k) return fs[i];
+  return null;
+}
+function passed(f){
+  var v=val(f.k), n=0;
+  for(var i=0;i<f.checks.length;i++) if(CK[f.checks[i]].f(v)) n++;
+  return {n:n, all:(n===f.checks.length && nchar(v)>0)};
+}
+function filled(f){ return nchar(val(f.k))>=10; }
+
+/* ───────── 고르기 카드 ───────── */
+function renderWhy(){
+  var w=document.getElementById("why"); w.innerHTML="";
+  for(var i=0;i<ORDER.length;i++){
+    (function(k){
+      var c=CANVAS[k];
+      var b=el("button","wc"+(k===cur?" on":""));
+      b.innerHTML='<div class="wn">'+c.no+' · '+c.when+'</div>'+
+        '<h4>'+c.name+'</h4>'+
+        '<div class="wq">“'+c.q+'”</div>'+
+        '<div class="wd">'+c.wd+'</div>'+
+        '<div class="wgo">이걸로 쓰기</div>';
+      b.onclick=function(){ setCanvas(k); document.getElementById("work").scrollIntoView(); };
+      w.appendChild(b);
+    })(ORDER[i]);
+  }
+}
+
+/* ───────── 탭 ───────── */
+function renderTabs(){
+  var t=document.getElementById("tabs"); t.innerHTML="";
+  for(var i=0;i<ORDER.length;i++){
+    (function(k){
+      var b=el("button","tab"+(k===cur?" on":""),CANVAS[k].tab);
+      b.onclick=function(){ setCanvas(k); };
+      t.appendChild(b);
+    })(ORDER[i]);
+  }
+}
+
+/* ───────── 한 칸씩 ───────── */
+function renderSteps(){
+  var s=document.getElementById("steps"); s.innerHTML="";
+  var fs=CANVAS[cur].fields;
+  for(var i=0;i<fs.length;i++){
+    (function(f){
+      var box=el("div","fld"); box.id="fld-"+f.k;
+      var hd=el("div","fld-hd",
+        '<span class="fld-no">'+f.no+'번</span>'+
+        '<div class="fld-nm">'+f.nm+'<small>'+f.sub+'</small></div>'+
+        '<div class="fld-why">'+f.why+'</div>');
+      box.appendChild(hd);
+      box.appendChild(el("div","fld-q",
+        '<span class="cap">이 질문에 답하면 된다</span>'+
+        '<div class="qt">'+f.q+'</div>'+
+        '<div class="qs">'+f.qs+'</div>'));
+
+      var bd=el("div","fld-bd");
+      var ta=el("textarea","in"); ta.placeholder=f.ph; ta.value=val(f.k);
+      ta.id="ta-"+f.k; ta.setAttribute("aria-label",f.nm);
+      ta.addEventListener("input",function(){ setVal(f.k, ta.value, "guide"); });
+      bd.appendChild(ta);
+
+      var tp=el("div","tpls",'<span class="tl">문장 틀 — 눌러서 넣기</span>');
+      for(var j=0;j<f.tpl.length;j++){
+        (function(txt){
+          var b=el("button","tpl",txt);
+          b.onclick=function(){
+            var cvt = ta.value;
+            ta.value = (cvt && cvt.slice(-1)!=="\n" ? cvt+"\n" : cvt) + txt;
+            setVal(f.k, ta.value, "guide"); ta.focus();
+            ta.selectionStart=ta.selectionEnd=ta.value.length;
+          };
+          tp.appendChild(b);
+        })(f.tpl[j]);
+      }
+      bd.appendChild(tp);
+
+      var ch=el("div","chks"); ch.id="chk-"+f.k; bd.appendChild(ch);
+      var wn=el("div","warn"); wn.id="wn-"+f.k; wn.style.display="none"; bd.appendChild(wn);
+
+      var exs=el("div","exs");
+      var eb=el("button","exbtn",'<i>+</i> 이렇게 쓰면 안 되고, 이렇게 쓰면 된다');
+      var bx=el("div","exbox");
+      bx.innerHTML='<div class="exrow">'+
+          '<div class="r bad"><b>이렇게 쓰면 아무 결정도 안 된다</b>'+f.bad+'</div>'+
+          '<div class="r good"><b>이렇게 쓰면 다음 할 일이 보인다</b><span>'+f.good+'</span></div>'+
+        '</div>'+
+        '<p class="muted" style="margin-top:9px">'+f.goodwhy+'</p>'+
+        '<div class="mine"><b>코멜은 이 칸에 이렇게 적었다</b><p>'+f.mine.join('</p><p>')+'</p></div>';
+      var ub=el("button","ib exuse","아래 좋은 예를 내 칸에 넣고 고치기");
+      ub.onclick=function(){
+        var cvt=ta.value;
+        ta.value=(cvt?cvt+"\n":"")+f.good;
+        setVal(f.k, ta.value, "guide"); ta.focus(); toast("넣었다 — 내 사정에 맞게 고쳐 쓰세요");
+      };
+      bx.appendChild(ub);
+      eb.onclick=function(){
+        bx.classList.toggle("open");
+        eb.querySelector("i").textContent = bx.classList.contains("open") ? "−" : "+";
+      };
+      exs.appendChild(eb); exs.appendChild(bx);
+      bd.appendChild(exs);
+
+      box.appendChild(bd);
+      s.appendChild(box);
+      paint(f.k);
+    })(fs[i]);
+  }
+}
+
+/* ───────── 한눈에 ───────── */
+function renderGrid(){
+  var g=document.getElementById("cv");
+  g.className="cv "+CANVAS[cur].grid; g.innerHTML="";
+  var fs=CANVAS[cur].fields.slice().sort(function(a,b){ return a.k<b.k?-1:1; });
+  for(var i=0;i<fs.length;i++){
+    (function(f){
+      var c=el("div","cell"); c.id="cell-"+f.k; c.style.gridArea=f.k;
+      c.appendChild(el("div","cell-hd",'<span class="cell-no">'+f.no+'</span><span class="cell-nm">'+f.nm+'</span>'));
+      c.appendChild(el("div","cell-q",f.sub));
+      var ta=el("textarea"); ta.id="ca-"+f.k; ta.value=val(f.k);
+      ta.placeholder="여기에 적는다"; ta.setAttribute("aria-label",f.nm);
+      ta.addEventListener("input",function(){ setVal(f.k, ta.value, "grid"); });
+      c.appendChild(ta);
+      g.appendChild(c);
+    })(fs[i]);
+  }
+}
+
+/* ───────── 값 변경 ───────── */
+function setVal(k,v,from){
+  DB[cur][k]=v;
+  if(from!=="guide"){ var a=document.getElementById("ta-"+k); if(a) a.value=v; }
+  if(from!=="grid"){ var b=document.getElementById("ca-"+k); if(b) b.value=v; }
+  paint(k); progress(); save();
+}
+
+function paint(k){
+  var f=fieldOf(k); if(!f) return;
+  var v=val(k), p=passed(f);
+  var ch=document.getElementById("chk-"+k);
+  if(ch){
+    ch.innerHTML="";
+    for(var i=0;i<f.checks.length;i++){
+      var c=CK[f.checks[i]], ok=c.f(v);
+      ch.appendChild(el("span","chk"+(ok?" on":""),'<i>'+(ok?"✓":"○")+'</i>'+c.t));
+    }
+  }
+  var wn=document.getElementById("wn-"+k);
+  if(wn){
+    var hits=vagueHits(v);
+    if(hits.length){
+      wn.style.display="block";
+      wn.innerHTML='<b>흐린 말이 있다 — '+hits.slice(0,4).join(", ")+'</b><br>'+
+        '이 말은 어느 사업에 붙여도 맞는 말이라, 읽는 사람이 아무 결정도 못 한다. '+
+        '<b>누가 · 몇 번 · 얼마 · 몇 분</b>으로 바꿔 보세요. 예를 들어 “편리하게”는 “30분 걸리던 걸 10분에”로.';
+    } else wn.style.display="none";
+  }
+  var box=document.getElementById("fld-"+k);
+  if(box) box.className="fld"+(p.all?" done":"");
+  var cell=document.getElementById("cell-"+k);
+  if(cell) cell.className="cell"+(p.all?" done":"");
+}
+
+function progress(){
+  var fs=CANVAS[cur].fields, nf=0, nd=0;
+  for(var i=0;i<fs.length;i++){ if(filled(fs[i])) nf++; if(passed(fs[i]).all) nd++; }
+  document.getElementById("ptxt").textContent=nf+"/"+fs.length;
+  document.getElementById("pbar").style.width=Math.round(nd/fs.length*100)+"%";
+  document.getElementById("ptxt").parentNode.title="채운 칸 "+nf+"개 · 점검을 모두 통과한 칸 "+nd+"개";
+}
+
+/* ───────── 마무리 ───────── */
+function renderFin(){
+  var c=CANVAS[cur], f=c.fin;
+  document.getElementById("fin").innerHTML=
+    '<span class="cap">마무리</span><h4><em>'+f.t+'</em></h4><ol>'+
+    f.li.map(function(x){ return '<li>'+x+'</li>'; }).join("")+
+    '</ol><p class="mini">'+f.mini+'</p>';
+}
+
+/* ───────── 캔버스 전환 ───────── */
+function setCanvas(k){
+  cur=k;
+  var c=CANVAS[k];
+  document.getElementById("secno").textContent=c.no;
+  document.getElementById("secnm").textContent=c.name;
+  document.getElementById("worktitle").textContent=c.name+" — 칸마다 질문에 답하면 채워진다";
+  document.getElementById("workdesc").textContent=c.desc;
+  document.getElementById("nm").value=DB[k]._nm||"";
+  renderTabs(); renderWhy(); renderSteps(); renderGrid(); renderFin(); progress();
+  try{ localStorage.setItem(KEY+".last",k); }catch(e){}
+}
+function setMode(m){
+  mode=m;
+  document.getElementById("mGuide").className = m==="guide"?"on":"";
+  document.getElementById("mGrid").className = m==="grid"?"on":"";
+  document.getElementById("steps").style.display = m==="guide"?"block":"none";
+  document.getElementById("cvwrap").style.display = m==="grid"?"block":"none";
+}
+
+/* ───────── 내보내기 ───────── */
+function outText(){
+  var c=CANVAS[cur], nm=DB[cur]._nm||"(이름 없음)";
+  var d=new Date(), ds=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+  var L=[];
+  L.push("["+c.name+"] "+nm);
+  L.push("작성일 "+ds+" · 코멜 캔버스");
+  L.push("");
+  for(var i=0;i<c.fields.length;i++){
+    var f=c.fields[i], v=(val(f.k)||"").trim();
+    L.push("── "+f.no+". "+f.nm+" ("+f.sub+") ──");
+    L.push(v ? v : "(아직 비어 있음 — 다음에 확인할 일)");
+    var p=passed(f);
+    if(v && !p.all){
+      var miss=[];
+      for(var j=0;j<f.checks.length;j++) if(!CK[f.checks[j]].f(v)) miss.push(CK[f.checks[j]].t);
+      L.push("  * 점검 남음: "+miss.join(" / "));
+    }
+    L.push("");
+  }
+  L.push("── 다 썼다면 ──");
+  L.push(c.fin.t);
+  for(var k2=0;k2<c.fin.li.length;k2++) L.push((k2+1)+") "+c.fin.li[k2].replace(/<[^>]+>/g,""));
+  return L.join("\n");
+}
+function dl(name,text,type){
+  var b=new Blob([text],{type:type||"text/plain;charset=utf-8"});
+  var u=URL.createObjectURL(b), a=document.createElement("a");
+  a.href=u; a.download=name; document.body.appendChild(a); a.click();
+  document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(u); },400);
+}
+function fname(ext){
+  var nm=(DB[cur]._nm||CANVAS[cur].name).replace(/[\\/:*?"<>|]/g,"_");
+  return "코멜캔버스_"+nm+"."+ext;
+}
+
+/* ───────── 시작 ───────── */
+load();
+try{ var lk=localStorage.getItem(KEY+".last"); if(lk && CANVAS[lk]) cur=lk; }catch(e){}
+setCanvas(cur);
+setMode("guide");
+
+document.getElementById("mGuide").onclick=function(){ setMode("guide"); };
+document.getElementById("mGrid").onclick=function(){ setMode("grid"); };
+document.getElementById("nm").addEventListener("input",function(){ DB[cur]._nm=this.value; save(); });
+document.getElementById("btnPrint").onclick=function(){
+  if(mode!=="grid"){ setMode("grid"); toast("한눈에 보기로 바꿨다 — 이 화면이 인쇄된다"); setTimeout(function(){ window.print(); },320); }
+  else window.print();
+};
+document.getElementById("btnOut").onclick=function(){
+  document.getElementById("outtext").value=outText();
+  document.getElementById("sheet").classList.add("open");
+};
+function closeSheet(){ document.getElementById("sheet").classList.remove("open"); }
+document.getElementById("sheetx").onclick=closeSheet;
+document.getElementById("sheetbg").onclick=closeSheet;
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeSheet(); });
+document.getElementById("btnCopy").onclick=function(){
+  var t=document.getElementById("outtext");
+  t.select(); t.setSelectionRange(0,999999);
+  var done=false;
+  try{ done=document.execCommand("copy"); }catch(e){}
+  if(navigator.clipboard && !done){ navigator.clipboard.writeText(t.value).then(function(){ toast("복사했다"); }); }
+  else toast(done?"복사했다":"직접 선택해서 복사하세요");
+};
+document.getElementById("btnFile").onclick=function(){ dl(fname("txt"),outText()); toast("파일로 저장했다"); };
+document.getElementById("btnJson").onclick=function(){
+  dl(fname("json"),JSON.stringify(DB,null,2),"application/json;charset=utf-8");
+  toast("저장 파일을 받았다 — 다른 기기에서 불러올 수 있다");
+};
+document.getElementById("btnLoad").onclick=function(){ document.getElementById("fileIn").click(); };
+document.getElementById("fileIn").addEventListener("change",function(e){
+  var f=e.target.files && e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var p=JSON.parse(r.result), got=0;
+      for(var i=0;i<ORDER.length;i++){
+        var k=ORDER[i];
+        if(p && p[k]) for(var fk in DB[k]) if(typeof p[k][fk]==="string"){ DB[k][fk]=p[k][fk]; got++; }
+      }
+      save(); setCanvas(cur); closeSheet(); toast(got?"불러왔다":"읽을 내용이 없다");
+    }catch(err){ toast("이 파일은 읽을 수 없다"); }
+  };
+  r.readAsText(f); e.target.value="";
+});
+document.getElementById("btnClear").onclick=function(){
+  if(!confirm(CANVAS[cur].name+"에 쓴 내용을 전부 지웁니다. 되돌릴 수 없습니다. 지울까요?")) return;
+  for(var k in DB[cur]) DB[cur][k]="";
+  save(); setCanvas(cur); closeSheet(); toast("비웠다");
+};
+</script>
+</body>
+</html>
