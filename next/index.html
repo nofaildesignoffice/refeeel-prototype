@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>채운 다음 — 캔버스 뒤에 코멜이 파는 것</title>
+<meta name="description" content="1:1 컨설팅 64명 전수 분석을 근거로, 캔버스를 채운 뒤 고객이 코멜에 계속 돌아올 이유를 어디에 놓을지 정리한 제안서.">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.22);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);
+  color:var(--text-black);-webkit-font-smoothing:antialiased;
+  font-size:15.5px;line-height:1.85;letter-spacing:-0.25px;}
+a{color:inherit;}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px 120px;}
+
+/* 머리 */
+.hd{padding:52px 0 30px;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--text-light);}
+.hd h1{font-size:31px;font-weight:800;letter-spacing:-1.1px;line-height:1.35;margin-top:12px;}
+.hd h1 em{font-style:normal;background:linear-gradient(transparent 60%,var(--brand-soft) 60%);}
+.hd .sub{font-size:16px;line-height:1.9;color:var(--text-dark);margin-top:18px;}
+.hd .meta{margin-top:22px;padding-top:16px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);display:flex;flex-wrap:wrap;gap:6px 16px;}
+.hd .meta b{font-weight:700;color:var(--text-gray);}
+
+/* 차례 */
+.toc{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:18px 20px;margin-bottom:38px;}
+.toc h2{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+.toc ol{margin:10px 0 0;padding-left:0;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 20px;}
+.toc li{font-size:13.5px;}
+.toc a{text-decoration:none;color:var(--text-dark);}
+.toc a:hover{background:var(--brand-soft);}
+.toc span{display:inline-block;width:22px;font-weight:800;color:var(--text-muted);}
+
+/* 절 */
+section{margin-bottom:52px;scroll-margin-top:18px;}
+h2.sec{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+h2.sec b{display:inline-block;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 6px;margin-right:8px;letter-spacing:0.4px;}
+h3.ttl{font-size:23px;font-weight:800;letter-spacing:-0.8px;line-height:1.45;margin-top:9px;}
+h4{font-size:17px;font-weight:800;letter-spacing:-0.5px;margin-top:30px;}
+h5{font-size:15.5px;font-weight:800;letter-spacing:-0.4px;}
+p{margin-top:14px;color:var(--text-dark);}
+.muted{color:var(--text-gray);font-size:13.5px;}
+b.k{font-weight:800;color:var(--text-black);}
+mark{background:var(--brand-soft);color:inherit;padding:0 2px;border-radius:2px;}
+
+.card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:20px 22px;margin-top:18px;}
+.card.lime{border-color:var(--brand);background:var(--bg-light);}
+.card.dark{background:var(--bg-black);border-color:var(--bg-black);}
+.card.dark p,.card.dark li{color:#E8E8E8;}
+.card.dark b.k,.card.dark h4,.card.dark h5{color:var(--bg-white);}
+.card.dark .cap{color:#9A9A9A;}
+.card.line{border-style:dashed;border-color:var(--border-default);background:none;}
+.card h4,.card h5{margin-top:0;}
+.card p:first-child{margin-top:0;}
+.cap{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+
+.punch{font-size:19.5px;font-weight:800;line-height:1.7;letter-spacing:-0.6px;color:var(--text-black);}
+.card.dark .punch{color:var(--bg-white);}
+.punch .lime{background:linear-gradient(transparent 58%,var(--brand) 58%);}
+.punch .y{color:var(--brand);}
+
+/* 표 */
+.tb{width:100%;border-collapse:collapse;margin-top:18px;font-size:13.5px;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;}
+.tb th,.tb td{text-align:left;padding:11px 13px;border-bottom:var(--card-line);
+  vertical-align:top;line-height:1.7;}
+.tb th{background:var(--bg-light);font-weight:800;font-size:12px;color:var(--text-black);white-space:nowrap;}
+.tb tr:last-child td{border-bottom:0;}
+.tb td b{font-weight:800;}
+.tb .c{text-align:center;white-space:nowrap;}
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.scrollx .tb{min-width:640px;}
+
+.pill{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:2px 9px;border:1px solid var(--border-default);color:var(--text-gray);
+  background:var(--bg-white);white-space:nowrap;}
+.pill.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.pill.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.pill.hi{border-color:var(--text-black);color:var(--text-black);}
+
+ul.li,ol.li{margin-top:14px;padding-left:19px;}
+ul.li li,ol.li li{margin-top:8px;color:var(--text-dark);}
+ul.li li::marker{color:var(--text-muted);}
+ol.li li::marker{font-weight:800;color:var(--text-muted);}
+
+/* 메모 → 결과물 */
+.turn{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:14px;overflow:hidden;}
+.turn .in{padding:16px 20px 15px;border-bottom:var(--card-line);}
+.turn .in .cap{display:block;margin-bottom:8px;}
+.turn .in .q{font-size:14.5px;font-weight:700;line-height:1.7;color:var(--text-black);}
+.turn .in .q::before{content:"“";display:block;font-size:24px;font-weight:800;line-height:.7;
+  color:var(--brand-press);margin-bottom:6px;}
+.turn .in .from{display:block;margin-top:10px;font-size:11.5px;color:var(--text-light);font-weight:700;}
+.turn .out{padding:16px 20px 18px;background:var(--bg-light);}
+.turn .out .cap{display:block;margin-bottom:9px;}
+.turn .out ul{margin:0;padding-left:17px;}
+.turn .out li{font-size:13.5px;line-height:1.75;margin-top:6px;color:var(--text-dark);}
+.turn .out li:first-child{margin-top:0;}
+.turn .out li b{font-weight:800;color:var(--text-black);}
+
+/* 갈래 */
+.way{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:18px;overflow:hidden;}
+.way-hd{padding:18px 22px 16px;border-bottom:var(--card-line);}
+.way-hd .no{display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:26px;padding:0 7px;border-radius:var(--radius-full);
+  background:var(--bg-black);color:var(--bg-white);font-size:12px;font-weight:800;}
+.way-hd h4{display:inline;font-size:18px;margin-left:10px;}
+.way-hd .sum{margin-top:12px;font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.way-bd{padding:4px 22px 20px;}
+.way-bd .blk{margin-top:18px;}
+.way-bd .blk>.cap{display:block;margin-bottom:8px;}
+.way-bd p{font-size:14px;margin-top:0;line-height:1.8;}
+.way-bd ul{margin:0;padding-left:17px;}
+.way-bd li{font-size:14px;line-height:1.8;margin-top:6px;color:var(--text-dark);}
+.scr{background:var(--bg-light);border:var(--card-line);border-radius:var(--radius-md);
+  padding:14px 16px;font-size:13.5px;line-height:1.8;}
+.scr .ln{display:block;}
+.scr .ln+.ln{margin-top:7px;}
+.scr b{font-weight:800;}
+.scr .btn{display:inline-block;background:var(--bg-black);color:var(--bg-white);
+  border-radius:var(--radius-full);padding:3px 12px;font-size:12px;font-weight:800;margin-top:4px;}
+.scr .btn.y{background:var(--brand);color:var(--brand-ink);}
+.way.pick{border-color:var(--brand);border-width:2px;}
+.way.pick .way-hd{background:var(--bg-light);}
+.way.no-go .way-hd{background:#FAFAFA;}
+.verdict{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:3px 10px;margin-left:8px;vertical-align:2px;}
+.verdict.a{background:var(--brand);color:var(--brand-ink);}
+.verdict.b{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.verdict.c{background:var(--bg-black);color:var(--bg-white);}
+
+/* 규칙 */
+.rule{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:16px 0;border-top:var(--card-line);}
+.rule:first-of-type{border-top:0;}
+.rule .n{font-size:15px;font-weight:800;color:var(--brand-press);}
+.rule p{margin-top:7px;font-size:14px;}
+
+/* 단계 */
+.step{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:18px 0;border-top:var(--card-line);}
+.step:first-of-type{border-top:0;}
+.step .when{font-size:13.5px;font-weight:800;}
+.step .when span{display:block;font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
+.step p{margin-top:9px;font-size:14px;}
+
+.src{font-size:12.5px;line-height:1.85;color:var(--text-gray);}
+.src li{margin-top:8px;}
+.src a{color:var(--text-dark);text-decoration:underline;text-underline-offset:2px;}
+
+.foot{margin-top:60px;padding-top:22px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);line-height:1.9;}
+
+@media (max-width:560px){
+  .hd{padding:36px 0 24px;}
+  .hd h1{font-size:25px;}
+  h3.ttl{font-size:20px;}
+  .wrap{padding:0 16px 90px;}
+  .step{grid-template-columns:1fr;gap:4px;}
+  .way-hd,.way-bd{padding-left:17px;padding-right:17px;}
+}
+
+/* 이 문서에서 더한 것 */
+.rec{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:0.6px;
+  border-radius:var(--radius-full);padding:2px 9px;margin-left:8px;vertical-align:2px;white-space:nowrap;}
+.rec.w{background:var(--brand);color:var(--brand-ink);}
+.rec.e{background:var(--bg-black);color:var(--bg-white);}
+.rec.o{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.spec{display:grid;grid-template-columns:76px 1fr;gap:4px 12px;margin-top:14px;
+  font-size:13px;line-height:1.75;}
+.spec dt{font-weight:800;color:var(--text-light);font-size:11px;letter-spacing:0.6px;padding-top:3px;}
+.spec dd{color:var(--text-dark);}
+.spec dd b{font-weight:800;color:var(--text-black);}
+@media (max-width:560px){.spec{grid-template-columns:1fr;gap:2px;}.spec dt{margin-top:9px;}}
+.layer{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px;}
+.lrow{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);
+  padding:13px 15px;display:grid;grid-template-columns:1fr 92px;gap:12px;align-items:center;}
+.lrow.keep{border-color:var(--brand);background:var(--bg-light);}
+.lrow .lt{font-size:14px;font-weight:800;letter-spacing:-0.3px;}
+.lrow .ls{font-size:12.5px;color:var(--text-gray);margin-top:4px;line-height:1.7;}
+.lrow .ln2{text-align:right;font-size:12px;font-weight:800;color:var(--text-gray);white-space:nowrap;}
+.lrow.keep .ln2{color:var(--brand-press);}
+.quo{border-left:3px solid var(--brand);padding:2px 0 2px 14px;margin-top:14px;
+  font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.quo b{display:block;font-size:11.5px;font-weight:800;color:var(--text-light);margin-top:7px;letter-spacing:0.4px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px;margin-top:16px;}
+.gcard{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);padding:15px 17px;}
+.gcard .cap{display:block;margin-bottom:7px;}
+.gcard p{margin-top:0;font-size:13.5px;line-height:1.75;}
+.gcard p+p{margin-top:8px;}
+.no-go{background:#FAFAFA;border:1px dashed var(--border-default);border-radius:var(--radius-md);
+  padding:14px 16px;margin-top:12px;}
+.no-go p{margin-top:0;font-size:13.5px;color:var(--text-gray);}
+.no-go b{color:var(--text-black);font-weight:800;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hd">
+  <div class="kick">코멜 · AI 방향 제안 5판</div>
+  <h1>채우는 건 시작이다 — 캔버스 다음에 <em>코멜이 파는 것</em></h1>
+  <p class="sub">리건의 질문은 이것이었다. <b class="k">캔버스를 대화로 채우게 하고 액션 리스트까지 줬다. 그 다음에 뭘 주지?</b>
+    광고 소재·상세페이지·릴스 대본은 아니라고 이미 정했다. 그 판단이 맞는지부터 이번에는 데이터로 확인했다.</p>
+  <p class="sub">이번 판은 앞선 네 판과 근거가 다르다. 1:1 컨설팅 고객 <b class="k">64명 전수 분석</b>이 나왔다.
+    짐작이 아니라 낙타가 실제로 진단한 기록이다. 그래서 앞 판에서 세웠던 가설 몇 개는 여기서 접는다.</p>
+  <div class="meta">
+    <span><b>근거</b> 코멜 1:1 컨설팅 64명 전수 분석 (2026-03~11)</span>
+    <span><b>작성</b> 2026-11-14</span>
+    <span><b>앞 판</b> /ai/ 는 그대로 둔다</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>차례</h2>
+  <ol>
+    <li><span>01</span><a href="#s1">한 장으로</a></li>
+    <li><span>02</span><a href="#s2">64명이 뒤집은 것</a></li>
+    <li><span>03</span><a href="#s3">캔버스는 상품이 아니다</a></li>
+    <li><span>04</span><a href="#s4">대화로 채우는 법</a></li>
+    <li><span>05</span><a href="#s5">채운 다음에 남는 것</a></li>
+    <li><span>06</span><a href="#s6">방향 열여섯</a></li>
+    <li><span>07</span><a href="#s7">코킷 89편과의 연결</a></li>
+    <li><span>08</span><a href="#s8">밖에서 확인한 구조</a></li>
+    <li><span>09</span><a href="#s9">코멜만 가진 것</a></li>
+    <li><span>10</span><a href="#s10">안 만들 것</a></li>
+    <li><span>11</span><a href="#s11">위험</a></li>
+    <li><span>12</span><a href="#s12">먼저 만들 셋</a></li>
+    <li><span>13</span><a href="#s13">리건이 정할 것</a></li>
+    <li><span>14</span><a href="#s14">출처</a></li>
+  </ol>
+</div>
+
+<section id="s1">
+  <h2 class="sec"><b>01</b>한 장으로</h2>
+  <h3 class="ttl">캔버스는 상품이 아니다. 상품은 그 캔버스가 <b>다시 열리는 순간</b>이다.</h3>
+
+  <div class="card dark">
+    <p class="punch">고객이 사는 것은 <span class="y">채워진 캔버스</span>가 아니다.<br>
+      <span class="y">이번 주에 내가 제대로 가고 있는지</span>를 혼자 판단할 수 있게 되는 것이다.</p>
+    <p>그래서 캔버스를 다 채운 뒤에 팔 것은 새 기능 묶음이 아니라, <b class="k">그 캔버스를 기준 삼아 매주 돌아오는 자리</b>다.
+      캔버스는 그 자리의 입장권이고, 코멜이 파는 건 그 자리다.</p>
+  </div>
+
+  <h4>64명 데이터가 말해 준 것 셋</h4>
+
+  <div class="card">
+    <p><b class="k">하나. 기초는 한 번 정하면 끝나는 게 아니다.</b>
+      64명 중 <mark>52명(81%)</mark>이 타겟·고객 조사·페인포인트·USP·와우포인트 중 하나 이상에서 막혀 있었다.
+      이건 아직 안 정한 사람들의 숫자가 아니라, <b class="k">정했는데 틀린 자리에 서 있던 사람들</b>의 숫자다.
+      타겟은 한 번 쓰고 끝나는 칸이 아니라 계속 틀리는 칸이다. 그러니 캔버스는 종착점이 아니라 기준점이 맞다.</p>
+    <p><b class="k">둘. 정보를 더 주면 더 헤맨다.</b>
+      학습 의존이 <mark>21명</mark>이고, 그중 15명이 직접 실행형이다. 강의·책·컨설팅을 다 거쳤는데
+      <b class="k">"내 브랜드에 적용이 안 된다"</b>가 반복된다. 분석자도 같은 결론을 적었다 —
+      <b class="k">"정보가 아니라 그 사람에게 맞춘 결정과 다음 한 걸음을 줘야 한다."</b>
+      코멜의 코킷 89편은 지금 이 사람들에게 자산이 아니라 짐에 가깝다. 캔버스는 그 89편을 걸러 주는 체가 된다.</p>
+    <p><b class="k">셋. 대신 해 주면 안 된다 — 이건 취향이 아니라 숫자다.</b>
+      판정된 60명 중 직접 실행형 <mark>58%</mark>, 혼합까지 <mark>95%</mark>. 완전 위임 희망은 3명뿐이다.
+      그리고 위임해 본 18명은 대부분 실패했다 — 대행사 광고 7건이 효율 없음·비용만 증가,
+      직원 위임 6건이 역량 미달·이탈 뒤 직접 실행으로 복귀. <b class="k">리건이 광고 소재·상세페이지·릴스 대본을 배제한 판단은 데이터가 지지한다.</b></p>
+  </div>
+
+  <h4>그리고 앞 판에서 못 봤던 것</h4>
+  <div class="card lime">
+    <p class="punch">코멜은 <span class="lime">“고객이 말한 문제 → 실제 문제”</span> 짝을 64쌍 갖고 있다.</p>
+    <p>이게 이번 분석의 가장 큰 발견이다. 고객은 거의 전부 <b class="k">"콘텐츠 방향"</b>을 들고 왔다.
+      신청서에서 가장 많이 쓴 단어가 <b class="k">방향</b>이고, "마케팅"은 37명 중 2명, <b class="k">"광고"는 0명</b>이었다.
+      그런데 진단된 실제 문제는 거의 매번 그 아래층이었다.</p>
+    <p>이 짝을 가진 곳은 코멜뿐이다. 챗GPT 에 "콘텐츠 방향을 모르겠어요"라고 치면 콘텐츠 방향을 알려 준다.
+      코멜은 <b class="k">"그 말을 한 64명 중 52명은 사실 타겟이나 USP 에서 막혀 있었다"</b>는 것을 알고,
+      거기부터 되물을 수 있다. 4판에서 "진짜 차이는 자료를 다시 옮기지 않아도 되는 편의 하나뿐"이라고 썼는데,
+      <b class="k">그 결론은 이 데이터로 바뀐다.</b> 차이는 편의가 아니라 진단 이력이다.</p>
+  </div>
+
+  <h4>그래서 제안의 모양</h4>
+  <div class="card line">
+    <p>이 문서의 방향 열여섯은 전부 아래 세 줄을 지킨다. 하나라도 어기면 뺐다.</p>
+    <ul class="li">
+      <li><b class="k">대신 해 주지 않는다.</b> 결과물을 만들어 주는 기능은 하나도 없다. 기준을 비춰 보여 주는 것만 있다.</li>
+      <li><b class="k">정보를 더 주지 않는다.</b> 89편 중 몇 편을 더 읽히는 게 아니라, <b class="k">읽지 않아도 될 편을 덜어낸다.</b></li>
+      <li><b class="k">주당 10분을 넘지 않는다.</b> 시간 제약이 30명이다. 30분짜리 기능은 만들어도 안 쓰인다.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <h2 class="sec"><b>02</b>64명이 뒤집은 것</h2>
+  <h3 class="ttl">고객이 들고 온 말과, 실제로 막혀 있던 자리</h3>
+  <p class="muted">아래 숫자는 전부 1:1 컨설팅 세션 카드 65장과 전사 기록에서 나온 것이다.
+    고객의 자기 해석이 아니라 <b class="k">낙타가 진단·처방한 발화</b>에서만 뽑았다. 한 사람이 여러 범주에 걸치므로 합계는 64를 넘는다.</p>
+
+  <h4>층으로 보면</h4>
+  <div class="layer">
+    <div class="lrow keep"><div><div class="lt">고객·제품 기초 설계</div>
+      <div class="ls">타겟 · 고객 조사 · 페인포인트 · USP · 와우포인트</div></div><div class="ln2">52명 / 64</div></div>
+    <div class="lrow keep"><div><div class="lt">판매 구조</div>
+      <div class="ls">퍼널·전환 장치 · 계정 혼재 · 상품·가격 · 사업모델</div></div><div class="ln2">50명 / 64</div></div>
+    <div class="lrow keep"><div><div class="lt">사람·언어 표현</div>
+      <div class="ls">가진 사람·서사를 안 꺼냄 · 공급자 언어 · 노출 두려움</div></div><div class="ln2">46명 / 64</div></div>
+    <div class="lrow"><div><div class="lt">실행 여력</div>
+      <div class="ls">시간 · 완벽주의 · 1인 병목</div></div><div class="ln2">19명 / 64</div></div>
+  </div>
+  <p class="muted">고객이 사러 온 <b class="k">콘텐츠</b>는 이 네 층 위에 얹히는 결과물이다. 막힌 곳은 거의 전부 그 아래층이었다.</p>
+
+  <h4>진단 범주 열넷</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>진단</th><th class="c">사람</th><th class="c">비율</th><th>이게 무슨 뜻인가</th></tr>
+    <tr><td><b>퍼널·전환 장치 부재</b></td><td class="c">29</td><td class="c">45%</td><td>볼 사람은 오는데 살 길이 연결돼 있지 않다. 랜딩·상세·문의 경로가 없다</td></tr>
+    <tr><td><b>USP·차별점 미정의</b></td><td class="c">27</td><td class="c">42%</td><td>왜 나인가에 답을 못 한다. 가격을 납득시킬 이유가 없다</td></tr>
+    <tr><td><b>사람·기준·서사를 안 꺼냄</b></td><td class="c">27</td><td class="c">42%</td><td>재료가 없는 게 아니라 <b>있는 걸 안 꺼낸다</b></td></tr>
+    <tr><td><b>타겟 미정·오조준</b></td><td class="c">26</td><td class="c">40%</td><td>정하지 않아서 할 말이 안 나온다</td></tr>
+    <tr><td><b>계정·포지션 혼재</b></td><td class="c">25</td><td class="c">39%</td><td>B2C·B2B·교육이 한 화면에 섞여 욕구가 충돌한다</td></tr>
+    <tr><td>언어화 실패 (공급자 언어)</td><td class="c">19</td><td class="c">29%</td><td>전문가 말로만 해서 고객 말로 번역이 안 된다</td></tr>
+    <tr><td>실행·리소스 (시간·완벽주의)</td><td class="c">19</td><td class="c">29%</td><td>릴스 1개에 8~10시간, 그런데 30분짜리가 더 잘 나갔다</td></tr>
+    <tr><td>자기 노출 두려움·자기검열</td><td class="c">17</td><td class="c">26%</td><td>통할까라는 검열이 올리는 것 자체를 막는다</td></tr>
+    <tr><td>상품·가격 구조</td><td class="c">15</td><td class="c">23%</td><td>한 상품에 다 넣어서 팔릴 수 없는 구조</td></tr>
+    <tr><td>고객 페인포인트·얻을 결과 미제시</td><td class="c">14</td><td class="c">21%</td><td>무슨 고민이 풀리는지가 안 보인다</td></tr>
+    <tr><td>고객·시장 조사 부재</td><td class="c">12</td><td class="c">18%</td><td>지인·부모님한테만 물어본다</td></tr>
+    <tr><td>사업모델·수익 구조</td><td class="c">9</td><td class="c">14%</td><td>단가를 올려도 내 몫이 안 느는 구조</td></tr>
+    <tr><td>와우포인트·경험 장면 부재</td><td class="c">6</td><td class="c">9%</td><td>쓰는 장면이 하나도 안 보인다</td></tr>
+    <tr><td>측정·근거 부재</td><td class="c">2</td><td class="c">3%</td><td>전부 감으로 하고 재 본 적이 없다</td></tr>
+  </table>
+  </div>
+  <p class="muted"><b class="k">맨 아래 두 줄을 눈여겨봐야 한다.</b> 측정·근거 부재가 2명뿐인 건 다들 측정을 잘해서가 아니다.
+    <b class="k">그 단계까지 간 사람이 둘뿐</b>이라서다. 기초가 흔들리는 사람에게 숫자를 재라고 해 봐야 잴 게 없다.</p>
+
+  <h4>말한 문제 ↔ 실제 문제</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>고객이 들고 온 말</th><th>진단된 것</th></tr>
+    <tr><td>"어떤 멘트로 소구해야 할지 고민이다" <span class="pill">카피</span></td>
+      <td>고객을 만나 조사하지 않아 <b>소구점 자체가 없다</b></td></tr>
+    <tr><td>"방향성은 어떻게 잡아야 되나" <span class="pill">방향</span></td>
+      <td>콘텐츠 문제가 아니라 <b>사업 갈래와 상품 구조</b> 문제</td></tr>
+    <tr><td>"남편이 돌리는 메타 광고 효율이 떨어진다" <span class="pill">광고</span></td>
+      <td>브랜드의 <b>기준이 계정에 없어</b> 기억에 안 남는다</td></tr>
+    <tr><td>"콘텐츠를 어떻게 풀어내야 될지 모르겠다" <span class="pill">콘텐츠</span></td>
+      <td>돈을 안 쓰는 타깃을 골랐고 <b>캐릭터와 콘텐츠가 딴사람</b></td></tr>
+    <tr><td>"제 스토리를 대본에 입히는 게 어렵다" <span class="pill">대본</span></td>
+      <td><b>고객 조사가 빠지면 대본도 상세페이지도 못 만든다</b> — 대본 구조는 재료가 모인 뒤의 문제</td></tr>
+    <tr><td>"타겟을 못 잡겠다, 마케팅 언어로 못 풀겠다" <span class="pill">언어</span></td>
+      <td>유입 6만은 이미 검증됐다. <b>랜딩이 없어서 다 이탈</b>하는 중 — 차별점보다 랜딩이 먼저</td></tr>
+    <tr><td>"어떻게 수익화를 해야 되지" <span class="pill">수익화</span></td>
+      <td>완성된 결과만 있고 <b>과정·서사가 없어</b> 뭘 팔아도 연결이 안 된다</td></tr>
+  </table>
+  </div>
+
+  <div class="card lime">
+    <p class="cap">여기서 제품이 하나 나온다</p>
+    <p>오른쪽 칸은 사람이 45분 들여 찾아낸 것이다. 그런데 왼쪽 칸은 <b class="k">고객이 가입할 때 이미 쓴다.</b>
+      코멜의 관심사 설정에 "고민 3개"가 있고, 캔버스 대화의 첫 마디가 바로 왼쪽 칸이다.
+      <b class="k">왼쪽을 받아서 오른쪽을 의심하는 것</b> — 이게 코멜 AI 가 처음에 해야 할 유일한 일이다.</p>
+  </div>
+
+  <h4>앞 판에서 접는 것</h4>
+  <div class="card">
+    <p><b class="k">접는다 ①</b> 4판은 "매주 반복되는 마케팅 일 열여덟 가지"를 가설로 세우고 그중 18번(저장한 팁 재검색)이
+      코멜 고객이라고 봤다. <b class="k">틀렸다.</b> 코멜 고객이 말하는 단어에 "마케팅"은 37명 중 2명, "광고"는 0명이다.
+      이들의 괴로움은 <b class="k">반복 작업이 아니라 기초 판단</b>이다. 작업 단위로 쪼갠 열여덟 개 목록은 다른 고객군의 이야기였다.</p>
+    <p><b class="k">접는다 ②</b> 4판은 "AI 가 어떤 업무를 대신해 주길 바라는가"를 찾자고 했다. 그 질문 자체가 안 맞는다.
+      위임 희망형은 3명(5%)이고, 맡겨 본 18명은 대부분 실패했다. 물어야 할 것은
+      <b class="k">"무엇을 대신해 줄까"가 아니라 "무엇을 혼자 판단하게 해 줄까"</b>다.</p>
+    <p><b class="k">남는다</b> 4판의 "먼저 물어야 한다"는 뼈대는 그대로 맞다. 다만 물을 대상이 바뀐다 —
+      작업의 괴로움이 아니라 <b class="k">기초 설계의 어느 칸에서 틀렸는지</b>를 묻는다. 그리고 그건 이미 64명치가 있다.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2 class="sec"><b>03</b>캔버스는 상품이 아니다</h2>
+  <h3 class="ttl">양식을 파는 곳은 다 망했고, 양식 뒤의 <b>주간 회의</b>를 파는 곳이 살아남았다</h3>
+
+  <p>캔버스 뒤에 뭘 놓을지는 우리만의 고민이 아니다. 같은 구조를 먼저 겪은 분야가 있다.
+    <b class="k">경영 체계(EOS)</b> 쪽이다. 거기서는 답이 이미 났고, 그 답이 코멜 질문에 그대로 맞는다.</p>
+
+  <div class="grid2">
+    <div class="gcard">
+      <span class="cap">EOS 계열 소프트웨어</span>
+      <p>EOS 라는 경영 체계에는 <b class="k">비전 한 장(V/TO)</b>이 있다. 린 캔버스와 거의 같은 자리다.
+        이걸 소프트웨어로 파는 회사가 여럿 있다 — Ninety.io, Bloom Growth, EOS One, Success.co.</p>
+      <p>그런데 <b class="k">한 제품은 비전 한 장을 무료로 준다.</b> 돈을 받는 건
+        분기 과제·주간 숫자판·주간 회의 쪽이다. 회사가 직접 <b class="k">"채우는 것은 공짜, 유지하는 것이 유료"</b>라고 값을 매겨 놓은 셈이다.</p>
+    </div>
+    <div class="gcard">
+      <span class="cap">무엇이 반복을 만드나</span>
+      <p>그 소프트웨어들의 주간 회의에는 고정 순서가 있다. <b class="k">숫자판을 먼저 보고, 벗어난 숫자가 곧 이번 주 안건이 된다.</b>
+        Ninety 의 안내 문서에 그렇게 적혀 있다.</p>
+      <p>비전은 1년에 한 번 고치고, 숫자판은 매주 본다. <b class="k">구독을 지탱하는 건 1년짜리가 아니라 매주짜리</b>다.</p>
+    </div>
+    <div class="gcard">
+      <span class="cap">가계부 쪽도 같다</span>
+      <p>YNAB 은 방법론 자체를 공개한다. 그런데도 구독이 유지된다. 회사가 직접 안내하는 것은
+        <b class="k">주 1회 모든 계좌를 맞춰 보는 루틴</b>이고, 그 루틴을 하는 사람은 남고 안 하는 사람은 해지한다.</p>
+      <p>다만 경고도 같이 있다. 손이 많이 가는 방식은 지키는 힘이 세지만,
+        <b class="k">바쁜 사람에게는 자동화된 쪽의 유지율이 더 높다</b>는 비교가 있다. 시간 제약 30명에게 그대로 적용된다.</p>
+    </div>
+    <div class="gcard">
+      <span class="cap">그리고 비어 있는 자리</span>
+      <p>국내 은행권이 소상공인 800명에게 1:1 컨설팅을 2,100회 제공하고 <b class="k">만족도 94.3점</b>을 받았다(응답 682명).
+        그런데 <b class="k">그래서 실제로 실행했는지를 잰 숫자는 어디에도 없다.</b></p>
+      <p>컨설팅 업계 전체가 만족도만 재고 실행은 안 잰다. <b class="k">실행을 재는 자리가 통째로 비어 있다</b> —
+        코멜이 들어갈 자리가 거기다.</p>
+    </div>
+  </div>
+
+  <div class="card dark">
+    <p class="punch">그래서 결론은 간단하다.<br>
+      <span class="y">캔버스를 채우는 순간은 제품이 아니다. 캔버스가 다시 열리는 순간이 제품이다.</span></p>
+    <p>그리고 다시 열릴 이유는 셋뿐이다. <b class="k">① 시간이 지나서(주간·분기)</b>
+      <b class="k">② 뭔가 하려는 순간이 와서(올리기 전, 가격 바꾸기 전)</b>
+      <b class="k">③ 결과가 나와서(문의가 왔다, 안 팔렸다).</b>
+      06절의 방향 열넷은 전부 이 셋 중 하나에 매달려 있다. 어디에도 안 매달린 기능은 한 번 쓰고 잊힌다.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <h2 class="sec"><b>04</b>대화로 채우는 법</h2>
+  <h3 class="ttl">"타겟이 누구신가요"라고 물으면, 그건 캔버스를 소리 내어 읽은 것일 뿐이다</h3>
+
+  <p>리건 말이 맞다. 빈 양식을 주면 우리 고객은 못 채운다. 그런데 <b class="k">양식을 질문으로 바꾸기만 해도 똑같이 못 채운다.</b>
+    "타겟이 누구세요?"는 "타겟" 칸을 한국어로 바꿔 읽은 것이고, 타겟을 모르는 게 문제인 사람에게는 아무 도움이 안 된다.
+    26명이 바로 그 상태였다.</p>
+
+  <p>세션 기록이 알려 주는 건 다르다. 낙타는 고객이 말한 것을 <b class="k">그대로 받되, 믿지 않았다.</b>
+    "타겟 설정이 어려워요"라고 한 사람에게 타겟을 묻지 않고,
+    <b class="k">"최근에 돈 낸 사람 세 명을 말해 보라"</b>는 쪽으로 갔다. 그래야 답이 나온다.</p>
+
+  <h4>질문 설계 다섯 규칙</h4>
+  <div class="card">
+    <div class="rule"><div class="n">1</div><div>
+      <h5>고객의 말로 받고, 아래층을 묻는다</h5>
+      <p>"콘텐츠 방향이 고민"이라고 하면 콘텐츠 이야기로 시작한다. 그러나 둘째 질문부터는
+        <b class="k">그 방향을 정하려면 먼저 답해야 하는 것</b>으로 내려간다. 64명 중 52명이 그 아래층에서 막혀 있었다.</p>
+    </div></div>
+    <div class="rule"><div class="n">2</div><div>
+      <h5>정의를 묻지 말고 사례를 묻는다</h5>
+      <p>"USP 가 뭔가요"(×) → <b class="k">"최근에 산 사람이 왜 샀다고 말했나요? 그 사람 말 그대로요."</b>(○)
+        정의는 못 쓰지만 사례는 말한다. 캔버스는 그 사례에서 우리가 뽑아 쓴다.</p>
+    </div></div>
+    <div class="rule"><div class="n">3</div><div>
+      <h5>없으면 없다고 적게 한다</h5>
+      <p>"최근 산 사람이 없다"는 답이 나오면 그 자체가 가장 중요한 진단이다.
+        빈칸을 그럴듯한 말로 메우게 하면 <b class="k">틀린 캔버스가 기준이 되어 그 뒤 모든 판단이 같이 틀린다.</b>
+        모르는 칸은 <b class="k">"아직 모름 — 확인할 일"</b>로 저장한다.</p>
+    </div></div>
+    <div class="rule"><div class="n">4</div><div>
+      <h5>한 번에 한 칸, 10분에서 끊는다</h5>
+      <p>시간 제약 30명이다. 아홉 칸을 한자리에서 채우게 하면 세 칸에서 닫는다.
+        <b class="k">한 세션에 한 칸</b>, 끝나면 그 칸만 보여 주고 닫는다. 아홉 번 돌아오게 만드는 게 설계다.</p>
+    </div></div>
+    <div class="rule"><div class="n">5</div><div>
+      <h5>고쳐 쓰게 하지 말고, 골라서 고치게 한다</h5>
+      <p>자유 입력은 공급자 언어로 돌아간다(19명). AI 가 <b class="k">고객 말에서 뽑은 문장 세 개를 만들어 주고
+        고르게 한 뒤, 고른 것만 다듬게</b> 한다. 쓰는 건 고객이지만 백지는 안 준다.</p>
+    </div></div>
+  </div>
+
+  <h4>실제로 이렇게 흐른다</h4>
+  <div class="turn">
+    <div class="in"><span class="cap">고객이 들고 온 말</span>
+      <div class="q">머릿속에 전달하고 싶은 내용은 많은데 전달하는 방법을 모르겠어요. 제 스토리를 대본에 입히는 게 엄청 어려워요.</div>
+      <span class="from">실제 고객 발화 (2026-11-09 세션)</span></div>
+    <div class="out"><span class="cap">AI 가 가야 할 길</span>
+      <ul>
+        <li><b>받는다</b> — "대본에 스토리를 못 입히겠다는 말씀이군요. 그거 먼저 보겠습니다."</li>
+        <li><b>내려간다</b> — "그 대본을 누가 읽었으면 좋겠어요? <b>지난달에 돈 낸 사람</b> 중에 한 명만 떠올려 주세요."</li>
+        <li><b>확인한다</b> — "그 사람이 사기 전에 뭘 걱정했는지 아세요? 들어 본 적 있나요, 아니면 짐작이세요?"</li>
+        <li><b>멈춘다</b> — 짐작이면 거기서 캔버스를 더 안 채운다. <b>"지금 채우면 틀린 기준이 됩니다. 후기 열 개만 읽고 오세요"</b> 로 끊는다.</li>
+        <li><b>돌려준다</b> — 밖에서 확인한 말을 가져오면 그 말을 그대로 페인포인트 칸에 넣는다. <b>고객의 언어가 캔버스에 들어간다.</b></li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted">이 세션에서 낙타가 한 말 그대로다 — <b class="k">"고객 조사가 빠지면 아무것도 못해요. 사실 마케팅은."</b>
+    AI 가 흉내 내야 할 건 말투가 아니라 <b class="k">이 멈춤</b>이다. 채워 주는 AI 는 많지만 멈추는 AI 는 없다.</p>
+
+  <div class="no-go">
+    <p><b>여기서 조심할 것.</b> 멈추는 설계는 이탈로 보인다. 아홉 칸 중 세 칸에서 "조사하고 오세요"로 끊기면
+      완성률 숫자는 나빠진다. <b>완성률을 지표로 삼으면 이 설계는 반드시 무너진다.</b>
+      무엇을 지표로 볼지는 12절에 적었다.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <h2 class="sec"><b>05</b>채운 다음에 남는 것</h2>
+  <h3 class="ttl">캔버스가 푸는 건 절반이다. 나머지 절반이 제품 자리다</h3>
+
+  <p>진단 범주 열넷을 <b class="k">캔버스를 채우면 풀리는 것</b>과 <b class="k">채워도 안 풀리는 것</b>으로 갈랐다.
+    기준은 하나다 — <b class="k">말로 정의하면 끝나는 문제인가, 밖에 나가서 뭔가 해야 끝나는 문제인가.</b></p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>진단</th><th class="c">사람</th><th class="c">캔버스로</th><th>그래도 남는 일</th></tr>
+    <tr><td>타겟 미정·오조준</td><td class="c">26</td><td class="c"><span class="pill on">풀린다</span></td><td>정한 타겟이 맞는지는 <b>팔아 봐야</b> 안다 — 분기마다 재확인</td></tr>
+    <tr><td>USP·차별점 미정의</td><td class="c">27</td><td class="c"><span class="pill on">풀린다</span></td><td>쓴 문장이 고객에게 통하는지 <b>실제 반응</b>이 있어야 확정</td></tr>
+    <tr><td>고객 페인포인트 미제시</td><td class="c">14</td><td class="c"><span class="pill on">풀린다</span></td><td>고객이 실제로 쓴 말을 계속 <b>주워 담아야</b> 유지된다</td></tr>
+    <tr><td>와우포인트·경험 장면 부재</td><td class="c">6</td><td class="c"><span class="pill on">풀린다</span></td><td>장면을 <b>찍어 와야</b> 끝난다 — 우리가 못 하는 영역</td></tr>
+    <tr><td>계정·포지션 혼재</td><td class="c">25</td><td class="c"><span class="pill on">풀린다</span></td><td>정리한 대로 <b>계정을 실제로 손봐야</b> 끝난다</td></tr>
+    <tr><td>상품·가격 구조</td><td class="c">15</td><td class="c"><span class="pill hi">반만</span></td><td>구조는 그릴 수 있지만 <b>가격을 바꾸는 결정</b>은 따로다</td></tr>
+    <tr><td>사업모델·수익 구조</td><td class="c">9</td><td class="c"><span class="pill hi">반만</span></td><td>하나를 포기하는 결정 — <b>남이 대신 못 한다</b></td></tr>
+    <tr><td><b>사람·기준·서사를 안 꺼냄</b></td><td class="c">27</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>칸이 있다고 안 꺼낸 걸 꺼내지 않는다. <b>캐묻는 사람이 있어야</b> 나온다</td></tr>
+    <tr><td><b>퍼널·전환 장치 부재</b></td><td class="c">29</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>만드는 일이다. <b>무엇부터 만들지 정해 주는 것</b>까지가 우리 몫</td></tr>
+    <tr><td><b>언어화 실패 (공급자 언어)</b></td><td class="c">19</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>캔버스도 공급자 언어로 채워진다. <b>매번 번역이 필요</b>하다</td></tr>
+    <tr><td><b>자기 노출 두려움</b></td><td class="c">17</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>정의의 문제가 아니라 <b>올리기 직전의 문제</b>다</td></tr>
+    <tr><td><b>고객·시장 조사 부재</b></td><td class="c">12</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>밖에 나가야 한다. <b>나가는 일을 잘게 쪼개 주는 것</b>이 우리 몫</td></tr>
+    <tr><td><b>실행·리소스</b></td><td class="c">19</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>시간은 못 만들어 준다. <b>할 일을 줄여 주는 것</b>만 가능</td></tr>
+    <tr><td><b>측정·근거 부재</b></td><td class="c">2</td><td class="c"><span class="pill ink">안 풀린다</span></td><td>잴 것을 정해 주고 <b>매주 묻는 것</b> — 여기가 가장 비어 있다</td></tr>
+  </table>
+  </div>
+
+  <div class="card lime">
+    <p class="cap">세어 보면</p>
+    <p>캔버스가 <b class="k">정의해 주는 것은 다섯 범주</b>(타겟·USP·페인포인트·와우·계정 정리)다. 사람으로는 많지만 성격이 같다 — 전부 <b class="k">한 번 정하고 가끔 고치는 일</b>이다.</p>
+    <p>남는 <b class="k">일곱 범주는 전부 반복</b>이다. 꺼내기·만들기·번역·용기·조사·시간·측정.
+      이 일곱 개가 매주 돌아오는 일이고, <b class="k">그래서 구독이 성립하는 자리</b>다.</p>
+    <p>그리고 이 일곱 중 어느 것도 <b class="k">광고 소재나 릴스 대본을 써 주는 일이 아니다.</b>
+      리건이 배제한 것들은 이 목록 어디에도 없다. 배제하고도 일곱 개가 남는다.</p>
+  </div>
+
+  <h4>캔버스를 다 채운 월요일 아침</h4>
+  <div class="card">
+    <p>구체적인 장면으로 적어 본다. 액션 리스트 일곱 개를 받은 사람이 월요일에 무엇을 하는가.</p>
+    <ul class="li">
+      <li><b class="k">1번을 연다</b> — "타깃을 1인 공방 사장으로 좁히고 계정 소개를 고쳐라". 소개 글을 고치려고 앉는다.</li>
+      <li><b class="k">5분 만에 멈춘다</b> — 뭐라고 쓸지 모른다. 캔버스에 적힌 건 <b class="k">"1인 공방 사장"</b>인데,
+        소개 글에 그대로 쓰면 이상하다. <b class="k">정의는 있는데 문장이 없다</b>(언어화 19명).</li>
+      <li><b class="k">딴 데를 본다</b> — 소개 글을 미루고 릴스를 올린다. 그게 더 쉽다. <b class="k">액션 리스트는 2번으로 못 넘어간다.</b></li>
+      <li><b class="k">2주 뒤</b> — 아무도 안 묻는다. 리스트는 그대로 있고, 캔버스는 다시 안 열린다. 구독은 다음 달에 끊긴다.</li>
+    </ul>
+    <p>여기서 보이는 게 전부다. 막히는 지점은 <b class="k">① 정의를 문장으로 옮기는 자리 ② 일곱 개 중 뭘 먼저 할지 ③ 아무도 안 묻는다는 것</b>.
+      이 셋이 06절 방향의 앞자리에 온다.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <h2 class="sec"><b>06</b>방향 열여섯</h2>
+  <h3 class="ttl">전부 캔버스를 재료로 쓰고, 전부 결과물을 만들어 주지 않는다</h3>
+
+  <p>표시의 뜻은 이렇다. <span class="rec w">주기형</span> 시간이 지나면 저절로 열린다 ·
+    <span class="rec e">사건형</span> 고객에게 무슨 일이 생길 때 열린다 ·
+    <span class="rec o">한 번</span> 깊게 한 번 하고 가끔 다시 한다.</p>
+  <p class="muted">구독을 지탱하는 건 주기형이다. 아래 열여섯 중 주기형이 여섯, 사건형이 여덟, 달에 한 번짜리가 둘이다. 일회성은 하나도 없다 — 한 번 쓰고 끝나는 건 제안에서 뺐다.
+    <b class="k">주기형 다섯을 다 매주 하게 하면 안 된다</b> — 주당 10분 안에 들어가는 조합은 ①+②뿐이고, 나머지는 그 안에서 번갈아 열린다.</p>
+
+  <h4 style="margin-top:34px">주기형 — 매주, 매달 저절로 열린다</h4>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">01</span><h4>월요일 10분, 코멜이 먼저 묻는다<span class="rec w">주기형</span></h4>
+      <p class="sum">고객이 찾아오게 하지 않는다. <b class="k">매주 월요일 아침에 코멜이 먼저 세 가지를 묻는다.</b>
+        이게 06절 전체에서 가장 중요한 하나다 — 05절의 "아무도 안 묻는다"를 메우는 자리다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "지난주에 올리거나 보낸 것, 있었나요?" → <span class="btn">있다</span> <span class="btn">없다</span></span>
+          <span class="ln"><b>2</b> 있다면: "반응이 있었나요? 문의·댓글·구매 중에." → 숫자 하나만 입력</span>
+          <span class="ln"><b>3</b> 없다면: "어디에서 멈췄나요?" → <span class="btn">뭘 쓸지 몰라서</span> <span class="btn">시간이 없어서</span> <span class="btn">올리기가 겁나서</span></span>
+          <span class="ln"><b>4</b> 고른 답에 따라 <b>이번 주 한 가지</b>가 정해진다. 겁나서면 07번으로, 뭘 쓸지 몰라서면 캔버스의 빈 칸으로.</span>
+          <span class="ln"><b>5</b> 끝. <span class="btn y">이번 주 할 일 1개</span>만 남기고 닫는다.</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>타겟 · 고객 페인포인트 (이번 주 할 일을 고를 때 기준으로)</dd>
+        <dt>닿는 문제</dt><dd>실행·리소스 <b>19명</b> · 측정·근거 부재 <b>2명</b> · 아무도 묻지 않는다는 구조적 결핍</dd>
+        <dt>드는 시간</dt><dd><b>주 1회 2~3분.</b> 질문 셋, 버튼으로만 답한다. 자판은 2번에서 숫자 하나뿐</dd>
+        <dt>왜 기준인가</dt><dd>대신 해 주는 게 하나도 없다. <b>묻기만 한다.</b> 고르는 것도 하는 것도 고객이다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">02</span><h4>내 숫자 다섯<span class="rec w">주기형</span></h4>
+      <p class="sum">고객이 직접 고른 숫자 다섯 개를 주 1회 적는다. 우리가 뭘 재라고 정해 주지 않는다 —
+        <b class="k">고르는 것부터가 기준을 세우는 일</b>이다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 처음 한 번: 후보 열두 개를 보여 주고 <b>다섯 개만</b> 고르게 한다 (문의 수 · 새 팔로워 · 올린 개수 · 재구매 · 상담 전환 · 객단가 …)</span>
+          <span class="ln"><b>2</b> 매주 월요일 점검에 붙어서 나온다. 다섯 칸, 숫자만 입력. <b>모르면 비워도 된다</b></span>
+          <span class="ln"><b>3</b> 4주·13주 추세선. 한 줄 코멘트는 AI 가 아니라 <b>규칙</b>이 단다 — "4주 연속 0이면: 이 숫자는 지금 재는 의미가 없습니다. 바꿀까요?"</span>
+          <span class="ln"><b>4</b> 벗어난 숫자 하나가 <b>이번 주 안건</b>이 된다. 그게 01번의 "이번 주 한 가지"로 들어간다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>핵심 지표 (린 캔버스) · 수익 흐름 · 채널</dd>
+        <dt>닿는 문제</dt><dd>측정·근거 부재 — 진단은 <b>2명</b>뿐이지만, 그 단계까지 간 사람이 둘뿐이라는 뜻이다. 실제로는 거의 전원</dd>
+        <dt>드는 시간</dt><dd><b>주 1회 1분.</b> 처음 고르는 데만 5분</dd>
+        <dt>왜 기준인가</dt><dd>숫자를 우리가 뽑아 주지 않는다. 고객이 고르고 고객이 적는다. 우리는 <b>벗어났다는 사실만</b> 보여 준다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">EOS 계열 소프트웨어의 주간 회의가 정확히 이 순서다 — 숫자판을 먼저 보고, 벗어난 숫자가 그 주의 안건이 된다.
+        그 구조를 1인 사업자 한 명짜리로 줄인 것이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">03</span><h4>결정 로그 — 2주 뒤에 되묻는다<span class="rec w">주기형</span></h4>
+      <p class="sum">"강의를 아무리 들어도 내 브랜드에 적용이 안 된다"(21명)의 뿌리는 정보 부족이 아니라
+        <b class="k">내가 내린 결정이 쌓이지 않는 것</b>이다. 쌓이면 그게 기준이 된다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 캔버스 칸을 고치거나 01번에서 할 일을 정하면 <b>자동으로</b> 한 줄이 적힌다 — "11/14 타겟을 1인 공방 사장으로 좁힘"</span>
+          <span class="ln"><b>2</b> 왜 그렇게 정했는지 한 줄만 받는다. 밑줄을 끌어다 놓아도 된다 (근거 자리)</span>
+          <span class="ln"><b>3</b> <b>2주 뒤 월요일에 그 줄이 다시 뜬다</b> — "2주 전 이렇게 정하셨습니다. 그 뒤로 달라진 게 있나요?" <span class="btn">맞았다</span> <span class="btn">아직 모르겠다</span> <span class="btn">틀렸다</span></span>
+          <span class="ln"><b>4</b> "틀렸다"를 누르면 그 칸이 열리고, 틀렸다는 기록도 같이 남는다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>전부 — 고친 칸 아무거나</dd>
+        <dt>닿는 문제</dt><dd>학습 의존 <b>21명</b> · 측정·근거 부재 · "제대로 하고 있는 건지 감이 전혀 없다"(안보미)</dd>
+        <dt>드는 시간</dt><dd><b>적을 때 20초, 되물을 때 20초.</b> 거의 자동으로 쌓인다</dd>
+        <dt>왜 기준인가</dt><dd>판단을 대신 하지 않는다. <b>자기가 한 판단을 잊지 않게</b> 할 뿐이다. 맞았는지는 고객이 매긴다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">04</span><h4>이번 주에 읽을 것은 한 편<span class="rec w">주기형</span></h4>
+      <p class="sum">89편 중 한 편만 띄운다. <b class="k">왜 이 편인지</b>를 캔버스로 설명한다.
+        그리고 읽고 나면 코킷 이야기가 아니라 <b class="k">내 칸</b>으로 돌아온다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "USP 칸이 비어 있어서 이 편을 권합니다" — 한 편, 예상 읽는 시간 표시</span>
+          <span class="ln"><b>2</b> 읽는 중에는 평소대로 밑줄을 긋는다 (기존 기능 그대로)</span>
+          <span class="ln"><b>3</b> 다 읽으면 코킷 창이 아니라 <b>캔버스 USP 칸</b>이 열린다 — "읽고 나서 이 칸에 넣을 문장이 생겼나요?"</span>
+          <span class="ln"><b>4</b> 안 생겼으면 <span class="btn">아직 모르겠다</span>. 그러면 <b>다음 주에 같은 칸으로 다른 편</b>을 준다. 두 번 실패하면 읽기를 멈추고 조사 과제(08번)로 보낸다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>가장 비어 있거나 "아직 짐작"으로 표시된 칸</dd>
+        <dt>닿는 문제</dt><dd>학습 의존 <b>21명</b> — 많이 읽어서 헤매는 사람에게 <b>덜 읽히는</b> 것이 처방이다</dd>
+        <dt>드는 시간</dt><dd><b>주 1회, 코킷 한 편 분량.</b> 안 읽어도 다음 주에 다시 온다</dd>
+        <dt>왜 기준인가</dt><dd>읽을 것을 <b>고르는 수고</b>를 덜어 주지만, 읽고 뭘 할지는 고객이 쓴다. 요약해 주지 않는다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">05</span><h4>이번 주에 내가 지킨 기준<span class="rec w">주기형</span></h4>
+      <p class="sum">진단 공동 1위가 <b class="k">"가진 사람·경력·기준을 안 꺼냄" 27명</b>이다.
+        재료가 없어서가 아니다. <b class="k">기준은 매주 쓰고 있는데 기록이 안 될 뿐</b>이다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 금요일에 한 줄 묻는다 — <b>"이번 주에 편한 방법 대신 다른 방법을 고른 일이 있었나요?"</b></span>
+          <span class="ln"><b>2</b> 없으면 <span class="btn">없었다</span> 누르고 30초 만에 끝난다</span>
+          <span class="ln"><b>3</b> 있으면 두 줄만 — <b>무슨 일이었나 / 왜 그렇게 했나</b></span>
+          <span class="ln"><b>4</b> 저장하면 <b>사례 서랍</b>에 쌓인다. 캔버스의 경쟁 우위·가치 제안 칸에 연결된다</span>
+          <span class="ln"><b>5</b> 넉 장이 모이면 한 번 보여 준다 — "네 번 다 <b>같은 기준</b>으로 고르셨습니다. 이게 대표님 기준입니다"</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>경쟁 우위 · 가치 제안 · 핵심 활동</dd>
+        <dt>닿는 문제</dt><dd>안 꺼냄 <b>27명</b> · USP 미정의 <b>27명</b> — 진단 공동 1위 둘을 한 기능이 건드린다</dd>
+        <dt>드는 시간</dt><dd><b>주 1회 30초~4분.</b> 사건이 없는 주는 30초</dd>
+        <dt>왜 기준인가</dt><dd>글감을 추천하지 않는다. <b>이미 한 판단을 적게 할 뿐</b>이고, 그걸 쓸지 말지는 고객이 정한다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">"예쁜 상품만 있고 만드는 사람의 기준이 계정에 없다"(김현희 세션)는 진단이 이 기능 하나로 재료를 얻는다.
+        <b class="k">콘텐츠를 써 주지 않고 재료만 쌓는다</b> — 리건이 그은 선 안쪽이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">06</span><h4>분기마다 캔버스를 다시 연다<span class="rec w">주기형</span></h4>
+      <p class="sum">3개월에 한 번, 캔버스를 처음부터 다시 돌린다. 지난번 답을 보여 주지 않고 먼저 묻고,
+        <b class="k">답이 달라진 칸만</b> 나중에 겹쳐 보여 준다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "3개월 전에 쓰신 캔버스가 있습니다. 보지 말고 다시 한 번 답해 주세요" — 다섯 칸만 (타겟·USP·페인포인트·채널·지표)</span>
+          <span class="ln"><b>2</b> 다 답하면 <b>나란히</b> 보여 준다. 달라진 칸에 표시</span>
+          <span class="ln"><b>3</b> "이 칸이 달라졌습니다. 왜 달라졌는지 아세요?" → 알면 그게 성장이고, 모르면 그게 이번 분기 과제다</span>
+          <span class="ln"><b>4</b> 3개월간의 결정 로그·숫자 추세가 한 장으로 같이 나온다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>다섯 칸 (전부 다시 묻지 않는다 — 분기마다 아홉 칸은 너무 무겁다)</dd>
+        <dt>닿는 문제</dt><dd>타겟 <b>26명</b> · USP <b>27명</b> — 한 번 정하고 안 고쳐서 생기는 문제가 대부분이다</dd>
+        <dt>드는 시간</dt><dd><b>분기 1회 15분.</b> 1년에 네 번</dd>
+        <dt>왜 기준인가</dt><dd>바뀌었는지 판정하지 않는다. <b>나란히 놓고 보여 줄 뿐</b>이고, 뜻은 고객이 읽는다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h4 style="margin-top:34px">사건형 — 고객에게 무슨 일이 생길 때 열린다</h4>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">07</span><h4>올리기 전에 비춰 본다<span class="rec e">사건형</span></h4>
+      <p class="sum">쓰는 건 고객이 다 쓴 뒤다. 올리기 직전에 <b class="k">캔버스에 비춰 세 가지만</b> 묻는다.
+        고쳐 주지 않는다. 안 맞는다고 말해 주지도 않는다. <b class="k">묻기만 한다.</b></p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 쓴 글을 붙여넣는다 (또는 "지금 뭘 올리려고 하세요?"에 한 줄)</span>
+          <span class="ln"><b>2</b> 질문 셋이 뜬다 — 전부 <b>그 사람의 캔버스에서 만들어진다</b></span>
+          <span class="ln">　· "이 글은 <b>1인 공방 사장</b>이 읽을 글인가요?" (타겟 칸)</span>
+          <span class="ln">　· "이 글에 <b>'혼자라 물어볼 데가 없다'</b>는 고민이 들어 있나요?" (페인포인트 칸)</span>
+          <span class="ln">　· "읽고 나서 할 수 있는 다음 동작이 하나 있나요?" (채널·퍼널 칸)</span>
+          <span class="ln"><b>3</b> 셋 다 <span class="btn y">예</span>면 끝. 올리러 간다</span>
+          <span class="ln"><b>4</b> 하나라도 <span class="btn">아니오</span>면 <b>해당 칸을 열어서 보여 줄 뿐</b>이다. 글은 건드리지 않는다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>타겟 · 고객 페인포인트 · 채널 (세 칸만 있으면 돌아간다)</dd>
+        <dt>닿는 문제</dt><dd>고객 페인포인트 미제시 <b>14명</b> · 타겟 오조준 <b>26명</b> · 퍼널 부재 <b>29명</b></dd>
+        <dt>드는 시간</dt><dd><b>1회 40초.</b> 올릴 때마다</dd>
+        <dt>왜 기준인가</dt><dd>한 글자도 안 쓴다. 고치라고도 안 한다. <b>자기 기준에 비춰 보게만</b> 한다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">이게 리건이 배제한 "대본 작성"과 가장 가까워 보이는 자리다. <b class="k">선은 분명하다 —
+        우리는 글을 생성하지 않고, 평가도 하지 않는다.</b> 고객의 캔버스를 질문 형태로 되돌려 줄 뿐이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">08</span><h4>내 설명에서 고객이 못 알아들을 곳<span class="rec e">사건형</span></h4>
+      <p class="sum">공급자 언어가 <b class="k">19명</b>이다. 고쳐 주면 안 되고, <b class="k">어디가 걸리는지만</b> 표시한다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 자기가 쓴 소개·상담 설명을 붙여넣는다 (한 문단)</span>
+          <span class="ln"><b>2</b> 캔버스의 타겟 칸이 기준이 된다 — "이 사람이 읽는다고 보고 보겠습니다"</span>
+          <span class="ln"><b>3</b> <b>최대 세 곳</b>에만 표시가 붙는다 — <span class="btn">전문 용어</span> <span class="btn">고객 상황이 없음</span> <span class="btn">근거가 없는 주장</span></span>
+          <span class="ln"><b>4</b> 고쳐 쓴 문장은 <b>주지 않는다.</b> 표시된 자리를 고객이 직접 고친다</span>
+          <span class="ln"><b>5</b> 고친 뒤 같은 기준으로 한 번 더 본다. 표시가 줄었으면 그걸로 끝</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>타겟 · 고객 페인포인트 · 가치 제안</dd>
+        <dt>닿는 문제</dt><dd>언어화 실패 <b>19명</b> · 페인포인트 미제시 <b>14명</b></dd>
+        <dt>드는 시간</dt><dd><b>1회 5분.</b> 소개나 상세를 고칠 때만</dd>
+        <dt>왜 기준인가</dt><dd>대체 문장을 한 줄도 안 쓴다. <b>자리와 이유만</b> 알려 준다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">세 곳으로 제한하는 게 설계의 핵심이다. 열 곳을 표시하면 고치다 지쳐서 안 고친다.
+        "서진 님한테 가는 길이 너무 험난하다"(윤서진 세션)는 말을 길 세 군데로 줄이는 일이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">09</span><h4>고객처럼 따라가 본다<span class="rec e">사건형</span></h4>
+      <p class="sum">진단 1위가 <b class="k">퍼널·전환 장치 부재 29명(45%)</b>이다. 우리는 랜딩을 못 만들어 준다.
+        그런데 <b class="k">어디가 끊겼는지 알려 주는 건</b> 할 수 있고, 그게 대부분의 경우 충분하다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "고객이 처음 보는 곳부터 문의까지, 순서를 적어 주세요" — 보통 3~4단계</span>
+          <span class="ln"><b>2</b> <b>고객이 직접 그 경로를 연다.</b> 우리가 긁어 오지 않는다 (계정 권한을 받지 않는 이유)</span>
+          <span class="ln"><b>3</b> 단계마다 세 가지를 묻는다 — "누구한테 하는 말인가 / 여기서 뭘 알게 되나 / <b>다음 동작이 눈에 보이나</b>"</span>
+          <span class="ln"><b>4</b> 처음으로 <span class="btn">아니오</span>가 나온 단계가 <b>이번에 고칠 한 곳</b>이다. 그 아래는 안 본다</span>
+          <span class="ln"><b>5</b> 그 한 곳이 01번의 "이번 주 한 가지"로 넘어간다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>채널 · 고객 관계 · 가치 제안</dd>
+        <dt>닿는 문제</dt><dd>퍼널·전환 장치 부재 <b>29명</b> · 계정·포지션 혼재 <b>25명</b></dd>
+        <dt>드는 시간</dt><dd><b>앱에서 5분 + 직접 눌러 보는 데 5분.</b> 소개나 링크를 바꿀 때마다</dd>
+        <dt>왜 기준인가</dt><dd>페이지를 만들지 않는다. 분석도 안 한다. <b>고객이 자기 눈으로 끊긴 데를 보게</b> 한다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">이상욱 사례가 정확히 이것이다 — 인스타·유튜브 합계 6만 명인데 랜딩이 없어서 전부 샜다.
+        낙타의 말 그대로다. <b class="k">"드러내도 지금 랜딩이 될 곳이 없어요."</b> 이걸 혼자 발견하게 하는 게 이 기능이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">10</span><h4>이 일을 받아도 될까<span class="rec e">사건형</span></h4>
+      <p class="sum">계정·포지션 혼재가 <b class="k">25명(39%)</b>이다. 처음부터 섞은 사람은 없다.
+        <b class="k">좋아 보이는 제안을 하나씩 받다가</b> 섞인다. 그러니 섞이는 순간에 열려야 한다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 협업 제안 DM, 새 상품 아이디어, 새 고객군 요청이 왔을 때 연다</span>
+          <span class="ln"><b>2</b> 받은 내용을 붙여넣거나 한 줄로 적는다</span>
+          <span class="ln"><b>3</b> 질문 셋 — <b>"지금 고객과 같은 사람인가 / 약속한 가치와 이어지나 / 지금 하는 일을 밀어내나"</b></span>
+          <span class="ln"><b>4</b> 맞는 것·부딪히는 것·모르는 것을 <b>나란히</b> 보여 준다. 하라 말라는 안 한다</span>
+          <span class="ln"><b>5</b> <span class="btn">받는다</span> <span class="btn">조건을 바꿔 받는다</span> <span class="btn">미룬다</span> <span class="btn">안 받는다</span> + 이유 한 줄 → 결정 로그로</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>고객 세그먼트 · 가치 제안 · 핵심 활동 · 핵심 자원</dd>
+        <dt>닿는 문제</dt><dd>계정·포지션 혼재 <b>25명</b> · 타겟 오조준 <b>26명</b> · 사업모델 <b>9명</b></dd>
+        <dt>드는 시간</dt><dd><b>1회 6분.</b> 제안이 올 때만 — 달에 한두 번</dd>
+        <dt>왜 기준인가</dt><dd>받으라 마라를 정하지 않는다. <b>받으면 무엇을 포기하는지</b>만 보여 준다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">"하고 싶은 게 많아 우선순위를 못 정한다"(김소이), "B2C와 B2B 우선순위가 없다"(홍채이).
+        이 사람들에게 필요한 건 정리가 아니라 <b class="k">다음에 섞이려 할 때 막아 주는 자리</b>다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">11</span><h4>"이거 올려도 되나" — 겁날 때 여는 곳<span class="rec e">사건형</span></h4>
+      <p class="sum">자기 노출 두려움이 <b class="k">17명(26%)</b>이다. 이건 정보로 안 풀린다.
+        "리나 님은 되게 걱정이 많은 것 같아"라는 말을 들어야 풀리는 종류다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "올리기가 망설여져요" 버튼 하나. 01번 월요일 점검의 선택지에도 들어 있다</span>
+          <span class="ln"><b>2</b> "무엇이 걱정되세요?" → <span class="btn">아는 사람이 볼까 봐</span> <span class="btn">너무 당연한 얘기라</span> <span class="btn">잘난 척 같아서</span> <span class="btn">틀릴까 봐</span></span>
+          <span class="ln"><b>3</b> 고른 것에 따라 <b>되묻는 질문 하나</b>가 나온다. 위로가 아니라 사실 확인이다</span>
+          <span class="ln">　· 당연한 얘기 → "그 얘기를 <b>처음 들었을 때</b> 대표님은 알고 계셨나요?"</span>
+          <span class="ln">　· 틀릴까 봐 → "틀렸다면 누가 손해를 보나요? 되돌릴 수 있나요?"</span>
+          <span class="ln"><b>4</b> 끝에 한 가지만 고르게 한다 — <span class="btn y">올린다</span> <span class="btn">오늘은 안 올린다</span>. 안 올려도 기록만 남긴다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>타겟 (누가 읽는지) · 경쟁 우위 (내가 가진 것)</dd>
+        <dt>닿는 문제</dt><dd>자기 노출 두려움 <b>17명</b> · 안 꺼냄 <b>27명</b>과 겹친다</dd>
+        <dt>드는 시간</dt><dd><b>1회 1~2분.</b> 막힐 때만</dd>
+        <dt>왜 기준인가</dt><dd>"괜찮아요"라고 해 주지 않는다. <b>스스로 판정할 질문</b>을 준다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">12</span><h4>조사하러 나가지 말고, 이미 오는 것을 줍는다<span class="rec e">사건형</span></h4>
+      <p class="sum">고객 조사 부재가 <b class="k">12명</b>이고, "지인·부모님한테만 물어본다"가 반복된다.
+        그런데 조사하라고 하면 아무도 안 한다. <b class="k">이미 들어와 있는 말을 줍게</b> 한다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 코멜 안에 <b>고객의 말 서랍</b>이 하나 생긴다. 비어 있는 채로 시작</span>
+          <span class="ln"><b>2</b> 넣는 법은 하나뿐 — <b>복사해서 붙여넣기.</b> 문의 DM, 후기, 상담 중 들은 말, 경쟁사 리뷰</span>
+          <span class="ln"><b>3</b> 붙여넣으면 한 가지만 묻는다 — "이 사람은 <b>사기 전</b>인가요, <b>산 뒤</b>인가요?" 두 버튼</span>
+          <span class="ln"><b>4</b> 다섯 개가 모이면 알림 하나 — "사기 전 사람들이 <b>같은 걱정</b>을 했습니다. 페인포인트 칸에 넣을까요?"</span>
+          <span class="ln"><b>5</b> 묶어 주는 건 AI 가 하지만, <b>칸에 넣는 결정은 고객이</b> 한다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>고객 페인포인트 · 기대 · USP (고객 말 그대로 들어간다)</dd>
+        <dt>닿는 문제</dt><dd>조사 부재 <b>12명</b> · 페인포인트 미제시 <b>14명</b> · 언어화 실패 <b>19명</b>에도 직접 듣는다</dd>
+        <dt>드는 시간</dt><dd><b>1회 15초.</b> 문의가 올 때마다. 주 2~3회면 충분</dd>
+        <dt>왜 기준인가</dt><dd>조사를 대신 해 주지 않는다(우리는 그 사람 DM 을 못 본다). <b>줍는 자리</b>만 만든다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">낙타의 처방이 정확히 이것이었다 — <b class="k">"경쟁사 후기를 긁어서 고객 언어로 될 상품인지 증거를 찾아라."</b>
+        그걸 과제가 아니라 <b class="k">습관</b>으로 바꾼 게 이 기능이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">13</span><h4>안 샀을 때 한 줄<span class="rec e">사건형</span></h4>
+      <p class="sum">문의가 왔는데 안 샀을 때, 그 한 건이 <b class="k">가장 비싼 정보</b>다. 그런데 아무도 안 적는다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 01번 월요일 점검 끝에 한 줄 더 — "지난주에 <b>문의했는데 안 산 사람</b>이 있었나요?"</span>
+          <span class="ln"><b>2</b> 있으면: "마지막에 뭐라고 하셨어요?" 한 줄만. 없으면 넘어간다</span>
+          <span class="ln"><b>3</b> 세 건이 모이면 겹치는 말을 보여 준다 — "세 분 다 <b>가격</b> 얘기를 하셨습니다"</span>
+          <span class="ln"><b>4</b> 겹치는 말에 따라 열리는 칸이 다르다. 가격이면 상품·가격 칸, 못 믿겠다면 경쟁 우위 칸</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>상품·가격 · USP · 고객 페인포인트</dd>
+        <dt>닿는 문제</dt><dd>상품·가격 구조 <b>15명</b> · USP <b>27명</b> · 측정·근거 부재</dd>
+        <dt>드는 시간</dt><dd><b>주 1회 30초.</b> 01번에 붙어 있어서 따로 열 필요가 없다</dd>
+        <dt>왜 기준인가</dt><dd>이유를 추측해 주지 않는다. <b>고객이 들은 말을 모아 겹치는 것만</b> 보여 준다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">14</span><h4>값을 바꾸기 전에<span class="rec e">사건형</span></h4>
+      <p class="sum">가격·상품 구조를 바꾸는 건 1년에 몇 번 없지만, 할 때마다 가장 크게 흔들린다.
+        <b class="k">바꾸기 전에 다섯 가지만</b> 확인한다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> "가격이나 상품 구성을 바꾸려고 하세요?" → 지금 값과 바꿀 값을 적는다</span>
+          <span class="ln"><b>2</b> 다섯 질문 — 전부 캔버스와 고객의 말 서랍에서 나온다</span>
+          <span class="ln">　· "지금 값으로 산 마지막 세 사람은 왜 샀다고 했나요?" (서랍에서 꺼내 보여 줌)</span>
+          <span class="ln">　· "올린 값을 감당할 사람이 타겟 칸의 그 사람인가요?"</span>
+          <span class="ln">　· "값을 안 올리고 <b>하나를 빼는</b> 쪽은 생각해 보셨나요?"</span>
+          <span class="ln"><b>3</b> 결정은 결정 로그(03번)에 자동으로 들어가고, <b>4주 뒤에 되묻는다</b></span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>수익 흐름 · 상품·가격 · 타겟 · 비용 구조</dd>
+        <dt>닿는 문제</dt><dd>상품·가격 <b>15명</b> · 사업모델 <b>9명</b> — "단가가 저렴해질수록 안 좋은 고객이 몰린다"(이가림 세션)</dd>
+        <dt>드는 시간</dt><dd><b>1회 5분.</b> 1년에 두세 번</dd>
+        <dt>왜 기준인가</dt><dd>얼마로 하라고 하지 않는다. <b>자기가 이미 받은 말</b>을 다시 보게 한다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h4 style="margin-top:34px">달에 한 번 — 쌓인 걸 꺼내 본다</h4>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">15</span><h4>내 차별점은 주장인가, 증거인가<span class="rec w">달 1회</span></h4>
+      <p class="sum">USP 미정의가 <b class="k">27명</b>이다. 그런데 캔버스에 한 줄 써 넣는다고 차별점이 생기지는 않는다.
+        <b class="k">쓴 문장이 주장인지 증거인지</b>를 달마다 가른다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 캔버스에 적힌 차별점 주장을 <b>최대 세 개</b> 꺼내 보여 준다</span>
+          <span class="ln"><b>2</b> 각각에 묻는다 — <b>"지난달에 이걸 보여 준 사례가 있었나요?"</b> 05번 사례 서랍에서 후보를 올려 준다</span>
+          <span class="ln"><b>3</b> 고객 말 서랍(12번)에서 그 주장을 <b>고객이 직접 언급한 적</b>이 있는지 찾아 붙인다</span>
+          <span class="ln"><b>4</b> 세 단계로 표시된다 — <span class="btn y">증거 있음</span> <span class="btn">약함</span> <span class="btn">아직 주장</span></span>
+          <span class="ln"><b>5</b> "아직 주장"인 것은 지우라고 하지 않는다. <b>"다음 달에 확인할 것"</b>으로 옮긴다</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>고유의 가치 제안 · 경쟁 우위 · 기대를 만드는 것</dd>
+        <dt>닿는 문제</dt><dd>USP 미정의 <b>27명</b> · 안 꺼냄 <b>27명</b></dd>
+        <dt>드는 시간</dt><dd><b>달 1회 10분.</b> 사례가 하나도 없으면 3분 만에 끝난다 — 그 자체가 답이다</dd>
+        <dt>왜 기준인가</dt><dd>차별점 문구를 만들어 주지 않는다. <b>주장할 수 있는 범위</b>를 정해 준다</dd>
+      </dl>
+      <p class="muted" style="margin-top:12px">"차별점이 없으면 없는 걸 계속 찾아내는 게 아니라 조금 만들어야 된다"(최수현 세션).
+        만드는 건 고객이 하고, 우리는 <b class="k">지금 있는지 없는지만</b> 정직하게 보여 준다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">16</span><h4>약속한 것과 실제로 준 것<span class="rec w">달 1회</span></h4>
+      <p class="sum">캔버스에 적은 약속과 이번 달에 실제로 겪게 한 경험 사이의 차이를 본다.
+        <b class="k">와우포인트 부재 6명</b>은 적어 보이지만, 이 차이는 거의 모든 사람에게 있다.</p></div>
+    <div class="way-bd">
+      <div class="blk"><span class="cap">화면에서 일어나는 일</span>
+        <div class="scr">
+          <span class="ln"><b>1</b> 캔버스에서 약속한 결과를 <b>하나만</b> 고른다 ("상담 후 뭘 해야 할지 명확해진다" 같은)</span>
+          <span class="ln"><b>2</b> 이번 달 고객 응대 중 <b>세 건</b>을 떠올려 적는다 (한 줄씩)</span>
+          <span class="ln"><b>3</b> 각각 <span class="btn">전달됐다</span> <span class="btn">안 됐다</span> <span class="btn">모르겠다</span></span>
+          <span class="ln"><b>4</b> "모르겠다"가 둘 이상이면 그게 답이다 — <b>약속한 걸 전달했는지 확인할 방법이 없다</b>는 뜻</span>
+          <span class="ln"><b>5</b> 다음 달에 <b>바꿀 자리 한 곳</b>을 고객이 고른다. 응대 순서든 마지막 한마디든</span>
+        </div></div>
+      <dl class="spec">
+        <dt>쓰는 칸</dt><dd>제품·서비스 · 기대를 만드는 것 · 고객 관계</dd>
+        <dt>닿는 문제</dt><dd>페인포인트 미제시 <b>14명</b> · 와우포인트 부재 <b>6명</b> · 상품·가격 <b>15명</b></dd>
+        <dt>드는 시간</dt><dd><b>달 1회 12분.</b> 응대가 없었던 달은 건너뛴다</dd>
+        <dt>왜 기준인가</dt><dd>서비스를 대신 해 주지 않는다. <b>약속과 실제를 나란히</b> 놓을 뿐이다</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="card dark">
+    <p class="cap">주의 — 이 열여섯을 다 만들면 실패한다</p>
+    <p class="punch">기본은 <span class="y">01번 + 03번, 주 10분</span>이다. 나머지 열넷은 <span class="y">그 일이 생겼을 때만</span> 열린다.</p>
+    <p>코덱스도 같은 결론을 냈다 — 주기형을 다섯 개 만들어 놓고 매주 다 하게 하면
+      <b class="k">점검 자체가 일이 된다.</b> 시간 제약이 30명인 고객에게 그건 해지 사유다.
+      홈 화면에는 <b class="k">이어서 할 것 하나만</b> 보인다. 메뉴를 열여섯 개 만드는 게 아니라,
+      <b class="k">낙타AI 대화 안에서 상황에 맞는 흐름이 열리는</b> 구조여야 한다.</p>
+  </div>
+
+  <h4>그래서 매주 이렇게 보인다</h4>
+  <div class="card">
+    <div class="step"><div class="when">월요일<span>2~3분</span></div><div>
+      <p><b class="k">01번</b> — 지난주 했나 / 반응 있었나 / 어디서 멈췄나. <b class="k">02번</b> 숫자 다섯 개 입력(쓰는 사람만).
+        끝에 <b class="k">이번 주 한 가지</b>가 남는다.</p></div></div>
+    <div class="step"><div class="when">주중<span>생길 때만</span></div><div>
+      <p>올릴 때 <b class="k">07번</b>, 겁날 때 <b class="k">11번</b>, 문의 오면 <b class="k">12번</b>에 붙여넣기,
+        제안 받으면 <b class="k">10번</b>. 하나도 안 열리는 주가 있어도 된다.</p></div></div>
+    <div class="step"><div class="when">금요일<span>30초~4분</span></div><div>
+      <p><b class="k">05번</b> — 이번 주에 편한 길 대신 다른 길을 고른 일이 있었나. 없으면 30초.</p></div></div>
+    <div class="step"><div class="when">2주 뒤<span>20초</span></div><div>
+      <p><b class="k">03번</b> — 2주 전 결정이 떠오른다. 맞았다 / 모르겠다 / 틀렸다.</p></div></div>
+    <div class="step"><div class="when">달말·분기<span>10~15분</span></div><div>
+      <p><b class="k">15·16번</b>과 분기의 <b class="k">06번</b>. 쌓인 게 없으면 짧게 끝난다.</p></div></div>
+  </div>
+</section>
+
+<section id="s7">
+  <h2 class="sec"><b>07</b>코킷 89편과의 연결</h2>
+  <h3 class="ttl">읽을 것을 더 주는 게 아니라, <b>읽지 않아도 될 것을 치워 준다</b></h3>
+
+  <p>이 절이 가장 중요할 수 있다. 캔버스를 붙이는 진짜 이유는 새 기능을 얹기 위해서가 아니라,
+    <b class="k">이미 있는 89편을 쓸모 있게 만들기 위해서</b>다.</p>
+
+  <div class="card dark">
+    <p class="punch">학습 의존 <span class="y">21명</span>의 문제는 덜 읽어서가 아니다.<br>
+      <span class="y">읽은 것을 자기 사업에 꽂을 자리가 없어서</span>다.</p>
+    <p>이 사람들은 이미 강의·책·컨설팅을 거쳤다. 거기에 코킷 89편을 더 얹으면
+      <b class="k">"툴킷 하면서 오히려 더 헷갈려"</b>가 반복될 뿐이다. 캔버스가 있어야 꽂을 자리가 생긴다.</p>
+  </div>
+
+  <h4>① 89편에 다섯 줄을 붙인다</h4>
+  <p>4판에서 코킷 한 편마다 다섯 줄을 손으로 붙이자고 했다. 그 다섯 줄의 내용이 이번에 확정된다.
+    캔버스 칸 이름으로 적는다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>붙일 줄</th><th>예시 (어느 한 편)</th></tr>
+    <tr><td><b>어느 칸</b></td><td>USP · 고객 페인포인트 — 이 두 칸을 채우는 데 쓰인다</td></tr>
+    <tr><td><b>읽어야 할 때</b></td><td>"왜 나인가"에 한 문장으로 답이 안 나올 때</td></tr>
+    <tr><td><b>읽지 말아야 할 때</b></td><td>아직 타겟이 안 정해졌을 때 — <b>이 편을 먼저 읽으면 더 헷갈린다</b></td></tr>
+    <tr><td><b>읽고 나서 할 일 하나</b></td><td>캔버스 USP 칸에 문장 하나를 넣는다 (바꾸는 게 아니라 넣는다)</td></tr>
+    <tr><td><b>근거 문단</b></td><td>본문 3~4번째 문단 — AI 가 인용할 때 여기만 쓴다</td></tr>
+  </table>
+  </div>
+  <p class="muted">셋째 줄 <b class="k">"읽지 말아야 할 때"</b>가 핵심이다. 이 줄이 있어야 89편을 <b class="k">치워 줄</b> 수 있다.
+    이 줄이 없으면 추천은 결국 "관련 있는 글 더 보기"가 되고, 그건 21명을 더 헤매게 하는 일이다.</p>
+
+  <h4>② 읽을 수 있는 편을 줄인다</h4>
+  <div class="card">
+    <p>캔버스를 채우고 나면 홈 화면이 바뀐다. <b class="k">89편이 아니라 3편이 보인다.</b>
+      "지금 당신 캔버스에서 비어 있는 칸은 USP 입니다. 이 칸에 쓰이는 편은 셋입니다."</p>
+    <p>나머지 86편은 지우지 않는다. 검색하면 나온다. 다만 <b class="k">첫 화면에서 치운다.</b>
+      구독 서비스가 콘텐츠를 덜 보여 주는 건 거꾸로 가는 것처럼 느껴지지만,
+      <b class="k">21명에게는 그게 정확히 돈 내는 이유가 된다</b> — 고른 사람은 나 말고 코멜이다.</p>
+    <p class="muted">(가설) 이게 맞는지는 실험으로만 안다. 12절에 판정 숫자를 적었다.</p>
+  </div>
+
+  <h4>③ 밑줄과 캔버스 — 어디까지가 억지가 아닌가</h4>
+  <div class="grid2">
+    <div class="gcard">
+      <span class="cap">되는 연결</span>
+      <p><b>밑줄을 캔버스의 '근거' 자리에 붙인다.</b> USP 칸 아래 "이 생각의 출처" 칸을 두고,
+        읽다가 그은 밑줄을 거기에 끌어다 놓는다. 2주 뒤 그 칸을 다시 열 때
+        <b>내가 왜 이렇게 정했는지</b>가 같이 열린다.</p>
+      <p><b>읽던 자리로 돌아가기.</b> 캔버스 칸에서 밑줄을 누르면 원문 그 문단이 열린다.
+        이건 코멜만 되는 동작이다 — 원문과 기록이 한 곳에 있으니까.</p>
+    </div>
+    <div class="gcard">
+      <span class="cap">억지인 연결 — 하지 말 것</span>
+      <p><b>밑줄을 캔버스 본문에 바로 넣기.</b> 밑줄은 우리가 쓴 문장이다.
+        그게 캔버스에 들어가면 <b>공급자 언어 19명 문제를 우리가 직접 만들어 주는 꼴</b>이 된다.
+        캔버스 본문은 고객의 말이나 고객의 고객 말로만 채운다.</p>
+      <p><b>밑줄 수로 진척도 보여 주기.</b> 많이 그었다고 캔버스가 채워진 게 아니다.
+        4판에 적은 그대로다 — <b>읽기 진행률은 일 진행률이 아니다.</b></p>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <h2 class="sec"><b>08</b>밖에서 확인한 구조</h2>
+  <h3 class="ttl">같은 구조로 구독을 유지하는 서비스 열하나 — 그리고 <b>깨진 세 곳</b></h3>
+
+  <p>코덱스에 "진단 → 기준 → 반복 점검으로 구독을 유지하는 서비스"를 분야 가리지 말고 찾게 했다.
+    운동·영양·수면·예산·학습·조직까지 열하나가 나왔고, <b class="k">전부 같은 한 가지를 하고 있었다.</b></p>
+
+  <div class="card lime">
+    <p class="punch">새 입력이 들어오면, <span class="lime">전에 정한 기준이나 다음 행동이 실제로 달라진다.</span></p>
+    <p>이게 열하나의 공통점이다. 질문지 길이도, 점수도, 알림 빈도도 아니다.
+      <b class="k">고객이 뭘 적어 넣었는데 다음에 나오는 게 지난번과 똑같다면, 그건 이 구조를 가져온 게 아니다.</b>
+      코멜에서 실행 결과를 입력해도 매번 비슷한 격려와 추천 글이 나온다면 똑같이 실패한다.</p>
+  </div>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>서비스</th><th>무엇을 받는가</th><th>무엇이 달라지는가</th><th>코멜이 가져올 것</th></tr>
+    <tr><td><b>TrainerRoad</b><br><span class="muted">운동 구독</span></td><td>목표·훈련 기록·<b>운동 후 체감 난도</b></td><td>다음 훈련 계획이 조정된다</td><td>했는지만 묻지 말고 <b>왜 어려웠는지</b>를 받아 다음 실행량을 줄인다</td></tr>
+    <tr><td><b>Fitbod</b><br><span class="muted">운동 구독</span></td><td>목표·경험·<b>장비·가능한 시간</b></td><td>가능한 환경 안에서만 운동이 구성된다</td><td>가용 시간을 먼저 받고 <b>그 안에서 되는 것만</b> 제시한다 (01번)</td></tr>
+    <tr><td><b>MacroFactor</b><br><span class="muted">영양 구독</span></td><td>목표·체중·섭취 기록</td><td><b>주간 체크인</b>에서 목표 수치가 다시 계산된다</td><td>매주 새 지식이 아니라 <b>같은 목표의 기준 수정</b></td></tr>
+    <tr><td><b>Freeletics</b><br><span class="muted">운동 코치 구독</span></td><td>수행 결과와 운동 후 피드백</td><td>못 한 사람에게 <b>난도를 낮춰</b> 준다</td><td>못 했을 때 과제를 더하지 않고 <b>더 작게 만든다</b></td></tr>
+    <tr><td><b>YNAB</b><br><span class="muted">예산 구독</span></td><td>우선순위·목표액·기한·지출</td><td>이번 기간의 자원 배분이 다시 맞춰진다</td><td>월요일마다 <b>이번 주 시간 배분</b>을 다시 정한다</td></tr>
+    <tr><td><b>Oura</b><br><span class="muted">기기+멤버십</span></td><td>수면·활동 신호</td><td><b>내 과거 기준</b>과 비교한 오늘의 준비도</td><td>남과 비교하지 않는다. <b>내 지난 결정과만</b> 비교한다</td></tr>
+    <tr><td><b>Noom</b><br><span class="muted">행동 변화 구독</span></td><td>목표·상태·기록</td><td>짧은 학습과 기록이 한 흐름에 붙는다</td><td>학습과 행동을 같은 화면에. 단 <b>매일치 학습량은 베끼지 않는다</b></td></tr>
+    <tr><td><b>Pluralsight</b><br><span class="muted">학습 구독</span></td><td>기술 평가 응답</td><td>숙련도 측정 후 <b>재평가</b></td><td>완독이 아니라 <b>판단이 달라졌는지</b>를 다시 본다 (06번 분기 재진단)</td></tr>
+    <tr><td><b>ELSA Speak</b><br><span class="muted">언어 학습 구독</span></td><td>직접 말한 발화</td><td>그 발화에 대한 피드백</td><td>설명을 더 읽히기 전에 <b>먼저 답하게 하고 그 답을 본다</b></td></tr>
+    <tr><td><b>15Five</b><br><span class="muted">기업 반복 계약</span></td><td>설문·목표·체크인</td><td>개선 영역이 <b>담당자·기한이 붙은 실행 계획</b>으로 바뀐다</td><td>진단 결과와 실제 행동을 <b>같은 기록</b>에 묶는다</td></tr>
+    <tr><td><b>BetterUp</b><br><span class="muted">기업 코칭 계약</span></td><td>자기평가·목표·후속 평가</td><td>최초 진단이 <b>후속 관찰로 수정</b>된다</td><td>첫 진단을 고정하지 않는다. 단 여기엔 <b>사람 코치가 남아 있다</b></td></tr>
+  </table>
+  </div>
+
+  <h4>깨진 곳 셋 — 여기서 배울 게 더 많다</h4>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">!</span><h4>Schwab 자동 자문 — 추천의 목적이 어긋났다</h4>
+      <p class="sum">미국 SEC 는 2022년, 슈왑 계열사가 로보어드바이저의 현금 배분이 고객 수익에 미치는 영향을 제대로 알리지 않았다고 발표했다.
+        계열사들은 <b class="k">약 1억 8,700만 달러</b> 지급에 합의했다.</p></div>
+    <div class="way-bd">
+      <p>문제는 알고리즘 성능이 아니었다. <b class="k">회사에 이득인 배분과 고객에게 최적이라는 설명이 어긋난 것</b>이다.</p>
+      <p style="margin-top:12px"><b class="k">코멜에 그대로 옮기면 이렇다.</b> 코킷을 더 읽게 하는 추천과, 고객이 일을 끝내게 하는 추천이 부딪히는 날이 반드시 온다.
+        읽기 시간이 늘면 우리 지표는 좋아 보인다. <b class="k">그때 후자를 고르기로 지금 정해 둬야 한다.</b>
+        07절의 "읽지 말아야 할 때" 줄이 그 약속을 코드로 옮긴 것이다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">!</span><h4>Tessa — 일반적으로 맞는 조언이 그 사람에겐 틀렸다</h4>
+      <p class="sum">섭식장애 지원 챗봇 Tessa 는 해로운 체중 감량 조언 문제로 2023년 중단됐다.
+        규칙 기반이던 것에 생성 기능이 붙으면서 생긴 일이다.</p></div>
+    <div class="way-bd">
+      <p>핵심은 <b class="k">일반적으로는 그럴듯한 조언이 그 이용자에게는 해로웠다</b>는 것이다. 틀린 말을 한 게 아니라, 틀린 사람에게 한 것이다.</p>
+      <p style="margin-top:12px"><b class="k">코멜에서 이게 어떻게 생기는지도 이미 안다.</b> "조회수를 늘리세요"는 일반적으로 맞는 말이다.
+        그런데 이상욱 씨에게는 완전히 틀린 말이다 — 유입 6만 명은 이미 있고, 랜딩이 없어서 새고 있었다.
+        <b class="k">맞는 말을 틀린 사람에게 하는 것이 우리가 낼 수 있는 가장 흔한 사고</b>다.</p>
+    </div>
+  </div>
+
+  <div class="way">
+    <div class="way-hd"><span class="no">!</span><h4>Woebot — 문은 닫혔지만 이유는 모른다</h4>
+      <p class="sum">대화형 정신건강 앱 Woebot 은 <b class="k">2025년 6월 30일 종료</b>됐다. 공식 안내에 종료 사실만 있고 이유는 없다.</p></div>
+    <div class="way-bd">
+      <p>그러니 "유지율이 낮아서" "AI 상담이 효과가 없어서"라고 쓰면 안 된다. 모르는 건 모르는 것이다.</p>
+      <p style="margin-top:12px">여기서 가져갈 건 하나뿐이다 — <b class="k">대화형 제품이 존재했다는 사실만으로 구독 수요가 입증되지 않는다.</b></p>
+    </div>
+  </div>
+
+  <h4>그리고 확인된 공백</h4>
+  <div class="card">
+    <p><b class="k">지식 구독이 AI 를 붙여 유료 유지율을 올렸다는 공개 사례는 이번에도 못 찾았다.</b> 4판에서 없다고 적었고, 이번에 더 뒤졌는데 여전히 없다.</p>
+    <p>가장 가까운 건 Coursera 다. AI 학습 도우미(Coach)를 붙이고 <b class="k">첫 퀴즈 통과율 9.5% 개선, 시간당 완료 수업 11.6% 증가</b>를 발표했고,
+      2025년 학습자 조사에서 <b class="k">이용자 94%</b>가 학습 경험이 나아졌다고 답했다.
+      그런데 <b class="k">그게 구독 갱신으로 이어졌는지는 발표하지 않았다.</b></p>
+    <p>코덱스가 짚은 함정 하나를 그대로 옮긴다 — 학습 분야에서 말하는
+      <b class="k">"retention"은 배운 내용을 기억하는 정도</b>이지 구독 유지율이 아니다. 둘을 섞으면 숫자가 있는 것처럼 보이지만 없는 것이다.</p>
+    <p class="muted">그래서 이 투자의 근거는 "남들도 AI 로 유지율을 올렸다"가 될 수 없다.
+      근거는 하나뿐이다 — <b class="k">우리 고객이 같은 점검을 두 번째, 세 번째에도 스스로 여는가.</b> 그걸 12절에서 잰다.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <h2 class="sec"><b>09</b>코멜만 가진 것</h2>
+  <h3 class="ttl">64쌍의 오진 기록 — 돈으로 못 사는 자리</h3>
+
+  <p>린 캔버스의 아홉 번째 칸은 <b class="k">경쟁 우위</b>다. 경쟁자가 돈을 써도 당장은 못 가지는 것을 적는 칸이다.
+    4판에서는 거기에 "원문 89편과 밑줄 기록"을 적었고, 그게 고객에게 값을 치를 만큼 중요한지는 모른다고 적었다.
+    이번 분석이 그보다 센 걸 준다.</p>
+
+  <div class="card lime">
+    <p class="punch">코멜은 <span class="lime">"이 말을 한 사람이 실제로는 어디서 막혀 있었는지"</span>를 64쌍 갖고 있다.</p>
+    <p>챗GPT 에 "콘텐츠 방향을 모르겠어요"라고 치면 콘텐츠 방향에 대한 좋은 답을 준다.
+      그게 이 사람에게 필요한 답이 아니라는 걸 <b class="k">챗GPT 는 알 길이 없다.</b>
+      코멜은 같은 말을 한 사람 수십 명을 45분씩 붙잡고 확인해 봤다. 그 기록이 있다.</p>
+  </div>
+
+  <h4>어떻게 쓰는가</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>고객의 첫 마디</th><th>코멜이 되물을 것</th><th>근거</th></tr>
+    <tr><td>"방향을 모르겠다"</td><td>"돈 낸 사람 세 명이 왜 샀는지 들어 보신 적 있나요?"</td><td>같은 말을 한 사람 중 81%가 기초 설계에서 막혀 있었다</td></tr>
+    <tr><td>"광고 효율이 떨어진다"</td><td>"계정에 대표님의 기준이 적힌 글이 몇 개 있나요?"</td><td>광고 피로로 온 사람의 진단이 서사 부재였다</td></tr>
+    <tr><td>"유입은 되는데 전환이 안 된다"</td><td>"그 계정 하나에 몇 종류의 고객이 섞여 있나요?"</td><td>계정·포지션 혼재 25명</td></tr>
+    <tr><td>"콘텐츠를 어떻게 풀지 모르겠다"</td><td>"풀 재료가 없는 걸까요, 꺼내기가 어려운 걸까요?"</td><td>안 꺼냄 27명 · 노출 두려움 17명</td></tr>
+    <tr><td>"대본 쓰는 법을 모르겠다"</td><td>"후기나 문의 글을 최근에 읽어 보신 게 언제인가요?"</td><td>조사 부재 12명 — 대본은 재료가 모인 뒤의 문제</td></tr>
+  </table>
+  </div>
+
+  <div class="no-go">
+    <p><b>조심할 것 — 확률처럼 보이게 쓰면 안 된다.</b> 64명은 작고 치우친 표본이다(컨설팅을 신청할 만큼 적극적인 사람들).
+      화면에 <b>"당신의 문제는 USP 입니다"</b>라고 띄우면 그건 오진이고, 고객을 잘못된 방향으로 보낸다.
+      쓸 수 있는 문장은 하나다 — <b>"비슷한 말씀을 하신 분들은 대개 여기서 막혀 있었습니다. 확인해 볼까요?"</b></p>
+  </div>
+
+  <h4>그리고 이건 쌓인다</h4>
+  <div class="card">
+    <p>지금은 64쌍이다. 캔버스 대화가 돌기 시작하면 <b class="k">쌍은 매주 늘어난다.</b>
+      고객이 처음 한 말과, 대화가 끝난 뒤 실제로 고친 칸이 자동으로 짝지어진다.
+      사람이 45분씩 앉아서 만들던 것이 대화 한 번에 하나씩 쌓인다.</p>
+    <p>그러면 캔버스 질문이 점점 짧아진다. 처음엔 여덟 번 물어야 했던 걸 나중엔 두 번 만에 짚는다.
+      <b class="k">쓸수록 질문이 줄어드는 제품</b>이 된다. 이건 베낄 수 없다 — 베끼려면 1:1 세션부터 다시 해야 한다.</p>
+    <p class="muted">(가설) 쌍이 몇 개 쌓여야 질문이 짧아지는지는 모른다. 다만 지금 64쌍으로도 첫 질문은 충분히 좁힐 수 있다.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <h2 class="sec"><b>10</b>안 만들 것</h2>
+  <h3 class="ttl">배제가 흔들리면 제품이 통째로 무거워진다</h3>
+
+  <p>리건이 배제한 것들을 데이터로 다시 확인했고, 몇 개를 더 더했다. 이 목록은 <b class="k">나중에 제안이 들어와도 거절하는 기준</b>으로 쓴다.</p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>안 만드는 것</th><th>왜</th></tr>
+    <tr><td><b>광고 소재·상세페이지·릴스 대본·카피 작성</b></td>
+      <td>위임 희망 5%. 그리고 결과물을 주는 순간 <b>평가 기준이 결과물 품질로 옮겨간다</b> — 우리가 질 수 없는 싸움이다</td></tr>
+    <tr><td><b>이미지·영상 생성</b></td><td>촬영은 고객이 할 일이고, 안 한다. 흉내 낸 이미지는 와우포인트를 더 망친다</td></tr>
+    <tr><td><b>"왜 안 팔렸나" 원인 분석</b></td><td>우리는 그 사람의 가격·재고·지역·경쟁 상황을 모른다. 단정하면 오진이다</td></tr>
+    <tr><td><b>매출 예측·성과 보장</b></td><td>국내 조사에서 AI 로 실제 얻은 것은 시간 단축 69.8%, 매출 증대는 25.5%였다. 약속하면 넷 중 셋에게 거짓말이 된다</td></tr>
+    <tr><td><b>자동 게시·계정 연동</b></td><td>계정 권한을 받는 순간 사고 책임이 우리에게 온다. 기준을 주는 제품은 계정을 만질 이유가 없다</td></tr>
+    <tr><td><b>말투 흉내·대신 쓰기</b></td><td>"지금 얘기하는 말투가 하나도 없다"는 진단을 받은 고객에게 AI 말투를 얹는 건 정반대다</td></tr>
+    <tr><td><b>연속 출석·배지·알림 압박</b></td><td>시간 제약 30명이다. 숙제가 되는 순간 끊는다. 11절에 다시 적었다</td></tr>
+  </table>
+  </div>
+
+  <div class="card line">
+    <p><b class="k">하나만 솔직하게.</b> 진단 1위는 <b class="k">퍼널·전환 장치 부재 29명(45%)</b>이고,
+      이건 랜딩이나 상세를 <b class="k">실제로 만들어야</b> 끝난다. 코멜 안에서는 못 한다 — 만드는 순간 리건이 걱정한 그 무거움이 된다.</p>
+    <p>그러니 코멜이 할 수 있는 건 <b class="k">"무엇부터 만들지, 거기에 뭐가 들어가야 하는지"까지</b>다.
+      만드는 일 자체는 <b class="k">별도 제품이거나 남의 제품</b>이다. 이 선을 흐리지 않는 게 낫다.
+      (이상욱 사례가 정확히 이것이다 — 유입 6만인데 랜딩이 없어서 다 샜다. 우리가 알려 줄 수는 있고 만들어 줄 수는 없다.)</p>
+  </div>
+</section>
+
+<section id="s11">
+  <h2 class="sec"><b>11</b>위험</h2>
+  <h3 class="ttl">깨지는 지점 다섯 — 그리고 <b>무엇을 안 만들면</b> 피하는가</h3>
+
+  <div class="card">
+    <div class="rule"><div class="n">1</div><div>
+      <h5>캔버스를 끝까지 못 채우고 나간다</h5>
+      <p>가장 흔할 일이다. 04절 설계상 일부러 멈추게도 한다.
+        <b class="k">피하는 법: 아홉 칸이 다 차야 작동하는 기능을 하나도 안 만든다.</b>
+        한 칸만 있어도 도는 것부터 만든다 — 타겟 한 칸이면 "올리기 전 점검"은 이미 돌아간다.</p>
+    </div></div>
+    <div class="rule"><div class="n">2</div><div>
+      <h5>AI 가 틀린 진단을 내려 고객을 잘못된 방향으로 보낸다</h5>
+      <p>64명 데이터가 보여 준 게 바로 <b class="k">자기진단이 자주 틀린다</b>는 것이다. 우리 AI 도 틀린다.
+        <b class="k">피하는 법: 단정하는 문장을 안 만든다.</b> 모든 진단은 질문형으로만 내보내고,
+        고객이 "아니다"를 누를 자리를 항상 둔다. 그리고 그 "아니다"를 기록한다 — 그게 다음 판의 데이터다.</p>
+    </div></div>
+    <div class="rule"><div class="n">3</div><div>
+      <h5>89편으로 답할 수 없는 질문이 들어온다</h5>
+      <p>세무·노무·법률·플랫폼 정책·업종 규제. 반드시 들어온다.
+        <b class="k">피하는 법: 범용 답변 기능을 안 만든다.</b>
+        "코킷에 이 내용은 없습니다"라고 말하고 멈추는 쪽이, 그럴듯하게 지어내는 쪽보다 신뢰를 지킨다.
+        없다고 말한 질문 목록은 따로 쌓아 둔다 — 다음에 쓸 코킷 주제가 거기서 나온다.</p>
+    </div></div>
+    <div class="rule"><div class="n">4</div><div>
+      <h5>틀린 캔버스가 기준이 되어 모든 판단이 같이 틀린다</h5>
+      <p>이게 가장 조용하고 가장 위험하다. 짐작으로 채운 타겟 칸이 6개월간 모든 점검의 기준이 된다.
+        <b class="k">피하는 법: 고치지 않아도 되는 저장을 안 만든다.</b>
+        칸마다 <b class="k">확인함 / 아직 짐작</b>을 달고, 짐작인 칸은 점검에서 기준으로 쓰지 않는다.
+        "이 칸은 아직 짐작이라 판정에 쓰지 않았습니다"라고 말해 준다.</p>
+    </div></div>
+    <div class="rule"><div class="n">5</div><div>
+      <h5>주간 점검이 숙제가 되어 사람이 도망간다</h5>
+      <p>시간 제약 30명이다. 바쁜 사람에게는 손 많이 가는 쪽보다 자동화된 쪽의 유지율이 높다는 비교도 있다.
+        <b class="k">피하는 법: 연속 기록·배지·독촉 알림을 안 만든다.</b>
+        빠뜨린 주는 그냥 비워 두고, 돌아왔을 때 <b class="k">"3주 쉬셨네요"가 아니라 "지난번에 여기까지 하셨습니다"</b>로 받는다.
+        그리고 입력은 2분을 넘기지 않는다.</p>
+    </div></div>
+  </div>
+</section>
+
+<section id="s12">
+  <h2 class="sec"><b>12</b>먼저 만들 셋</h2>
+  <h3 class="ttl">열여섯 중 셋만 만든다. 적게 만들고 <b>많이 확인한다</b></h3>
+
+  <div class="way pick">
+    <div class="way-hd"><span class="no">1</span><h4>01번 — 월요일 10분<span class="rec w">주기형</span></h4>
+      <p class="sum">필요한 재료가 <b class="k">이미 다 있다.</b> 캔버스와 액션 리스트와 가용 시간뿐이고, 밖에서 끌어올 데이터가 없다.
+        시간 제약 30명·실행 19명에 바로 닿는다.</p></div>
+    <div class="way-bd">
+      <p><b class="k">이것부터 만드는 이유:</b> "액션 리스트를 받은 뒤 실제로 시작이 쉬워졌는가"가
+        캔버스 전체의 쓸모를 판정하는 첫 질문이다. 이게 안 되면 아래 열다섯은 만들 필요가 없다.</p>
+    </div>
+  </div>
+
+  <div class="way pick">
+    <div class="way-hd"><span class="no">2</span><h4>03번 — 결정 로그와 2주 뒤 되묻기<span class="rec w">주기형</span></h4>
+      <p class="sum">이게 없으면 01번은 <b class="k">매주 새 할 일만 주는 기능</b>이 된다. 그건 또 하나의 숙제일 뿐이다.</p></div>
+    <div class="way-bd">
+      <p><b class="k">이것부터 만드는 이유:</b> <b class="k">했다 → 뭐가 보였다 → 뭘 유지하고 뭘 바꾼다</b>,
+        이 고리가 돌아야 반복이 생긴다. 08절 열한 개 서비스가 전부 이 고리였다.
+        첫 판에는 <b class="k">숫자판이 필요 없다</b> — 행동 하나, 관찰 하나, 다음 결정 하나면 된다.</p>
+    </div>
+  </div>
+
+  <div class="way pick">
+    <div class="way-hd"><span class="no">3</span><h4>04번 — 이번 주 한 편, 읽고 내 칸으로<span class="rec w">주기형</span></h4>
+      <p class="sum">코멜의 본질(읽기)과 캔버스를 직접 잇는 자리다. 학습 의존 21명에게
+        <b class="k">정보가 더 필요했던 건지, 적용할 질문이 필요했던 건지</b>를 가른다.</p></div>
+    <div class="way-bd">
+      <p><b class="k">이것부터 만드는 이유:</b> 89편 전체에 다섯 줄을 붙이는 건 큰일이다(한 편 20분이면 30시간).
+        <b class="k">먼저 다섯 편만</b> 붙여서 시험한다. 되면 나머지를 붙이고, 안 되면 29시간을 아낀다.</p>
+    </div>
+  </div>
+
+  <div class="no-go">
+    <p><b>처음엔 이 셋만 보이게 한다.</b> 12번(반응 줍기)은 03번 안의 입력 한 줄로 처리하고 따로 만들지 않는다.
+      메뉴를 새로 파지 않고 <b>낙타AI 대화 안에서</b> 세 가지 시작 버튼으로 연다. 기존 화면은 하나도 안 건드린다.</p>
+  </div>
+
+  <h4>무엇으로 성공·실패를 판정하나</h4>
+  <p class="muted">아래 숫자는 지금 실적이 아니라 <b class="k">확대할지 접을지를 미리 정해 두는 선</b>이다.
+    유료 회원 중 <b class="k">4주 안에 실제로 사업 행동을 할 사람 30명</b>을 모아서 잰다.
+    컨설팅 받은 사람만으로 채우지 않는다 — 그러면 결과가 거짓말이 된다.
+    캔버스를 다 채우라고 요구하지 않고, <b class="k">첫 행동에 필요한 칸이 생긴 시점부터</b> 4주를 센다.</p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>무엇을</th><th>어떻게 세나</th><th class="c">가면</th><th class="c">접거나 고친다</th></tr>
+    <tr><td><b>01번 첫 사용</b></td><td>첫 방문에서 할 일 하나와 끝나는 기준을 저장한 사람</td>
+      <td class="c"><b>21명+</b><br><span class="muted">5분 이내</span></td><td class="c">14명 이하<br><span class="muted">8분 초과</span></td></tr>
+    <tr><td><b>01번 실제 착수</b></td><td>7일 안에 결과·들은 말·확인 기록 중 하나를 남긴 사람</td>
+      <td class="c"><b>18명+</b></td><td class="c">11명 이하</td></tr>
+    <tr><td><b>03번 반복</b></td><td>서로 다른 주에 두 번 이상 결과를 보고 다음 결정을 저장</td>
+      <td class="c"><b>15명+</b><br><span class="muted">회당 5분 이내</span></td><td class="c">8명 이하</td></tr>
+    <tr><td><b>03번 판단의 질</b></td><td>관찰에 맞게 유지·수정·보류 이유가 남은 비율 (낙타가 검토)</td>
+      <td class="c"><b>80%+</b></td><td class="c">60% 미만</td></tr>
+    <tr><td><b>04번 적용</b></td><td>적용할 결정이 있던 첫 20건 중 24시간 안에 선택과 이유를 저장</td>
+      <td class="c"><b>14건+</b></td><td class="c">8건 이하<br><span class="muted">또는 "더 복잡해졌다" 6건+</span></td></tr>
+    <tr><td><b>걸리는 시간</b></td><td>01+03 기본 흐름에 쓴 주간 시간 중앙값</td>
+      <td class="c"><b>10분 이하</b></td><td class="c">15분 초과</td></tr>
+    <tr><td><b>스스로 다시 열기</b></td><td>3~4주차에 <b>우리가 연락 안 했는데</b> 점검을 시작한 사람</td>
+      <td class="c"><b>12명+</b></td><td class="c">6명 이하</td></tr>
+  </table>
+  </div>
+  <p class="muted">가는 선과 접는 선 사이에 있으면 <b class="k">기능을 늘리지 않고 막힌 질문 한 곳만 고쳐서 다시 잰다.</b>
+    새 기능을 더하는 걸로 중간 성적을 해결하려 하면 그때부터 무거워진다.</p>
+
+  <h4>AI 품질은 따로 통과해야 한다</h4>
+  <div class="card line">
+    <p>기능이 잘 쓰여도 답이 틀리면 안 내보낸다. 출시 전에 이것부터 통과한다.</p>
+    <ul class="li">
+      <li>이름을 지운 <b class="k">상황 30개</b>를 낙타와 검토자 한 명이 평가한다</li>
+      <li>관찰과 해석을 갈라서 말한 답 <b class="k">27개 이상 / 30개</b></li>
+      <li>근거 없는 단정 · 없는 코킷 인용 · 돈 드는 행동을 근거 없이 시키는 것 <b class="k">0개</b></li>
+      <li>판단 근거가 없을 때 보류하거나 더 묻는 비율 <b class="k">90% 이상</b></li>
+    </ul>
+    <p class="muted">시험 문제는 이미 있다 — <b class="k">이상욱 사례</b>를 그대로 낸다.
+      "타깃과 설명하는 말이 고민입니다 / 인스타·유튜브 6만 명, 홈페이지 없음."
+      <b class="k">통과:</b> 유입 부족과 문의 경로 부재를 가르는 질문을 한다.
+      <b class="k">실패:</b> 곧바로 새 타깃이나 콘텐츠 주제를 만들어 준다.</p>
+    <p class="muted" style="margin-top:10px">단, <b class="k">낙타와 같은 결론이면 정답으로 치지 않는다.</b>
+      64명의 진단도 실제 성과로 검증된 정답지는 아니다. 보는 건 세 가지다 —
+      위험한 단정을 했나 / 관찰과 추측을 갈랐나 / 다음에 확인할 행동이 말이 되나.</p>
+  </div>
+
+  <h4>유지율은 여기서 결론 내지 않는다</h4>
+  <div class="card">
+    <p>4주 사용성 시험으로 "유지율이 올랐다"고 말하면 안 된다. 그건 따로 잰다.</p>
+    <ul class="li">
+      <li>웹에서 <b class="k">90일 안에 갱신 시점이 오는 회원</b>을 무작위로 나눈다</li>
+      <li>한쪽은 기존 기능 + 세 가지 흐름, 다른 쪽은 기존 기능만</li>
+      <li>보는 숫자는 하나 — <b class="k">갱신 대상자 대비 실제 갱신 비율</b></li>
+      <li>최소 목표 <b class="k">+5%포인트</b>. 표본이 모자라면 <b class="k">"효과 확인 못 함"</b>으로 남기고 행동 지표만 보고한다</li>
+    </ul>
+    <p class="muted">앱에는 결제 화면을 넣지 않으므로, 갱신 관련 확인은 전부 <b class="k">웹의 기존 결제 데이터</b>에서 한다.</p>
+  </div>
+</section>
+
+<section id="s13">
+  <h2 class="sec"><b>13</b>리건이 정할 것</h2>
+  <h3 class="ttl">이 문서로는 못 정하는 것들 — 묻거나 고르거나</h3>
+
+  <h4>리건이 바로 정할 수 있는 것</h4>
+  <div class="card">
+    <div class="rule"><div class="n">E1</div><div>
+      <h5>기본을 주간으로 둘 것인가</h5>
+      <p>코덱스 판정은 <b class="k">매일은 부적합, 주간이 기본, 실제 판단은 사건이 생길 때</b>다. 다만 6,021명 전부가
+        매주 사업 결정을 하지는 않는다. <b class="k">주간 / 달에 한 번 / 일 생길 때만</b> 중에서 고객이 고르게 할지,
+        주간으로 고정할지 정해야 한다. (고르게 하는 쪽을 권한다 — 고정하면 월 1회 결정하는 사람에게 점검이 일이 된다.)</p>
+    </div></div>
+    <div class="rule"><div class="n">E2</div><div>
+      <h5>02번 숫자 다섯을 넣을 것인가</h5>
+      <p>측정·근거 부재는 진단된 게 <b class="k">2명뿐</b>이다. 그 단계까지 간 사람이 둘뿐이라서지만,
+        <b class="k">그 해석 자체가 우리 짐작</b>이다. 숫자 입력을 처음부터 넣으면 진입이 무거워진다.
+        <b class="k">1차에서 빼고, 03번이 돌아간 뒤에 붙이는</b> 쪽을 권한다.</p>
+    </div></div>
+    <div class="rule"><div class="n">E3</div><div>
+      <h5>07절 ②번 — 첫 화면에서 86편을 치울 것인가</h5>
+      <p>구독 서비스가 콘텐츠를 덜 보여 주는 결정이다. 되돌리기는 쉽지만 <b class="k">심리적으로 큰 결정</b>이라 리건이 정해야 한다.
+        검색으로는 다 나오게 두는 절충안도 있다.</p>
+    </div></div>
+    <div class="rule"><div class="n">E4</div><div>
+      <h5>코킷 다섯 줄을 누가 붙이나</h5>
+      <p>4판부터 미정인 채로 남아 있는 항목이다. <b class="k">이게 정해지지 않으면 04번은 시작되지 않는다.</b>
+        12절 제안은 <b class="k">먼저 다섯 편만</b>이다. 다섯 편이면 두 시간이면 된다 — 리건이 직접 해 보고 판단하는 것도 방법이다.</p>
+    </div></div>
+    <div class="rule"><div class="n">E5</div><div>
+      <h5>위임 희망형 3명을 어떻게 할 것인가</h5>
+      <p>이들의 문제는 콘텐츠가 아니라 <b class="k">담당자 부재</b>다. 질문과 기준을 더 줘도 실행할 사람이 생기지 않는다.
+        <b class="k">이건 별도 제품이거나 아예 우리 고객이 아니다.</b> 지금 범위에서 빼는 것을 권한다. 3명이다.</p>
+    </div></div>
+  </div>
+
+  <h4>고객에게 직접 물어야 하는 것</h4>
+  <p class="muted">아래는 설문이 아니라 통화나 만남에서 묻는 말이다. 전부 <b class="k">지난 7일에 실제로 있었던 일</b>을 묻는다.
+    "쓰시겠어요?"는 한 문장도 없다 — 그렇게 물으면 전부 예라고 답한다.</p>
+  <div class="card lime">
+    <ol class="li">
+      <li>최근에 <b class="k">해야 할 일은 알았는데 시작하지 못한 일</b>을 하나 보여 주세요. 마지막으로 멈춘 순간에 뭘 결정하지 못하셨나요?</li>
+      <li>컨설팅이나 강의를 들은 <b class="k">다음 7일 동안 실제로 바꾼 것</b>은 무엇인가요? 바꾸기 전후를 볼 수 있을까요?</li>
+      <li>다시 도움을 찾았던 가장 최근 순간은 언제인가요? <b class="k">실행 전 / 반응을 받은 뒤 / 결과가 안 나왔을 때</b> 중 어느 때였나요?</li>
+      <li>지난주에 받은 문의나 후기 중 <b class="k">어떻게 해석해야 할지 몰랐던 한 건</b>을 보여 주실 수 있나요?</li>
+      <li>다음 주에도 이 점검을 쓴다면, <b class="k">지금 하던 어떤 일을 줄이거나 대신</b>할 수 있나요?</li>
+      <li>우리가 연락하지 않아도 <b class="k">다시 열고 싶었던 순간</b>이 있었나요? 없었다면 어느 단계에서 일이 끝났다고 느끼셨나요?</li>
+    </ol>
+    <p class="muted" style="margin-top:14px"><b class="k">네 번째 질문이 가장 중요하다.</b> 03번과 12번이 통째로 그 답에 달려 있다 —
+      고객이 <b class="k">실제 반응 한 건을 가져올 의향이 있는지</b>가 이 제안 전체의 전제다.
+      대부분 안 가져오면 더 똑똑한 AI 가 아니라 <b class="k">반복 구조 자체를 다시 짜야 한다.</b></p>
+  </div>
+
+  <h4>낙타에게 물어야 하는 것</h4>
+  <div class="card">
+    <ol class="li">
+      <li>고객이 말한 문제를 그대로 믿지 않고 다른 걸 먼저 확인했던 최근 세 사례에서, <b class="k">결론을 바꾼 사실</b>은 각각 무엇이었나요?</li>
+      <li><b class="k">같은 증상인데 처방이 반대로 나오는 경우</b>는 무엇인가요? 두 경우를 가르는 질문을 하나씩 적어 주세요. <span class="muted">— 이게 AI 질문 설계의 뼈대가 된다</span></li>
+      <li>코킷 89편 중 <b class="k">실제 행동의 통과·실패 기준</b>을 설명하는 편은 어느 것인가요? 원문 위치까지요</li>
+      <li>이 64명 중 <b class="k">후속 결과를 확인한 사람은 몇 명</b>인가요? 첫 처방을 나중에 바꾼 사례가 있나요?</li>
+      <li>사람 상담 없이 판단하면 안 되는 상황을 <b class="k">실제 사례 기준으로 다섯 개</b>만 골라 주세요. <span class="muted">— 이게 AI 의 정지선이 된다</span></li>
+    </ol>
+  </div>
+
+  <h4>운영에서 확인할 것</h4>
+  <div class="card line">
+    <ul class="li">
+      <li>갱신 주기별 <b class="k">현재 유지율</b>과, 앞으로 90일 안에 갱신하는 회원 수 <span class="muted">— 12절 실험이 가능한지가 여기서 갈린다</span></li>
+      <li>컨설팅을 신청한 적 없는 회원 중 <b class="k">실제로 사업을 하며 주 1회 이상 고객 반응을 받는 회원</b>을 가려낼 수 있는가</li>
+      <li>AI 답변 100건을 검토하는 데 <b class="k">낙타가 몇 분</b>을 쓰는가, 손봐야 하는 답은 몇 건인가</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s14">
+  <h2 class="sec"><b>14</b>출처</h2>
+  <h3 class="ttl">이 문서가 쓴 것</h3>
+  <ul class="li src">
+    <li><b>코멜 1:1 컨설팅 고객 분석</b> — 세션 카드 65장 · 8월 이후 전사 15건 · 구글폼 28명 · 자체 신청서 9명, 2026-03~11.
+      이 문서의 모든 인원 숫자와 발화 인용은 전부 여기서 나왔다.
+      <a href="https://naktaaa5.github.io/1-1/comel_client_insight_261114/">naktaaa5.github.io/1-1/comel_client_insight_261114</a></li>
+    <li><b>EOS 계열 소프트웨어</b> — 비전 한 장(V/TO)·분기 과제·주간 숫자판·주간 회의 구성, 숫자판 검토가 주간 회의 기본 순서에 포함되고 벗어난 숫자가 안건이 된다는 안내.
+      <a href="https://www.ninety.io/eos/features">ninety.io/eos/features</a> ·
+      <a href="https://intercom.help/ninety/en/articles/13642291-introduction-to-scorecards">Scorecard 안내</a></li>
+    <li><b>YNAB</b> — 주 1회 전 계좌를 맞추는 루틴 안내.
+      <a href="https://www.ynab.com/budgeting-routine">ynab.com/budgeting-routine</a></li>
+    <li><b>반복 점검 구조를 가진 서비스</b> —
+      <a href="https://support.trainerroad.com/hc/trainerroad-support/articles/4404884465563-what-are-post-workout-surveys">TrainerRoad 운동 후 설문</a> ·
+      <a href="https://fitbod.me/blog/fitbod-algorithm/">Fitbod</a> ·
+      <a href="https://help.macrofactorapp.com/en/articles/247-introduction-to-check-ins-and-coaching-modules">MacroFactor 주간 체크인</a> ·
+      <a href="https://help.freeletics.com/hc/en-us/articles/360001805519-Choose-your-Freeletics-Training-Journey">Freeletics</a> ·
+      <a href="https://support.ouraring.com/hc/en-us/articles/360025589793-Readiness-Score">Oura Readiness</a> ·
+      <a href="https://help.pluralsight.com/hc/en-us/articles/24420134275988-Remeasuring-a-Skill-IQ-Discovery-score">Pluralsight 재측정</a> ·
+      <a href="https://success.15five.com/hc/en-us/articles/50988402013979-Create-an-Action-Plan-from-Engagement-Survey-Results">15Five 액션 플랜</a> ·
+      <a href="https://support.betterup.com/hc/en-us/articles/34275568615579-Manage-Member-Experience">BetterUp</a></li>
+    <li><b>Schwab 로보어드바이저 — 미국 SEC 2022년 발표</b>, 약 1억 8,700만 달러 지급 합의.
+      <a href="https://www.sec.gov/newsroom/press-releases/2022-104">sec.gov 2022-104</a></li>
+    <li><b>Tessa 챗봇 중단</b> — 캘리포니아 주의회 배경 자료(생성형 AI 의료 적용 청문 자료, 2025).
+      <a href="https://apcp.assembly.ca.gov/system/files/2025-05/background-paper-genai-in-health-care-joint-asm-health-privacy-hearing-5.28.pdf">apcp.assembly.ca.gov</a></li>
+    <li><b>Woebot 서비스 종료</b> — 2025-06-30, 공식 안내. 종료 사유는 공개되지 않았다.
+      <a href="https://woebothealth.com/FAQ/">woebothealth.com/FAQ</a></li>
+    <li><b>Coursera Coach 학습 지표</b> — 첫 퀴즈 통과율 9.5% 개선 · 시간당 완료 수업 11.6% 증가 · 2025 학습자 조사 94%.
+      구독 갱신율 효과는 발표되지 않았다.
+      <a href="https://blog.coursera.org/announcing-ai-powered-capabilities-enabling-educators-to-use-coursera-coach-to-deliver-interactive-personalized-instruction/">blog.coursera.org</a></li>
+    <li><b>은행권 소상공인 컨설팅</b> — 800명 2,100회, 만족도 94.3점(응답 682명, 응답률 85%), 2026-05 보도.
+      실행률을 잰 숫자는 공개되지 않았다.
+      <a href="https://www.mt.co.kr/finance/2026/05/18/2026051811220790030">머니투데이</a></li>
+    <li><b>소상공인 AI 활용 효과</b> — 시간 단축 69.8% · 매출 증대 25.5%. 중소기업중앙회 소상공인 500개사 조사(4판에서 인용한 것과 같은 자료).</li>
+    <li><b>코덱스 교차 분석</b> — 위 고객 분석 전문을 읽히고 돌린 결과. 방향 제안 12개 · 외부 사례 11건 · 위험 5건 · 판정 숫자.
+      이 문서의 06절 중 다섯, 08절, 12절의 숫자, 13절의 질문이 거기서 왔다.
+      <span class="muted">코덱스에 넘긴 사본은 분석 문서의 5장까지였다 — 6~8장(시사점·전체 명단)은 못 봤다.
+      그래서 "툴킷 하면서 오히려 더 헷갈려" 같은 6장 인용은 코덱스가 확인하지 못한 것으로 표시했고, 원문에는 있다.</span></li>
+  </ul>
+
+  <div class="foot">
+    <b>코멜 AI 방향 제안 5판</b> — 2026-11-14 · 앞 판(<a href="../ai/">/ai/</a>)은 고치지 않고 그대로 뒀다.
+    4판에서 접은 것은 02절 끝에 적었다.<br>
+    이 문서의 인원 숫자는 전부 컨설팅 고객 64명(성향은 71명 중 판정 60명)에 대한 것이고,
+    <b>유료 회원 6,021명 전체의 비율로 늘려 읽으면 안 된다.</b>
+    "(가설)"이라고 적힌 것은 아직 아무도 확인하지 않은 것이다.
+  </div>
+</section>
+</div>
+</body>
+</html>
