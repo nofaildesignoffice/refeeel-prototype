@@ -283,6 +283,33 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 .jump:active{background:var(--brand);color:var(--brand-ink);}
 @media (max-width:720px){.jump{display:block;}}
 @media print{.jump{display:none!important;}}
+
+/* ── 넓은 화면: 차례를 왼쪽에 고정 ─────────── */
+@media (min-width:1080px){
+  .wrap{max-width:1200px;padding:0 36px 120px 330px;}
+  .toc{position:fixed;top:0;bottom:0;left:max(0px,calc((100vw - 1200px) / 2));
+    width:290px;margin:0;padding:34px 24px 40px 32px;
+    background:var(--bg-white);border:0;border-right:var(--card-line);
+    border-radius:0;overflow-y:auto;overscroll-behavior:contain;z-index:40;}
+  .toc h2{font-size:10.5px;letter-spacing:1.4px;}
+  .toc ol{display:block;margin-top:14px;gap:0;}
+  .toc li{font-size:13.5px;border-top:0;}
+  .toc a{display:flex;align-items:baseline;gap:2px;padding:7px 10px 7px 8px;
+    border-radius:var(--radius-sm);color:var(--text-gray);line-height:1.55;}
+  .toc a:hover{background:var(--bg-light);color:var(--text-black);}
+  .toc span{width:25px;flex:0 0 25px;}
+  .toc a.on{background:var(--brand-soft);color:var(--text-black);font-weight:800;}
+  .toc a.on span{color:var(--brand-press);}
+  .hd{padding:46px 0 30px;}
+  .hd h1{font-size:33px;}
+  section{margin-bottom:62px;scroll-margin-top:24px;}
+  h4{margin-top:34px;}
+  .foot{margin-top:72px;}
+}
+@media (min-width:1440px){
+  .wrap{max-width:1290px;padding-left:344px;}
+  .toc{left:max(0px,calc((100vw - 1290px) / 2));width:300px;}
+}
 </style>
 </head>
 <body>
@@ -776,5 +803,22 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 </div>
 <a href="#toc" class="jump">차례</a>
 
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('#toc a'));
+  var tg=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  function pick(){
+    var cur=links[0];
+    for(var i=0;i<links.length;i++){
+      if(tg[i] && tg[i].getBoundingClientRect().top<=140) cur=links[i];
+    }
+    for(var j=0;j<links.length;j++) links[j].classList.toggle('on',links[j]===cur);
+  }
+  var f=0;
+  addEventListener('scroll',function(){ if(f) return; f=requestAnimationFrame(function(){f=0;pick();}); },{passive:true});
+  addEventListener('resize',pick,{passive:true});
+  pick();
+})();
+</script>
 </body>
 </html>
