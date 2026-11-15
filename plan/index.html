@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>캔버스를 채운 뒤 무엇을 파는가 · 결론</title>
+<meta name="description" content="코멜 캔버스 24칸으로 만들 비즈니스모델 10가지와 고객이 손에 쥐는 아웃풋 7가지. 제안만 적은 결론판.">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.22);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);
+  color:var(--text-black);-webkit-font-smoothing:antialiased;
+  font-size:15.5px;line-height:1.85;letter-spacing:-0.25px;}
+a{color:inherit;}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px 120px;}
+
+/* 머리 */
+.hd{padding:52px 0 30px;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--text-light);}
+.hd h1{font-size:31px;font-weight:800;letter-spacing:-1.1px;line-height:1.35;margin-top:12px;}
+.hd h1 em{font-style:normal;background:linear-gradient(transparent 60%,var(--brand-soft) 60%);}
+.hd .sub{font-size:16px;line-height:1.9;color:var(--text-dark);margin-top:18px;}
+.hd .meta{margin-top:22px;padding-top:16px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);display:flex;flex-wrap:wrap;gap:6px 16px;}
+.hd .meta b{font-weight:700;color:var(--text-gray);}
+
+/* 차례 */
+.toc{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:18px 20px;margin-bottom:38px;}
+.toc h2{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+.toc ol{margin:10px 0 0;padding-left:0;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 20px;}
+.toc li{font-size:13.5px;}
+.toc a{text-decoration:none;color:var(--text-dark);}
+.toc a:hover{background:var(--brand-soft);}
+.toc span{display:inline-block;width:22px;font-weight:800;color:var(--text-muted);}
+
+/* 절 */
+section{margin-bottom:52px;scroll-margin-top:18px;}
+h2.sec{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+h2.sec b{display:inline-block;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 6px;margin-right:8px;letter-spacing:0.4px;}
+h3.ttl{font-size:23px;font-weight:800;letter-spacing:-0.8px;line-height:1.45;margin-top:9px;}
+h4{font-size:17px;font-weight:800;letter-spacing:-0.5px;margin-top:30px;}
+h5{font-size:15.5px;font-weight:800;letter-spacing:-0.4px;}
+p{margin-top:14px;color:var(--text-dark);}
+.muted{color:var(--text-gray);font-size:13.5px;}
+b.k{font-weight:800;color:var(--text-black);}
+mark{background:var(--brand-soft);color:inherit;padding:0 2px;border-radius:2px;}
+
+.card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:20px 22px;margin-top:18px;}
+.card.lime{border-color:var(--brand);background:var(--bg-light);}
+.card.dark{background:var(--bg-black);border-color:var(--bg-black);}
+.card.dark p,.card.dark li{color:#E8E8E8;}
+.card.dark b.k,.card.dark h4,.card.dark h5{color:var(--bg-white);}
+.card.dark .cap{color:#9A9A9A;}
+.card.line{border-style:dashed;border-color:var(--border-default);background:none;}
+.card h4,.card h5{margin-top:0;}
+.card p:first-child{margin-top:0;}
+.cap{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+
+.punch{font-size:19.5px;font-weight:800;line-height:1.7;letter-spacing:-0.6px;color:var(--text-black);}
+.card.dark .punch{color:var(--bg-white);}
+.punch .lime{background:linear-gradient(transparent 58%,var(--brand) 58%);}
+.punch .y{color:var(--brand);}
+
+/* 표 */
+.tb{width:100%;border-collapse:collapse;margin-top:18px;font-size:13.5px;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;}
+.tb th,.tb td{text-align:left;padding:11px 13px;border-bottom:var(--card-line);
+  vertical-align:top;line-height:1.7;}
+.tb th{background:var(--bg-light);font-weight:800;font-size:12px;color:var(--text-black);white-space:nowrap;}
+.tb tr:last-child td{border-bottom:0;}
+.tb td b{font-weight:800;}
+.tb .c{text-align:center;white-space:nowrap;}
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.scrollx .tb{min-width:640px;}
+
+.pill{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:2px 9px;border:1px solid var(--border-default);color:var(--text-gray);
+  background:var(--bg-white);white-space:nowrap;}
+.pill.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.pill.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.pill.hi{border-color:var(--text-black);color:var(--text-black);}
+
+ul.li,ol.li{margin-top:14px;padding-left:19px;}
+ul.li li,ol.li li{margin-top:8px;color:var(--text-dark);}
+ul.li li::marker{color:var(--text-muted);}
+ol.li li::marker{font-weight:800;color:var(--text-muted);}
+
+/* 메모 → 결과물 */
+.turn{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:14px;overflow:hidden;}
+.turn .in{padding:16px 20px 15px;border-bottom:var(--card-line);}
+.turn .in .cap{display:block;margin-bottom:8px;}
+.turn .in .q{font-size:14.5px;font-weight:700;line-height:1.7;color:var(--text-black);}
+.turn .in .q::before{content:"“";display:block;font-size:24px;font-weight:800;line-height:.7;
+  color:var(--brand-press);margin-bottom:6px;}
+.turn .in .from{display:block;margin-top:10px;font-size:11.5px;color:var(--text-light);font-weight:700;}
+.turn .out{padding:16px 20px 18px;background:var(--bg-light);}
+.turn .out .cap{display:block;margin-bottom:9px;}
+.turn .out ul{margin:0;padding-left:17px;}
+.turn .out li{font-size:13.5px;line-height:1.75;margin-top:6px;color:var(--text-dark);}
+.turn .out li:first-child{margin-top:0;}
+.turn .out li b{font-weight:800;color:var(--text-black);}
+
+/* 갈래 */
+.way{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:18px;overflow:hidden;}
+.way-hd{padding:18px 22px 16px;border-bottom:var(--card-line);}
+.way-hd .no{display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:26px;padding:0 7px;border-radius:var(--radius-full);
+  background:var(--bg-black);color:var(--bg-white);font-size:12px;font-weight:800;}
+.way-hd h4{display:inline;font-size:18px;margin-left:10px;}
+.way-hd .sum{margin-top:12px;font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.way-bd{padding:4px 22px 20px;}
+.way-bd .blk{margin-top:18px;}
+.way-bd .blk>.cap{display:block;margin-bottom:8px;}
+.way-bd p{font-size:14px;margin-top:0;line-height:1.8;}
+.way-bd ul{margin:0;padding-left:17px;}
+.way-bd li{font-size:14px;line-height:1.8;margin-top:6px;color:var(--text-dark);}
+.scr{background:var(--bg-light);border:var(--card-line);border-radius:var(--radius-md);
+  padding:14px 16px;font-size:13.5px;line-height:1.8;}
+.scr .ln{display:block;}
+.scr .ln+.ln{margin-top:7px;}
+.scr b{font-weight:800;}
+.scr .btn{display:inline-block;background:var(--bg-black);color:var(--bg-white);
+  border-radius:var(--radius-full);padding:3px 12px;font-size:12px;font-weight:800;margin-top:4px;}
+.scr .btn.y{background:var(--brand);color:var(--brand-ink);}
+.way.pick{border-color:var(--brand);border-width:2px;}
+.way.pick .way-hd{background:var(--bg-light);}
+.way.no-go .way-hd{background:#FAFAFA;}
+.verdict{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:3px 10px;margin-left:8px;vertical-align:2px;}
+.verdict.a{background:var(--brand);color:var(--brand-ink);}
+.verdict.b{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.verdict.c{background:var(--bg-black);color:var(--bg-white);}
+
+/* 규칙 */
+.rule{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:16px 0;border-top:var(--card-line);}
+.rule:first-of-type{border-top:0;}
+.rule .n{font-size:15px;font-weight:800;color:var(--brand-press);}
+.rule p{margin-top:7px;font-size:14px;}
+
+/* 단계 */
+.step{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:18px 0;border-top:var(--card-line);}
+.step:first-of-type{border-top:0;}
+.step .when{font-size:13.5px;font-weight:800;}
+.step .when span{display:block;font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
+.step p{margin-top:9px;font-size:14px;}
+
+.src{font-size:12.5px;line-height:1.85;color:var(--text-gray);}
+.src li{margin-top:8px;}
+.src a{color:var(--text-dark);text-decoration:underline;text-underline-offset:2px;}
+
+.foot{margin-top:60px;padding-top:22px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);line-height:1.9;}
+
+@media (max-width:560px){
+  .hd{padding:36px 0 24px;}
+  .hd h1{font-size:25px;}
+  h3.ttl{font-size:20px;}
+  .wrap{padding:0 16px 90px;}
+  .step{grid-template-columns:1fr;gap:4px;}
+  .way-hd,.way-bd{padding-left:17px;padding-right:17px;}
+}
+
+/* 이 문서에서 더한 것 */
+.rec{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:0.6px;
+  border-radius:var(--radius-full);padding:2px 9px;margin-left:8px;vertical-align:2px;white-space:nowrap;}
+.rec.w{background:var(--brand);color:var(--brand-ink);}
+.rec.e{background:var(--bg-black);color:var(--bg-white);}
+.rec.o{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.spec{display:grid;grid-template-columns:76px 1fr;gap:4px 12px;margin-top:14px;
+  font-size:13px;line-height:1.75;}
+.spec dt{font-weight:800;color:var(--text-light);font-size:11px;letter-spacing:0.6px;padding-top:3px;}
+.spec dd{color:var(--text-dark);}
+.spec dd b{font-weight:800;color:var(--text-black);}
+@media (max-width:560px){.spec{grid-template-columns:1fr;gap:2px;}.spec dt{margin-top:9px;}}
+.layer{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px;}
+.lrow{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);
+  padding:13px 15px;display:grid;grid-template-columns:1fr 92px;gap:12px;align-items:center;}
+.lrow.keep{border-color:var(--brand);background:var(--bg-light);}
+.lrow .lt{font-size:14px;font-weight:800;letter-spacing:-0.3px;}
+.lrow .ls{font-size:12.5px;color:var(--text-gray);margin-top:4px;line-height:1.7;}
+.lrow .ln2{text-align:right;font-size:12px;font-weight:800;color:var(--text-gray);white-space:nowrap;}
+.lrow.keep .ln2{color:var(--brand-press);}
+.quo{border-left:3px solid var(--brand);padding:2px 0 2px 14px;margin-top:14px;
+  font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.quo b{display:block;font-size:11.5px;font-weight:800;color:var(--text-light);margin-top:7px;letter-spacing:0.4px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px;margin-top:16px;}
+.gcard{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);padding:15px 17px;}
+.gcard .cap{display:block;margin-bottom:7px;}
+.gcard p{margin-top:0;font-size:13.5px;line-height:1.75;}
+.gcard p+p{margin-top:8px;}
+.no-go{background:#FAFAFA;border:1px dashed var(--border-default);border-radius:var(--radius-md);
+  padding:14px 16px;margin-top:12px;}
+.no-go p{margin-top:0;font-size:13.5px;color:var(--text-gray);}
+.no-go b{color:var(--text-black);font-weight:800;}
+
+/* ── 모바일 ─────────────────────────── */
+html{-webkit-text-size-adjust:100%;}
+body{overflow-wrap:break-word;word-break:keep-all;}
+
+@media (max-width:720px){
+  /* 표를 카드로 눕힌다 — 가로 스크롤 없이 */
+  .scrollx{overflow:visible;-webkit-overflow-scrolling:auto;}
+  .scrollx .tb{min-width:0;}
+  .tb{display:block;border:0;background:none;border-radius:0;overflow:visible;font-size:14px;}
+  .tb tbody{display:block;}
+  .tb tr{display:block;background:var(--bg-white);border:var(--card-line);
+    border-radius:var(--radius-md);margin-top:10px;padding:4px 0;}
+  .tb tr:first-child{display:none;}
+  .tb td{display:block;border:0;padding:8px 15px;line-height:1.72;white-space:normal;}
+  .tb td:empty{display:none;}
+  .tb td::before{content:attr(data-l);display:block;font-size:10px;font-weight:800;
+    letter-spacing:0.9px;color:var(--text-light);margin-bottom:3px;}
+  .tb td[data-l=""]::before,.tb td:not([data-l])::before{display:none;}
+  .tb td:first-child{padding-top:12px;font-size:15px;font-weight:800;letter-spacing:-0.3px;
+    color:var(--text-black);border-bottom:var(--card-line);padding-bottom:11px;margin-bottom:3px;}
+  .tb td:first-child::before{display:none;}
+  .tb td:first-child b{font-weight:800;}
+  .tb td:last-child{padding-bottom:13px;}
+  .tb .c{text-align:left;white-space:normal;}
+  .tb td .pill{margin-top:2px;}
+
+  /* 차례 — 손가락으로 누를 수 있게 */
+  .toc{padding:16px 18px;}
+  .toc ol{grid-template-columns:1fr;gap:0;}
+  .toc li{font-size:15px;border-top:var(--card-line);}
+  .toc li:first-child{border-top:0;}
+  .toc a{display:block;padding:11px 0;}
+  .toc span{width:26px;}
+
+  /* 읽기 */
+  body{font-size:15.5px;line-height:1.82;}
+  .punch{font-size:17.5px;line-height:1.65;}
+  .hd h1{font-size:24px;letter-spacing:-0.9px;}
+  .hd .sub{font-size:15.5px;}
+  h3.ttl{font-size:19.5px;}
+  h4{font-size:16.5px;}
+  section{margin-bottom:40px;scroll-margin-top:12px;}
+  .card{padding:17px 17px;border-radius:var(--radius-md);}
+  .scr{padding:13px 14px;font-size:13.5px;line-height:1.85;}
+  .scr .btn{padding:3px 10px;margin-top:3px;}
+  .spec{font-size:13.5px;}
+  .grid2{grid-template-columns:1fr;}
+  .gcard{padding:15px 16px;}
+  .lrow{grid-template-columns:1fr auto;}
+  .layer{gap:7px;}
+  .rule{grid-template-columns:24px 1fr;gap:10px;}
+  .turn .in,.turn .out{padding-left:16px;padding-right:16px;}
+  .quo{padding-left:12px;}
+  .src a{word-break:break-all;}
+  ul.li,ol.li{padding-left:17px;}
+}
+
+@media (max-width:420px){
+  .hd h1{font-size:22px;}
+  .punch{font-size:16.5px;}
+  .way-hd h4{font-size:16.5px;}
+  .tb td:first-child{font-size:14.5px;}
+}
+
+/* 차례로 돌아가는 단추 */
+.jump{display:none;position:fixed;right:14px;bottom:18px;z-index:50;
+  background:var(--bg-black);color:var(--bg-white);text-decoration:none;
+  font-size:12.5px;font-weight:800;letter-spacing:-0.2px;
+  padding:11px 15px;border-radius:var(--radius-full);
+  box-shadow:0 2px 10px rgba(0,0,0,0.18);min-height:44px;line-height:22px;}
+.jump:active{background:var(--brand);color:var(--brand-ink);}
+@media (max-width:720px){.jump{display:block;}}
+@media print{.jump{display:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hd">
+  <div class="kick">코멜 · 캔버스 결론</div>
+  <h1>캔버스를 채운 뒤 <em>무엇을 파는가</em></h1>
+  <p class="sub">결론만 적었다. 근거와 고객 분석은 <a href="../next/">5판 본문</a>에 있다.</p>
+  <div class="meta">
+    <span><b>작성</b> 2026-11-15</span>
+    <span><b>본문</b> <a href="../next/">/next/</a></span>
+    <span><b>캔버스</b> <a href="../canvas/">/canvas/</a></span>
+  </div>
+</div>
+
+<section>
+  <h2 class="sec"><b>01</b>바뀌지 않는 선</h2>
+  <div class="card lime">
+    <ul class="li">
+      <li><b class="k">대행하지 않는다.</b> 직접 하는 일을 빨리 끝내게 한다.</li>
+      <li><b class="k">기획까지 하고 제작은 안 한다.</b> 소재 각을 정하는 건 기획, 이미지를 뽑는 건 제작이다.</li>
+      <li><b class="k">모든 아웃풋은 고객의 24칸에서만 나온다.</b> 칸이 비면 멈추고 그 칸을 묻는다.</li>
+    </ul>
+  </div>
+  <p class="muted">캔버스 1장은 텍스트 24칸이다. 린 캔버스 9칸, 비즈니스 모델 캔버스 9칸, 밸류 프로포지션 캔버스 6칸.</p>
+</section>
+
+<section>
+  <h2 class="sec"><b>02</b>비즈니스모델 10가지</h2>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>비즈니스모델</th><th>나오는 것</th><th>언제</th></tr>
+    <tr><td data-l="비즈니스모델"><b>01 캔버스 진단서</b></td><td data-l="나오는 것">막힌 칸 3개와 왜 막혔는지. 채점은 무료, 풀이는 유료 회원</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>02 컨설팅 사전 서류</b></td><td data-l="나오는 것">상담 전에 읽는 1장 요약. 같은 1시간을 본론에 쓴다</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>03 고객의 말 서랍</b></td><td data-l="나오는 것">고칠 자리마다 바꿔 쓸 후보 2개. 재료는 고객이 쓴 말뿐</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>04 가격·비용 점검</b></td><td data-l="나오는 것">1건 팔면 얼마 남는지, 어긋난 칸</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>05 캔버스 변화 기록</b></td><td data-l="나오는 것">어느 칸이 몇 번 바뀌었나</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>06 코킷 처방</b></td><td data-l="나오는 것">지금 읽을 2편과 읽고 고칠 칸 1개</td><td data-l="언제"><span class="rec w">1장</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>07 같은 칸 비교</b></td><td data-l="나오는 것">같은 업종 사람들이 그 칸에 쓴 예시 3개. 누가 썼는지는 지운다</td><td data-l="언제"><span class="rec e">쌓여야</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>08 업종별 기준선</b></td><td data-l="나오는 것">업종마다 가장 많이 비는 칸</td><td data-l="언제"><span class="rec e">쌓여야</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>09 막힌 칸이 같은 사람 모임</b></td><td data-l="나오는 것">4~5명 방 1개. 한 번에 다루는 칸은 1개</td><td data-l="언제"><span class="rec e">쌓여야</span></td></tr>
+    <tr><td data-l="비즈니스모델"><b>10 기관 납품</b></td><td data-l="나오는 것">반 진행 상황판, 수료 기준, 강사용 요약</td><td data-l="언제"><span class="rec o">별도</span></td></tr>
+  </table>
+  </div>
+  <p class="muted"><span class="rec w">1장</span> 고객 1명 캔버스로 된다 ·
+    <span class="rec e">쌓여야</span> 수십 장 모여야 된다 ·
+    <span class="rec o">별도</span> 코멜 안에 넣으면 무거워진다.</p>
+</section>
+
+<section>
+  <h2 class="sec"><b>03</b>고객이 손에 쥐는 아웃풋 7가지</h2>
+  <p>02절 10가지는 전부 아래 7가지 중 하나로 끝난다. 어디에도 안 닿는 기능은 만들지 않는다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>실무</th><th>나오는 것</th><th>여기서 멈춘다</th></tr>
+    <tr><td data-l="실무"><b>인스타 콘텐츠</b></td><td data-l="나오는 것">주제 3개, 주제마다 첫 문장 후보 2개, 올리기 전 확인 질문 3개</td><td data-l="여기서 멈춘다">사진 · 영상 · 완성 원고</td></tr>
+    <tr><td data-l="실무"><b>블로그</b></td><td data-l="나오는 것">제목 후보 5개, 목차 틀, 쓴 뒤 공급자 언어 표시</td><td data-l="여기서 멈춘다">본문 대필 · 검색량 숫자</td></tr>
+    <tr><td data-l="실무"><b>랜딩페이지 기획</b></td><td data-l="나오는 것">9칸을 랜딩 순서로 놓은 기획서 1장, 빈 자리 목록</td><td data-l="여기서 멈춘다">디자인 · 개발</td></tr>
+    <tr><td data-l="실무"><b>광고소재 기획</b></td><td data-l="나오는 것">소재 각 5개, 각마다 첫 문장 후보 2개</td><td data-l="여기서 멈춘다">이미지 생성 · 계정 운영 · 예산 집행</td></tr>
+    <tr><td data-l="실무"><b>객단가 수정</b></td><td data-l="나오는 것">1건당 남는 돈, 올릴 때 같이 바뀌어야 하는 칸</td><td data-l="여기서 멈춘다">금액을 정해 주는 것</td></tr>
+    <tr><td data-l="실무"><b>마케팅 전략 기획</b></td><td data-l="나오는 것">12주 순서표, 주마다 할 일 1개</td><td data-l="여기서 멈춘다">매출 목표 · 예측</td></tr>
+    <tr><td data-l="실무"><b>광고 성과 분석</b></td><td data-l="나오는 것">끊긴 단계 1개와 그 단계에 해당하는 캔버스 칸</td><td data-l="여기서 멈춘다">원인 단정 · 광고 계정 연동</td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><b>04</b>먼저 만들 3가지</h2>
+  <div class="card">
+    <div class="rule"><div class="n">1</div><div>
+      <h5>월요일 10분</h5>
+      <p>코멜이 먼저 세 가지를 묻고, <b class="k">이번 주 할 일 1개</b>만 남기고 닫는다. 버튼으로만 답한다.</p>
+    </div></div>
+    <div class="rule"><div class="n">2</div><div>
+      <h5>결정 기록</h5>
+      <p>한 일, 본 것, 다음 결정을 한 줄씩 남기고 <b class="k">2주 뒤에 다시 묻는다.</b> 첫 판에는 숫자판을 넣지 않는다.</p>
+    </div></div>
+    <div class="rule"><div class="n">3</div><div>
+      <h5>이번 주 한 편</h5>
+      <p>코킷 1편을 읽고 <b class="k">내 칸 1개를 고친다.</b> 89편 전체가 아니라 먼저 5편만 붙여서 시험한다.</p>
+    </div></div>
+  </div>
+  <p class="muted">메뉴를 새로 파지 않는다. 낙타AI 대화 안에서 시작 버튼 3개로 연다. 기존 화면은 건드리지 않는다.</p>
+</section>
+
+<section>
+  <h2 class="sec"><b>05</b>만들지 않을 것</h2>
+  <div class="card line">
+    <ul class="li">
+      <li>광고 소재 · 상세페이지 · 릴스 대본 · 카피를 <b>빈 화면에서 뽑아 주는 것</b></li>
+      <li>이미지 · 영상 생성</li>
+      <li>왜 안 팔렸는지 원인 단정</li>
+      <li>매출 예측 · 성과 보장</li>
+      <li>자동 게시 · 광고 계정 연동</li>
+      <li>말투 흉내</li>
+      <li>연속 출석 · 배지 · 독촉 알림</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><b>06</b>지금 안 맞춰 두면 나중에 못 고치는 것</h2>
+  <div class="card lime">
+    <p><b class="k">24칸을 한 덩어리 글로 저장하지 않는다.</b> 칸 단위로 쪼개서 저장하고,
+      <b class="k">업종 태그</b>와 <b class="k">칸별 공개 동의</b>를 처음부터 같이 받는다.</p>
+    <p>이걸 안 해 두면 07번 같은 칸 비교와 08번 업종별 기준선을 나중에 소급해서 못 만든다.
+      첫 기능 하나를 만들 때 이 세 가지만 지키면 된다.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><b>07</b>리건이 정할 것</h2>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>정할 것</th><th>권하는 쪽</th></tr>
+    <tr><td data-l="정할 것"><b>점검 주기를 주간으로 고정할까</b></td><td data-l="권하는 쪽">고객이 고르게 한다. 주간 / 월 1회 / 일 생길 때</td></tr>
+    <tr><td data-l="정할 것"><b>숫자 5개 입력을 1차에 넣을까</b></td><td data-l="권하는 쪽">뺀다. 결정 기록이 돌아간 뒤에 붙인다</td></tr>
+    <tr><td data-l="정할 것"><b>첫 화면에서 나머지 편을 치울까</b></td><td data-l="권하는 쪽">치운다. 검색으로는 다 나오게 둔다</td></tr>
+    <tr><td data-l="정할 것"><b>코킷 5줄을 누가 붙일까</b></td><td data-l="권하는 쪽">먼저 5편만. 리건이 직접 해 보고 정한다</td></tr>
+    <tr><td data-l="정할 것"><b>대행을 원하는 고객을 받을까</b></td><td data-l="권하는 쪽">지금 범위에서 뺀다. 별도 제품이다</td></tr>
+  </table>
+  </div>
+</section>
+
+<div class="foot">
+  <b>코멜 · 캔버스 결론</b> 2026-11-15. 제안만 적었다.
+  근거, 고객 분석, 기능 16가지, 판정 기준은 <a href="../next/">5판 본문</a>에 있다.
+</div>
+
+</div>
+</body>
+</html>
