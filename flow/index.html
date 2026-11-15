@@ -814,8 +814,8 @@ body{overflow-wrap:break-word;word-break:keep-all;}
     }
     for(var j=0;j<links.length;j++) links[j].classList.toggle('on',links[j]===cur);
   }
-  var f=0;
-  addEventListener('scroll',function(){ if(f) return; f=requestAnimationFrame(function(){f=0;pick();}); },{passive:true});
+  var last=0;
+  addEventListener('scroll',function(){ var n=Date.now(); if(n-last<80) return; last=n; pick(); },{passive:true});
   addEventListener('resize',pick,{passive:true});
   pick();
 })();
