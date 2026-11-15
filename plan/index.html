@@ -399,7 +399,112 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 </section>
 
 <section>
-  <h2 class="sec"><b>04</b>먼저 만들 3가지</h2>
+  <h2 class="sec"><b>04</b>개발 없이 먼저 테스트한다</h2>
+  <p>02절 11가지를 지금 개발하면 오래 걸린다. <b class="k">6주 중 4주는 코드를 한 줄도 안 쓴다.</b>
+    고객은 자동인지 사람이 한 건지 모른다. 알 필요도 없다.
+    우리가 확인할 것은 기능이 되는지가 아니라 <b class="k">고객이 받은 걸 실제로 쓰는지</b>다.</p>
+
+  <svg viewBox="0 0 380 512" style="display:block;width:100%;max-width:420px;margin:22px auto 6px;font-family:inherit" role="img" aria-label="6주 테스트 순서 4단계">
+    <!-- 1 -->
+    <rect x="0.5" y="4.5" width="379" height="108" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14" y="18" width="70" height="22" rx="11" fill="#DFF000"/>
+    <text x="49" y="33.5" font-size="12" font-weight="800" fill="#1A1A1A" text-anchor="middle">0주차</text>
+    <text x="96" y="35" font-size="14.5" font-weight="800" fill="#1A1A1A">뭘 원하는지만 묻는다</text>
+    <text x="96" y="58" font-size="11.8" fill="#555555">11가지 이름만 보내고</text>
+    <text x="96" y="76" font-size="11.8" fill="#555555">1개를 고르게 한다</text>
+    <text x="96" y="96" font-size="11.8" font-weight="800" fill="#1A1A1A">개발 0 · 메일 1통</text>
+    <line x1="49" y1="114" x2="49" y2="130" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M45 128 L49 136 L53 128 Z" fill="#1A1A1A"/>
+    <!-- 2 -->
+    <rect x="0.5" y="136.5" width="379" height="108" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14" y="150" width="70" height="22" rx="11" fill="#DFF000"/>
+    <text x="49" y="165.5" font-size="12" font-weight="800" fill="#1A1A1A" text-anchor="middle">1~2주차</text>
+    <text x="96" y="167" font-size="14.5" font-weight="800" fill="#1A1A1A">뒤에서 사람이 만든다</text>
+    <text x="96" y="190" font-size="11.8" fill="#555555">캔버스를 받아 아웃풋을</text>
+    <text x="96" y="208" font-size="11.8" fill="#555555">손으로 만들어 보낸다 (10명)</text>
+    <text x="96" y="228" font-size="11.8" font-weight="800" fill="#1A1A1A">개발 0 · 캔버스 내보내기로 받는다</text>
+    <line x1="49" y1="246" x2="49" y2="262" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M45 260 L49 268 L53 260 Z" fill="#1A1A1A"/>
+    <!-- 3 -->
+    <rect x="0.5" y="268.5" width="379" height="108" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14" y="282" width="70" height="22" rx="11" fill="#DFF000"/>
+    <text x="49" y="297.5" font-size="12" font-weight="800" fill="#1A1A1A" text-anchor="middle">3~4주차</text>
+    <text x="96" y="299" font-size="14.5" font-weight="800" fill="#1A1A1A">프롬프트로 바꿔 본다</text>
+    <text x="96" y="322" font-size="11.8" fill="#555555">손으로 만든 10건을</text>
+    <text x="96" y="340" font-size="11.8" fill="#555555">프롬프트 1개로 재현한다</text>
+    <text x="96" y="360" font-size="11.8" font-weight="800" fill="#1A1A1A">개발 0 · 낙타AI 대화창에서</text>
+    <line x1="49" y1="378" x2="49" y2="394" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M45 392 L49 400 L53 392 Z" fill="#1A1A1A"/>
+    <!-- 4 -->
+    <rect x="0.5" y="400.5" width="379" height="108" rx="14" fill="#FBFDEF" stroke="#DFF000" stroke-width="2"/>
+    <rect x="14" y="414" width="70" height="22" rx="11" fill="#1A1A1A"/>
+    <text x="49" y="429.5" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">5~6주차</text>
+    <text x="96" y="431" font-size="14.5" font-weight="800" fill="#1A1A1A">화면 1개만 만든다</text>
+    <text x="96" y="454" font-size="11.8" fill="#555555">가장 많이 고른 1개만</text>
+    <text x="96" y="472" font-size="11.8" fill="#555555">낙타 대화 안의 버튼으로</text>
+    <text x="96" y="492" font-size="11.8" font-weight="800" fill="#1A1A1A">여기서 처음 개발한다</text>
+  </svg>
+
+  <h4 style="margin-top:30px">1~2주차에 실제로 일어나는 일</h4>
+  <p class="muted">고객이 보는 자리와 우리가 일하는 자리를 가른다. 새로 만드는 화면은 없다.</p>
+
+  <svg viewBox="0 0 380 286" style="display:block;width:100%;max-width:420px;margin:16px auto 6px;font-family:inherit" role="img" aria-label="고객과 코멜 내부를 가르는 손작업 흐름">
+    <line x1="190" y1="8" x2="190" y2="270" stroke="#D0D0D0" stroke-width="1.4" stroke-dasharray="5 5"/>
+    <text x="92" y="22" font-size="11" font-weight="800" fill="#999999" text-anchor="middle">고객이 보는 것</text>
+    <text x="288" y="22" font-size="11" font-weight="800" fill="#999999" text-anchor="middle">고객이 못 보는 자리</text>
+
+    <rect x="12.5" y="40.5" width="160" height="58" rx="12" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="92" y="66" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">① 고객이</text>
+    <text x="92" y="85" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">캔버스를 낸다</text>
+
+    <line x1="174" y1="69" x2="204" y2="69" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M202 65 L210 69 L202 73 Z" fill="#1A1A1A"/>
+
+    <rect x="208.5" y="40.5" width="160" height="58" rx="12" fill="#FBFDEF" stroke="#DFF000" stroke-width="2"/>
+    <text x="288" y="66" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">② 리건·낙타가</text>
+    <text x="288" y="85" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">손으로 만든다</text>
+
+    <line x1="288" y1="100" x2="288" y2="124" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M284 122 L288 130 L292 122 Z" fill="#1A1A1A"/>
+
+    <rect x="208.5" y="132.5" width="160" height="52" rx="12" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="288" y="164" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">③ 메일·DM으로 보낸다</text>
+
+    <path d="M208 158 L92 158 L92 198" fill="none" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M88 196 L92 204 L96 196 Z" fill="#1A1A1A"/>
+
+    <rect x="12.5" y="206.5" width="160" height="58" rx="12" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.6"/>
+    <text x="92" y="232" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">④ 고객이 쓴다</text>
+    <text x="92" y="251" font-size="11.5" fill="#555555" text-anchor="middle">썼는지만 센다</text>
+  </svg>
+
+  <h4 style="margin-top:30px">10명으로 판정한다</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tr><th>재는 것</th><th>어떻게 세나</th><th class="c">만든다</th><th class="c">접는다</th></tr>
+    <tr><td data-l="재는 것"><b>캔버스를 끝까지 냈나</b></td><td data-l="어떻게 세나">보낸 10명 중 아웃풋에 필요한 칸을 채워 보낸 사람</td>
+      <td class="c" data-l="만든다"><b>7명+</b></td><td class="c" data-l="접는다">4명 이하</td></tr>
+    <tr><td data-l="재는 것"><b>받은 걸 실제로 썼나</b></td><td data-l="어떻게 세나">7일 안에 올렸거나 고친 사람. 본인이 보여 주는 것으로 센다</td>
+      <td class="c" data-l="만든다"><b>5명+</b></td><td class="c" data-l="접는다">2명 이하</td></tr>
+    <tr><td data-l="재는 것"><b>또 달라고 했나</b></td><td data-l="어떻게 세나">우리가 연락하지 않았는데 다음 주에 먼저 요청한 사람</td>
+      <td class="c" data-l="만든다"><b>3명+</b></td><td class="c" data-l="접는다">1명 이하</td></tr>
+  </table>
+  </div>
+  <p class="muted">가는 선과 접는 선 사이에 있으면 기능을 늘리지 않고 <b class="k">질문 한 곳만 고쳐서 다시 잰다.</b></p>
+
+  <div class="card line">
+    <ul class="li">
+      <li><b class="k">10명은 컨설팅 받은 사람으로만 채우지 않는다.</b> 그러면 결과가 거짓말이 된다.</li>
+      <li><b class="k">손으로 만든 것이 프롬프트로 재현되지 않으면</b> 그 번호는 아직 자동화할 수 없다.
+        02절 09번 1:1 컨설팅 쪽으로 보내고, 제품에서는 뺀다.</li>
+      <li><b class="k">6주 안에 만드는 화면은 1개다.</b> 11가지를 다 만들지 않는다. 고객이 고른 1개만 남는다.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><b>05</b>먼저 만들 3가지</h2>
+  <p class="muted">04절 테스트를 통과한 다음의 순서다. 아래 3가지는 아웃풋을 파는 자리가 아니라 <b class="k">고객이 매주 돌아오게 하는 흐름</b>이다.</p>
   <div class="card">
     <div class="rule"><div class="n">1</div><div>
       <h5>월요일 10분</h5>
@@ -418,7 +523,7 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 </section>
 
 <section>
-  <h2 class="sec"><b>05</b>만들지 않을 것</h2>
+  <h2 class="sec"><b>06</b>만들지 않을 것</h2>
   <div class="card line">
     <ul class="li">
       <li>광고 소재 · 상세페이지 · 릴스 대본 · 카피를 <b>빈 화면에서 뽑아 주는 것</b></li>
@@ -433,7 +538,7 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 </section>
 
 <section>
-  <h2 class="sec"><b>06</b>지금 안 맞춰 두면 나중에 못 고치는 것</h2>
+  <h2 class="sec"><b>07</b>지금 안 맞춰 두면 나중에 못 고치는 것</h2>
   <div class="card lime">
     <p><b class="k">24칸을 한 덩어리 글로 저장하지 않는다.</b> 칸 단위로 쪼개서 저장하고,
       <b class="k">업종 태그</b>와 <b class="k">칸별 공개 동의</b>를 처음부터 같이 받는다.</p>
@@ -443,7 +548,7 @@ body{overflow-wrap:break-word;word-break:keep-all;}
 </section>
 
 <section>
-  <h2 class="sec"><b>07</b>리건이 정할 것</h2>
+  <h2 class="sec"><b>08</b>리건이 정할 것</h2>
   <div class="scrollx">
   <table class="tb">
     <tr><th>정할 것</th><th>권하는 쪽</th></tr>
