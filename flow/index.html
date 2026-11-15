@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>낙타AI 진단과 액션리스트 · 고객 플로우</title>
+<meta name="description" content="낙타AI가 대화로 진단하고 막힌 칸에 맞는 액션 1개를 주는 코멜 고객 플로우. 진단 지도 12칸, 액션 구조, 새로 만들 화면.">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+
+:root{
+  --text-black:#1A1A1A; --text-dark:#333333; --text-gray:#666666; --text-light:#999999; --text-muted:#BCBCBC;
+  --bg-white:#FFFFFF; --bg-light:#FBFDEF; --bg-dark:#2D2D2D; --bg-black:#1A1A1A;
+  --border-light:#E0E0E0; --border-default:#D0D0D0;
+  --radius-xs:4px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:9999px;
+  --brand:#DFF000; --brand-ink:#1A1A1A; --brand-press:#C7D600;
+  --brand-soft:rgba(223,240,0,0.22);
+  --card-line:1px solid var(--border-light);
+  --page:#F2F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);
+  color:var(--text-black);-webkit-font-smoothing:antialiased;
+  font-size:15.5px;line-height:1.85;letter-spacing:-0.25px;}
+a{color:inherit;}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px 120px;}
+
+/* 머리 */
+.hd{padding:52px 0 30px;}
+.hd .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--text-light);}
+.hd h1{font-size:31px;font-weight:800;letter-spacing:-1.1px;line-height:1.35;margin-top:12px;}
+.hd h1 em{font-style:normal;background:linear-gradient(transparent 60%,var(--brand-soft) 60%);}
+.hd .sub{font-size:16px;line-height:1.9;color:var(--text-dark);margin-top:18px;}
+.hd .meta{margin-top:22px;padding-top:16px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);display:flex;flex-wrap:wrap;gap:6px 16px;}
+.hd .meta b{font-weight:700;color:var(--text-gray);}
+
+/* 차례 */
+.toc{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:18px 20px;margin-bottom:38px;}
+.toc h2{font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+.toc ol{margin:10px 0 0;padding-left:0;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 20px;}
+.toc li{font-size:13.5px;}
+.toc a{text-decoration:none;color:var(--text-dark);}
+.toc a:hover{background:var(--brand-soft);}
+.toc span{display:inline-block;width:22px;font-weight:800;color:var(--text-muted);}
+
+/* 절 */
+section{margin-bottom:52px;scroll-margin-top:18px;}
+h2.sec{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--text-light);}
+h2.sec b{display:inline-block;background:var(--brand);color:var(--brand-ink);
+  border-radius:var(--radius-xs);padding:1px 6px;margin-right:8px;letter-spacing:0.4px;}
+h3.ttl{font-size:23px;font-weight:800;letter-spacing:-0.8px;line-height:1.45;margin-top:9px;}
+h4{font-size:17px;font-weight:800;letter-spacing:-0.5px;margin-top:30px;}
+h5{font-size:15.5px;font-weight:800;letter-spacing:-0.4px;}
+p{margin-top:14px;color:var(--text-dark);}
+.muted{color:var(--text-gray);font-size:13.5px;}
+b.k{font-weight:800;color:var(--text-black);}
+mark{background:var(--brand-soft);color:inherit;padding:0 2px;border-radius:2px;}
+
+.card{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  padding:20px 22px;margin-top:18px;}
+.card.lime{border-color:var(--brand);background:var(--bg-light);}
+.card.dark{background:var(--bg-black);border-color:var(--bg-black);}
+.card.dark p,.card.dark li{color:#E8E8E8;}
+.card.dark b.k,.card.dark h4,.card.dark h5{color:var(--bg-white);}
+.card.dark .cap{color:#9A9A9A;}
+.card.line{border-style:dashed;border-color:var(--border-default);background:none;}
+.card h4,.card h5{margin-top:0;}
+.card p:first-child{margin-top:0;}
+.cap{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-light);}
+
+.punch{font-size:19.5px;font-weight:800;line-height:1.7;letter-spacing:-0.6px;color:var(--text-black);}
+.card.dark .punch{color:var(--bg-white);}
+.punch .lime{background:linear-gradient(transparent 58%,var(--brand) 58%);}
+.punch .y{color:var(--brand);}
+
+/* 표 */
+.tb{width:100%;border-collapse:collapse;margin-top:18px;font-size:13.5px;
+  background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);overflow:hidden;}
+.tb th,.tb td{text-align:left;padding:11px 13px;border-bottom:var(--card-line);
+  vertical-align:top;line-height:1.7;}
+.tb th{background:var(--bg-light);font-weight:800;font-size:12px;color:var(--text-black);white-space:nowrap;}
+.tb tr:last-child td{border-bottom:0;}
+.tb td b{font-weight:800;}
+.tb .c{text-align:center;white-space:nowrap;}
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.scrollx .tb{min-width:640px;}
+
+.pill{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:2px 9px;border:1px solid var(--border-default);color:var(--text-gray);
+  background:var(--bg-white);white-space:nowrap;}
+.pill.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
+.pill.ink{background:var(--bg-black);border-color:var(--bg-black);color:var(--bg-white);}
+.pill.hi{border-color:var(--text-black);color:var(--text-black);}
+
+ul.li,ol.li{margin-top:14px;padding-left:19px;}
+ul.li li,ol.li li{margin-top:8px;color:var(--text-dark);}
+ul.li li::marker{color:var(--text-muted);}
+ol.li li::marker{font-weight:800;color:var(--text-muted);}
+
+/* 메모 → 결과물 */
+.turn{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:14px;overflow:hidden;}
+.turn .in{padding:16px 20px 15px;border-bottom:var(--card-line);}
+.turn .in .cap{display:block;margin-bottom:8px;}
+.turn .in .q{font-size:14.5px;font-weight:700;line-height:1.7;color:var(--text-black);}
+.turn .in .q::before{content:"“";display:block;font-size:24px;font-weight:800;line-height:.7;
+  color:var(--brand-press);margin-bottom:6px;}
+.turn .in .from{display:block;margin-top:10px;font-size:11.5px;color:var(--text-light);font-weight:700;}
+.turn .out{padding:16px 20px 18px;background:var(--bg-light);}
+.turn .out .cap{display:block;margin-bottom:9px;}
+.turn .out ul{margin:0;padding-left:17px;}
+.turn .out li{font-size:13.5px;line-height:1.75;margin-top:6px;color:var(--text-dark);}
+.turn .out li:first-child{margin-top:0;}
+.turn .out li b{font-weight:800;color:var(--text-black);}
+
+/* 갈래 */
+.way{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-lg);
+  margin-top:18px;overflow:hidden;}
+.way-hd{padding:18px 22px 16px;border-bottom:var(--card-line);}
+.way-hd .no{display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:26px;padding:0 7px;border-radius:var(--radius-full);
+  background:var(--bg-black);color:var(--bg-white);font-size:12px;font-weight:800;}
+.way-hd h4{display:inline;font-size:18px;margin-left:10px;}
+.way-hd .sum{margin-top:12px;font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.way-bd{padding:4px 22px 20px;}
+.way-bd .blk{margin-top:18px;}
+.way-bd .blk>.cap{display:block;margin-bottom:8px;}
+.way-bd p{font-size:14px;margin-top:0;line-height:1.8;}
+.way-bd ul{margin:0;padding-left:17px;}
+.way-bd li{font-size:14px;line-height:1.8;margin-top:6px;color:var(--text-dark);}
+.scr{background:var(--bg-light);border:var(--card-line);border-radius:var(--radius-md);
+  padding:14px 16px;font-size:13.5px;line-height:1.8;}
+.scr .ln{display:block;}
+.scr .ln+.ln{margin-top:7px;}
+.scr b{font-weight:800;}
+.scr .btn{display:inline-block;background:var(--bg-black);color:var(--bg-white);
+  border-radius:var(--radius-full);padding:3px 12px;font-size:12px;font-weight:800;margin-top:4px;}
+.scr .btn.y{background:var(--brand);color:var(--brand-ink);}
+.way.pick{border-color:var(--brand);border-width:2px;}
+.way.pick .way-hd{background:var(--bg-light);}
+.way.no-go .way-hd{background:#FAFAFA;}
+.verdict{display:inline-block;font-size:11px;font-weight:800;border-radius:var(--radius-full);
+  padding:3px 10px;margin-left:8px;vertical-align:2px;}
+.verdict.a{background:var(--brand);color:var(--brand-ink);}
+.verdict.b{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.verdict.c{background:var(--bg-black);color:var(--bg-white);}
+
+/* 규칙 */
+.rule{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:16px 0;border-top:var(--card-line);}
+.rule:first-of-type{border-top:0;}
+.rule .n{font-size:15px;font-weight:800;color:var(--brand-press);}
+.rule p{margin-top:7px;font-size:14px;}
+
+/* 단계 */
+.step{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:18px 0;border-top:var(--card-line);}
+.step:first-of-type{border-top:0;}
+.step .when{font-size:13.5px;font-weight:800;}
+.step .when span{display:block;font-size:11px;font-weight:700;color:var(--text-light);margin-top:3px;}
+.step p{margin-top:9px;font-size:14px;}
+
+.src{font-size:12.5px;line-height:1.85;color:var(--text-gray);}
+.src li{margin-top:8px;}
+.src a{color:var(--text-dark);text-decoration:underline;text-underline-offset:2px;}
+
+.foot{margin-top:60px;padding-top:22px;border-top:var(--card-line);
+  font-size:12px;color:var(--text-light);line-height:1.9;}
+
+@media (max-width:560px){
+  .hd{padding:36px 0 24px;}
+  .hd h1{font-size:25px;}
+  h3.ttl{font-size:20px;}
+  .wrap{padding:0 16px 90px;}
+  .step{grid-template-columns:1fr;gap:4px;}
+  .way-hd,.way-bd{padding-left:17px;padding-right:17px;}
+}
+
+/* 이 문서에서 더한 것 */
+.rec{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:0.6px;
+  border-radius:var(--radius-full);padding:2px 9px;margin-left:8px;vertical-align:2px;white-space:nowrap;}
+.rec.w{background:var(--brand);color:var(--brand-ink);}
+.rec.e{background:var(--bg-black);color:var(--bg-white);}
+.rec.o{background:var(--bg-white);border:1px solid var(--border-default);color:var(--text-gray);}
+.spec{display:grid;grid-template-columns:76px 1fr;gap:4px 12px;margin-top:14px;
+  font-size:13px;line-height:1.75;}
+.spec dt{font-weight:800;color:var(--text-light);font-size:11px;letter-spacing:0.6px;padding-top:3px;}
+.spec dd{color:var(--text-dark);}
+.spec dd b{font-weight:800;color:var(--text-black);}
+@media (max-width:560px){.spec{grid-template-columns:1fr;gap:2px;}.spec dt{margin-top:9px;}}
+.layer{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px;}
+.lrow{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);
+  padding:13px 15px;display:grid;grid-template-columns:1fr 92px;gap:12px;align-items:center;}
+.lrow.keep{border-color:var(--brand);background:var(--bg-light);}
+.lrow .lt{font-size:14px;font-weight:800;letter-spacing:-0.3px;}
+.lrow .ls{font-size:12.5px;color:var(--text-gray);margin-top:4px;line-height:1.7;}
+.lrow .ln2{text-align:right;font-size:12px;font-weight:800;color:var(--text-gray);white-space:nowrap;}
+.lrow.keep .ln2{color:var(--brand-press);}
+.quo{border-left:3px solid var(--brand);padding:2px 0 2px 14px;margin-top:14px;
+  font-size:14.5px;line-height:1.8;color:var(--text-dark);}
+.quo b{display:block;font-size:11.5px;font-weight:800;color:var(--text-light);margin-top:7px;letter-spacing:0.4px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px;margin-top:16px;}
+.gcard{background:var(--bg-white);border:var(--card-line);border-radius:var(--radius-md);padding:15px 17px;}
+.gcard .cap{display:block;margin-bottom:7px;}
+.gcard p{margin-top:0;font-size:13.5px;line-height:1.75;}
+.gcard p+p{margin-top:8px;}
+.no-go{background:#FAFAFA;border:1px dashed var(--border-default);border-radius:var(--radius-md);
+  padding:14px 16px;margin-top:12px;}
+.no-go p{margin-top:0;font-size:13.5px;color:var(--text-gray);}
+.no-go b{color:var(--text-black);font-weight:800;}
+
+/* ── 모바일 ─────────────────────────── */
+html{-webkit-text-size-adjust:100%;}
+body{overflow-wrap:break-word;word-break:keep-all;}
+
+@media (max-width:720px){
+  /* 표를 카드로 눕힌다 — 가로 스크롤 없이 */
+  .scrollx{overflow:visible;-webkit-overflow-scrolling:auto;}
+  .scrollx .tb{min-width:0;}
+  .tb{display:block;border:0;background:none;border-radius:0;overflow:visible;font-size:14px;}
+  .tb tbody{display:block;}
+  .tb tr{display:block;background:var(--bg-white);border:var(--card-line);
+    border-radius:var(--radius-md);margin-top:10px;padding:4px 0;}
+  .tb tr:first-child{display:none;}
+  .tb td{display:block;border:0;padding:8px 15px;line-height:1.72;white-space:normal;}
+  .tb td:empty{display:none;}
+  .tb td::before{content:attr(data-l);display:block;font-size:10px;font-weight:800;
+    letter-spacing:0.9px;color:var(--text-light);margin-bottom:3px;}
+  .tb td[data-l=""]::before,.tb td:not([data-l])::before{display:none;}
+  .tb td:first-child{padding-top:12px;font-size:15px;font-weight:800;letter-spacing:-0.3px;
+    color:var(--text-black);border-bottom:var(--card-line);padding-bottom:11px;margin-bottom:3px;}
+  .tb td:first-child::before{display:none;}
+  .tb td:first-child b{font-weight:800;}
+  .tb td:last-child{padding-bottom:13px;}
+  .tb .c{text-align:left;white-space:normal;}
+  .tb td .pill{margin-top:2px;}
+
+  /* 차례 — 손가락으로 누를 수 있게 */
+  .toc{padding:16px 18px;}
+  .toc ol{grid-template-columns:1fr;gap:0;}
+  .toc li{font-size:15px;border-top:var(--card-line);}
+  .toc li:first-child{border-top:0;}
+  .toc a{display:block;padding:11px 0;}
+  .toc span{width:26px;}
+
+  /* 읽기 */
+  body{font-size:15.5px;line-height:1.82;}
+  .punch{font-size:17.5px;line-height:1.65;}
+  .hd h1{font-size:24px;letter-spacing:-0.9px;}
+  .hd .sub{font-size:15.5px;}
+  h3.ttl{font-size:19.5px;}
+  h4{font-size:16.5px;}
+  section{margin-bottom:40px;scroll-margin-top:12px;}
+  .card{padding:17px 17px;border-radius:var(--radius-md);}
+  .scr{padding:13px 14px;font-size:13.5px;line-height:1.85;}
+  .scr .btn{padding:3px 10px;margin-top:3px;}
+  .spec{font-size:13.5px;}
+  .grid2{grid-template-columns:1fr;}
+  .gcard{padding:15px 16px;}
+  .lrow{grid-template-columns:1fr auto;}
+  .layer{gap:7px;}
+  .rule{grid-template-columns:24px 1fr;gap:10px;}
+  .turn .in,.turn .out{padding-left:16px;padding-right:16px;}
+  .quo{padding-left:12px;}
+  .src a{word-break:break-all;}
+  ul.li,ol.li{padding-left:17px;}
+}
+
+@media (max-width:420px){
+  .hd h1{font-size:22px;}
+  .punch{font-size:16.5px;}
+  .way-hd h4{font-size:16.5px;}
+  .tb td:first-child{font-size:14.5px;}
+}
+
+/* 차례로 돌아가는 단추 */
+.jump{display:none;position:fixed;right:14px;bottom:18px;z-index:50;
+  background:var(--bg-black);color:var(--bg-white);text-decoration:none;
+  font-size:12.5px;font-weight:800;letter-spacing:-0.2px;
+  padding:11px 15px;border-radius:var(--radius-full);
+  box-shadow:0 2px 10px rgba(0,0,0,0.18);min-height:44px;line-height:22px;}
+.jump:active{background:var(--brand);color:var(--brand-ink);}
+@media (max-width:720px){.jump{display:block;}}
+@media print{.jump{display:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hd">
+  <div class="kick">코멜 · 고객 플로우</div>
+  <h1>낙타AI가 진단하고 <em>다음 할 일을 준다</em></h1>
+  <p class="sub">브랜딩과 마케팅을 모르는 사업자가 자기 사업의 빈 자리를 직접 보고, 이번 주에 할 일 1개를 받는 흐름이다.
+    낙타AI 진단과 액션리스트는 기획된 게 없어서 이 문서에서 처음 설계했다.
+    <b class="k">기존 와이어프레임은 한 줄도 고치지 않았다.</b></p>
+  <div class="meta">
+    <span><b>작성</b> 2026-11-15</span>
+    <span><b>앱 와이어</b> <a href="../app2/">/app2/</a></span>
+    <span><b>캔버스</b> <a href="../canvas/">/canvas/</a></span>
+    <span><b>결론판</b> <a href="../plan/">/plan/</a></span>
+  </div>
+</div>
+
+<nav class="toc" id="toc">
+  <h2>차례</h2>
+  <ol>
+    <li><a href="#s1"><span>01</span>이 서비스가 하는 일</a></li>
+    <li><a href="#s2"><span>02</span>첫 7일 고객 플로우</a></li>
+    <li><a href="#s3"><span>03</span>진단 지도 12칸</a></li>
+    <li><a href="#s4"><span>04</span>현재 위치를 어떻게 정하나</a></li>
+    <li><a href="#s5"><span>05</span>낙타AI 진단 대화 설계</a></li>
+    <li><a href="#s6"><span>06</span>진단 결과 화면</a></li>
+    <li><a href="#s7"><span>07</span>액션 1개의 구조</a></li>
+    <li><a href="#s8"><span>08</span>코킷을 고르는 규칙</a></li>
+    <li><a href="#s9"><span>09</span>그 뒤로 도는 흐름</a></li>
+    <li><a href="#s10"><span>10</span>새로 만들 화면과 손볼 화면</a></li>
+    <li><a href="#s11"><span>11</span>첫 판에 안 넣을 것</a></li>
+    <li><a href="#s12"><span>12</span>리건이 정할 것</a></li>
+  </ol>
+</nav>
+
+<section id="s1">
+  <h2 class="sec"><b>01</b>이 서비스가 하는 일</h2>
+  <p class="punch">코멜은 결과물을 만들어 주지 않는다.
+    <span class="lime">지금 뭐가 비어 있는지 보여 주고, 이번 주에 할 일 1개를 준다.</span></p>
+
+  <div class="grid2">
+    <div class="gcard">
+      <span class="cap">지금 와이어프레임</span>
+      <p><b class="k">고민을 말하면 코킷을 추천한다.</b> 낙타AI 대화는 코킷 2~3편을 골라 주고 끝난다.</p>
+      <p class="muted">읽은 다음에 뭘 해야 하는지는 고객이 알아서 정한다. 강의와 책을 이미 많이 본 사람에게는 자료가 1개 더 늘어난 것과 같다.</p>
+    </div>
+    <div class="gcard" style="border-color:var(--brand);background:var(--bg-light)">
+      <span class="cap">이 문서에서 더하는 것</span>
+      <p><b class="k">진단 → 막힌 칸 → 할 일 1개.</b> 코킷은 그 칸을 이해시키려고 붙는다.</p>
+      <p class="muted">읽는 게 목적이 아니라 <b class="k">그 칸을 채우는 게 목적</b>이다. 칸이 채워지면 지도가 바뀌고 다음 칸이 열린다.</p>
+    </div>
+  </div>
+
+  <h4>세 덩어리로만 돈다</h4>
+  <div class="layer">
+    <div class="lrow"><div><div class="lt">1 진단</div><div class="ls">낙타AI가 대화로 묻는다. 답은 캔버스 24칸에 칸별로 들어간다</div></div><div class="ln2">낙타AI</div></div>
+    <div class="lrow"><div><div class="lt">2 자기 사업을 직접 본다</div><div class="ls">12칸 지도에서 비어 있는 칸과 막힌 칸이 보인다. 점수는 매기지 않는다</div></div><div class="ln2">진단 지도</div></div>
+    <div class="lrow keep"><div><div class="lt">3 할 일</div><div class="ls">막힌 칸에 맞는 액션 1개와 코킷 1편. 끝내면 그 칸이 바뀐다</div></div><div class="ln2">액션리스트</div></div>
+  </div>
+  <p class="muted">리건이 말한 서비스의 목적은 2번이다. 1번과 3번은 2번이 일어나게 만드는 장치다.
+    그래서 진단은 <b class="k">단정하지 않고 질문으로</b> 내고, 액션은 <b class="k">한 번에 1개만</b> 낸다.</p>
+</section>
+
+<section id="s2">
+  <h2 class="sec"><b>02</b>첫 7일 고객 플로우</h2>
+  <p>가입부터 액션 1개를 끝내기까지 6단계다. 2번부터 5번까지가 새로 만드는 자리고,
+    1번과 6번은 <b class="k">지금 앱 와이어프레임에 이미 있다.</b></p>
+
+  <svg viewBox="0 0 380 686" style="display:block;width:100%;max-width:420px;margin:22px auto 6px;font-family:inherit" role="img" aria-label="가입에서 첫 액션까지 6단계 흐름">
+    <rect x="0.5" y="4.5" width="379" height="92" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14.5" y="18.5" width="52" height="22" rx="11" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="40" y="34" font-size="11.5" font-weight="800" fill="#666666" text-anchor="middle">기존</text>
+    <text x="78" y="35" font-size="14.5" font-weight="800" fill="#1A1A1A">가입하고 6가지 고른다</text>
+    <text x="16" y="60" font-size="11.8" fill="#555555">하는 일 · 분야 · 판매처 · 고민 3개 · 주제 3개</text>
+    <text x="16" y="79" font-size="11.8" font-weight="800" fill="#1A1A1A">지금 와이어프레임 그대로 쓴다</text>
+    <line x1="40" y1="97" x2="40" y2="112" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M36 110 L40 118 L44 110 Z" fill="#1A1A1A"/>
+
+    <rect x="0.5" y="120.5" width="379" height="92" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14.5" y="134.5" width="52" height="22" rx="11" fill="#DFF000"/>
+    <text x="40" y="150" font-size="11.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">신규</text>
+    <text x="78" y="151" font-size="14.5" font-weight="800" fill="#1A1A1A">낙타AI와 8분 대화</text>
+    <text x="16" y="176" font-size="11.8" fill="#555555">고른 고민에서 시작해 낙타가 되묻는다</text>
+    <text x="16" y="195" font-size="11.8" font-weight="800" fill="#1A1A1A">고객 답이 캔버스 24칸에 칸별로 저장된다</text>
+    <line x1="40" y1="213" x2="40" y2="228" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M36 226 L40 234 L44 226 Z" fill="#1A1A1A"/>
+
+    <rect x="0.5" y="236.5" width="379" height="92" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14.5" y="250.5" width="52" height="22" rx="11" fill="#DFF000"/>
+    <text x="40" y="266" font-size="11.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">신규</text>
+    <text x="78" y="267" font-size="14.5" font-weight="800" fill="#1A1A1A">진단 지도 1장</text>
+    <text x="16" y="292" font-size="11.8" fill="#555555">12칸이 채움 · 빔 · 막힘 세 가지로 표시된다</text>
+    <text x="16" y="311" font-size="11.8" font-weight="800" fill="#1A1A1A">점수와 등급은 매기지 않는다</text>
+    <line x1="40" y1="329" x2="40" y2="344" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M36 342 L40 350 L44 342 Z" fill="#1A1A1A"/>
+
+    <rect x="0.5" y="352.5" width="379" height="92" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14.5" y="366.5" width="52" height="22" rx="11" fill="#DFF000"/>
+    <text x="40" y="382" font-size="11.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">신규</text>
+    <text x="78" y="383" font-size="14.5" font-weight="800" fill="#1A1A1A">막힌 칸 3개와 질문</text>
+    <text x="16" y="408" font-size="11.8" fill="#555555">칸마다 왜 막혔는지 묻는 질문 1개가 붙는다</text>
+    <text x="16" y="427" font-size="11.8" font-weight="800" fill="#1A1A1A">원인을 단정하지 않는다</text>
+    <line x1="40" y1="445" x2="40" y2="460" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M36 458 L40 466 L44 458 Z" fill="#1A1A1A"/>
+
+    <rect x="0.5" y="468.5" width="379" height="92" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="14.5" y="482.5" width="52" height="22" rx="11" fill="#DFF000"/>
+    <text x="40" y="498" font-size="11.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">신규</text>
+    <text x="78" y="499" font-size="14.5" font-weight="800" fill="#1A1A1A">이번 주 할 일 1개</text>
+    <text x="16" y="524" font-size="11.8" fill="#555555">액션 1개와 그 칸을 다루는 코킷 1편</text>
+    <text x="16" y="543" font-size="11.8" font-weight="800" fill="#1A1A1A">나머지 2개는 제목만 보인다</text>
+    <line x1="40" y1="561" x2="40" y2="576" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M36 574 L40 582 L44 574 Z" fill="#1A1A1A"/>
+
+    <rect x="0.5" y="584.5" width="379" height="96" rx="14" fill="#FBFDEF" stroke="#DFF000" stroke-width="2"/>
+    <rect x="14.5" y="598.5" width="52" height="22" rx="11" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="40" y="614" font-size="11.5" font-weight="800" fill="#666666" text-anchor="middle">기존</text>
+    <text x="78" y="615" font-size="14.5" font-weight="800" fill="#1A1A1A">읽고 밑줄 치고 기록 남긴다</text>
+    <text x="16" y="640" font-size="11.8" fill="#555555">리더 → 완독 → 내 코킷 기록. 지금 화면 그대로</text>
+    <text x="16" y="659" font-size="11.8" font-weight="800" fill="#1A1A1A">액션을 끝내면 지도의 그 칸이 바뀐다</text>
+  </svg>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>단계</th><th>쓰는 화면</th><th>새로 만드나</th></tr>
+    <tr><td data-l="단계"><b>1 가입하고 6가지 고른다</b></td><td data-l="쓰는 화면">로그인 · 동의 · 온보딩 5화면</td><td data-l="새로 만드나"><span class="pill">그대로</span></td></tr>
+    <tr><td data-l="단계"><b>2 낙타AI와 8분 대화</b></td><td data-l="쓰는 화면">낙타AI 대화창의 되묻기 구조를 쓴다</td><td data-l="새로 만드나"><span class="pill on">새 화면 2개</span></td></tr>
+    <tr><td data-l="단계"><b>3 진단 지도</b></td><td data-l="쓰는 화면">없다</td><td data-l="새로 만드나"><span class="pill on">새 화면 1개</span></td></tr>
+    <tr><td data-l="단계"><b>4 막힌 칸 3개</b></td><td data-l="쓰는 화면">없다. 지도 화면 아래에 이어 붙인다</td><td data-l="새로 만드나"><span class="pill on">같은 화면</span></td></tr>
+    <tr><td data-l="단계"><b>5 이번 주 할 일 1개</b></td><td data-l="쓰는 화면">없다. 홈 맨 위와 낙타AI 탭에서 들어간다</td><td data-l="새로 만드나"><span class="pill on">새 화면 2개</span></td></tr>
+    <tr><td data-l="단계"><b>6 읽고 기록 남긴다</b></td><td data-l="쓰는 화면">리더 · 완독 · 내 코킷 · 인사이트</td><td data-l="새로 만드나"><span class="pill">그대로</span></td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted">첫 코킷 추천 화면(온보딩 6번째)은 자리를 옮긴다. 지금은 가입 직후에 코킷을 골라 주는데,
+    진단을 먼저 하면 <b class="k">그 추천이 진단 결과에서 나온다.</b> 화면을 지우는 게 아니라 진단 뒤로 밀어 둔다.</p>
+</section>
+
+<section id="s3">
+  <h2 class="sec"><b>03</b>진단 지도 12칸</h2>
+  <p>사업을 펼치는 순서는 사람마다 크게 다르지 않다. 그래서 진단 항목을
+    <b class="k">사업 기획 4칸 · 상품 기획 4칸 · 마케팅 기획 4칸</b>으로 고정했다.
+    12칸은 캔버스 24칸을 고객이 알아볼 말로 묶은 것이다. 새로 받는 데이터는 없다.</p>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>칸</th><th>낙타가 묻는 것</th><th>캔버스 칸</th><th>막혔다고 보는 기준</th></tr>
+    <tr><td data-l="칸"><b>1단계 · 01 고객 1명</b></td><td data-l="낙타가 묻는 것">최근에 돈을 낸 사람 1명은 누구였나</td><td data-l="캔버스 칸">린 고객군 · BMC 고객</td><td data-l="막혔다고 보는 기준">직업이나 나이대만 적혀 있고 사람 1명이 안 보인다</td></tr>
+    <tr><td data-l="칸"><b>1단계 · 02 문제와 불만</b></td><td data-l="낙타가 묻는 것">그 사람이 돈을 내기 직전에 뭐가 불편했나</td><td data-l="캔버스 칸">린 문제 · 밸류 불만</td><td data-l="막혔다고 보는 기준">우리가 짐작한 말만 있고 고객이 한 말이 없다</td></tr>
+    <tr><td data-l="칸"><b>1단계 · 03 고객의 말</b></td><td data-l="낙타가 묻는 것">고객이 실제로 한 말을 그대로 적을 수 있나</td><td data-l="캔버스 칸">밸류 고객의 일 · 기대</td><td data-l="막혔다고 보는 기준">물어본 적이 없다. 후기나 문의 글을 모아 둔 데가 없다</td></tr>
+    <tr><td data-l="칸"><b>1단계 · 04 돈 들어오는 길</b></td><td data-l="낙타가 묻는 것">지금 돈이 들어오는 길이 몇 개인가</td><td data-l="캔버스 칸">린 수익 흐름 · BMC 수익원</td><td data-l="막혔다고 보는 기준">길이 1개인데 그 1개가 남이 정한 자리다</td></tr>
+    <tr><td data-l="칸"><b>2단계 · 05 한 줄 가치</b></td><td data-l="낙타가 묻는 것">왜 하필 우리한테 사야 하나</td><td data-l="캔버스 칸">린 가치 제안 · 밸류 이득</td><td data-l="막혔다고 보는 기준">업종 설명만 있다. 남의 소개글에 넣어도 똑같이 읽힌다</td></tr>
+    <tr><td data-l="칸"><b>2단계 · 06 상품 구성</b></td><td data-l="낙타가 묻는 것">파는 것이 몇 개고 서로 어떻게 이어지나</td><td data-l="캔버스 칸">린 해결책</td><td data-l="막혔다고 보는 기준">상품이 나열만 되어 있고 처음 사는 것이 정해져 있지 않다</td></tr>
+    <tr><td data-l="칸"><b>2단계 · 07 가격과 남는 돈</b></td><td data-l="낙타가 묻는 것">1건 팔면 얼마가 남나</td><td data-l="캔버스 칸">린 비용 구조 · 수익 흐름</td><td data-l="막혔다고 보는 기준">1건당 남는 돈을 바로 말할 수 없다</td></tr>
+    <tr><td data-l="칸"><b>2단계 · 08 믿을 근거</b></td><td data-l="낙타가 묻는 것">이미 가지고 있는 결과나 사례가 뭔가</td><td data-l="캔버스 칸">린 경쟁 우위</td><td data-l="막혔다고 보는 기준">가진 게 있는데 어디에도 안 꺼내 놨다</td></tr>
+    <tr><td data-l="칸"><b>3단계 · 09 만나는 자리</b></td><td data-l="낙타가 묻는 것">고객이 우리를 처음 보는 자리는 어디인가</td><td data-l="캔버스 칸">린 채널 · BMC 채널</td><td data-l="막혔다고 보는 기준">자리가 3곳 이상인데 각 자리가 하는 일이 섞여 있다</td></tr>
+    <tr><td data-l="칸"><b>3단계 · 10 고객 말로 쓴 문장</b></td><td data-l="낙타가 묻는 것">소개글 첫 줄이 고객이 쓰는 말로 되어 있나</td><td data-l="캔버스 칸">린 가치 제안 + 03번</td><td data-l="막혔다고 보는 기준">공급자 말로만 쓰여 있다. 고객은 그 단어를 안 쓴다</td></tr>
+    <tr><td data-l="칸"><b>3단계 · 11 다음 행동</b></td><td data-l="낙타가 묻는 것">콘텐츠를 본 사람이 그다음에 하는 행동이 뭔가</td><td data-l="캔버스 칸">린 채널 · 핵심 지표</td><td data-l="막혔다고 보는 기준">다음 행동이 없다. 프로필 링크 1개가 전부다</td></tr>
+    <tr><td data-l="칸"><b>3단계 · 12 보는 숫자 1개</b></td><td data-l="낙타가 묻는 것">이번 달에 보기로 정한 숫자 1개가 뭔가</td><td data-l="캔버스 칸">린 핵심 지표</td><td data-l="막혔다고 보는 기준">보는 숫자가 없거나 조회수만 본다</td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted"><b class="k">칸의 상태는 세 가지뿐이다.</b>
+    <span class="pill on">채움</span> 고객 말로 적혀 있다 ·
+    <span class="pill ink">막힘</span> 적혀 있지만 기준에 걸린다, 또는 모르겠다고 답했다 ·
+    <span class="pill">빔</span> 아직 안 물었다.
+    점수를 안 매기는 이유는 점수가 등수로 읽히기 때문이다. 고객이 봐야 하는 것은 등수가 아니라 비어 있는 자리다.</p>
+</section>
+
+<section id="s4">
+  <h2 class="sec"><b>04</b>현재 위치를 어떻게 정하나</h2>
+  <p>액션이 사람마다 달라지는 이유는 사업이 달라서가 아니라 <b class="k">막힌 자리가 달라서</b>다.
+    그래서 위치는 이렇게 센다. <b class="k">01번부터 세어서 처음 막힌 칸이 현재 위치</b>다.
+    그 칸 뒤의 액션은 잠긴다.</p>
+
+  <svg viewBox="0 0 380 266" style="display:block;width:100%;max-width:420px;margin:20px auto 6px;font-family:inherit" role="img" aria-label="12칸 중 처음 막힌 칸이 현재 위치가 되는 예시">
+    <text x="0" y="12" font-size="11" font-weight="800" fill="#999999">1단계 사업 기획</text>
+    <rect x="0.5" y="20.5" width="89" height="34" rx="10" fill="#DFF000"/>
+    <text x="45" y="42" font-size="10.6" font-weight="800" fill="#1A1A1A" text-anchor="middle">01 고객 1명</text>
+    <rect x="95.5" y="20.5" width="89" height="34" rx="10" fill="#DFF000"/>
+    <text x="140" y="42" font-size="10.6" font-weight="800" fill="#1A1A1A" text-anchor="middle">02 문제·불만</text>
+    <rect x="190.5" y="20.5" width="89" height="34" rx="10" fill="#1A1A1A"/>
+    <text x="235" y="42" font-size="10.6" font-weight="800" fill="#FFFFFF" text-anchor="middle">03 고객의 말</text>
+    <rect x="285.5" y="20.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="330" y="42" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">04 돈의 길</text>
+
+    <text x="0" y="86" font-size="11" font-weight="800" fill="#999999">2단계 상품 기획</text>
+    <rect x="0.5" y="94.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="45" y="116" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">05 한 줄 가치</text>
+    <rect x="95.5" y="94.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="140" y="116" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">06 상품 구성</text>
+    <rect x="190.5" y="94.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="235" y="116" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">07 가격</text>
+    <rect x="285.5" y="94.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="330" y="116" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">08 믿을 근거</text>
+
+    <text x="0" y="160" font-size="11" font-weight="800" fill="#999999">3단계 마케팅 기획</text>
+    <rect x="0.5" y="168.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="45" y="190" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">09 만나는 자리</text>
+    <rect x="95.5" y="168.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="140" y="190" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">10 고객 말 문장</text>
+    <rect x="190.5" y="168.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="235" y="190" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">11 다음 행동</text>
+    <rect x="285.5" y="168.5" width="89" height="34" rx="10" fill="#F4F4F4" stroke="#E0E0E0"/>
+    <text x="330" y="190" font-size="10.6" font-weight="800" fill="#AAAAAA" text-anchor="middle">12 보는 숫자</text>
+
+    <line x1="235" y1="56" x2="235" y2="222" stroke="#1A1A1A" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <rect x="128.5" y="224.5" width="213" height="26" rx="13" fill="#1A1A1A"/>
+    <text x="235" y="242" font-size="11.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">현재 위치 = 처음 막힌 칸</text>
+    <text x="0" y="242" font-size="10.5" font-weight="800" fill="#999999">예시 1명</text>
+  </svg>
+
+  <div class="grid2">
+    <div class="gcard">
+      <span class="cap">잠그는 이유</span>
+      <p>고객의 말(03번)이 없는데 소개글 문장(10번)을 고치면 <b class="k">짐작으로 쓴 문장을 또 짐작으로 고치는 일</b>이 된다.
+        순서를 지키면 뒤 칸은 앞 칸의 재료로 채워진다.</p>
+    </div>
+    <div class="gcard">
+      <span class="cap">완전히 막지는 않는다</span>
+      <p>잠긴 칸도 제목은 보인다. 누르면 <b class="k">"이 칸은 03번을 먼저 채워야 해요"</b>와 그 이유 한 줄이 나온다.
+        그래도 지금 하겠다고 하면 열어 준다. 막는 게 아니라 순서를 알려 주는 것이다.</p>
+    </div>
+  </div>
+  <p class="muted">막힌 칸이 여러 개면 <b class="k">앞 단계 1개와 뒤 단계 2개</b>를 뽑는다. 세 개를 다 1단계로 채우지 않는다.
+    기초만 석 달째 다듬는 상태가 되면 고객이 떠난다.</p>
+</section>
+
+<section id="s5">
+  <h2 class="sec"><b>05</b>낙타AI 진단 대화 설계</h2>
+  <p>빈 캔버스를 주면 우리 고객은 못 채운다. 그래서 <b class="k">낙타가 묻고 고객은 답만 한다.</b>
+    고객이 쓴 문장은 그대로 칸에 들어간다. 낙타가 말을 다듬지 않는다.</p>
+
+  <h4>대화 1회 = 5구간 · 8분</h4>
+  <div class="step"><div class="when">1구간<span>30초</span></div>
+    <div><h5>고른 고민에서 시작한다</h5>
+      <p>가입할 때 고른 고민 3개를 그대로 띄우고 1개를 누르게 한다. 처음부터 새로 쓰게 하지 않는다.</p></div></div>
+  <div class="step"><div class="when">2구간<span>2분</span></div>
+    <div><h5>장면 1개를 받는다</h5>
+      <p>"그게 가장 크게 느껴진 날이 언제였나요?" 생각이 아니라 <b class="k">있었던 일</b>을 받는다. 여기서 고객 말이 나온다.</p></div></div>
+  <div class="step"><div class="when">3구간<span>3분</span></div>
+    <div><h5>2~3번 되묻는다</h5>
+      <p>고객이 말한 문제를 12칸 중 하나로 옮긴다. 지금 대화창에 있는 되묻기 방식과 같다.
+        "릴스를 더 올려야 할까요"에 양을 답하지 않고 <b class="k">본 다음에 하는 행동</b>을 되묻는 그 방식이다.</p></div></div>
+  <div class="step"><div class="when">4구간<span>2분</span></div>
+    <div><h5>칸에 넣기 전에 확인받는다</h5>
+      <p>"이렇게 적어 둘게요"로 고객 문장을 보여 주고 고치게 한다. <b class="k">고객이 고친 문장이 최종이다.</b></p></div></div>
+  <div class="step"><div class="when">5구간<span>30초</span></div>
+    <div><h5>멈춘다</h5>
+      <p>질문 8개 또는 8분에서 끊는다. 못 물은 칸은 <span class="pill">빔</span>으로 두고 다음 대화로 넘긴다.
+        <b class="k">12칸을 한 번에 다 묻지 않는다.</b></p></div></div>
+
+  <h4>대화 예시</h4>
+  <div class="scr">
+    <span class="ln"><b>낙타</b> 고른 고민 중에 지금 제일 급한 건 뭔가요?</span>
+    <span class="ln"><b>고객</b> <span class="btn y">팔로워는 있는데 매출이 안 돼요</span></span>
+    <span class="ln"><b>낙타</b> 그게 가장 크게 느껴진 날이 언제였어요? 그날 있었던 일 그대로 말해 주시면 돼요.</span>
+    <span class="ln"><b>고객</b> 지난주에 릴스가 3만 뷰 나왔는데 문의가 한 건도 없었어요.</span>
+    <span class="ln"><b>낙타</b> 그 릴스를 본 사람이 그다음에 하게 되는 행동이 뭐였나요?</span>
+    <span class="ln"><b>고객</b> 음… 딱히 없네요. 프로필 링크 정도.</span>
+    <span class="ln"><b>낙타</b> 그러면 지금 비어 있는 건 조회수가 아니라 <b>본 다음 할 행동</b>일 가능성이 높아요.
+      <br>'11 다음 행동' 칸에 이렇게 적어 둘게요. <b>"릴스 조회 3만, 다음 행동 없음. 프로필 링크만"</b> 고칠 데 있으세요?</span>
+    <span class="ln"><b>고객</b> <span class="btn">그대로 둘게요</span></span>
+    <span class="ln"><b>낙타</b> 하나만 더요. 그 릴스를 보고 들어온 사람이 어떤 말을 했나요? DM이나 댓글에 남은 말 있으면 그대로요.</span>
+  </div>
+  <p class="muted">마지막 질문은 11번 칸을 묻다가 <b class="k">03번 고객의 말 칸</b>으로 넘어간 것이다.
+    고객이 말한 장면 1개에서 칸 2~3개가 채워진다. 칸을 순서대로 하나씩 묻지 않는다.</p>
+
+  <h4>낙타가 지키는 것 5가지</h4>
+  <div class="rule"><div class="n">1</div><div><h5>한 번에 1개만 묻는다</h5><p>질문 2개를 붙여 보내면 뒤 질문만 답이 온다.</p></div></div>
+  <div class="rule"><div class="n">2</div><div><h5>원인을 단정하지 않는다</h5><p>"가능성이 높아요"까지만 간다. 매출이 안 되는 이유를 정해 주지 않는다.</p></div></div>
+  <div class="rule"><div class="n">3</div><div><h5>고객 문장을 바꿔 쓰지 않는다</h5><p>칸에 들어가는 건 고객이 쓴 말이다. 낙타가 다듬은 문장은 따로 표시한다.</p></div></div>
+  <div class="rule"><div class="n">4</div><div><h5>모르겠다는 답도 답이다</h5><p>그 칸은 <span class="pill ink">막힘</span>으로 적는다. 다시 캐묻지 않는다.</p></div></div>
+  <div class="rule"><div class="n">5</div><div><h5>진단에서 결과물을 만들지 않는다</h5><p>대본이나 카피를 여기서 써 주지 않는다. 진단은 칸을 채우는 자리다.</p></div></div>
+</section>
+
+<section id="s6">
+  <h2 class="sec"><b>06</b>진단 결과 화면</h2>
+  <p>한 화면에 지도와 막힌 칸 3개를 같이 둔다. 지도만 보여 주면 고객은 뭘 해야 할지 모른 채 나간다.</p>
+  <div class="scr">
+    <span class="ln"><b>리건님 사업의 지금 상태</b></span>
+    <span class="ln">12칸 중 채운 칸 2개 · 막힌 칸 3개 · 아직 안 물은 칸 7개</span>
+    <span class="ln">[ 12칸 지도 · 채움 라임 · 막힘 검정 · 빔 회색 ]</span>
+    <span class="ln"><b>지금 막힌 칸</b></span>
+    <span class="ln"><b>03 고객의 말</b><br>고객이 실제로 한 말을 모아 둔 데가 없어요. 지난주 릴스를 본 사람들은 뭐라고 했나요?
+      <br><span class="btn y">이 칸부터 하기</span> <span class="btn">코킷 보기</span></span>
+    <span class="ln"><b>11 다음 행동</b><br>조회 3만에 다음 행동이 프로필 링크 1개예요. 본 사람이 할 행동 1개를 정해 볼까요?
+      <br><span class="btn">03번 다음에 열려요</span></span>
+    <span class="ln"><b>05 한 줄 가치</b><br>소개글이 업종 설명으로 되어 있어요. <span class="btn">03번 다음에 열려요</span></span>
+    <span class="ln">안 물은 칸 7개는 다음 대화에서 채워요. <span class="btn">이어서 묻기</span></span>
+  </div>
+  <div class="no-go"><p><b>점수 · 등급 · 그래프를 넣지 않는다.</b> 100점 중 몇 점으로 보여 주면 고객은 점수를 올리려 한다.
+    우리가 바라는 건 비어 있는 칸 1개를 채우는 것이다.</p></div>
+</section>
+
+<section id="s7">
+  <h2 class="sec"><b>07</b>액션 1개의 구조</h2>
+  <p>액션은 항목 7개로 고정된다. 7개가 다 안 적히면 액션으로 내지 않는다.
+    특히 <b class="k">끝 기준</b>이 없는 액션은 고객이 끝낼 수 없다.</p>
+
+  <svg viewBox="0 0 380 298" style="display:block;width:100%;max-width:420px;margin:20px auto 6px;font-family:inherit" role="img" aria-label="액션 카드 1개의 항목 7가지">
+    <rect x="0.5" y="4.5" width="379" height="288" rx="14" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <rect x="16" y="18" width="62" height="22" rx="11" fill="#DFF000"/>
+    <text x="47" y="33.5" font-size="11.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">이번 주</text>
+    <text x="16" y="58" font-size="14" font-weight="800" fill="#1A1A1A">지난주 릴스를 본 사람의 말 5개를 모은다</text>
+    <line x1="0.5" y1="68" x2="379.5" y2="68" stroke="#E0E0E0"/>
+
+    <text x="16" y="92" font-size="10" font-weight="800" fill="#999999">왜 지금</text>
+    <text x="104" y="92" font-size="11.8" fill="#333333">03 고객의 말 칸이 막혀 있다</text>
+    <line x1="0.5" y1="106" x2="379.5" y2="106" stroke="#F0F0F0"/>
+
+    <text x="16" y="130" font-size="10" font-weight="800" fill="#999999">어디서 하나</text>
+    <text x="104" y="130" font-size="11.8" fill="#333333">DM · 댓글 · 문의 글 세 곳</text>
+    <line x1="0.5" y1="144" x2="379.5" y2="144" stroke="#F0F0F0"/>
+
+    <text x="16" y="168" font-size="10" font-weight="800" fill="#999999">끝 기준</text>
+    <text x="104" y="168" font-size="11.8" font-weight="800" fill="#1A1A1A">고객이 쓴 문장 5개를 그대로 저장했다</text>
+    <line x1="0.5" y1="182" x2="379.5" y2="182" stroke="#F0F0F0"/>
+
+    <text x="16" y="206" font-size="10" font-weight="800" fill="#999999">걸리는 시간</text>
+    <text x="104" y="206" font-size="11.8" fill="#333333">20분</text>
+    <line x1="0.5" y1="220" x2="379.5" y2="220" stroke="#F0F0F0"/>
+
+    <text x="16" y="244" font-size="10" font-weight="800" fill="#999999">같이 읽는 것</text>
+    <text x="104" y="244" font-size="11.8" fill="#333333">CO:KIT 80 콘텐츠는 포착하는 것</text>
+    <line x1="0.5" y1="258" x2="379.5" y2="258" stroke="#F0F0F0"/>
+
+    <text x="16" y="282" font-size="10" font-weight="800" fill="#999999">끝나면</text>
+    <text x="104" y="282" font-size="11.8" font-weight="800" fill="#1A1A1A">03번이 채움으로 바뀌고 11번이 열린다</text>
+  </svg>
+
+  <h4>액션을 만드는 규칙</h4>
+  <div class="rule"><div class="n">1</div><div><h5>칸 1개에 액션 1개</h5><p>액션은 막힌 칸에서만 나온다. 칸과 이어지지 않는 할 일은 내지 않는다.</p></div></div>
+  <div class="rule"><div class="n">2</div><div><h5>30분 안에 끝나는 크기로 자른다</h5><p>"타겟을 정하세요"는 액션이 아니다. "최근 결제한 3명의 공통점 1개를 적는다"가 액션이다.</p></div></div>
+  <div class="rule"><div class="n">3</div><div><h5>끝 기준은 눈으로 확인되게 쓴다</h5><p>"이해했다"는 기준이 될 수 없다. 저장했다, 바꿨다, 적었다로 쓴다.</p></div></div>
+  <div class="rule"><div class="n">4</div><div><h5>완료는 고객이 누른다</h5><p>코멜이 검사하지 않는다. 검사하면 숙제가 되고 점검이 부담이 된다.</p></div></div>
+  <div class="rule"><div class="n">5</div><div><h5>한 번에 1개만 띄운다</h5><p>나머지 2개는 제목만 보인다. 3개를 같이 주면 아무것도 시작하지 않는다.</p></div></div>
+
+  <h4>액션의 상태 4가지</h4>
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>상태</th><th>누가 바꾸나</th><th>그때 일어나는 일</th></tr>
+    <tr><td data-l="상태"><b>이번 주</b></td><td data-l="누가 바꾸나">코멜이 배정</td><td data-l="그때 일어나는 일">홈 맨 위에 카드 1장으로 뜬다</td></tr>
+    <tr><td data-l="상태"><b>하는 중</b></td><td data-l="누가 바꾸나">고객이 누름</td><td data-l="그때 일어나는 일">코킷 1편이 같이 열린다</td></tr>
+    <tr><td data-l="상태"><b>끝</b></td><td data-l="누가 바꾸나">고객이 누름</td><td data-l="그때 일어나는 일">한 줄 기록을 남기고, 칸 상태와 지도가 바뀐다</td></tr>
+    <tr><td data-l="상태"><b>넘김</b></td><td data-l="누가 바꾸나">고객이 누름</td><td data-l="그때 일어나는 일">이유 1개를 버튼으로 받고, 같은 칸의 다른 액션으로 바꿔 준다</td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted">끝낼 때 받는 한 줄은 <b class="k">내 코킷의 기록과 같은 자리에 쌓인다.</b>
+    밑줄과 기록, 액션 기록이 한 곳에서 보이면 고객이 자기가 뭘 바꿨는지 알 수 있다.
+    이때 <b class="k">밑줄 수와 기록 수, 액션 수를 더해서 한 숫자로 보여 주지 않는다.</b> 따로 센다.</p>
+  <div class="no-go"><p><b>연속 출석 · 배지 · 독촉 알림은 넣지 않는다.</b>
+    못 한 주에 알림이 오면 고객은 앱을 지운다. 알림은 월요일 1통으로 끝낸다.</p></div>
+</section>
+
+<section id="s8">
+  <h2 class="sec"><b>08</b>코킷을 고르는 규칙</h2>
+  <p>지금 추천은 <b class="k">고른 고민과 읽은 코킷</b>에서 나온다. 진단이 들어오면 기준이 1개 더 생긴다.
+    <b class="k">막힌 칸 번호</b>다. 같은 고민이라도 막힌 칸이 다르면 다른 코킷이 나간다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>막힌 칸</th><th>주제</th><th>이미 있는 코킷 예</th></tr>
+    <tr><td data-l="막힌 칸"><b>01 고객 1명</b></td><td data-l="주제">소비자 심리 · 브랜딩</td><td data-l="이미 있는 코킷 예">CO:KIT 81 제품 말고 '두 사람'을 파세요</td></tr>
+    <tr><td data-l="막힌 칸"><b>02 문제와 불만</b></td><td data-l="주제">콘텐츠 · 소비자 심리</td><td data-l="이미 있는 코킷 예">CO:KIT 80 콘텐츠는 만드는 게 아니라 포착하는 것</td></tr>
+    <tr><td data-l="막힌 칸"><b>05 한 줄 가치</b></td><td data-l="주제">브랜딩</td><td data-l="이미 있는 코킷 예">CO:KIT 15 사업자의 인스타 프로필 설정법</td></tr>
+    <tr><td data-l="막힌 칸"><b>08 믿을 근거</b></td><td data-l="주제">소비자 심리</td><td data-l="이미 있는 코킷 예">CO:KIT 51 뇌는 왜 이야기에 속는가</td></tr>
+    <tr><td data-l="막힌 칸"><b>09 만나는 자리</b></td><td data-l="주제">사업 성장</td><td data-l="이미 있는 코킷 예">CO:KIT 57 빼는 게 먼저, 더하는 게 나중</td></tr>
+    <tr><td data-l="막힌 칸"><b>10 고객 말로 쓴 문장</b></td><td data-l="주제">콘텐츠 · 전환</td><td data-l="이미 있는 코킷 예">CO:KIT 59 판매원처럼 보이기 싫은데</td></tr>
+    <tr><td data-l="막힌 칸"><b>11 다음 행동</b></td><td data-l="주제">전환 · 매출</td><td data-l="이미 있는 코킷 예">CO:KIT 41 · CO:KIT 03 콘텐츠 퍼널 3단계</td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted">위 7칸은 지금 코킷으로 바로 이어진다. 나머지 5칸(03 고객의 말 · 04 돈 들어오는 길 · 06 상품 구성 · 07 가격 · 12 보는 숫자)은
+    <b class="k">붙일 코킷이 비어 있다.</b> 89편에 칸 번호를 붙여 보면 비는 칸이 더 나올 수 있다.
+    그 칸은 코킷 없이 액션만 내보내거나 새 편을 만든다.</p>
+  <div class="card line">
+    <h5>먼저 해야 하는 일 1개</h5>
+    <p class="muted" style="margin-top:8px">코킷 89편에 <b class="k">12칸 번호를 붙이는 작업</b>이다. 지금 붙은 주제 태그로는 칸까지 안 내려간다.
+      한 편에 칸 1~2개씩, 리건이 10편 해 보고 기준을 정한 다음 나머지를 맡기는 순서를 권한다.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <h2 class="sec"><b>09</b>그 뒤로 도는 흐름</h2>
+  <p>첫 7일이 지나면 같은 자리를 돈다. 새 기능을 더하지 않고 <b class="k">네 자리만 반복</b>한다.</p>
+
+  <svg viewBox="0 0 380 258" style="display:block;width:100%;max-width:420px;margin:20px auto 6px;font-family:inherit" role="img" aria-label="월요일 점검에서 재진단까지 반복되는 네 자리">
+    <rect x="4.5" y="20.5" width="170" height="66" rx="13" fill="#FBFDEF" stroke="#DFF000" stroke-width="2"/>
+    <text x="89" y="48" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">월요일 10분 점검</text>
+    <text x="89" y="68" font-size="11" fill="#555555" text-anchor="middle">버튼 3개로 답하고 닫는다</text>
+
+    <line x1="176" y1="53" x2="200" y2="53" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M198 49 L206 53 L198 57 Z" fill="#1A1A1A"/>
+
+    <rect x="205.5" y="20.5" width="170" height="66" rx="13" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="290" y="48" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">액션 1개를 끝낸다</text>
+    <text x="290" y="68" font-size="11" fill="#555555" text-anchor="middle">한 줄 기록을 남긴다</text>
+
+    <line x1="290" y1="88" x2="290" y2="128" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M286 126 L290 134 L294 126 Z" fill="#1A1A1A"/>
+
+    <rect x="205.5" y="138.5" width="170" height="66" rx="13" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="290" y="166" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">2주 뒤 재진단</text>
+    <text x="290" y="186" font-size="11" fill="#555555" text-anchor="middle">질문 6개만 다시 묻는다</text>
+
+    <line x1="204" y1="171" x2="180" y2="171" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M182 167 L174 171 L182 175 Z" fill="#1A1A1A"/>
+
+    <rect x="4.5" y="138.5" width="170" height="66" rx="13" fill="#FFFFFF" stroke="#D0D0D0"/>
+    <text x="89" y="166" font-size="12.5" font-weight="800" fill="#1A1A1A" text-anchor="middle">지도가 바뀐다</text>
+    <text x="89" y="186" font-size="11" fill="#555555" text-anchor="middle">다음 칸이 열린다</text>
+
+    <line x1="89" y1="136" x2="89" y2="96" stroke="#1A1A1A" stroke-width="1.6"/>
+    <path d="M85 98 L89 90 L93 98 Z" fill="#1A1A1A"/>
+
+    <text x="190" y="232" font-size="11.5" font-weight="800" fill="#666666" text-anchor="middle">같은 칸에서 2번 막히면 1:1 컨설팅을 권한다</text>
+    <text x="190" y="250" font-size="11" fill="#999999" text-anchor="middle">AI로는 안 풀리는 칸이 있다는 뜻이다</text>
+  </svg>
+
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>자리</th><th>고객이 하는 일</th><th>코멜이 하는 일</th></tr>
+    <tr><td data-l="자리"><b>월요일 10분 점검</b></td><td data-l="고객이 하는 일">지난 액션 했는지, 뭐가 걸렸는지 버튼으로 답한다</td><td data-l="코멜이 하는 일">이번 주 액션 1개만 남기고 닫는다</td></tr>
+    <tr><td data-l="자리"><b>액션 끝</b></td><td data-l="고객이 하는 일">완료를 누르고 한 줄 남긴다</td><td data-l="코멜이 하는 일">칸 상태를 바꾸고 다음 칸을 연다</td></tr>
+    <tr><td data-l="자리"><b>2주 뒤 재진단</b></td><td data-l="고객이 하는 일">질문 6개에 답한다</td><td data-l="코멜이 하는 일">지난 지도와 나란히 보여 준다. 바뀐 칸만 표시한다</td></tr>
+    <tr><td data-l="자리"><b>지도 갱신</b></td><td data-l="고객이 하는 일">바뀐 걸 본다</td><td data-l="코멜이 하는 일">다음 액션 3개를 다시 뽑는다</td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted">액션을 2개 끝낸 고객은 2주를 기다리지 않아도 재진단을 열 수 있다.
+    반대로 2주 동안 액션을 1개도 안 한 고객에게는 재진단을 띄우지 않는다.
+    <b class="k">같은 질문을 또 받으면 처음부터 다시 하는 기분이 된다.</b> 그 자리에는 더 작게 자른 액션 1개를 다시 낸다.</p>
+</section>
+
+<section id="s10">
+  <h2 class="sec"><b>10</b>새로 만들 화면과 손볼 화면</h2>
+  <p>새 화면 6개, 손볼 기존 화면 4개다. <b class="k">탭바 5개는 그대로 둔다.</b>
+    기존 와이어프레임 파일은 고치지 않았다. 아래는 리건이 결정한 다음에 손댈 목록이다.</p>
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>화면</th><th>하는 일</th><th>들어가는 자리</th></tr>
+    <tr><td data-l="화면"><b>진단 시작</b> <span class="rec w">신규</span></td><td data-l="하는 일">8분이 걸린다고 알리고, 고른 고민 3개를 띄운다</td><td data-l="들어가는 자리">온보딩 마지막 · 홈 맨 위 · 낙타AI 탭</td></tr>
+    <tr><td data-l="화면"><b>진단 대화</b> <span class="rec w">신규</span></td><td data-l="하는 일">낙타가 묻고, 칸에 넣기 전에 확인받는다</td><td data-l="들어가는 자리">진단 시작 다음</td></tr>
+    <tr><td data-l="화면"><b>진단 지도</b> <span class="rec w">신규</span></td><td data-l="하는 일">12칸 상태와 막힌 칸 3개를 한 화면에</td><td data-l="들어가는 자리">대화 끝 · 홈 카드 · 내 코킷</td></tr>
+    <tr><td data-l="화면"><b>칸 1개 보기</b> <span class="rec w">신규</span></td><td data-l="하는 일">그 칸에 적힌 고객 문장, 왜 막혔는지, 액션, 코킷</td><td data-l="들어가는 자리">지도에서 칸을 누를 때</td></tr>
+    <tr><td data-l="화면"><b>액션리스트</b> <span class="rec w">신규</span></td><td data-l="하는 일">이번 주 1개와 잠긴 2개. 상태 4가지</td><td data-l="들어가는 자리">홈 맨 위 · 칸 보기</td></tr>
+    <tr><td data-l="화면"><b>액션 끝</b> <span class="rec w">신규</span></td><td data-l="하는 일">한 줄 기록을 받고 바뀐 칸을 보여 준다</td><td data-l="들어가는 자리">액션에서 완료를 누를 때</td></tr>
+    <tr><td data-l="화면"><b>홈</b> <span class="rec o">손본다</span></td><td data-l="하는 일">맨 위에 진단 또는 이번 주 액션 카드 1장을 넣는다</td><td data-l="들어가는 자리">This Week 히어로 위</td></tr>
+    <tr><td data-l="화면"><b>낙타AI 탭</b> <span class="rec o">손본다</span></td><td data-l="하는 일">첫 화면을 진단 입구로 바꾼다. 코킷 추천 대화는 그대로 둔다</td><td data-l="들어가는 자리">탭 3번째</td></tr>
+    <tr><td data-l="화면"><b>완독</b> <span class="rec o">손본다</span></td><td data-l="하는 일">'이어서 묻기' 아래에 '이 코킷으로 액션 끝내기' 한 줄</td><td data-l="들어가는 자리">완독 화면 아래</td></tr>
+    <tr><td data-l="화면"><b>내 코킷</b> <span class="rec o">손본다</span></td><td data-l="하는 일">기록 목록에 액션 기록 줄을 섞는다. 숫자는 따로 센다</td><td data-l="들어가는 자리">나의 인사이트 아래</td></tr>
+  </tbody></table>
+  </div>
+  <p class="muted">캔버스 24칸 화면(<a href="../canvas/">/canvas/</a>)은 <b class="k">고객이 직접 채우는 입력 폼으로 두지 않는다.</b>
+    대화가 채운 결과를 확인하고 고치는 자리로 쓴다. 빈 칸 24개를 주면 우리 고객은 첫 칸에서 닫는다.</p>
+</section>
+
+<section id="s11">
+  <h2 class="sec"><b>11</b>첫 판에 안 넣을 것</h2>
+  <div class="grid2">
+    <div class="gcard"><span class="cap">진단</span><p>점수 · 등급 · 레이더 그래프<br>진단 결과 PDF 내보내기<br>업종 평균과 비교</p></div>
+    <div class="gcard"><span class="cap">액션</span><p>액션 무제한 생성<br>기한 알림 · 독촉<br>연속 달성 배지</p></div>
+    <div class="gcard"><span class="cap">결과물</span><p>광고 소재 · 상세페이지 · 릴스 대본<br>이미지 · 영상 생성<br>자동 게시</p></div>
+    <div class="gcard"><span class="cap">판단</span><p>왜 안 팔렸는지 원인 단정<br>매출 예측 · 성과 보장<br>가격을 정해 주는 것</p></div>
+  </div>
+  <p class="muted">업종 평균과 비교하는 기능은 캔버스가 수십 장 모인 다음에만 된다.
+    첫 판에서는 <b class="k">그 사람의 2주 전 지도</b>와만 비교한다.</p>
+</section>
+
+<section id="s12">
+  <h2 class="sec"><b>12</b>리건이 정할 것</h2>
+  <div class="scrollx">
+  <table class="tb">
+    <tbody><tr><th>정할 것</th><th>권하는 쪽</th></tr>
+    <tr><td data-l="정할 것"><b>첫 진단을 가입 직후에 넣을까</b></td><td data-l="권하는 쪽">넣는다. 주제 고르기 다음, 첫 코킷 추천 앞</td></tr>
+    <tr><td data-l="정할 것"><b>진단 질문을 몇 개로 자를까</b></td><td data-l="권하는 쪽">8개 · 8분. 12칸을 한 번에 다 묻지 않는다</td></tr>
+    <tr><td data-l="정할 것"><b>지도를 12칸으로 둘까</b></td><td data-l="권하는 쪽">12칸. 24칸은 고객에게 너무 많고 6칸은 액션이 안 나온다</td></tr>
+    <tr><td data-l="정할 것"><b>액션을 몇 개 띄울까</b></td><td data-l="권하는 쪽">1개. 나머지 2개는 제목만</td></tr>
+    <tr><td data-l="정할 것"><b>액션 완료를 누가 판정할까</b></td><td data-l="권하는 쪽">고객이 직접 누른다. 코멜은 검사하지 않는다</td></tr>
+    <tr><td data-l="정할 것"><b>탭바 5개를 바꿀까</b></td><td data-l="권하는 쪽">그대로 둔다. 액션은 홈 맨 위와 낙타AI 탭에 붙인다</td></tr>
+    <tr><td data-l="정할 것"><b>재진단 주기</b></td><td data-l="권하는 쪽">2주. 액션 2개를 끝내면 그때 바로도 열어 준다</td></tr>
+    <tr><td data-l="정할 것"><b>진단 답을 캔버스 24칸에 저장할까</b></td><td data-l="권하는 쪽">저장한다. 칸 단위로. 업종 태그와 칸별 공개 동의를 같이 받는다</td></tr>
+    <tr><td data-l="정할 것"><b>코킷 89편에 칸 번호를 누가 붙일까</b></td><td data-l="권하는 쪽">리건이 10편 먼저. 기준을 정한 다음 나머지를 맡긴다</td></tr>
+  </tbody></table>
+  </div>
+</section>
+
+<div class="foot">
+  <b>코멜 · 고객 플로우</b> 2026-11-15. 낙타AI 진단과 액션리스트는 이 문서에서 처음 설계한 것이다.
+  기존 와이어프레임은 고치지 않았다. 비즈니스모델과 MVP 순서는 <a href="../plan/">결론판</a>에 있다.
+</div>
+
+</div>
+<a href="#toc" class="jump">차례</a>
+
+</body>
+</html>
