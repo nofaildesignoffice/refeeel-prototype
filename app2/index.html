@@ -145,6 +145,24 @@ body.clean .rd-top{padding-top:calc(16px + env(safe-area-inset-top));}
 body.clean .screen>.scroll:first-child{padding-top:env(safe-area-inset-top);}
 body.clean #scr-login>.scroll:first-child{padding-top:0;}
 
+/* ── 앱 모드: 스크롤에 숨는 머리와 시계 줄 ── (리건, 2026-11-16)
+   머리(상단바·내 코킷 gnb)는 글자가 든 칸만큼만 올라간다(스크립트에서 자른다).
+   시계가 있는 줄은 그 자리에 남아, 뒤에 지나가는 글이 시계에 겹쳐 보이지 않는다.
+   머리 안의 글자까지 그 자리에 남으면 시계와 겹치므로, 글자는 한 번 더 올려 잘라 낸다.
+   따라 내려오던 띠(검색하기·전체보기·코킷)는 시계 줄 바로 아래에서 멈춘다 —
+   더 올라가면 버튼이 시계에 가려 눌리지 않는다. */
+body.clean .topbar,body.clean #scr-my>.gnb{overflow:hidden;}
+body.clean .topbar>*,body.clean #scr-my>.gnb>*{transform:translateY(calc(-1 * var(--tb-off, 0px)));}
+body.clean .seg-bar,body.clean #scr-my .my-segbar{
+  top:max(env(safe-area-inset-top),calc(var(--topbar-h) - var(--tb-off, 0px)));}
+body.clean #scr-my .seg2{
+  top:max(calc(env(safe-area-inset-top) + var(--myseg-h, 67px)),
+          calc(var(--topbar-h) + var(--myseg-h, 67px) - var(--tb-off, 0px)));}
+/* 검색 머리는 sticky 라 top 이 아니라 transform 으로 따라 올라간다.
+   올라갈 수 있는 몫도 글자 칸(52px)까지다 — 상단바와 같은 값이다. */
+body.clean #scr-search .search-top{
+  transform:translateY(calc(-1 * min(var(--tb-off, 0px), 52px)));}
+
 /* ===== 폰 프레임 ===== */
 .phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;padding-top:env(safe-area-inset-top);}
 @media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:24px;} }
@@ -5151,7 +5169,11 @@ function lseg(key){
   let off = 0, last = sc.scrollTop, queued = false;
   const read = () => {
     queued = false;
-    const H = bar.offsetHeight;
+    /* 머리가 올라갈 수 있는 높이는 '글자가 든 칸'까지다 — 시계가 있는 줄(padding-top)은
+       남겨 둔다(리건, 2026-11-16). 끝까지 올리면 아래 따라오던 띠(검색하기·전체보기·코킷)가
+       시계 자리까지 올라가 버튼이 시계에 가려 안 눌린다.
+       앱 모드가 아니면 padding-top 이 0 이라 예전과 같다. */
+    const H = Math.max(0, bar.offsetHeight - (parseFloat(getComputedStyle(bar).paddingTop) || 0));
     /* 떠 있지 않은 머리는 밀 수 없다 — 넓은 화면의 내 코킷은 머리가 제자리에 있는
        큰 제목이라 손대지 않는다(2026-11-10). 상단바는 거기서 아예 display:none 이라
        높이가 0 이다. 둘 중 하나라도 걸리면 치운 적도 없게 되돌린다. */
@@ -5169,6 +5191,34 @@ function lseg(key){
     if(!queued){ queued = true; requestAnimationFrame(read); }
   }, {passive:true});
   }
+})();
+
+/* ── 임시 진단 줄 (리건 요청으로 넣었다. 바닥 띠의 원인을 재고 나면 지운다) ──
+   앱 모드에서만 뜬다. 화면 맨 아래에 붙으므로, 이 줄 아래에 띠가 남으면
+   그 띠는 페이지 바깥(아이폰이 내주지 않은 자리)이라는 뜻이다. */
+(function(){
+  if(!document.body.classList.contains("clean")) return;
+  const px = css => {
+    const p = document.createElement("div");
+    p.style.cssText = "position:fixed;left:0;width:1px;visibility:hidden;height:" + css;
+    document.body.appendChild(p);
+    const h = p.getBoundingClientRect().height;
+    p.remove();
+    return Math.round(h * 10) / 10;
+  };
+  const d = document.createElement("div");
+  d.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;"
+    + "font:10px/1.5 ui-monospace,monospace;color:#fff;background:rgba(0,0,0,.78);"
+    + "text-align:center;padding:2px 4px;pointer-events:none;";
+  const ph = document.querySelector(".phone");
+  d.textContent = "ih" + window.innerHeight + " sh" + screen.height
+    + " dvh" + px("100dvh") + " vh" + px("100vh")
+    + " sat" + px("env(safe-area-inset-top)") + " sab" + px("env(safe-area-inset-bottom)")
+    + " body" + document.body.getBoundingClientRect().height
+    + " phone" + (ph ? Math.round(ph.getBoundingClientRect().height) : 0)
+    + " sa" + (navigator.standalone === true ? 1 : 0)
+    + " dm" + (matchMedia("(display-mode: standalone)").matches ? 1 : 0);
+  document.body.appendChild(d);
 })();
 
 /* 낙타AI 첫 화면의 입력칸 — 쓴 말을 들고 대화방으로 간다(리건, 2026-11-10).
