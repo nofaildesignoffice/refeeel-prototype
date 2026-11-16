@@ -114,14 +114,17 @@ svg.lucide{flex-shrink:0;}   /* 굵기는 lucide 기본값 2 유지 */
 body.clean .jumpbar{display:none;}
 @media (max-width:430px){body.clean .phone{border:none;border-radius:0;box-shadow:none;}}
 
-/* ── 앱 모드(홈 화면 아이콘)의 위·아래 ── (리건, 2026-11-16)
-   아이폰은 아래 홈 바가 쓰는 자리를 화면 높이에서 빼고 내줄 때가 있다.
-   그러면 폰 틀이 화면보다 짧아져, 틀 밖에 바탕색(#EBEBEB)이 회색 띠로 드러났다.
-   틀을 화면 높이(100dvh)만큼 늘리고, 그래도 남는 자리는 지금 떠 있는 화면과
-   같은 색으로 칠한다 — 그 자리는 페이지 바깥이라 아이폰이 바탕색으로 메운다.
-   로그인만 검정이고 나머지는 흰색이다(화면 번호는 show() 가 data-scr 에 적는다). */
-body.clean{min-height:100dvh;background:var(--bg-white);}
-body.clean .phone{min-height:100dvh;}
+/* ── 앱 모드(홈 화면 아이콘)의 아래쪽 ── (리건, 2026-11-16)
+   폰 틀이 화면보다 짧아 아래에 빈 띠가 남았다. 100dvh 로 늘려 봤지만 그대로였다 —
+   아이폰이 앱으로 띄울 때 dvh 가 실제 화면보다 작게 들어오기 때문이다.
+   그래서 화면 단위(dvh·vh)를 아예 쓰지 않는다. html 과 body 를 height:100% 로 두면
+   기준이 '아이폰이 내준 화면 전체'가 되고, 폰 틀은 flex:1 로 그 높이를 정확히 채운다.
+   틀이 화면 끝까지 닿으므로 하단 탭바도 화면 맨 아래에 붙는다.
+   바탕색은 그래도 화면에 맞춰 둔다 — 로그인만 검정, 나머지는 흰색
+   (화면 번호는 show() 가 data-scr 에 적는다). */
+html.clean,body.clean{height:100%;}
+body.clean{background:var(--bg-white);}
+body.clean .phone{min-height:0;}
 body.clean[data-scr="scr-login"]{background:var(--bg-black);}
 /* 로그인 사진은 홈 바 자리까지 내려간다. 스크롤러가 아래를 비워 두면
    사진이 끝난 자리에 흰 띠가 34px 남는다 — 그 여백을 사진 안쪽으로 옮긴다. */
@@ -145,23 +148,32 @@ body.clean .rd-top{padding-top:calc(16px + env(safe-area-inset-top));}
 body.clean .screen>.scroll:first-child{padding-top:env(safe-area-inset-top);}
 body.clean #scr-login>.scroll:first-child{padding-top:0;}
 
-/* ── 앱 모드: 스크롤에 숨는 머리와 시계 줄 ── (리건, 2026-11-16)
-   머리(상단바·내 코킷 gnb)는 글자가 든 칸만큼만 올라간다(스크립트에서 자른다).
-   시계가 있는 줄은 그 자리에 남아, 뒤에 지나가는 글이 시계에 겹쳐 보이지 않는다.
-   머리 안의 글자까지 그 자리에 남으면 시계와 겹치므로, 글자는 한 번 더 올려 잘라 낸다.
-   따라 내려오던 띠(검색하기·전체보기·코킷)는 시계 줄 바로 아래에서 멈춘다 —
-   더 올라가면 버튼이 시계에 가려 눌리지 않는다. */
-body.clean .topbar,body.clean #scr-my>.gnb{overflow:hidden;}
-body.clean .topbar>*,body.clean #scr-my>.gnb>*{transform:translateY(calc(-1 * var(--tb-off, 0px)));}
+/* ── 앱 모드: 시계 줄과 그 아래로 지나가는 내용 ── (리건, 2026-11-16)
+   스크롤하면 머리(상단바·내 코킷 제목줄)가 올라가 숨는다. 앱 모드에서는 그 자리가
+   시계·배터리가 있는 줄이라, 숨는 글자가 시계와 겹쳐 보였다.
+   고치는 방법은 두 가지다.
+   1) 시계 줄 높이만큼 띠를 깔아 둔다 — 그 아래로 지나가는 것은 띠가 가린다.
+      띠 색은 그 화면의 바탕색이다. 홈과 로그인만 비워 둔다 — 히어로와 로그인 사진이
+      시계 줄까지 올라가야 한다(리건). 리더는 종이색이다.
+   2) 눌러야 하는 띠(검색하기·전체보기·코킷)는 시계 줄 아래에서 멈춘다.
+      더 올라가면 띠가 가려 버튼이 안 눌린다. sticky 의 붙을 자리에 하한을 준다. */
+body.clean .phone::before{content:"";position:absolute;left:0;right:0;top:0;
+  height:env(safe-area-inset-top);z-index:31;pointer-events:none;
+  background:var(--bg-white);}
+body.clean[data-scr="scr-home"] .phone::before,
+body.clean[data-scr="scr-login"] .phone::before{background:none;}
+body.clean[data-scr="scr-reader"] .phone::before{background:#FBFAF8;}
 body.clean .seg-bar,body.clean #scr-my .my-segbar{
   top:max(env(safe-area-inset-top),calc(var(--topbar-h) - var(--tb-off, 0px)));}
 body.clean #scr-my .seg2{
   top:max(calc(env(safe-area-inset-top) + var(--myseg-h, 67px)),
           calc(var(--topbar-h) + var(--myseg-h, 67px) - var(--tb-off, 0px)));}
-/* 검색 머리는 sticky 라 top 이 아니라 transform 으로 따라 올라간다.
-   올라갈 수 있는 몫도 글자 칸(52px)까지다 — 상단바와 같은 값이다. */
+/* 검색 머리(알약·검색바)는 sticky 라 top 이 아니라 transform 으로 상단바를 따라간다.
+   따라갈 수 있는 몫은 '시계 줄 아래'까지다 — 끝까지 따라가면 시계에 가려 안 눌린다.
+   제자리가 --topbar-h(111px) 이고 멈출 자리가 시계 줄(59px) 이니 몫은 그 차이다. */
 body.clean #scr-search .search-top{
-  transform:translateY(calc(-1 * min(var(--tb-off, 0px), 52px)));}
+  transform:translateY(calc(-1 * min(var(--tb-off, 0px),
+                                     var(--topbar-h) - env(safe-area-inset-top))));}
 
 /* ===== 폰 프레임 ===== */
 .phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;padding-top:env(safe-area-inset-top);}
@@ -4516,7 +4528,10 @@ if(new URLSearchParams(location.search).has("clean")
    || (window.matchMedia && (matchMedia("(display-mode: standalone)").matches
                              || matchMedia("(display-mode: fullscreen)").matches
                              || matchMedia("(display-mode: minimal-ui)").matches)))
+{
   document.body.classList.add("clean");
+  document.documentElement.classList.add("clean");   /* height:100% 의 기준 */
+}
 
 const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];
@@ -5169,11 +5184,7 @@ function lseg(key){
   let off = 0, last = sc.scrollTop, queued = false;
   const read = () => {
     queued = false;
-    /* 머리가 올라갈 수 있는 높이는 '글자가 든 칸'까지다 — 시계가 있는 줄(padding-top)은
-       남겨 둔다(리건, 2026-11-16). 끝까지 올리면 아래 따라오던 띠(검색하기·전체보기·코킷)가
-       시계 자리까지 올라가 버튼이 시계에 가려 안 눌린다.
-       앱 모드가 아니면 padding-top 이 0 이라 예전과 같다. */
-    const H = Math.max(0, bar.offsetHeight - (parseFloat(getComputedStyle(bar).paddingTop) || 0));
+    const H = bar.offsetHeight;
     /* 떠 있지 않은 머리는 밀 수 없다 — 넓은 화면의 내 코킷은 머리가 제자리에 있는
        큰 제목이라 손대지 않는다(2026-11-10). 상단바는 거기서 아예 display:none 이라
        높이가 0 이다. 둘 중 하나라도 걸리면 치운 적도 없게 되돌린다. */
@@ -5191,34 +5202,6 @@ function lseg(key){
     if(!queued){ queued = true; requestAnimationFrame(read); }
   }, {passive:true});
   }
-})();
-
-/* ── 임시 진단 줄 (리건 요청으로 넣었다. 바닥 띠의 원인을 재고 나면 지운다) ──
-   앱 모드에서만 뜬다. 화면 맨 아래에 붙으므로, 이 줄 아래에 띠가 남으면
-   그 띠는 페이지 바깥(아이폰이 내주지 않은 자리)이라는 뜻이다. */
-(function(){
-  if(!document.body.classList.contains("clean")) return;
-  const px = css => {
-    const p = document.createElement("div");
-    p.style.cssText = "position:fixed;left:0;width:1px;visibility:hidden;height:" + css;
-    document.body.appendChild(p);
-    const h = p.getBoundingClientRect().height;
-    p.remove();
-    return Math.round(h * 10) / 10;
-  };
-  const d = document.createElement("div");
-  d.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;"
-    + "font:10px/1.5 ui-monospace,monospace;color:#fff;background:rgba(0,0,0,.78);"
-    + "text-align:center;padding:2px 4px;pointer-events:none;";
-  const ph = document.querySelector(".phone");
-  d.textContent = "ih" + window.innerHeight + " sh" + screen.height
-    + " dvh" + px("100dvh") + " vh" + px("100vh")
-    + " sat" + px("env(safe-area-inset-top)") + " sab" + px("env(safe-area-inset-bottom)")
-    + " body" + document.body.getBoundingClientRect().height
-    + " phone" + (ph ? Math.round(ph.getBoundingClientRect().height) : 0)
-    + " sa" + (navigator.standalone === true ? 1 : 0)
-    + " dm" + (matchMedia("(display-mode: standalone)").matches ? 1 : 0);
-  document.body.appendChild(d);
 })();
 
 /* 낙타AI 첫 화면의 입력칸 — 쓴 말을 들고 대화방으로 간다(리건, 2026-11-10).
