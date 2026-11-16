@@ -521,8 +521,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .hscroll[data-auto]>.hcard{flex:0 0 200px;}
 /* 추천은 첫 장이 폭을 거의 다 쓴다(리건, 2026-11-07) — '최근에 업데이트된 코킷'과 같은 모양.
    카드마다 '왜 추천하는지' 한 줄이 붙어서, 좁은 칸에 여럿 늘어놓으면 그 줄이 먼저 잘린다.
-   다음 장은 15% 만 걸쳐 더 있다는 것만 알린다. 데스크톱은 3141줄에서 300px 로 되돌아간다. */
-.hscroll[data-wide]>.hcard{flex:0 0 calc(85% - 14px);}
+   폭과 틈은 큐레이션 슬라이더(.cur-card)와 같은 식을 쓴다(리건, 2026-11-16) —
+   홈의 슬라이더가 저마다 다른 폭이면 섹션끼리 어긋나 보인다. 사진 비율(16/10)은 그대로다.
+   다음 장은 10% 만 걸쳐 더 있다는 것만 알린다. 데스크톱은 3141줄에서 300px 로 되돌아간다. */
+.hscroll[data-wide]>.hcard{flex:0 0 calc((100% - 14px) / 1.1);}
 /* 풀블리드 카드는 판이 사진 위로 올라와 그림자를 드리운다(리건, 2026-11-07).
    트랙은 overflow-x:auto 라 세로로도 잘린다 — 한 축만 visible 로 둘 수 없기 때문이다.
    그래서 그림자가 나갈 자리를 안쪽 여백으로 비워 둔다. 그림자는 아래로 6px 번진다. */
@@ -582,13 +584,14 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    사진·이름보다 먼저 눈에 걸린다. 둘 이상이면 가운뎃점으로 잇는다. */
 .cur-meta{margin-top:auto;padding-top:9px;font-size:10px;font-weight:600;color:var(--text-gray);}
 .cur-meta span+span::before{content:"·";margin:0 5px;color:var(--text-muted);}
-/* 모바일에서는 한 장이 폭을 거의 채우고 다음 장이 15% 걸쳐 보인다(리건, 2026-11-07) —
-   옆에 더 있다는 걸 화살표 없이 알린다. 한 장의 폭은 85% 에서 틈(10px)을 뺀 값이다.
-   그래야 남는 15% 가 고스란히 다음 장 몫이 된다. */
-.new-grid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+/* 모바일에서는 한 장이 폭을 거의 채우고 다음 장이 10% 걸쳐 보인다 —
+   옆에 더 있다는 걸 화살표 없이 알린다. 폭과 틈은 큐레이션 슬라이더와 같은 식이다
+   (리건, 2026-11-16). 홈의 세 슬라이더가 한 선에서 시작하고 끝난다.
+   사진 비율(16/9)은 그대로다. */
+.new-grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
 .new-grid::-webkit-scrollbar{display:none;}
-.new-grid>.bigcard{flex:0 0 calc(85% - 10px);scroll-snap-align:start;}
+.new-grid>.bigcard{flex:0 0 calc((100% - 14px) / 1.1);scroll-snap-align:start;}
 
 /* ── 걸치는 슬라이더는 오른쪽 끝까지 흐른다(리건, 2026-11-08) ──
    섹션 오른쪽 여백(.sec 의 16px)만큼 트랙을 넘겨 빼고, 같은 값을 트랙 안쪽 여백으로
