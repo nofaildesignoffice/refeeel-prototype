@@ -155,11 +155,14 @@ html.clean,body.clean{overscroll-behavior:none;}
 body.clean.kb-on{--sab:0px;}
 /* 키보드가 떠 있는 동안에는 탭바를 내려 둔다(리건, 2026-11-17).
    입력칸 아래에 탭바까지 올라오면 글 쓰는 자리가 한 층 더 줄어든다.
-   숨기는 방법은 display:none 이 아니라 아래로 밀기다 — 탭바 글래스를 그리는
+   숨기는 방법은 display:none 이 아니라 visibility 다 — 탭바 글래스를 그리는
    스크립트가 폭·높이를 재서 두는데, 0 이 되면 그 그림을 떼고 돌아오지 못한다.
+   visibility 는 크기를 남긴 채로 안에 있는 것까지 같이 가린다.
+   ⚠ 아래로 밀기(translateY)로는 부족했다 — 켜진 칸의 동그라미가 탭바보다 48px
+      위로 솔아 있어서, 탭바 높이만큼 밀어도 반달이 남아 보였다(리건, 2026-11-17).
    탭바 자리로 비워 둔 아래 여백도 같이 걷는다 — 그 값은 스크립트가 직접 넣어
    있어서(inline) !important 가 아니면 안 걸린다. 키보드가 내려가면 저절로 돌아온다. */
-body.clean.kb-on .bottomnav{transform:translateY(100%);pointer-events:none;}
+body.clean.kb-on .bottomnav{visibility:hidden;pointer-events:none;}
 body.clean.kb-on .screen,
 body.clean.kb-on .screen>.scroll{padding-bottom:0!important;}
 body.clean{background:var(--bg-white);}
