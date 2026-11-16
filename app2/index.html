@@ -4457,8 +4457,17 @@ document.querySelectorAll("[data-qauto]").forEach(track => {
   mark(); start();
 });
 
-/* ?clean 파라미터: 리뷰용 점프바를 숨기고 실제 앱처럼 보기 */
-if(new URLSearchParams(location.search).has("clean")) document.body.classList.add("clean");
+/* 점프바를 숨기고 실제 앱처럼 보는 모드.
+   ?clean 을 붙여 열었을 때, 그리고 홈 화면 아이콘으로 띄웠을 때 켠다.
+   아이폰은 홈 화면에 추가할 때 주소창의 ?clean 을 버리고 manifest 의 start_url 로 저장한다.
+   그래서 주소만 믿지 않고 '앱으로 떠 있는지'를 직접 본다(리건, 2026-11-16).
+   navigator.standalone 은 아이폰 사파리, display-mode 는 안드로이드·데스크톱이 쓴다. */
+if(new URLSearchParams(location.search).has("clean")
+   || navigator.standalone === true
+   || (window.matchMedia && (matchMedia("(display-mode: standalone)").matches
+                             || matchMedia("(display-mode: fullscreen)").matches
+                             || matchMedia("(display-mode: minimal-ui)").matches)))
+  document.body.classList.add("clean");
 
 const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];

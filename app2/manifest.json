@@ -5,7 +5,7 @@
   "description": "코멜 — 마케팅·브랜딩 코킷 클릭 프로토타입",
   "lang": "ko",
   "dir": "ltr",
-  "start_url": "./",
+  "start_url": "./?clean",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
