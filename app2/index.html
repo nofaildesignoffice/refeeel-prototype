@@ -129,14 +129,17 @@ body.clean .phone{border:none;border-radius:0;box-shadow:none;}
 body.clean{padding-bottom:0;}
 
 /* ── 앱 모드(홈 화면 아이콘)의 아래쪽 ── (리건, 2026-11-16)
-   폰 틀이 화면보다 짧아 아래에 빈 띠가 남았다. 100dvh 로 늘려 봤지만 그대로였다 —
-   아이폰이 앱으로 띄울 때 dvh 가 실제 화면보다 작게 들어오기 때문이다.
-   그래서 화면 단위(dvh·vh)를 아예 쓰지 않는다. html 과 body 를 height:100% 로 두면
-   기준이 '아이폰이 내준 화면 전체'가 되고, 폰 틀은 flex:1 로 그 높이를 정확히 채운다.
-   틀이 화면 끝까지 닿으므로 하단 탭바도 화면 맨 아래에 붙는다.
+   폰 틀이 화면보다 짧아 아래에 빈 띠가 남았다. 100dvh 도 height:100% 도 안 됐다.
+   아이폰이 홈 화면 아이콘으로 띄우면 시계 줄까지 화면을 다 내주면서도(바탕색이
+   맨 아래 둥근 모서리까지 칠해진다) 페이지에는 '시계 줄 높이를 뺀 값'을 알려 준다.
+   그래서 100% 든 dvh 든 화면보다 59px 쯤 짧고, 그 차이가 바닥의 빈 띠였다.
+   아래 스크립트가 폰이 아는 진짜 화면 높이를 재서 --app-h 에 넣는다.
+   그 값이 없으면(브라우저·안드로이드) 예전처럼 100% 다.
    바탕색은 그래도 화면에 맞춰 둔다 — 로그인만 검정, 나머지는 흰색
    (화면 번호는 show() 가 data-scr 에 적는다). */
-html.clean,body.clean{height:100%;}
+/* overscroll-behavior:none — 앱 틀이 레이아웃 기준보다 클 수 있으므로
+   문서 전체가 따라 흔들리지 않게 막는다. 안쪽 스크롤은 그대로다. */
+html.clean,body.clean{height:var(--app-h, 100%);overscroll-behavior:none;}
 body.clean{background:var(--bg-white);}
 body.clean .phone{min-height:0;}
 body.clean[data-scr="scr-login"]{background:var(--bg-black);}
@@ -1908,6 +1911,61 @@ body.free #scr-viewer .progress-thin{display:none;}
 </style>
 </head>
 <body>
+<!-- ── 앱 모드 판정과 화면 높이 보정 ── (리건, 2026-11-16 · 코덱스 지적 반영)
+     이 둘은 첫 그림이 그려지기 전에 끝나야 해서 맨 앞 독립 스크립트로 둔다.
+     아래 큰 스크립트 안에 있을 때는 lucide(CDN) 호출 뒤라, 그 로딩이 실패하면
+     앱 모드 자체가 안 켜졌다. 여기서는 바깥 것에 기대지 않는다. -->
+<script>
+(function(){
+  /* 점프바를 숨기고 실제 앱처럼 보는 모드.
+     ?clean 을 붙여 열었을 때, 그리고 홈 화면 아이콘으로 띄웠을 때 켠다.
+     아이폰은 홈 화면에 추가할 때 주소창의 ?clean 을 버리고 manifest 의 start_url 로
+     저장한다. 그래서 주소만 믿지 않고 '앱으로 떠 있는지'를 직접 본다.
+     navigator.standalone 은 아이폰 사파리, display-mode 는 안드로이드·데스크톱이 쓴다. */
+  var isApp = new URLSearchParams(location.search).has("clean")
+    || navigator.standalone === true
+    || (window.matchMedia && (matchMedia("(display-mode: standalone)").matches
+                              || matchMedia("(display-mode: fullscreen)").matches
+                              || matchMedia("(display-mode: minimal-ui)").matches));
+  if(!isApp) return;
+  document.documentElement.classList.add("clean");   /* 높이 기준이 html 이다 */
+  document.body.classList.add("clean");
+
+  /* ── 앱으로 띄웠을 때의 진짜 화면 높이 ──
+     아이폰은 홈 화면 아이콘으로 띄우면 시계 줄까지 화면을 다 내주면서도
+     페이지에는 그 높이를 뺀 값(window.innerHeight)을 알려 준다.
+     CSS 의 100% · 100vh · 100dvh 가 모두 그 짧은 값을 따라가서, 폰 틀이 화면보다
+     시계 줄 높이만큼 짧아지고 그 아래가 빈 띠로 남았다(리건 스크린샷, 실측 약 59px).
+     폰이 아는 화면 높이(screen.height)로 직접 맞춘다.
+     손대는 조건을 좁게 잡는다 — 아이폰 홈 화면 앱이고, 세로이고, 모자란 몫이
+     시계 줄 높이쯤(80px 이내)일 때만. 안드로이드는 화면 높이에 시스템 바가
+     들어 있어 이 비교가 맞지 않으므로 navigator.standalone 로 아이폰만 거른다.
+     아이폰이 이 동작을 고치면 모자란 몫이 0 이 되어 저절로 손을 뗀다. */
+  var el = document.documentElement, fixed = false;
+  function appHeight(){
+    var ih = window.innerHeight;
+    var sh = (window.screen && window.screen.height) || 0;
+    var portrait = window.innerWidth <= ih;
+    if(navigator.standalone === true && portrait && sh > ih && (sh - ih) <= 80){
+      el.style.setProperty("--app-h", sh + "px"); fixed = true;
+    }else if(navigator.standalone !== true){
+      el.style.removeProperty("--app-h"); fixed = false;
+    }
+    /* 아이폰인데 조건이 안 맞는 순간(키보드가 올라와 높이가 확 줄었을 때 등)은
+       직전 값을 그대로 둔다 — 지웠다가 다시 넣으면 화면이 한 번 튄다. */
+  }
+  appHeight();
+  window.addEventListener("resize", appHeight);
+  window.addEventListener("orientationchange", function(){ setTimeout(appHeight, 300); });
+
+  /* 틀이 레이아웃 기준보다 크면 문서 전체가 그만큼 스크롤된다 —
+     앱이 손가락을 따라 위아래로 밀린다. overscroll-behavior 로는 안 막힌다(코덱스 지적).
+     스크롤은 안쪽 목록이 맡으므로, 문서가 움직이면 제자리로 되돌린다. */
+  window.addEventListener("scroll", function(){
+    if(fixed && window.scrollY !== 0) window.scrollTo(0, 0);
+  }, {passive:true});
+})();
+</script>
 <!-- commel 워드마크. 한 번만 심어 두고 <use> 로 꺼내 쓴다.
      path 가 fill:currentColor 라 꺼낸 자리의 글자색을 그대로 따라간다 —
      위 네비가 사진 위에서 흰색으로 뒤집히면 로고도 같이 뒤집힌다. -->
@@ -4532,21 +4590,6 @@ document.querySelectorAll("[data-qauto]").forEach(track => {
   mark(); start();
 });
 
-/* 점프바를 숨기고 실제 앱처럼 보는 모드.
-   ?clean 을 붙여 열었을 때, 그리고 홈 화면 아이콘으로 띄웠을 때 켠다.
-   아이폰은 홈 화면에 추가할 때 주소창의 ?clean 을 버리고 manifest 의 start_url 로 저장한다.
-   그래서 주소만 믿지 않고 '앱으로 떠 있는지'를 직접 본다(리건, 2026-11-16).
-   navigator.standalone 은 아이폰 사파리, display-mode 는 안드로이드·데스크톱이 쓴다. */
-if(new URLSearchParams(location.search).has("clean")
-   || navigator.standalone === true
-   || (window.matchMedia && (matchMedia("(display-mode: standalone)").matches
-                             || matchMedia("(display-mode: fullscreen)").matches
-                             || matchMedia("(display-mode: minimal-ui)").matches)))
-{
-  document.body.classList.add("clean");
-  document.documentElement.classList.add("clean");   /* height:100% 의 기준 */
-}
-
 const TABS =["scr-home","scr-search","scr-chat","scr-library","scr-my"];
 let stack = [];
 let current = "scr-login";
@@ -4648,9 +4691,12 @@ const NAVGOO = (function(){
        바탕 없는 탭바가 보이지 않는다(데스크톱 웹은 탭바 자체를 감춘다).
        탭바가 떠 있으므로 그만큼 스크롤 아래를 비워 둔다 — 마지막 줄이 탭바에 가리지 않게. */
     function measure(){
+      /* .goo 를 붙이면 윗 테두리 1px 이 사라진다 — 높이는 붙인 뒤에 재야
+         SVG 와 아래 여백이 1px 어긋나지 않는다(코덱스 지적, 2026-11-16). */
+      const ok0 = nav.clientWidth > 0 && nav.offsetHeight > 0;
+      nav.classList.toggle("goo", ok0);
       const w = nav.clientWidth, h = nav.offsetHeight;
       const ok = w > 0 && h > 0;
-      nav.classList.toggle("goo", ok);
       if(ok && (w !== W || h !== H)){
         W = w; H = h;
         svg.setAttribute("viewBox", "0 0 " + W + " " + (H + LIFT));
