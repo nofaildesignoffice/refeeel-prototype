@@ -8283,6 +8283,30 @@ function makeSlider(el){
     });
   });
 
+  /* ── 민 뒤에 카드 자리 맞추기 (리건, 2026-11-16) ──
+     손을 떼면 카드가 반쯤 잘린 자리에 멈춰 있었다. 칸 너비의 절반을 넘겼으면 다음 칸,
+     못 넘겼으면 있던 칸으로 되돌린다. 가장 가까운 칸으로 보내는 것과 같은 말이다.
+     ⚠ 관성이 다 끝난 뒤에 맞춘다. 미끄러지는 중에 끼어들면 손이 튀겨 나간다 —
+        움직임이 120ms 동안 없어야 멈춘 것으로 본다.
+     ⚠ 손가락이나 마우스가 닿아 있는 동안은 맞추지 않는다. */
+  let snapT = null, held = false;
+  function settle(){
+    const step = stepW();
+    if(step <= 0) return;
+    const max = Math.max(0, el.scrollWidth - el.clientWidth);
+    let left = Math.min(max, Math.max(0, Math.round(el.scrollLeft / step) * step));
+    idx = Math.round(left / step);
+    if(Math.abs(left - el.scrollLeft) < 1.5) return;
+    el.scrollTo({left: left, behavior:"smooth"});
+  }
+  const settleSoon = ()=>{ clearTimeout(snapT); snapT = setTimeout(()=>{ if(!held) settle(); }, 120); };
+  el.addEventListener("scroll", settleSoon, {passive:true});
+  el.addEventListener("touchstart", ()=>{ held = true; clearTimeout(snapT); }, {passive:true});
+  el.addEventListener("touchend",   ()=>{ held = false; settleSoon(); }, {passive:true});
+  el.addEventListener("touchcancel",()=>{ held = false; settleSoon(); }, {passive:true});
+  el.addEventListener("mousedown",  ()=>{ held = true; clearTimeout(snapT); });
+  window.addEventListener("mouseup",()=>{ if(held){ held = false; settleSoon(); } });
+
   /* ③ 손이 닿는 동안 */
   el.addEventListener("mouseenter", ()=> rest(6e5));
   el.addEventListener("mouseleave", ()=> rest(AUTO_MS));
