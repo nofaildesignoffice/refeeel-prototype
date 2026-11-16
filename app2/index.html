@@ -4564,13 +4564,16 @@ document.querySelectorAll("[data-qauto]").forEach(track => {
   const dots = track.parentElement.querySelectorAll(".q-dot");
   const calm = matchMedia("(prefers-reduced-motion: reduce)");
   let timer = null, held = false;
-  const at = () => Math.round(track.scrollLeft / track.clientWidth);
+  /* 켜지기 전의 화면은 폭이 0 이라 나눔셈이 NaN 이 된다 — 그러면 첫 점이 안 켜진다 */
+  const at = () => track.clientWidth ? Math.round(track.scrollLeft / track.clientWidth) : 0;
   const mark = () => dots.forEach((d,n) => d.classList.toggle("on", n === at()));
   const next = () => {
     if(held || getComputedStyle(track).overflowX !== "auto") return;
     track.scrollTo({left: track.clientWidth * ((at() + 1) % track.children.length), behavior:"smooth"});
   };
-  const start = () => { clearInterval(timer); if(!calm.matches) timer = setInterval(next, 5000); };
+  /* 저절로 넘기지 않는다(리건, 2026-11-17) — 앱과 모바일 웹에서는 손으로만 넘긴다.
+     데스크탑 웹은 석 장이 나란히 서서 원래도 넘길 일이 없었다. 점과 미는 것은 그대로 둔다. */
+  const start = () => { clearInterval(timer); };
   track.addEventListener("scroll", mark, {passive:true});
   track.addEventListener("pointerdown", () => { held = true; clearInterval(timer); });
   addEventListener("pointerup", () => { if(held){ held = false; start(); } });
@@ -5181,14 +5184,8 @@ function makeSlider(el){
     jump(stepW() * idx);
   });
 
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  setInterval(()=>{
-    if(Date.now() < hold) return;
-    if(!el.offsetParent) return;                  /* ④ 숨은 화면 */
-    if(stepW() * n <= el.clientWidth) return;     /* ⑤ 넘칠 것이 없다 */
-    slide(1);
-  }, AUTO_MS);
+  /* ── 저절로 넘어가지 않는다(리건, 2026-11-17) ──
+     앱에서는 손으로만 넘긴다. 화살표와 미는 것은 그대로 둔다. */
 }
 
 function startAutoSlides(){
