@@ -165,26 +165,14 @@ body.clean .rd-top{padding-top:calc(16px + env(safe-area-inset-top));}
 body.clean .screen>.scroll:first-child{padding-top:env(safe-area-inset-top);}
 body.clean #scr-login>.scroll:first-child{padding-top:0;}
 
-/* ── 앱 모드: 시계 줄과 그 아래로 지나가는 내용 ── (리건, 2026-11-16)
-   스크롤하면 머리(상단바·내 코킷 제목줄)가 올라가 숨는다. 앱 모드에서는 그 자리가
-   시계·배터리가 있는 줄이라, 숨는 글자가 시계와 겹쳐 보였다.
-   고치는 방법은 두 가지다.
-   1) 시계 줄 높이만큼 띠를 깔아 둔다 — 그 아래로 지나가는 것은 띠가 가린다.
-      띠 색은 그 화면의 바탕색이다. 홈과 로그인만 비워 둔다 — 히어로와 로그인 사진이
-      시계 줄까지 올라가야 한다(리건). 리더는 종이색이다.
-   2) 눌러야 하는 띠(검색하기·전체보기·코킷)는 시계 줄 아래에서 멈춘다.
-      더 올라가면 띠가 가려 버튼이 안 눌린다. sticky 의 붙을 자리에 하한을 준다. */
-body.clean .phone::before{content:"";position:absolute;left:0;right:0;top:0;
-  height:env(safe-area-inset-top);z-index:31;pointer-events:none;
-  background:var(--bg-white);}
-body.clean[data-scr="scr-home"] .phone::before,
-body.clean[data-scr="scr-login"] .phone::before{background:none;}
-body.clean[data-scr="scr-reader"] .phone::before{background:#FBFAF8;}
+/* ── 앱 모드: 시계 줄 아래에서 멈추는 띠 ── (리건, 2026-11-16)
+   시계 줄을 가리는 띠는 깔지 않는다. 스크롤하면 모든 화면에서 내용이 시계·배터리
+   자리까지 올라와 보인다 — 홈에서 보이던 그 모습이다(리건).
+   대신 눌러야 하는 띠(검색하기·둘러보기 · 전체보기·모아보기 · 코킷·시리즈)는
+   시계 줄 바로 아래에서 멈춘다. 더 올라가면 버튼이 시계에 가려 안 눌린다.
+   sticky 가 붙을 자리에 하한(env(safe-area-inset-top))을 준다. */
 body.clean .seg-bar,body.clean #scr-my .my-segbar{
   top:max(env(safe-area-inset-top),calc(var(--topbar-h) - var(--tb-off, 0px)));}
-body.clean #scr-my .seg2{
-  top:max(calc(env(safe-area-inset-top) + var(--myseg-h, 67px)),
-          calc(var(--topbar-h) + var(--myseg-h, 67px) - var(--tb-off, 0px)));}
 /* 검색 머리(알약·검색바)는 sticky 라 top 이 아니라 transform 으로 상단바를 따라간다.
    따라갈 수 있는 몫은 '시계 줄 아래'까지다 — 끝까지 따라가면 시계에 가려 안 눌린다.
    제자리가 --topbar-h(111px) 이고 멈출 자리가 시계 줄(59px) 이니 몫은 그 차이다. */
@@ -403,9 +391,9 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-my .my-segbar{position:sticky;top:calc(var(--topbar-h) - var(--tb-off, 0px));
   z-index:20;background:var(--bg-white);padding:10px 0;}
 #scr-my .my-segbar .seg{margin-top:0;}
-#scr-my .seg2{position:sticky;
-  top:calc(var(--topbar-h) + var(--myseg-h, 67px) - var(--tb-off, 0px));
-  z-index:19;background:var(--bg-white);}
+/* '읽는 중 · 완독 · 저장' 은 위에 붙지 않는다(리건, 2026-11-16) —
+   내리면 목록과 같이 올라가 사라진다. 붙는 것은 위 띠(코킷·시리즈)까지다. */
+#scr-my .seg2{position:relative;z-index:19;background:var(--bg-white);}
 #scr-my>.gnb .gnb-side:first-child{display:none;}
 #scr-my>.gnb .gnb-title{flex:1;max-width:none;text-align:left;}
 .progress-thin{flex-shrink:0;height:3px;background:var(--border-light);}
