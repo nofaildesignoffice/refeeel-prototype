@@ -2002,16 +2002,25 @@ body.free #scr-viewer .progress-thin{display:none;}
      앱 모드에서는 키보드가 떠도 window.innerHeight 가 그대로다.
      줄어드는 것은 visualViewport 뿐이다 — 그 바닥까지를 앱 높이로 잡는다.
      ⚠ 잔 변화는 키보드가 아니다(주소창·도구막). 80px 가 넘어야 키보드로 본다.
-     ⚠ 문서가 스크롤된 만큼을 더해야 바닥 위치가 맞는다. */
+     ⚠ 재는 것은 높이 하나다. offsetTop 이나 scrollY 를 더하면 안 된다 —
+        아이폰은 문서를 스크롤하는 대신 보이는 창 자체를 위로 올려 버려서,
+        그 몴을 더하면 가린 높이가 0 으로 나온다. 그러면 틀이 안 줄고, 대신
+        페이지 전체가 키보드를 피해 밀려 올라간다 — 탭바까지 같이(리건 스크린샷, 2026-11-17). */
   var vv = window.visualViewport;
   if(vv){
+    var kbT = null;
     var kb = function(){
       var full = (fixed && window.screen && window.screen.height) || window.innerHeight;
-      var seen = window.scrollY + vv.offsetTop + vv.height;
-      var gap = Math.max(0, Math.round(full - seen));
+      var gap = Math.max(0, Math.round(full - vv.height));
       if(gap <= 80) gap = 0;
       el.style.setProperty("--kb", gap + "px");
       document.body.classList.toggle("kb-on", gap > 0);
+      /* 틀을 줄이고 나면 스크롤할 것이 없다 — 올라가 만 한 자리를 되돌린다.
+         키보드가 올라오는 중에 당기면 올라오다 말고 내려가므로 한 박자 뒤에 한다. */
+      clearTimeout(kbT);
+      if(gap > 0) kbT = setTimeout(function(){
+        if(window.scrollY !== 0) window.scrollTo(0, 0);
+      }, 250);
     };
     vv.addEventListener("resize", kb);
     vv.addEventListener("scroll", kb);
