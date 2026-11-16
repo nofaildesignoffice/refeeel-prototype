@@ -1194,14 +1194,16 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    채널·유형 태그는 쓰지 않는다 — 내가 고민한 건 주제 축이지 형식 축이 아니다. */
 /* 스타일은 내 코킷의 '읽는 중 · 완독 · 저장' 탭(.seg2)과 같다 — 밑줄 탭이다(리건, 2026-11-16).
    다른 점은 가로 스크롤 하나다. 주제가 여덟 개라 한 줄에 다 안 들어간다.
-   아래 선을 border 대신 inset 그림자로 그린 이유: 스크롤 상자는 자기 테두리 영역을
-   잘라내서, 켜진 탭의 2px 밑줄이 1px 만 보인다. */
-.tagbar{display:flex;gap:20px;overflow-x:auto;padding:16px 16px 0;box-shadow:inset 0 -1px 0 var(--border-light);scrollbar-width:none;}
+   아래 선을 border 로 긋지 않은 이유: 가로 스크롤 상자는 자기 테두리 영역을 잘라내서,
+   켜진 탭의 2px 밑줄이 1px 로 깎인다(브라우저 확대·축소가 100% 가 아닐 때 특히).
+   그래서 선은 배경으로 긋고(아래에서 1px), 밑줄이 잘릴 일이 없게 바닥에 2px 를 비워 둔다.
+   밑줄의 자리(bottom:-1px)와 두께(2px)는 .seg2 와 글자 기준으로 똑같다. */
+.tagbar{display:flex;gap:20px;overflow-x:auto;padding:16px 16px 2px;background:linear-gradient(var(--border-light),var(--border-light)) left bottom 1px/100% 1px no-repeat;scrollbar-width:none;}
 .tagbar::-webkit-scrollbar{display:none;}
 .tagbar button{flex-shrink:0;position:relative;padding:0 0 10px;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-light);cursor:pointer;white-space:nowrap;}
 .tagbar button b{font-weight:inherit;color:inherit;margin-left:5px;}
 .tagbar button.on{color:var(--text-black);}
-.tagbar button.on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:1px;background:var(--brand);}
+.tagbar button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:1px;background:var(--brand);}
 
 /* ── 시간순 ──
    날짜는 그 날 첫 카드 위에 한 줄로 선다. 세로선과 점은 쓰지 않는다.
