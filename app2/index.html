@@ -390,6 +390,11 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-my .my-profile{margin-top:var(--topbar-h);}
 #scr-my .my-segbar{position:sticky;top:calc(var(--topbar-h) - var(--tb-off, 0px));
   z-index:20;background:var(--bg-white);padding:10px 0;}
+/* 위에 붙으면 바탕을 걷는다 — 인사이트의 .seg-bar 와 같은 규칙이다(리건, 2026-11-16).
+   흰 면을 깔아 둔 채로 붙으면 알약의 유리가 그 흰 면을 블러해서 그냥 흰 알약이 된다.
+   걷어야 목록이 알약 뒤로 지나가며 상단바와 같은 유리로 보인다.
+   .stuck 은 아래 스크립트가 붙인다 — 인사이트 띠와 같은 함수를 쓴다. */
+#scr-my .my-segbar.stuck{background:none;}
 #scr-my .my-segbar .seg{margin-top:0;}
 /* '읽는 중 · 완독 · 저장' 은 위에 붙지 않는다(리건, 2026-11-16) —
    내리면 목록과 같이 올라가 사라진다. 붙는 것은 위 띠(코킷·시리즈)까지다. */
@@ -5284,11 +5289,14 @@ function lseg(key){
 })();
 
 /* 전환 띠가 위에 붙었는지 알려 준다 — 붙으면 바탕을 걷는다.
-   떠 있을 때는 흰 면이 영상을 덮어야 하고, 붙었을 때는 그 흰 면이 없어야
-   알약이 상단바와 같은 유리로 보인다(목록이 알약 뒤로 지나간다). */
-(function(){
-  const sc = document.querySelector("#scr-library .ins-scroll");
-  const bar = sc && sc.querySelector(".seg-bar");
+   떠 있을 때는 흰 면이 아래 내용을 덮어야 하고, 붙었을 때는 그 흰 면이 없어야
+   알약이 상단바와 같은 유리로 보인다(목록이 알약 뒤로 지나간다).
+   인사이트의 전체보기·모아보기와 내 코킷의 코킷·시리즈가 같은 함수를 쓴다
+   — 두 띠는 같아 보여야 한다(리건, 2026-11-16). */
+["#scr-library .ins-scroll > .seg-bar", "#scr-my > .scroll > .my-segbar"].forEach(watchStuck);
+function watchStuck(sel){
+  const bar = document.querySelector(sel);
+  const sc = bar && bar.parentElement;
   if(!sc || !bar) return;
   let queued = false;
   const read = () => {
@@ -5309,7 +5317,7 @@ function lseg(key){
   /* 탭을 눌러 이 화면이 다시 보이면 크기가 생긴다 — 그때 다시 잰다 */
   if(window.ResizeObserver) new ResizeObserver(read).observe(sc);
   read();
-})();
+}
 
 /* 인사이트 머리의 3D 장면 스크립트는 머리와 함께 뺐다(2026-11-16).
    보관본: 기획 폴더의 insight-hero-3d.html */
