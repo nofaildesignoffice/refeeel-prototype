@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 눈금으로든 입력칸을 눌러서든 화면이 확대되지 않게 한다(리건, 2026-11-17) -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>COMMEL 웹 클릭 프로토타입 v3</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -1922,6 +1923,14 @@ body.free #scr-viewer .progress-thin{display:none;}
 .inp,.ta{width:100%;padding:12px 13px;border:1px solid var(--border-default);border-radius:var(--radius-sm);background:var(--bg-white);font-family:inherit;font-size:13px;color:var(--text-dark);}
 .ta{min-height:132px;line-height:1.65;resize:none;}
 .inp::placeholder,.ta::placeholder{color:var(--text-muted);}
+/* ── 입력칸 글자는 16px ── (리건, 2026-11-17)
+   아이폰은 글자가 16px 보다 작은 입력칸을 누르면 그 칸이 읽힐 만큼 화면을 키운다.
+   확대된 채로 남아 글을 다 쓰고 나면 화면이 어긋나 있다.
+   meta 의 user-scalable=no 는 사파리가 무시하므로, 막는 것은 이 16px 이다.
+   가짜 입력칸(div.ci-box)은 누려도 키보드가 안 떠므로 그대로 둔다. */
+input.inp,textarea.ta,.chat-input input.ci-box,input[type="text"],input[type="search"],
+input[type="email"],input[type="password"],input[type="tel"],input[type="number"],
+textarea,select{font-size:16px;}
 .file-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1px dashed var(--border-default);border-radius:var(--radius-sm);background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-gray);cursor:pointer;}
 .file-btn i,.file-btn svg{width:15px;height:15px;}
 

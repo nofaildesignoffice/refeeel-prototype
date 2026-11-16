@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 눈금으로든 입력칸을 눌러서든 화면이 확대되지 않게 한다(리건, 2026-11-17) -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>COMMEL 유저앱 클릭 프로토타입 v2</title>
 <!-- 홈 화면에 깔아 앱처럼 띄운다(리건, 2026-11-11 — 안드로이드).
      manifest·sw.js·아이콘은 올리는 쪽(repo)에만 있다. 이 파일을 그냥 열면
@@ -139,7 +140,19 @@ body.clean{padding-bottom:0;}
    (화면 번호는 show() 가 data-scr 에 적는다). */
 /* overscroll-behavior:none — 앱 틀이 레이아웃 기준보다 클 수 있으므로
    문서 전체가 따라 흔들리지 않게 막는다. 안쪽 스크롤은 그대로다. */
-html.clean,body.clean{height:var(--app-h, 100%);overscroll-behavior:none;}
+/* --kb 는 키보드가 가린 높이다(아래 스크립트가 재서 넣는다).
+   키보드가 없으면 0 이라 예전과 같다. */
+/* ⚠ 키보드 못은 html 한 고데서만 뺀다. body 는 그 100% 를 따라간다 —
+      둘 다 빼면 두 번 빠져 앱이 키보드 높이만큼 더 줄어든다. */
+html.clean{height:calc(var(--app-h, 100%) - var(--kb, 0px));}
+body.clean{height:100%;}
+html.clean,body.clean{overscroll-behavior:none;}
+/* ── 키보드가 올라왔을 때 ── (리건, 2026-11-17)
+   아이폰은 앱으로 띄우면 키보드가 떠도 페이지 높이를 줄여 주지 않는다.
+   그대로 두면 글 쓰는 칸이 키보드 아래에 깔린다. 앱 틀을 그만큼 줄여
+   입력칸이 키보드 바로 위에 서게 한다.
+   홈 바 여백은 그동안 필요 없다 — 키보드가 그 자리를 덮고 있다. */
+body.clean.kb-on{--sab:0px;}
 body.clean{background:var(--bg-white);}
 body.clean .phone{min-height:0;}
 body.clean[data-scr="scr-login"]{background:var(--bg-black);}
@@ -1435,6 +1448,14 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .inp,.ta{width:100%;padding:12px 13px;border:1px solid var(--border-default);border-radius:var(--radius-sm);background:var(--bg-white);font-family:inherit;font-size:13px;color:var(--text-dark);}
 .ta{min-height:132px;line-height:1.65;resize:none;}
 .inp::placeholder,.ta::placeholder{color:var(--text-muted);}
+/* ── 입력칸 글자는 16px ── (리건, 2026-11-17)
+   아이폰은 글자가 16px 보다 작은 입력칸을 누르면 그 칸이 읽힐 만큼 화면을 키운다.
+   확대된 채로 남아 글을 다 쓰고 나면 화면이 어긋나 있다.
+   meta 의 user-scalable=no 는 사파리가 무시하므로, 막는 것은 이 16px 이다.
+   가짜 입력칸(div.ci-box)은 누려도 키보드가 안 떠므로 그대로 둔다. */
+input.inp,textarea.ta,.chat-input input.ci-box,input[type="text"],input[type="search"],
+input[type="email"],input[type="password"],input[type="tel"],input[type="number"],
+textarea,select{font-size:16px;}
 .file-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1px dashed var(--border-default);border-radius:var(--radius-sm);background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-gray);cursor:pointer;}
 .file-btn i,.file-btn svg{width:15px;height:15px;}
 
@@ -1955,8 +1976,38 @@ body.free #scr-viewer .progress-thin{display:none;}
      앱이 손가락을 따라 위아래로 밀린다. overscroll-behavior 로는 안 막힌다(코덱스 지적).
      스크롤은 안쪽 목록이 맡으므로, 문서가 움직이면 제자리로 되돌린다. */
   window.addEventListener("scroll", function(){
-    if(fixed && window.scrollY !== 0) window.scrollTo(0, 0);
+    if(!fixed || window.scrollY === 0) return;
+    /* 글을 쓰는 동안은 폰이 키보드를 피해 스스로 자리를 잡는다.
+       그 손을 막으면 키보드가 올라오다 말고 내려간다(리건, 2026-11-17). */
+    var on = document.activeElement;
+    if(on && (on.tagName === "INPUT" || on.tagName === "TEXTAREA" || on.isContentEditable)) return;
+    window.scrollTo(0, 0);
   }, {passive:true});
+
+  /* 글을 다 쓰고 나면 폰이 올려 둔 만큼을 다시 내린다 — 위에서 비켜 준 자리다 */
+  document.addEventListener("focusout", function(){
+    if(fixed) setTimeout(function(){ window.scrollTo(0, 0); }, 0);
+  });
+
+  /* ── 키보드가 가린 높이 ── (리건, 2026-11-17)
+     앱 모드에서는 키보드가 떠도 window.innerHeight 가 그대로다.
+     줄어드는 것은 visualViewport 뿐이다 — 그 바닥까지를 앱 높이로 잡는다.
+     ⚠ 잔 변화는 키보드가 아니다(주소창·도구막). 80px 가 넘어야 키보드로 본다.
+     ⚠ 문서가 스크롤된 만큼을 더해야 바닥 위치가 맞는다. */
+  var vv = window.visualViewport;
+  if(vv){
+    var kb = function(){
+      var full = (fixed && window.screen && window.screen.height) || window.innerHeight;
+      var seen = window.scrollY + vv.offsetTop + vv.height;
+      var gap = Math.max(0, Math.round(full - seen));
+      if(gap <= 80) gap = 0;
+      el.style.setProperty("--kb", gap + "px");
+      document.body.classList.toggle("kb-on", gap > 0);
+    };
+    vv.addEventListener("resize", kb);
+    vv.addEventListener("scroll", kb);
+    kb();
+  }
 })();
 </script>
 <!-- commel 워드마크. 한 번만 심어 두고 <use> 로 꺼내 쓴다.
