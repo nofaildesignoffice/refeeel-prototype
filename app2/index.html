@@ -153,6 +153,15 @@ html.clean,body.clean{overscroll-behavior:none;}
    입력칸이 키보드 바로 위에 서게 한다.
    홈 바 여백은 그동안 필요 없다 — 키보드가 그 자리를 덮고 있다. */
 body.clean.kb-on{--sab:0px;}
+/* 키보드가 떠 있는 동안에는 탭바를 내려 둔다(리건, 2026-11-17).
+   입력칸 아래에 탭바까지 올라오면 글 쓰는 자리가 한 층 더 줄어든다.
+   숨기는 방법은 display:none 이 아니라 아래로 밀기다 — 탭바 글래스를 그리는
+   스크립트가 폭·높이를 재서 두는데, 0 이 되면 그 그림을 떼고 돌아오지 못한다.
+   탭바 자리로 비워 둔 아래 여백도 같이 걷는다 — 그 값은 스크립트가 직접 넣어
+   있어서(inline) !important 가 아니면 안 걸린다. 키보드가 내려가면 저절로 돌아온다. */
+body.clean.kb-on .bottomnav{transform:translateY(100%);pointer-events:none;}
+body.clean.kb-on .screen,
+body.clean.kb-on .screen>.scroll{padding-bottom:0!important;}
 body.clean{background:var(--bg-white);}
 body.clean .phone{min-height:0;}
 body.clean[data-scr="scr-login"]{background:var(--bg-black);}
