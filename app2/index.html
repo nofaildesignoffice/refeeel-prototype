@@ -425,25 +425,22 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .reason i,.reason svg{width:12px;height:12px;}
 .lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text-gray);background:var(--bg-light);border:1px solid var(--border-light);border-radius:4px;padding:2px 7px;}
 
-/* ── 코킷 카드의 무료·유료 표시 ──
-   추천 피드에는 둘이 섞여 나온다. 눌러 들어간 뒤에야 막히면 그건 속은 기분이 된다.
-   목록에서 미리 알 수 있어야 한다.
-   ⚠ 값은 쓰지 않는다. 여기 적는 건 '지금 내 계정에서 열리는가' 뿐이다.
-      그래야 앱 빌드에서도 같은 표시를 그대로 쓸 수 있다. */
-/* 라벨은 코킷 번호 위에 한 줄을 차지한다(리건, 2026-11-07). 번호 옆에 붙어 있을 때는
-   'CO:KIT 20무료' 처럼 한 덩어리로 읽혀 번호도 라벨도 흐려졌다 — 줄을 따로 주면
-   번호는 번호로, 라벨은 라벨로 읽힌다. 모서리는 완전히 둥근 알약이다. */
-/* 크기·굵기·자간·패딩까지 랜딩 .label 의 값이다 — 색과 모서리만 닮으면 다른 물건이 된다.
-   9.5px 로는 알약 안에서 글자가 떠 보였다. 아래 여백만 우리 값이다(8px) —
-   랜딩의 14~18px 은 섹션 제목 위에 홀로 서는 라벨의 여백이라 카드 안에서는 너무 벌어진다. */
-.kit-free,.kit-lock{display:inline-flex;align-items:center;vertical-align:middle;
-  font-size:12.5px;font-weight:700;letter-spacing:-0.2px;border-radius:var(--radius-full);
-  padding:6px 13px;margin-bottom:8px;}
-/* 무료는 어두운 판에 라임 글자, 구독 회원은 라임 판에 어두운 글자다(리건, 2026-11-07).
-   같은 알약에 색만 뒤집히니 한 목록에 둘이 섞여 나와도 짝으로 읽힌다 —
-   어느 한쪽이 더 크지도 작지도 않다. 라임 위에는 언제나 --brand-ink 를 얹는다. */
-.kit-free{color:var(--brand);background:var(--bg-black);}
-.kit-lock{color:var(--brand-ink);background:var(--brand);}
+/* ── 잠긴 코킷 ──
+   썸네일 한가운데 자물쇠 하나로 알린다(리건, 2026-11-16). 글자는 쓰지 않는다 —
+   목록에서 요금제 이름을 읽게 만들지 않는다. 자물쇠가 없으면 그냥 열리는 코킷이다.
+   ⚠ 값은 쓰지 않는다. 보이는 건 '지금 내 계정에서 열리는가' 뿐이다.
+      그래야 앱 빌드에서도 같은 표시를 그대로 쓴다.
+   사진이 밝든 어둡든 보이도록 옅은 그늘을 깔고, 그 위에 유리 동그라미를 둔다 —
+   상단바의 알림 동그라미와 같은 유리다(--glass-bg · --glass-blur). */
+.kit-lock{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
+  border-radius:inherit;background:rgba(26,26,26,0.28);}
+.kit-lock-dot{width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);}
+.kit-lock-dot i,.kit-lock-dot svg{width:16px;height:16px;color:var(--text-black);}
+/* 자리표시 그림과 자물쇠가 가운데에서 겹친다 — 잠겼으면 그림 쪽을 숨긴다 */
+.img-ph:has(.kit-lock)>i,.img-ph:has(.kit-lock)>svg{display:none;}
 .lock-badge i,.lock-badge svg{width:10px;height:10px;}
 .progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;}
 .progress-bar>div{height:100%;background:var(--brand);border-radius:2px;}
@@ -680,7 +677,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .rank-row+.rank-row{margin-top:10px;}
 /* 순위는 제목 위 라벨로 올라갔다(리건, 2026-11-06). 숫자 하나가 사진 왼쪽에 떨어져 있으면
    어느 제목의 순위인지 눈이 한 번 더 움직인다 — 'TOP 1' 까지 적어 제목의 머리말로 둔다.
-   모양은 무료·유료 배지(.kit-free)와 같은 결로 맞춘다 — 한 목록에서 배지가 둘 다 보인다. */
+   모양은 카드 안의 다른 작은 라벨들과 같은 결로 맞춘다 — 한 목록에서 함께 보인다. */
 .rank-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.2px;
   line-height:1.4;padding:2px 7px;border-radius:var(--radius-xs);color:var(--brand-ink);}
 .rank-badge.r1{background:var(--rank-1);}
@@ -2180,34 +2177,30 @@ body.free #scr-viewer .progress-thin{display:none;}
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 코킷</div>
-            <span class="kit-free">무료</span>
             <div class="hcard-num">CO:KIT 20</div>
             <div class="hcard-title">이번 릴스도 실패했다…?</div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="book-open-check"></i>CO:KIT 41을 읽고 계셔서</div>
-            <span class="kit-lock">구독 회원 전용</span>
             <div class="hcard-num">CO:KIT 03</div>
             <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-viewer">
-          <div class="img-ph"><i data-lucide="image"></i></div>
+          <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
           <div class="hcard-body">
             <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
-            <span class="kit-lock">구독 회원 전용</span>
             <div class="hcard-num">CO:KIT 59</div>
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
           </div>
         </div>
           <div class="card hcard" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 코킷</div>
-              <span class="kit-lock">구독 회원 전용</span>
               <div class="hcard-num">CO:KIT 81</div>
               <div class="hcard-title">제품 말고 '두 사람'을 파세요</div>
             </div>
@@ -2216,16 +2209,14 @@ body.free #scr-viewer .progress-thin{display:none;}
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="book-open-check"></i>'콘텐츠 소재가 떨어졌어요'에 맞는 코킷</div>
-              <span class="kit-free">무료</span>
               <div class="hcard-num">CO:KIT 80</div>
               <div class="hcard-title">콘텐츠는 만드는 게 아니라, 포착하는 것</div>
             </div>
           </div>
           <div class="card hcard" data-go="scr-viewer">
-            <div class="img-ph"><i data-lucide="image"></i></div>
+            <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
             <div class="hcard-body">
               <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
-              <span class="kit-lock">구독 회원 전용</span>
               <div class="hcard-num">CO:KIT 87</div>
               <div class="hcard-title">95 대 5 법칙</div>
             </div>
@@ -5516,7 +5507,9 @@ document.addEventListener("click", e=>{
        ⚠ 배지가 없는 카드(이어읽기·밑줄 기록·시리즈 회차)는 열려 있는 것으로 본다.
           이미 읽고 있거나 산 것들이라 여기서 막을 이유가 없다. */
     if(t.dataset.go === "scr-viewer"){
-      /* 자물쇠가 붙었으면 막힌 채로, 무료 표가 붙었으면 나눌 수 있는 채로 연다 */
+      /* 자물쇠가 붙었으면 막힌 채로 연다.
+         무료 배지(.kit-free)는 없앴다(리건, 2026-11-16) — 그래서 아랫줄은 늘 꺼지고,
+         공유 버튼(.v-share)이 뜨는 길이 지금은 없다. 어느 코킷에서 열지는 리건이 정한다. */
       document.body.classList.toggle("free",    !!t.querySelector(".kit-lock"));
       document.body.classList.toggle("freekit", !!t.querySelector(".kit-free"));
     }
