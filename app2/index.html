@@ -920,9 +920,15 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    ⚠ 넓은 화면은 그대로다 — 아래 미디어쿼리가 바탕을 흰색으로 되돌린다. */
 #scr-chat>.chat-input{border-top:none;background:none;}
 #scr-chat .ci-box{background:var(--bg-white);}
-#scr-chat input.ci-box{display:block;width:100%;min-width:0;
+#scr-chat input.ci-box,#scr-chat .ci-box[contenteditable]{display:block;width:100%;min-width:0;
   font-family:inherit;color:var(--text-black);outline:none;}
 #scr-chat input.ci-box::placeholder{color:var(--text-light);}
+/* 글자를 받는 div — 한 줄로 두고 넘치면 옆으로 흐른다.
+   비어 있을 때만 안내문을 그린다 — <input> 의 placeholder 자리다. */
+#scr-chat .ci-box[contenteditable]{white-space:nowrap;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;-webkit-user-select:text;user-select:text;cursor:text;}
+#scr-chat .ci-box[contenteditable]::-webkit-scrollbar{display:none;}
+#scr-chat .ci-box[contenteditable]:empty::before{content:attr(data-ph);color:var(--text-light);}
 #scr-chat .ci-send{flex-shrink:0;width:38px;height:38px;margin-left:4px;padding:0;
   display:flex;align-items:center;justify-content:center;
   border:none;border-radius:50%;background:var(--bg-dark);cursor:pointer;}
@@ -1465,7 +1471,8 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    확대된 채로 남아 글을 다 쓰고 나면 화면이 어긋나 있다.
    meta 의 user-scalable=no 는 사파리가 무시하므로, 막는 것은 이 16px 이다.
    가짜 입력칸(div.ci-box)은 누려도 키보드가 안 떠므로 그대로 둔다. */
-input.inp,textarea.ta,.chat-input input.ci-box,input[type="text"],input[type="search"],
+input.inp,textarea.ta,.chat-input input.ci-box,.chat-input .ci-box[contenteditable],
+input[type="text"],input[type="search"],
 input[type="email"],input[type="password"],input[type="tel"],input[type="number"],
 textarea,select{font-size:16px;}
 .file-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1px dashed var(--border-default);border-radius:var(--radius-sm);background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-gray);cursor:pointer;}
@@ -3040,7 +3047,11 @@ body.free #scr-viewer .progress-thin{display:none;}
 
   <!-- 말을 거는 화면이니 말할 자리가 늘 보여야 한다 -->
   <div class="chat-input nk-home-input">
-    <input class="ci-box" id="nk-home-ci" type="text" placeholder="무엇이든 물어보세요">
+    <!-- 아이폰이 입력칸 위에 띄우는 ^ v ✓ 막대를 피해 보는 시도(리건, 2026-11-17).
+         <input> 이 아니라 글자를 받는 칸이다 — 안내문은 data-ph 로 그린다. -->
+    <div class="ci-box" id="nk-home-ci" contenteditable="true" role="textbox"
+         aria-label="무엇이든 물어보세요" data-ph="무엇이든 물어보세요"
+         enterkeyhint="send"></div>
     <button class="ci-send" id="nk-home-send" data-go="scr-chatstart" aria-label="보내기"><i data-lucide="arrow-up"></i></button>
   </div>
   <nav class="bottomnav">
@@ -5333,8 +5344,10 @@ function lseg(key){
   const box = document.getElementById("nk-home-ci");
   const send = document.getElementById("nk-home-send");
   if(!box || !send) return;
+  /* <input> 이면 value, 글자를 받는 div 면 적힐 글이다 */
+  const typed = () => (box.value !== undefined ? box.value : box.textContent).trim();
   const aim = () => {
-    const say = box.value.trim();
+    const say = typed();
     send.dataset.go = say ? "scr-chatroom" : "scr-chatstart";
     const first = say && document.querySelector("#scr-chatroom .bubble.user");
     if(first) first.textContent = say;
@@ -5342,6 +5355,14 @@ function lseg(key){
   send.addEventListener("click", aim, true);   /* 화면 전환보다 먼저 읽는다 */
   box.addEventListener("keydown", e => {
     if(e.key === "Enter"){ e.preventDefault(); send.click(); }
+  });
+  /* 붙여넣기는 글자만 받는다 — 서식이 따라들어오면 알약이 깨진다 */
+  box.addEventListener("paste", e => {
+    if(box.value !== undefined) return;
+    const cd = e.clipboardData || window.clipboardData;
+    if(!cd) return;
+    e.preventDefault();
+    document.execCommand("insertText", false, String(cd.getData("text") || "").replace(/\s+/g, " "));
   });
 })();
 
