@@ -114,6 +114,20 @@ svg.lucide{flex-shrink:0;}   /* 굵기는 lucide 기본값 2 유지 */
 body.clean .jumpbar{display:none;}
 @media (max-width:430px){body.clean .phone{border:none;border-radius:0;box-shadow:none;}}
 
+/* ── 앱 모드(홈 화면 아이콘)의 위·아래 ── (리건, 2026-11-16)
+   아이폰은 아래 홈 바가 쓰는 자리를 화면 높이에서 빼고 내줄 때가 있다.
+   그러면 폰 틀이 화면보다 짧아져, 틀 밖에 바탕색(#EBEBEB)이 회색 띠로 드러났다.
+   틀을 화면 높이(100dvh)만큼 늘리고, 그래도 남는 자리는 지금 떠 있는 화면과
+   같은 색으로 칠한다 — 그 자리는 페이지 바깥이라 아이폰이 바탕색으로 메운다.
+   로그인만 검정이고 나머지는 흰색이다(화면 번호는 show() 가 data-scr 에 적는다). */
+body.clean{min-height:100dvh;background:var(--bg-white);}
+body.clean .phone{min-height:100dvh;}
+body.clean[data-scr="scr-login"]{background:var(--bg-black);}
+/* 로그인 사진은 홈 바 자리까지 내려간다. 스크롤러가 아래를 비워 두면
+   사진이 끝난 자리에 흰 띠가 34px 남는다 — 그 여백을 사진 안쪽으로 옮긴다. */
+#scr-login>.scroll:last-child{padding-bottom:0;}
+#scr-login .login-wrap{padding-bottom:env(safe-area-inset-bottom);}
+
 /* ===== 폰 프레임 ===== */
 .phone{width:100%;max-width:420px;flex:1;min-height:0;background:var(--bg-white);border:1px solid var(--border-default);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:var(--shadow-md);position:relative;margin-bottom:0;padding-top:env(safe-area-inset-top);}
 @media(min-width:480px){ body{padding-bottom:16px;} .phone{border-radius:24px;} }
@@ -4896,6 +4910,8 @@ function show(id){
   if(id === "scr-reader"){ const tr = document.getElementById("rd-track");
     if(tr){ tr.scrollTop = 0; tr.querySelectorAll(".rd-card").forEach((c,k)=>c.classList.toggle("in", k===0)); rdSync(); } }
   current = id;
+  /* 앱 모드에서 폰 틀 밖에 남는 자리를 이 화면 색으로 칠하기 위해 어떤 화면인지 적어 둔다 */
+  document.body.dataset.scr = id;
   document.querySelectorAll("#jumpbar button").forEach(b=>{
     b.classList.toggle("on", b.dataset.jump === id);
   });
