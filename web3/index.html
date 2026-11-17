@@ -986,6 +986,22 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
   background:var(--nk-shade,none);
   -webkit-mask-image:var(--nk-shade-mask,none);mask-image:var(--nk-shade-mask,none);}
 #scr-chat .nk-stage .ins-scene{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:2;}
+/* 브랜드 색 입히기(리건, 2026-11-17).
+   참고 영상은 회색뿐이라 화면이 흑백으로 보인다. 빛기둥과 행성 바닥에만 라임을 아주 옅게 얹는다.
+   영상 위, 캔버스 아래에 끼우고 soft-light 로 섞는다. 덧칠이 아니라 원래 빛의 색만 돌리는 쪽이라
+   밝은 데는 밝은 채로, 어두운 데는 어두운 채로 남는다.
+   자리는 스크립트가 적어 주는 값을 쓴다. 빛기둥은 코어 한가운데(--nk-core-cy),
+   바닥은 지평선(--nk-hz)이다. 흰 글자와 흰 카드는 캔버스보다 위라 여기에 닿지 않는다.
+   코어 자체는 캔버스가 더 위에 그리므로 라임을 캔버스 안에서 따로 넣는다. */
+#scr-chat .nk-tint{position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;
+  pointer-events:none;mix-blend-mode:soft-light;
+  background:
+    radial-gradient(46% 62% at 50% var(--nk-core-cy,310px),
+      rgba(223,240,0,0.40) 0%,rgba(223,240,0,0.20) 42%,rgba(223,240,0,0) 78%),
+    linear-gradient(180deg,
+      rgba(223,240,0,0) calc(var(--nk-hz,580px) - 48px),
+      rgba(223,240,0,0.14) calc(var(--nk-hz,580px) + 70px),
+      rgba(223,240,0,0.22) 100%);}
 /* 아래쪽만 살짝 누른다(리건, 2026-11-17).
    영상의 바닥은 밝은 회색이다. 그 위에 '최근 대화'의 흰 글자와 흰 카드가 앉으면
    밝은 것 위에 밝은 것이라 읽히지 않는다. 아래로 갈수록 조금씩 덮어 글자를 살린다.
@@ -3302,6 +3318,16 @@ body.modal-open #scr-interest .ord-sub,
   body.chatting .wfoot{display:none;}
   #scr-chat,#scr-chatstart,#scr-chatroom{
     height:calc(100vh - 72px);overflow:hidden;padding-bottom:0;}
+  /* 낙타AI 만 머리말 밑으로 들어간다(리건, 2026-11-17).
+     머리말은 바탕이 없는데 그 자리에 .phone 의 흰 바탕이 72px 띠로 남아 있었다.
+     방을 화면 높이로 늘리고 그만큼 위로 당긴다. 머리말은 z-index 100 이라 장면 위에 그대로 뜬다.
+     대화방(scr-chatstart·scr-chatroom)은 바탕이 희어서 그대로 둔다. */
+  #scr-chat{height:100vh;margin-top:-72px;}
+  /* 로고가 검은 글자라 어두운 장면 위에서 사라진다. 여기서만 흰 글자로 뒤집는다.
+     히어로 사진 위에서 하는 것(.wnav.on-media)과 같은 처리인데,
+     저쪽은 .hero-slider 를 보고 켜지는 것이라 여기에는 안 걸린다. */
+  body.chatting:has(#scr-chat.active) .wnav-logo{
+    color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.38);}
   #scr-chat .topbar{display:none;}          /* 위 네비에 낙타AI 가 이미 켜져 있다 */
   #scr-chat .scroll,#scr-chatstart .chat-area,#scr-chatroom .chat-area{
     flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-inline:0;max-width:none;width:100%;}
@@ -3367,10 +3393,19 @@ body.modal-open #scr-interest .ord-sub,
      세로 화면에서 옆을 눌러 잘린 옆 하늘을 되돌리는 것과 같은 이유로,
      여기서는 위를 눌러 하늘을 되돌린다. 자리는 같다 — 영상과 캔버스 사이(::before).
      지평선 아래로는 닿지 않는다. 바닥은 밝아야 바닥으로 보인다. */
+  /* 겹이 둘이다. 앞이 가로 눌림, 뒤가 하늘 어둠이다.
+     가로 눌림은 빛기둥을 좁히려고 넣었다(리건, 2026-11-17). 넓은 화면에서는 영상의 옆이
+     잘리지 않아 옆 어둠이 꺼져 있고, 그래서 빛이 화면 끝까지 번져 기둥으로 안 보였다.
+     가운데 24% 는 건드리지 않고 거기서 양 끝으로 짙어진다. */
   #scr-chat .nk-stage::before{
-    background:linear-gradient(180deg,
-      rgba(10,12,14,.74) 0%, rgba(10,12,14,.54) 26%,
-      rgba(10,12,14,.24) 52%, rgba(10,12,14,0) 72%);
+    background:
+      linear-gradient(90deg,
+        rgba(8,10,13,.46) 0%, rgba(8,10,13,.34) 16%, rgba(8,10,13,.14) 30%,
+        rgba(8,10,13,0) 38%, rgba(8,10,13,0) 62%,
+        rgba(8,10,13,.14) 70%, rgba(8,10,13,.34) 84%, rgba(8,10,13,.46) 100%),
+      linear-gradient(180deg,
+        rgba(10,12,14,.74) 0%, rgba(10,12,14,.54) 26%,
+        rgba(10,12,14,.24) 52%, rgba(10,12,14,0) 72%);
     -webkit-mask-image:none;mask-image:none;}
   #scr-chat .sec{padding-block:16px;}
   /* 넓은 화면에는 하단 입력창이 늘 있어서 이 계단이 필요 없다 */
@@ -7108,6 +7143,7 @@ body.modal-open #scr-interest .ord-sub,
       poster="../assets/ins/ins-r8.jpg">
       <source src="../assets/ins/ins-r8.mp4" type="video/mp4">
     </video>
+    <i class="nk-tint"></i>
     <canvas class="ins-scene"></canvas>
   </div>
   <div class="topbar">
@@ -8676,8 +8712,12 @@ function lseg(key){
   }
   /* 알갱이 도장 — 속이 꽉 차고 가장자리만 살짝 번진다. 참고 영상의 점은 또렷하다 */
   const SP_DOT = sprite("255,255,255", [0, 1, 0.38, 1, 0.62, 0.34, 1, 0], 32);
-  /* 넓은 빛. 가운데가 밝고 멀리까지 옅게 퍼진다. 영상이 푸른 기가 도는 회색이라 조금 차게 맞췄다 */
-  const SP_GLOW = sprite("238,243,250", [0, 1, 0.10, 0.72, 0.25, 0.40, 0.45, 0.17, 0.70, 0.05, 1, 0], 256);
+  /* 넓은 빛. 가운데가 밝고 멀리까지 옅게 퍼진다.
+     푸른 기를 걷었다(238,243,250 → 242,246,232). 화면 전체가 차가운 회색으로만 보였다 */
+  const SP_GLOW = sprite("242,246,232", [0, 1, 0.10, 0.72, 0.25, 0.40, 0.45, 0.17, 0.70, 0.05, 1, 0], 256);
+  /* 코어의 라임 후광(리건, 2026-11-17). 흰 빛보다 넓게, 아주 옅게 둘러친다.
+     알갱이는 흰색 그대로 두고 둘레만 물들인다 — 알갱이까지 칠하면 코어가 노랗게 뜬다 */
+  const SP_LIME = sprite("205,231,92", [0, 0.62, 0.18, 0.40, 0.42, 0.17, 0.72, 0.04, 1, 0], 256);
   /* 뜨거운 속 — 하얗게 날아간 자리 */
   const SP_HOT = sprite("255,255,255", [0, 1, 0.30, 1, 0.55, 0.50, 0.80, 0.12, 1, 0], 128);
   /* 산 밑동의 안개. 색은 영상의 지평선 안개(대략 124,129,136)에 맞췄다 */
@@ -8960,6 +9000,8 @@ function lseg(key){
     if(host){
       host.style.setProperty("--nk-core-cy", cyC.toFixed(1) + "px");
       host.style.setProperty("--nk-core-r", rC.toFixed(1) + "px");
+      /* 지평선 자리. 바닥에 입히는 라임이 여기서부터 시작한다 */
+      host.style.setProperty("--nk-hz", (top + K_HZ * dh).toFixed(1) + "px");
     }
     return true;
   }
@@ -8985,7 +9027,7 @@ function lseg(key){
   let shadeA = 0, shadeOff = false;
   function shadeCss(){
     shadeA = clamp(2.1 * crop, 0, 0.86);
-    const w0 = 0.09 * dwCss, w1 = cw * 0.5;
+    const w0 = 0.065 * dwCss, w1 = cw * 0.5;   /* 0.09 → 0.065 (빛기둥 좁히기, 리건 2026-11-17) */
     const top = (ch - VH * dwCss / VW) * 0.5;
     const y1 = top + K_CY * VH * dwCss / VW + 0.8 * Rcss;
     const y2 = top + K_HZ * VH * dwCss / VW - 0.10 * ch * tallK;
@@ -9304,13 +9346,19 @@ function lseg(key){
        키울 수 없으니 밝기로 채운다. 잘리지 않은 화면(데스크톱)에서는 1 이라 아무것도 바뀌지 않는다 */
     const kb = 1 + 0.30 * cropN;
     const ox = cx + mcx * R, oy = cy + mcy * R;
-    let rr = 2.4 * R;
-    ctx.globalAlpha = 0.24 * (0.80 + 0.20 * Math.min(1.4, flc));
+    /* 라임 후광이 맨 아래다. 흰 빛보다 넓게 깔아 둘레만 물들인다 */
+    let rr = 2.3 * R;
+    ctx.globalAlpha = 0.16;
+    ctx.drawImage(SP_LIME, ox - rr, oy - rr, rr * 2, rr * 2);
+    /* 빛을 좁혔다(리건, 2026-11-17). 2.4→1.95 · 1.25→1.06 · 0.80→0.70 배.
+       넓은 후광이 폰에서 화면 폭을 다 덮어 빛기둥이 뭉개져 보였다 */
+    rr = 1.95 * R;
+    ctx.globalAlpha = 0.23 * (0.80 + 0.20 * Math.min(1.4, flc));
     ctx.drawImage(SP_GLOW, ox - rr, oy - rr, rr * 2, rr * 2);
-    rr = 1.25 * R * sc;
+    rr = 1.06 * R * sc;
     ctx.globalAlpha = Math.min(0.8, 0.58 * kb);
     ctx.drawImage(SP_GLOW, ox + 0.14 * lop * cph * R - rr, oy + 0.14 * lop * sph * R - rr, rr * 2, rr * 2);
-    rr = 0.80 * R;
+    rr = 0.70 * R;
     ctx.globalAlpha = 0.70 * lop;
     ctx.drawImage(SP_GLOW, ox + 0.42 * cph * R - rr, oy + 0.42 * sph * R - rr, rr * 2, rr * 2);
     for(j = 0; j < N_ARM; j++){
