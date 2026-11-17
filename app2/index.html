@@ -985,15 +985,19 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    참고 영상은 회색뿐이라 화면이 흑백으로 보인다. 빛기둥과 행성 바닥에만 라임을 아주 옅게 얹는다.
    캔버스 위에 덮고 soft-light 로 섞는다. 덧칠이 아니라 원래 빛의 색만 돌리는 쪽이라
    밝은 데는 밝은 채로, 어두운 데는 어두운 채로 남는다.
-   자리는 스크립트가 적어 주는 값을 쓴다. 빛기둥은 코어 한가운데(--nk-core-cy),
-   바닥은 지평선(--nk-hz)이다. 흰 글자와 흰 카드는 장면 바깥이라 여기에 닿지 않는다.
+   얹는 자리는 셋뿐이다. 코어 한가운데(--nk-core-cy), 빛기둥 맨 위(화면 꼭대기,
+   기둥이 가장 밝은 자리), 그리고 행성 바닥(--nk-hz)이다.
+   전에는 코어를 중심으로 넓게 한 번 깔았더니 기둥이 통째로 형광으로 덮였다.
+   기둥의 나머지는 흰빛 그대로 번지는 편이 자연스럽다. 흰 글자와 흰 카드는 장면 바깥이라 여기에 닿지 않는다.
    캔버스 아래에 두었더니 넓은 화면에서 바닥 색이 갈렸다 — 가운데는 영상이라 물들고
    양옆은 캔버스가 이어 붙인 자리라 안 물들어서 세로줄이 보였다(확인함). 그래서 위로 올렸다. */
 #scr-chat .nk-tint{position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;
   pointer-events:none;mix-blend-mode:soft-light;
   background:
-    radial-gradient(46% 62% at 50% var(--nk-core-cy,310px),
-      rgba(223,240,0,0.40) 0%,rgba(223,240,0,0.20) 42%,rgba(223,240,0,0) 78%),
+    radial-gradient(13% 10% at 50% var(--nk-core-cy,310px),
+      rgba(223,240,0,0.60) 0%,rgba(223,240,0,0.28) 46%,rgba(223,240,0,0) 100%),
+    radial-gradient(15% 13% at 50% 0%,
+      rgba(223,240,0,0.52) 0%,rgba(223,240,0,0.24) 45%,rgba(223,240,0,0) 100%),
     linear-gradient(180deg,
       rgba(223,240,0,0) calc(var(--nk-hz,580px) - 48px),
       rgba(223,240,0,0.14) calc(var(--nk-hz,580px) + 70px),
@@ -5972,6 +5976,49 @@ function lseg(key){
      그러면 영상에 원래 있는 안개가 그대로 비쳐서 이음매가 생길 수 없다.
      투명해지는 구간은 산 높이의 아래 절반이고, 지평선에서 완전히 사라진다. 안쪽 끝은 높이가 그보다 낮으니
      통째로 옅어져서, 두 산이 가운데에서 만나지 않고 안개 속으로 사라진다. */
+  /* ── 깔대기 굽기 ──
+     참고 영상의 빛기둥은 거의 일자다. 맨 위 163, 코어 바로 위 146 — 11% 밖에 안 떨어진다(실측).
+     기획이 준 레퍼런스는 맨 위가 가장 밝고 가로로 가장 넓으며, 내려올수록 어두워지고 좁아진다.
+     그래서 위에는 흰빛을 더하고 아래에서는 덜어낸다. 한 장에 둘 다 담는다 —
+     더하는 자리는 흰 점, 덜어내는 자리는 검은 점이라 겹치지 않는다.
+     좁아 보이는 것은 폭을 줄여서가 아니라 어두워져서다. 빛은 어두워지면 가늘어 보인다.
+     화면 크기가 바뀔 때만 굽고, 그릴 때는 한 번 찍기만 한다.
+     판은 작게(192×224) 굽고 늘려서 찍는다. 화면 크기 그대로 줄 단위로 구웠더니
+     줄마다 진하기가 계단처럼 끊겨서 가로 띠가 보였다(확인함).
+     작게 구워 늘리면 브라우저가 가로세로를 같이 섞어 줘서 끊기는 자리가 없다. */
+  const FN = document.createElement("canvas"), fnc = FN.getContext("2d");
+  const FNW = 192, FNN = 224;             /* 구워 두는 판의 크기. 화면 크기와 상관없이 늘 같다 */
+  let fnH = 0;
+  function bakeFunnel(){
+    fnH = Math.max(1, Math.round(cy * 1.15));
+    FN.width = FNW; FN.height = FNN;
+    fnc.setTransform(1, 0, 0, 1, 0, 0);
+    fnc.clearRect(0, 0, FNW, FNN);
+    const cs = cx / bw * FNW, Rs = R / bw * FNW;
+    for(let i = 0; i < FNN; i++){
+      const t = (i + 0.5) / FNN;
+      /* 더하기: 맨 위가 가장 세고 절반쯤에서 사라진다. 폭도 위가 넓다 */
+      const lift = 0.42 * Math.pow(Math.max(0, 1 - t / 0.48), 1.7);
+      /* 덜어내기: 4분의 1 지점부터 들어와 4분의 3 쯤에서 가장 세고, 코어 가까이에서는 다시 물러난다.
+         끝까지 세게 두었더니 빛기둥이 코어에 닿기 전에 끊겨 보였다(확인함) */
+      const cut = 0.31 * smooth((t - 0.26) / 0.46) * (1 - 0.45 * smooth((t - 0.72) / 0.28));
+      for(let k = 0; k < 2; k++){
+        const a = k ? cut : lift;
+        if(a < 0.004) continue;
+        const hw = k ? Rs * 1.92 : Rs * (2.6 - 1.1 * Math.min(1, t / 0.48));
+        const rgb = k ? "9,11,14" : "236,241,230";
+        const g = fnc.createLinearGradient(cs - hw, 0, cs + hw, 0);
+        g.addColorStop(0, "rgba(" + rgb + ",0)");
+        g.addColorStop(0.26, "rgba(" + rgb + "," + (a * 0.42).toFixed(4) + ")");
+        g.addColorStop(0.5, "rgba(" + rgb + "," + a.toFixed(4) + ")");
+        g.addColorStop(0.74, "rgba(" + rgb + "," + (a * 0.42).toFixed(4) + ")");
+        g.addColorStop(1, "rgba(" + rgb + ",0)");
+        fnc.fillStyle = g;
+        fnc.fillRect(0, i, FNW, 1);
+      }
+    }
+  }
+
   const MT = document.createElement("canvas"), mtc = MT.getContext("2d");
   let mtY = 0;
   function bakeMtn(){
@@ -6179,7 +6226,7 @@ function lseg(key){
     const showMtn = stage.getAttribute("data-nk-mtn") !== "off";
     const so = stage.getAttribute("data-nk-shade") === "off";
     if(so !== shadeOff){ shadeOff = so; shadeCss(); }
-    if(dirty){ bakeMtn(); dirty = false; }
+    if(dirty){ bakeMtn(); bakeFunnel(); dirty = false; }
     /* 40초를 더한 것은 시작하자마자 잡음이 이미 흐르는 중이게 하려는 것이다 */
     const ts = now / 1000 + 40;
     let i, j;
@@ -6242,6 +6289,9 @@ function lseg(key){
         ctx.fillStyle = sideR; ctx.fillRect(Math.floor(xR) - 1, 0, bw - Math.floor(xR) + 1, bh);
       }
     }
+
+    /* 깔대기. 산과 돌과 코어보다 먼저 찍어서 그것들이 위로 지나가게 한다 */
+    if(fnH > 1) ctx.drawImage(FN, 0, 0, FNW, FNN, 0, 0, bw, fnH);
 
     /* 산과 밑동 안개 */
     if(showMtn){
@@ -6311,10 +6361,6 @@ function lseg(key){
        키울 수 없으니 밝기로 채운다. 잘리지 않은 화면(데스크톱)에서는 1 이라 아무것도 바뀌지 않는다 */
     const kb = 1 + 0.30 * cropN;
     const ox = cx + mcx * R, oy = cy + mcy * R;
-    /* 라임 후광이 맨 아래다. 흰 빛보다 넓게 깔아 둘레만 물들인다 */
-    let rr = 2.3 * R;
-    ctx.globalAlpha = 0.16;
-    ctx.drawImage(SP_LIME, ox - rr, oy - rr, rr * 2, rr * 2);
     /* 빛을 좁혔다(리건, 2026-11-17). 2.4→1.95 · 1.25→1.06 · 0.80→0.70 배.
        넓은 후광이 폰에서 화면 폭을 다 덮어 빛기둥이 뭉개져 보였다 */
     rr = 1.95 * R;
@@ -6336,6 +6382,12 @@ function lseg(key){
       ctx.drawImage(SP_GLOW, ox + (u * S.ca - v * S.sa) * R * sc - rr, oy + (u * S.sa + v * S.ca) * R * sc - rr, rr * 2, rr * 2);
     }
     const hX = cx + hx * R, hY = cy + hyy * R;
+    /* 라임은 코어 가운데에만 둔다(리건, 2026-11-17).
+       전에는 흰 빛보다 넓게 깔아서 기둥까지 통째로 물들었다. 이제 흰 빛을 깐 다음,
+       뜨거운 속을 올리기 바로 앞에 좁게 한 번만 찍는다 — 하얗게 날아간 한가운데 둘레만 물든다 */
+    rr = 1.25 * R;
+    ctx.globalAlpha = 0.24;
+    ctx.drawImage(SP_LIME, hX - rr, hY - rr, rr * 2, rr * 2);
     rr = 0.55 * R * (0.88 + 0.22 * Math.min(1.5, flc));
     ctx.globalAlpha = Math.min(1, (0.50 + 0.30 * flc) * kb);
     ctx.drawImage(SP_GLOW, hX - rr, hY - rr, rr * 2, rr * 2);
