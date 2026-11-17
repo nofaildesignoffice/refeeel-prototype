@@ -925,6 +925,12 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 /* 말 거는 자리를 머리 바로 아래로 올렸다(리건, 2026-11-17).
    좌우 여백은 감싸고 있는 .sec 가 이미 준다 — 두 번 주지 않는다. */
 #scr-chat .sec>.nk-home-input{padding-inline:0;padding-top:4px;}
+/* 보내기를 입력칸 안으로 넣는다(리건, 2026-11-17).
+   .ci-field 가 칸과 단추를 함께 감싸 기준점이 된다.
+   칸 오른쪽에 여백을 더 준다 — 쓴 글이 단추 밑으로 들어가면 안 된다. */
+#scr-chat .nk-home-input .ci-field{position:relative;flex:1;min-width:0;display:flex;align-items:center;}
+#scr-chat .nk-home-input input.ci-box{padding-right:50px;}
+#scr-chat .nk-home-input .ci-send{position:absolute;right:3px;top:50%;transform:translateY(-50%);margin:0;}
 #scr-chat .ci-box{background:var(--bg-white);}
 #scr-chat input.ci-box{display:block;width:100%;min-width:0;
   font-family:inherit;color:var(--text-black);outline:none;}
@@ -3003,8 +3009,10 @@ body.free #scr-viewer .progress-thin{display:none;}
       </div>
       <!-- 말을 거는 화면이니 말할 자리가 머리 바로 아래에 있다(리건, 2026-11-17) -->
       <div class="chat-input nk-home-input">
-        <input class="ci-box" id="nk-home-ci" type="text" placeholder="무엇이든 물어보세요">
-        <button class="ci-send" id="nk-home-send" data-go="scr-chatstart" aria-label="보내기"><i data-lucide="arrow-up"></i></button>
+        <div class="ci-field">
+          <input class="ci-box" id="nk-home-ci" type="text" placeholder="무엇이든 물어보세요">
+          <button class="ci-send" id="nk-home-send" data-go="scr-chatstart" aria-label="보내기"><i data-lucide="arrow-up"></i></button>
+        </div>
       </div>
     </div>
 
