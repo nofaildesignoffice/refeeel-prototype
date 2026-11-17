@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>인사이트 머리 — 영상 10편 (4:5)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#1A1A1A; --ink-2:#333333; --gray:#666666; --light:#999999;
+  --white:#FFFFFF; --paper:#FBFDEF; --page:#EFEDE8;
+  --line:#E0E0E0; --line-2:#D0D0D0;
+  --brand:#DFF000; --brand-ink:#1A1A1A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:9999px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--page);color:var(--ink);
+  line-height:1.5;-webkit-font-smoothing:antialiased;}
+:where(a,button):focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+
+.bar{position:sticky;top:0;z-index:60;background:rgba(239,237,232,.94);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
+  border-bottom:1px solid var(--line-2);}
+.bar-in{max-width:1320px;margin:0 auto;padding:15px 22px 13px;}
+.bar h1{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
+.bar h1 span{color:var(--light);font-weight:700;}
+.bar p{font-size:12.5px;color:var(--gray);margin-top:5px;line-height:1.65;word-break:keep-all;}
+.bar p b{font-weight:800;color:var(--ink-2);}
+.bar .tools{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.bar button{font-family:inherit;font-size:12px;font-weight:700;padding:7px 13px;cursor:pointer;
+  border-radius:var(--r-full);border:1px solid var(--line-2);background:var(--white);color:var(--ink-2);}
+.bar button.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+.note{max-width:1320px;margin:22px auto 0;padding:0 22px;}
+.note div{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--brand);
+  border-radius:var(--r-md);padding:13px 15px;font-size:12.5px;color:var(--gray);line-height:1.8;word-break:keep-all;}
+.note b{color:var(--ink-2);font-weight:800;}
+
+.wrap{max-width:1320px;margin:0 auto;padding:22px 22px 24px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,405px);justify-content:center;gap:22px;}
+@media (max-width:460px){ .grid{grid-template-columns:1fr;} }
+
+figure{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+figcaption{padding:13px 15px 15px;}
+.tag{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.tag em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.4px;color:var(--brand-ink);
+  background:var(--brand);border-radius:var(--r-full);padding:3px 8px;min-width:26px;text-align:center;}
+.tag strong{font-size:13.5px;font-weight:800;letter-spacing:-.2px;}
+.tag i{font-style:normal;margin-left:auto;font-size:10.5px;font-weight:700;color:var(--light);}
+figcaption p{font-size:12px;color:var(--gray);line-height:1.65;word-break:keep-all;}
+
+/* ── 앱 조각 — 4:5 로 늘린 .ins-head ── */
+.strip{position:relative;width:403px;line-height:normal;}
+.ins-head{position:relative;aspect-ratio:4/5;display:flex;flex-direction:column;
+  padding:16px;overflow:hidden;background:#141414;}
+.ins-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  pointer-events:none;border:0;display:block;}
+.sec-head{position:relative;z-index:2;display:flex;align-items:baseline;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:800;letter-spacing:-.2px;color:#fff;
+  text-shadow:0 1px 10px rgba(0,0,0,.5);}
+.ins-stat{position:relative;z-index:2;margin-top:auto;display:flex;padding:17px 8px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);border-radius:var(--r-sm);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);}
+.ins-stat>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.ins-stat>div+div{border-left:1px solid rgba(255,255,255,.2);}
+.ins-stat b{font-size:21px;font-weight:800;letter-spacing:-.5px;color:#fff;}
+.ins-stat span{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.7);}
+
+/* 밝은 안(10번)은 글자를 되돌린다 */
+.strip.lightv .ins-head{background:#FFFFFF;}
+.strip.lightv .sec-title{color:var(--ink);text-shadow:none;}
+.strip.lightv .ins-stat{background:rgba(255,255,255,.62);border-color:rgba(26,26,26,.1);}
+.strip.lightv .ins-stat>div+div{border-left-color:rgba(26,26,26,.1);}
+.strip.lightv .ins-stat b{color:var(--ink);}
+.strip.lightv .ins-stat span{color:var(--gray);}
+
+/* 지금 쓰는 125px 과 견주기 */
+body.compare .ins-head{aspect-ratio:auto;height:125px;}
+body.compare .ins-stat{margin-top:10px;}
+
+.foot{max-width:1320px;margin:0 auto;padding:4px 22px 70px;font-size:12.5px;color:var(--gray);
+  line-height:1.85;word-break:keep-all;}
+.foot b{color:var(--ink-2);font-weight:800;}
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="bar-in">
+  <h1>인사이트 머리 — 영상 10편 <span>4:5</span></h1>
+  <p>이번엔 <b>진짜 영상(mp4)</b>입니다. 참고 영상의 장면 — 어둠 · 위에서 내려오는 빛기둥 ·
+     입자가 뭉쳐 빛나는 코어 · 둘레를 떠다니는 파편 · 바닥의 안개 — 를 열 가지로 변주했습니다.
+     섹션은 요청대로 <b>4:5</b>(403 × 504)로 늘렸고, 지표 카드는 바닥에 붙여 유리로 띄웠습니다.</p>
+  <div class="tools">
+    <button id="t-compare">지금 쓰는 125px 과 견주기</button>
+    <button id="t-pause">멈춰 보기</button>
+  </div>
+</div></header>
+
+<div class="note"><div>
+  영상은 <b>5초 · 24fps · 600×750 · 한 편 약 170KB</b> 입니다. 끊김 없이 반복되도록
+  모든 움직임을 주기 함수로 짰습니다 — 마지막 프레임이 첫 프레임으로 이어집니다.
+  소리 없음 · <b>playsinline</b> · 자동 재생이라 iOS 에서도 전체화면으로 튀지 않습니다.
+  데이터 아끼기(저전력 모드)가 켜져 있으면 영상이 서고 <b>첫 프레임</b>이 그림처럼 남습니다.
+</div></div>
+
+<main class="wrap"><div class="grid" id="grid"></div></main>
+
+<p class="foot">
+  고르실 때: <b>글자가 읽히는가</b> · <b>5초가 지루하지 않은가</b> · <b>504px 을 내줄 만한가</b>.<br>
+  번호를 주시면 앱과 웹 양쪽에 넣겠습니다. 길이·속도·밝기도 바꿀 수 있습니다.
+</p>
+
+<script>
+const BASE = "https://nofaildesignoffice.github.io/refeeel-prototype/assets/ins/";
+const V = [
+ ["01","모여드는 빛","바깥 어둠에서 조각들이 가운데 코어로 빨려 들어옵니다. 위에서 빛기둥 하나가 내려와 코어에 닿습니다. 참고 영상에 가장 가깝습니다."],
+ ["02","라임 코어","같은 장면이되 코어가 브랜드 라임입니다. 조각 수를 줄여 더 또렷합니다."],
+ ["03","빛기둥과 먼지","코어 없이 빛기둥 둘과 떠오르는 먼지뿐입니다. 가장 조용합니다."],
+ ["04","궤도","코어 둘레를 조각들이 타원으로 돌고 꼬리를 남깁니다. 이따금 하나가 안으로 떨어집니다."],
+ ["05","퍼지는 파동","코어에서 고리가 퍼져 나가고, 고리가 지날 때 조각들이 차례로 밝아집니다."],
+ ["06","성운","구름 덩이가 느리게 돌고 그 안에서 알갱이가 반짝입니다. 가장 풍성합니다."],
+ ["07","이어지는 별자리","점이 차례로 켜지고 가까운 점끼리 라임 선으로 이어집니다. 기록이 서로 이어진다는 쪽입니다."],
+ ["08","내려 쌓이는 빛","위에서 내려온 알갱이가 아래 가운데로 모여 빛무리를 이룹니다. 지표 카드 바로 뒤가 가장 밝습니다."],
+ ["09","빛을 받는 결정","가운데 결정이 천천히 돌고 면마다 차례로 빛을 받습니다. 게임의 재화 같은 인상입니다."],
+ ["10","밝은 안개","흰 바탕 위로 라임 먼지가 모여듭니다. 지금 앱의 밝은 화면을 지키고 싶을 때."]
+];
+
+const grid = document.getElementById("grid");
+V.forEach(([n, name, desc]) => {
+  const fig = document.createElement("figure");
+  fig.innerHTML =
+    '<div class="strip' + (n === "10" ? " lightv" : "") + '">' +
+      '<div class="ins-head">' +
+        '<video class="ins-vid" autoplay muted loop playsinline preload="none" ' +
+               'poster="' + BASE + 'ins-' + n + '.jpg" data-src="' + BASE + 'ins-' + n + '.mp4"></video>' +
+        '<div class="sec-head"><span class="sec-title">나의 인사이트</span></div>' +
+        '<div class="ins-stat"><div><b>10</b><span>밑줄</span></div><div><b>6</b><span>메모</span></div></div>' +
+      '</div>' +
+    '</div>' +
+    '<figcaption><div class="tag"><em>' + n + '</em><strong>' + name + '</strong>' +
+      '<i>mp4 · 5초</i></div><p>' + desc + '</p></figcaption>';
+  grid.appendChild(fig);
+});
+
+/* 열 편을 한꺼번에 내려받지 않는다 — 화면에 들어올 때 붙인다 */
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    const v = e.target;
+    if(e.isIntersecting){
+      if(!v.src && v.dataset.src){ v.src = v.dataset.src; }
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  });
+}, {rootMargin:"300px"});
+document.querySelectorAll("video").forEach(v => io.observe(v));
+
+const bCmp = document.getElementById("t-compare");
+bCmp.addEventListener("click", () => {
+  const on = document.body.classList.toggle("compare");
+  bCmp.classList.toggle("on", on);
+  bCmp.textContent = on ? "다시 4:5 로" : "지금 쓰는 125px 과 견주기";
+});
+let paused = false;
+const bP = document.getElementById("t-pause");
+bP.addEventListener("click", () => {
+  paused = !paused;
+  bP.classList.toggle("on", paused);
+  bP.textContent = paused ? "다시 재생" : "멈춰 보기";
+  document.querySelectorAll("video").forEach(v => paused ? v.pause() : v.play().catch(()=>{}));
+});
+</script>
+</body>
+</html>
