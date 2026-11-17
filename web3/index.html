@@ -1034,8 +1034,9 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    --nk-core-cy(장면 위에서 코어 한가운데까지)와 --nk-core-r(반지름)을 적어 준다.
    빼는 68px 은 글이 이미 밀려 있는 몫이다. 상단바 52px + .sec 의 위 여백 16px.
    24px 은 코어 아래 끝과 이름표 사이 틈이다. */
+/* 스크립트가 재서 인라인으로 덮어쓴다(placeHero). 여기 값은 스크립트가 못 돌 때의 어림값이다 */
 #scr-chat .nk-hero{padding-top:calc(
-  var(--nk-core-cy,310px) + var(--nk-core-r,80px) + 24px - 68px);}
+  var(--nk-core-cy,310px) + var(--nk-core-r,80px) + 24px - 124px);}
 #scr-chat .nk-hero .nk-kick{color:rgba(255,255,255,.72);}
 #scr-chat .nk-hero b{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
 #scr-chat .nk-hero p{color:rgba(255,255,255,.84);text-shadow:0 1px 10px rgba(0,0,0,.45);}
@@ -9029,8 +9030,25 @@ function lseg(key){
       host.style.setProperty("--nk-core-r", rC.toFixed(1) + "px");
       /* 지평선 자리. 바닥에 입히는 라임이 여기서부터 시작한다 */
       host.style.setProperty("--nk-hz", (top + K_HZ * dh).toFixed(1) + "px");
+      placeHero(cyC, rC);
     }
     return true;
+  }
+
+  /* ── 머리 글자 자리 ──
+     글자는 코어 아래 24px 에서 시작한다. 코어 자리는 장면(.nk-stage) 기준인데
+     글자는 스크롤러 안에 있어서, 그 사이에 낀 상단바와 안쪽 여백만큼 빼야 한다.
+     그 값을 CSS 에 손으로 적어 두었더니 틀렸다. 앱에서는 상단바 52 뿐 아니라
+     스크롤러 여백 52 와 .sec 여백 20 이 더 있어서, 빼야 할 값이 68 이 아니라 124 였다.
+     그래서 글자가 61px 아래에 있었다(실측).
+     이제 적지 않고 잰다. 여백을 0 으로 두고 한 번 재서, 모자란 만큼만 채운다.
+     화면 크기가 바뀔 때만 재므로 매 장 드는 값이 없고, 좁은 화면과 넓은 화면이 같은 길을 쓴다. */
+  function placeHero(cyC, rC){
+    const hero = host && host.querySelector(".nk-hero");
+    if(!hero) return;
+    hero.style.paddingTop = "0px";
+    const dy = hero.getBoundingClientRect().top - stage.getBoundingClientRect().top;
+    hero.style.paddingTop = Math.max(0, cyC + rC + 24 - dy).toFixed(1) + "px";
   }
 
   /* ── 옆 어둠 ──
@@ -9088,6 +9106,59 @@ function lseg(key){
      그러면 영상에 원래 있는 안개가 그대로 비쳐서 이음매가 생길 수 없다.
      투명해지는 구간은 산 높이의 아래 절반이고, 지평선에서 완전히 사라진다. 안쪽 끝은 높이가 그보다 낮으니
      통째로 옅어져서, 두 산이 가운데에서 만나지 않고 안개 속으로 사라진다. */
+  /* ── 빛기둥의 압축 자국 덮기 ──
+     영상의 빛기둥은 바탕이 매끈해서 h.264 가 남긴 네모난 얼룩과 띠가 그대로 드러난다.
+     대비를 올려 보면 코어 둘레에 16점짜리 네모가 격자로 보인다(확인함). 기획이 "뭐가 덮여 있다"고 한 것이 이것이다.
+     영상을 다시 뽑아도 이미 박힌 자국이라 지워지지 않는다. 그래서 그 자리만 덮는다.
+     잘게 줄였다가 다시 늘인다. 줄이는 동안 잔 무늬가 평균으로 뭉개져서 네모가 사라진다.
+     절반 조금 넘게만 덮어 원래 결은 남긴다. 가장자리는 둥글게 옅어지게 해서
+     덮은 자리가 네모로 드러나지 않게 한다. */
+  const BL = document.createElement("canvas"), blc = BL.getContext("2d");
+  const BLW = 80, BLH = 100;
+  BL.width = BLW; BL.height = BLH;
+  if(blc) blc.imageSmoothingQuality = "high";
+  /* 옅어지는 모양은 가로와 세로를 따로 곱한다.
+     둥근 하나로 잡았더니 아래 모서리 쪽에서 투명도가 0 이 되기 전에 판이 끝나서
+     가로줄이 보였다(확인함). 가로는 양 끝에서, 세로는 아래에서 0 이 된다.
+     위쪽은 화면 꼭대기라 그 위에 아무것도 없으니 끊어도 보이지 않는다. */
+  const BL_MX = blc && blc.createLinearGradient(0, 0, BLW, 0);
+  const BL_MY = blc && blc.createLinearGradient(0, 0, 0, BLH);
+  if(BL_MX){
+    BL_MX.addColorStop(0, "rgba(0,0,0,0)");
+    BL_MX.addColorStop(0.12, "rgba(0,0,0,0.55)");
+    BL_MX.addColorStop(0.26, "rgba(0,0,0,1)");
+    BL_MX.addColorStop(0.74, "rgba(0,0,0,1)");
+    BL_MX.addColorStop(0.88, "rgba(0,0,0,0.55)");
+    BL_MX.addColorStop(1, "rgba(0,0,0,0)");
+    BL_MY.addColorStop(0, "rgba(0,0,0,1)");
+    BL_MY.addColorStop(0.58, "rgba(0,0,0,1)");
+    BL_MY.addColorStop(0.80, "rgba(0,0,0,0.52)");
+    BL_MY.addColorStop(1, "rgba(0,0,0,0)");
+  }
+  function deblock(){
+    if(!blc || !BL_MX || !vid || vid.readyState < 2 || R < 4) return;
+    const rw = 5.8 * R, rh = (cy + 2.2 * R) - vT;
+    if(rw < 8 || rh < 8) return;
+    const x0 = cx - 2.9 * R;
+    let sx = (x0 - vL) / vW * VW, sw = rw / vW * VW;
+    const sy = 0, sh = Math.min(VH, rh / vH * VH);
+    if(sx < 0){ sw += sx; sx = 0; }
+    if(sx + sw > VW) sw = VW - sx;
+    if(sw < 2 || sh < 2) return;
+    blc.setTransform(1, 0, 0, 1, 0, 0);
+    blc.globalCompositeOperation = "source-over";
+    blc.globalAlpha = 1;
+    blc.clearRect(0, 0, BLW, BLH);
+    blc.drawImage(vid, sx, sy, sw, sh, 0, 0, BLW, BLH);
+    blc.globalCompositeOperation = "destination-in";
+    blc.fillStyle = BL_MX; blc.fillRect(0, 0, BLW, BLH);
+    blc.fillStyle = BL_MY; blc.fillRect(0, 0, BLW, BLH);
+    blc.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 0.62;
+    ctx.drawImage(BL, 0, 0, BLW, BLH, x0, vT, rw, rh);
+    ctx.globalAlpha = 1;
+  }
+
   /* ── 깔대기 굽기 ──
      참고 영상의 빛기둥은 거의 일자다. 맨 위 163, 코어 바로 위 146 — 11% 밖에 안 떨어진다(실측).
      기획이 준 레퍼런스는 맨 위가 가장 밝고 가로로 가장 넓으며, 내려올수록 어두워지고 좁아진다.
@@ -9573,7 +9644,8 @@ function lseg(key){
       }
     }
 
-    /* 깔대기. 산과 돌과 코어보다 먼저 찍어서 그것들이 위로 지나가게 한다 */
+    /* 압축 자국 덮기와 깔대기. 산과 돌과 코어보다 먼저 찍어서 그것들이 위로 지나가게 한다 */
+    deblock();
     if(fnH > 1) ctx.drawImage(FN, 0, 0, FNW, FNN, 0, 0, bw, fnH);
 
     /* 산과 밑동 안개 */
