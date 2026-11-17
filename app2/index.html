@@ -964,8 +964,15 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
      --nk-core-r  : 코어 반지름 */
 #scr-chat .nk-stage{position:absolute;left:0;right:0;top:0;bottom:0;
   overflow:hidden;background:#16191C;z-index:0;pointer-events:none;}
-#scr-chat .nk-stage .ins-vid{position:absolute;left:0;top:0;width:100%;height:100%;border:0;display:block;
-  object-fit:cover;object-position:50% 50%;z-index:0;}
+/* 영상은 어느 화면에서나 세로에 맞춘다(리건, 2026-11-17).
+   cover 로 두면 넓은 화면에서 폭에 맞춰 커지면서 위아래가 잘린다. 그러면 어두운 하늘과
+   가까운 바닥이 날아가고 빛기둥만 늘어나서, 폰에서 보는 것과 다른 장면이 된다.
+   세로에 맞추면 구도가 하나로 남는다. 폰에서는 영상이 화면보다 넓어 양옆이 잘리고,
+   넓은 화면에서는 영상이 가운데 기둥처럼 서고 양옆이 빈다. 그 빈자리는 캔버스가 잇는다.
+   aspect-ratio 를 적어 두는 것은 영상 정보가 오기 전에도 상자 크기가 정해지게 하려는 것이다. */
+#scr-chat .nk-stage .ins-vid{position:absolute;left:50%;top:0;width:auto;height:100%;
+  aspect-ratio:1208/1510;max-width:none;transform:translateX(-50%);
+  border:0;display:block;object-fit:fill;z-index:0;}
 /* 옆 어둠 — 영상(0)과 캔버스(2) 사이에 낀다. 세로로 긴 화면에서 영상의 양옆이 잘려 나가
    빛기둥의 밝은 가운데만 남는 것을 되돌린다. 양옆을 어둡게 덮되 가운데 빛기둥 자리는 비우고,
    아래로 갈수록 옅어져 바닥에는 닿지 않는다. 배경(가로)과 마스크(세로)에 들어갈 값은
@@ -976,12 +983,13 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-chat .nk-stage .ins-scene{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:2;}
 /* 브랜드 색 입히기(리건, 2026-11-17).
    참고 영상은 회색뿐이라 화면이 흑백으로 보인다. 빛기둥과 행성 바닥에만 라임을 아주 옅게 얹는다.
-   영상 위, 캔버스 아래에 끼우고 soft-light 로 섞는다. 덧칠이 아니라 원래 빛의 색만 돌리는 쪽이라
+   캔버스 위에 덮고 soft-light 로 섞는다. 덧칠이 아니라 원래 빛의 색만 돌리는 쪽이라
    밝은 데는 밝은 채로, 어두운 데는 어두운 채로 남는다.
    자리는 스크립트가 적어 주는 값을 쓴다. 빛기둥은 코어 한가운데(--nk-core-cy),
-   바닥은 지평선(--nk-hz)이다. 흰 글자와 흰 카드는 캔버스보다 위라 여기에 닿지 않는다.
-   코어 자체는 캔버스가 더 위에 그리므로 라임을 캔버스 안에서 따로 넣는다. */
-#scr-chat .nk-tint{position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;
+   바닥은 지평선(--nk-hz)이다. 흰 글자와 흰 카드는 장면 바깥이라 여기에 닿지 않는다.
+   캔버스 아래에 두었더니 넓은 화면에서 바닥 색이 갈렸다 — 가운데는 영상이라 물들고
+   양옆은 캔버스가 이어 붙인 자리라 안 물들어서 세로줄이 보였다(확인함). 그래서 위로 올렸다. */
+#scr-chat .nk-tint{position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;
   pointer-events:none;mix-blend-mode:soft-light;
   background:
     radial-gradient(46% 62% at 50% var(--nk-core-cy,310px),
@@ -3094,8 +3102,8 @@ body.free #scr-viewer .progress-thin{display:none;}
       poster="../assets/ins/ins-r8.jpg">
       <source src="../assets/ins/ins-r8.mp4" type="video/mp4">
     </video>
-    <i class="nk-tint"></i>
     <canvas class="ins-scene"></canvas>
+    <i class="nk-tint"></i>
   </div>
   <div class="topbar">
     <span class="logo">낙타AI</span>
@@ -5480,6 +5488,7 @@ function lseg(key){
   if(!stage) return;
   const cvs = stage.querySelector(".ins-scene");
   if(!cvs) return;
+  const vid = stage.querySelector(".ins-vid");   /* 양옆을 이을 때 가장자리 띠를 여기서 떠 온다 */
   const ctx = cvs.getContext("2d");
   if(!ctx) return;
   const host = stage.closest ? stage.closest("#scr-chat") : document.getElementById("scr-chat");
@@ -5858,6 +5867,8 @@ function lseg(key){
   /* 옆이 잘린 정도. 영상 폭 가운데 화면 밖으로 나간 몫이다(0~1).
      1440×830 은 0(하나도 안 잘림), 768×1024 는 0.06, 360×640 은 0.30, 420×877 은 0.40 이다 */
   let crop = 0, cropN = 0, tallK = 1;
+  let rL = 0, rW = 0;                     /* 돌이 떠다니는 상자(캔버스 점 단위) */
+  let sideL = null, sideR = null;         /* 양옆을 가장자리로 갈수록 어둡게 하는 덧칠 */
   function size(){
     const w = cvs.clientWidth, h = cvs.clientHeight;
     if(!w || !h) return false;
@@ -5866,16 +5877,35 @@ function lseg(key){
     if(w === cw && h === ch && pw === bw && ph === bh) return true;
     cw = w; ch = h; dpr = d; bw = pw; bh = ph;
     cvs.width = pw; cvs.height = ph;
-    const s = Math.max(w / VW, h / VH), dw = VW * s, dh = VH * s;
+    /* 늘 세로에 맞춘다(리건, 2026-11-17). 전에는 max 라서 넓은 화면에서 폭에 맞춰졌다.
+       그 바람에 위아래가 잘려 폰과 다른 장면이 됐다. 이제 화면이 영상보다 넓으면
+       양옆이 남고, 그 자리는 아래 '양옆 잇기' 에서 캔버스가 채운다 */
+    const s = h / VH, dw = VW * s, dh = VH * s;
     const left = (w - dw) * 0.5, top = (h - dh) * 0.5;
     const cyC = top + K_CY * dh, rC = K_R * dw;
     vL = left * d; vT = top * d; vW = dw * d; vH = dh * d;
     cx = (left + 0.5 * dw) * d; cy = cyC * d; R = rC * d; hy = (top + K_HZ * dh) * d;
     Rcss = rC; dwCss = dw; dirty = true;
+    /* 늘린 양옆이 평평한 판처럼 보이지 않게 가장자리로 갈수록 어둡게 덮는다 */
+    sideL = sideR = null;
+    if(vL > 0.5){
+      sideL = ctx.createLinearGradient(0, 0, vL, 0);
+      sideR = ctx.createLinearGradient(pw, 0, vL + vW, 0);
+      for(const g of [sideL, sideR]){
+        g.addColorStop(0, "rgba(6,8,11,0.62)");
+        g.addColorStop(0.45, "rgba(6,8,11,0.30)");
+        g.addColorStop(0.80, "rgba(6,8,11,0.09)");
+        g.addColorStop(1, "rgba(6,8,11,0)");
+      }
+    }
     crop = Math.max(0, 1 - w / dw); cropN = Math.min(1, crop / 0.4);
-    /* 세로로 긴 화면에서는 산을 1.45 배까지 키운다. 그대로 두면 877px 높이에 100px 짜리라 눈에 안 띈다.
-       높이÷폭이 1 이하면 그대로, 1.9 이상이면 1.45 배다 */
-    tallK = 1 + 0.45 * smooth((h / w - 1) / 0.9);
+    /* 돌이 떠다니는 상자. 폰에서는 영상 상자(화면보다 넓다), 넓은 화면에서는 화면 전체다.
+       영상 상자에만 묶어 두면 넓은 화면에서 돌이 가운데 기둥 안에만 모인다 */
+    rL = Math.min(vL, 0); rW = Math.max(vW, bw);
+    /* 산 크기는 어디서나 같다. 영상이 늘 세로에 맞춰지므로 세계를 재는 자가 하나뿐이고,
+       화면 비율로 산만 따로 키우면 넓은 화면에서 다른 세계가 된다.
+       1.45 는 폰에서 쓰던 값이다 — 폰에서 보던 산 크기를 그대로 넓은 화면으로 옮긴다 */
+    tallK = 1.45;
     shadeCss();
     /* 코어가 차지한 자리를 화면 쪽에 알려 준다. 글자를 그 아래에 놓는 데 쓴다 */
     if(host){
@@ -6051,7 +6081,7 @@ function lseg(key){
       let a = smooth(tv * c / 0.045);                    /* 생길 때 서서히 나타난다 */
       if(a <= 0.02) continue;
       const r = d.rad * (0.55 + 0.95 * d.z * d.z) * U;
-      let x = vL + u * vW;
+      let x = rL + u * rW;
       const y = vT + v * vH;
       if(x < -r - 2 || x > bw + r + 2 || y < -r - 2 || y > bh + r + 2) continue;
       /* 큰 돌(코어 반지름의 4% 이상)은 뜨거운 속을 가리지 않게 옆으로 비켜 지나간다.
@@ -6158,6 +6188,60 @@ function lseg(key){
     ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = 1;
     ctx.clearRect(0, 0, bw, bh);
+
+    /* ── 양옆 잇기 ──
+       넓은 화면에서는 영상이 가운데 기둥처럼 서고 양옆이 남는다.
+       영상의 양 끝 4분의 1을 거울처럼 뒤집어 가며 이어 붙인다.
+       뒤집으면 이음매에서 같은 줄이 만나므로 금이 생길 수 없고, 자갈도 안개도 늘어나지 않고
+       제 크기 그대로 이어진다. 띠를 늘려 펴 봤더니 바닥 자갈이 가로로 뭉개지면서
+       무늬가 있는 가운데와 없는 양옆이 직선으로 갈렸다(확인함). 그래서 거울로 바꿨다.
+       폰에서는 영상이 화면보다 넓어 vL 이 음수라 여기를 건너뛴다. */
+    if(vL > 0.5 && vid && vid.readyState >= 2){
+      const tS = VW * 0.25, tD = tS * (vW / VW), xR = vL + vW;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, vT, Math.ceil(vL) + 1, vH);
+      ctx.rect(Math.floor(xR) - 1, vT, bw - Math.floor(xR) + 1, vH);
+      ctx.clip();
+      /* 왼쪽. 첫 칸은 뒤집어 붙여서 영상의 맨 왼쪽 줄이 이음매에서 그대로 만난다.
+         다음 칸은 바로 붙여서 또 만난다. 뒤집고 바로 붙이기를 번갈아 하면 어디서도 끊기지 않는다 */
+      for(let k = 0; k < 16 && vL - k * tD > -1; k++){
+        ctx.save(); ctx.translate(vL - k * tD, vT);
+        if(k & 1){ ctx.drawImage(vid, 0, 0, tS, VH, -tD - 0.5, 0, tD + 1, vH); }
+        else { ctx.scale(-1, 1); ctx.drawImage(vid, 0, 0, tS, VH, -0.5, 0, tD + 1, vH); }
+        ctx.restore();
+      }
+      /* 오른쪽. 같은 식으로 영상의 맨 오른쪽 줄에서 이어 나간다 */
+      for(let k = 0; k < 16 && xR + k * tD < bw + 1; k++){
+        ctx.save(); ctx.translate(xR + k * tD, vT);
+        if(k & 1){ ctx.drawImage(vid, VW - tS, 0, tS, VH, -0.5, 0, tD + 1, vH); }
+        else { ctx.scale(-1, 1); ctx.drawImage(vid, VW - tS, 0, tS, VH, -tD - 0.5, 0, tD + 1, vH); }
+        ctx.restore();
+      }
+      /* 하늘만 평평하게 편다.
+         거울로 붙이면 영상 가장자리의 밝기 기울기(가운데로 갈수록 밝다)가 뒤집혀 겹치면서
+         양옆에 흐린 빛기둥이 하나씩 더 생긴다(확인함). 참고 영상에 없는 기둥이다.
+         하늘에는 무늬가 없고 세로 그러데이션뿐이라, 맨 끝 줄만 떠다가 늘여 덮으면 기울기가 지워진다.
+         지평선을 조금 지나서 사라지게 한다. 안개도 매끈해서 덮는 편이 낫고,
+         자갈이 시작되는 자리에서는 이미 다 옅어져 있어 바닥 무늬는 거울이 붙인 대로 남는다.
+         세로로 옅어지는 덮개라 띠 여덟 개로 끊어서 칠한다 — 캔버스에는 세로 투명도가 없다. */
+      const SL = 10, yE = hy + 0.03 * bh, NB = 9;
+      for(let b = 0; b < NB && yE > 4; b++){
+        const y0 = yE * b / NB, y1 = yE * (b + 1) / NB;
+        const a = 1 - smooth((y0 + y1) * 0.5 / yE);
+        if(a <= 0.02) continue;
+        const sy = (y0 - vT) / vH * VH, sh = (y1 - y0) / vH * VH;
+        ctx.globalAlpha = a;
+        ctx.drawImage(vid, 0, sy, SL, sh, 0, y0, Math.ceil(vL) + 1, y1 - y0);
+        ctx.drawImage(vid, VW - SL, sy, SL, sh, Math.floor(xR) - 1, y0, bw - Math.floor(xR) + 1, y1 - y0);
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+      if(sideL){
+        ctx.fillStyle = sideL; ctx.fillRect(0, 0, Math.ceil(vL) + 1, bh);
+        ctx.fillStyle = sideR; ctx.fillRect(Math.floor(xR) - 1, 0, bw - Math.floor(xR) + 1, bh);
+      }
+    }
 
     /* 산과 밑동 안개 */
     if(showMtn){
