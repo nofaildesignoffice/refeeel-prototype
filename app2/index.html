@@ -644,6 +644,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 .hscroll[data-auto]>.cur-card{flex:0 0 calc((100% - 14px) / 1.1);}
 .hscroll[data-auto] .reason{align-items:flex-start;min-height:2.8em;}
 .hscroll[data-auto] .reason i,.hscroll[data-auto] .reason svg{flex-shrink:0;margin-top:2px;}
+.hscroll[data-auto] .hcard-body .reason:last-child{min-height:0;margin:6px 0 0;}
 .hscroll[data-auto] .hcard-title{min-height:2.9em;}
 /* 격자에서는 제목 두 줄 자리를 미리 잡지 않는다(리건, 2026-11-07).
    시리즈 넉 장이 모두 한 줄이라 제목 아래가 19px 씩 그냥 비어 있었다.
@@ -2355,19 +2356,19 @@ body.free #scr-viewer .progress-thin{display:none;}
       <div class="quote-grid" data-qauto>
         <div class="quote-card" data-go="scr-viewer">
           <div class="q-bg"></div>
-          <div class="q-cnt"><i data-lucide="highlighter"></i>이번 주 128명이 밑줄</div>
+          <div class="q-cnt">이번 주 128명이 밑줄</div>
           <p class="q-text">본인이 느꼈다면, <span class="q-u">팔로워는 훨씬 먼저 느꼈다</span>.</p>
           <p class="q-src">CO:KIT 59 · 판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</p>
         </div>
         <div class="quote-card" data-go="scr-viewer">
           <div class="q-bg"></div>
-          <div class="q-cnt"><i data-lucide="highlighter"></i>이번 주 94명이 밑줄</div>
+          <div class="q-cnt">이번 주 94명이 밑줄</div>
           <p class="q-text">사람들은 너무 팔고 싶은 사람에게 <span class="q-u">아무것도 사고 싶지 않습니다</span>.</p>
           <p class="q-src">CO:KIT 41 · 팔지 않으면 팔리는 3단계 콘텐츠 퍼널</p>
         </div>
         <div class="quote-card" data-go="scr-viewer">
           <div class="q-bg"></div>
-          <div class="q-cnt"><i data-lucide="highlighter"></i>이번 주 71명이 밑줄</div>
+          <div class="q-cnt">이번 주 71명이 밑줄</div>
           <p class="q-text">이력을 먼저 나열하면 고객은 <span class="q-u">스펙을 비교하기 시작</span>합니다.</p>
           <p class="q-src">CO:KIT 51 · 뇌는 왜 이야기에 속는가</p>
         </div>
@@ -2385,49 +2386,49 @@ body.free #scr-viewer .progress-thin{display:none;}
         <div class="card hcard" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i></div>
           <div class="hcard-body">
-            <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 코킷</div>
             <div class="hcard-num">CO:KIT 20</div>
             <div class="hcard-title">이번 릴스도 실패했다…?</div>
+            <div class="reason"><i data-lucide="sparkles"></i>'올려도 반응이 없어요'에 맞는 코킷</div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
           <div class="hcard-body">
-            <div class="reason"><i data-lucide="book-open-check"></i>CO:KIT 41을 읽고 계셔서</div>
             <div class="hcard-num">CO:KIT 03</div>
             <div class="hcard-title">노출이 매출이 되는 법: 콘텐츠 퍼널 3단계</div>
+            <div class="reason"><i data-lucide="book-open-check"></i>CO:KIT 41을 읽고 계셔서</div>
           </div>
         </div>
         <div class="card hcard" data-go="scr-viewer">
           <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
           <div class="hcard-body">
-            <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
             <div class="hcard-num">CO:KIT 59</div>
             <div class="hcard-title">판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요</div>
+            <div class="reason"><i data-lucide="highlighter"></i>'세일즈 심리' 문장에 밑줄 치셔서</div>
           </div>
         </div>
           <div class="card hcard" data-go="scr-viewer">
             <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
             <div class="hcard-body">
-              <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 코킷</div>
               <div class="hcard-num">CO:KIT 81</div>
               <div class="hcard-title">제품 말고 '두 사람'을 파세요</div>
+              <div class="reason"><i data-lucide="sparkles"></i>'팔로워는 느는데 문의가 없어요'에 맞는 코킷</div>
             </div>
           </div>
           <div class="card hcard" data-go="scr-viewer">
             <div class="img-ph"><i data-lucide="image"></i></div>
             <div class="hcard-body">
-              <div class="reason"><i data-lucide="book-open-check"></i>'콘텐츠 소재가 떨어졌어요'에 맞는 코킷</div>
               <div class="hcard-num">CO:KIT 80</div>
               <div class="hcard-title">콘텐츠는 만드는 게 아니라, 포착하는 것</div>
+              <div class="reason"><i data-lucide="book-open-check"></i>'콘텐츠 소재가 떨어졌어요'에 맞는 코킷</div>
             </div>
           </div>
           <div class="card hcard" data-go="scr-viewer">
             <div class="img-ph"><i data-lucide="image"></i><span class="kit-lock" aria-label="구독 회원 전용"><span class="kit-lock-dot"><i data-lucide="lock"></i></span></span></div>
             <div class="hcard-body">
-              <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
               <div class="hcard-num">CO:KIT 87</div>
               <div class="hcard-title">95 대 5 법칙</div>
+              <div class="reason"><i data-lucide="highlighter"></i>'전환·매출' 주제를 자주 보셔서</div>
             </div>
           </div>
       </div>
