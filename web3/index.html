@@ -7006,7 +7006,8 @@ body.modal-open #scr-interest .ord-sub,
         <b>낙타AI에게 코킷 추천 받기</b>
         <p>고민을 이야기하면 지금 읽어야 할 코킷을 골라드려요.</p>
       </div>
-      <!-- 말을 거는 화면이니 말할 자리가 머리 바로 아래에 있다(리건, 2026-11-17) -->
+      <!-- 말할 자리. 좀은 화면에서는 머리 바로 아래다(리건, 2026-11-17).
+           넓은 화면에서는 예전대로 방 바닥에 붙는다 — 아래 NKBAR 가 자리를 옮긴다. -->
       <div class="chat-input nk-home-input">
         <input class="ci-box" id="nk-home-ci" type="text" placeholder="무엇이든 물어보세요">
         <button class="ci-send" id="nk-home-send" data-go="scr-chatstart" aria-label="보내기"><i data-lucide="arrow-up"></i></button>
@@ -8405,6 +8406,25 @@ function lseg(key){
   box.addEventListener("keydown", e => {
     if(e.key === "Enter"){ e.preventDefault(); send.click(); }
   });
+})();
+
+/* NKBAR — 낭타AI 첫 화면의 말 거는 자리를 화면 폭에 따라 옮긴다(리건, 2026-11-17).
+   좀은 화면(모바일 웹)은 앱과 같은 자리 — 머리 바로 아래.
+   넓은 화면은 예전 그대로 방 바닥 — 탭바 앞에 두고 입력창이 늘 보이게 한다.
+   칸은 하나만 둔다 — 둘로 나누면 id 가 겹치고 쓴 글이 한쪽에만 남는다. */
+(function(){
+  const chat = document.getElementById("scr-chat");
+  const bar  = chat && chat.querySelector(".nk-home-input");
+  const sec  = chat && chat.querySelector(".scroll>.sec");
+  const nav  = chat && chat.querySelector(".bottomnav");
+  if(!bar || !sec) return;
+  const wide = window.matchMedia("(min-width:1024px)");
+  const place = () => {
+    if(wide.matches){ if(bar.parentNode !== chat) chat.insertBefore(bar, nav); }
+    else if(bar.parentNode !== sec) sec.appendChild(bar);
+  };
+  place();
+  wide.addEventListener ? wide.addEventListener("change", place) : wide.addListener(place);
 })();
 
 /* 아래 띠(읽는 중·완독·저장)는 위 띠(코킷·시리즈) 높이만큼 내려가 붙는다(리건, 2026-11-10).
