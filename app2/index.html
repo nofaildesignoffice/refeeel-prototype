@@ -942,8 +942,35 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 /* 머리는 홈의 낙타AI 권유와 같은 꼴이다(리건, 2026-11-10) — 반짝임과 이름표.
    ⚠ 흰 바탕이라 색만 뒤집는다. 반짝임은 흰색이면 안 보이고, 이름표의 라임은
      흰 바탕에서 읽히지 않는다 — 라임은 어두운 바탕에서만 쓴다. */
-#scr-chat .nk-hero .nk-ill{color:var(--bg-dark);margin:0 auto 10px;}
-#scr-chat .nk-hero .nk-kick{color:var(--text-light);margin-bottom:10px;}
+/* 반짝임 자리는 코어 장면이 대신한다(리건, 2026-11-17) */
+#scr-chat .nk-hero .nk-ill{display:none;}
+#scr-chat .nk-hero .nk-kick{margin-bottom:10px;}
+/* ── 낙타AI 첫 화면의 머리 배경(리건, 2026-11-17) ──
+   인사이트 화면에서 뺐던 코어 장면을 여기로 들였다. 보관본은
+   리필 앱 기획/insight-hero-3d.html 에 있다.
+   영상은 하늘·빛기둥·바닥·안개를, 캔버스는 파편·코어·후광을 그린다.
+   코어는 캔버스 높이의 35.3% 자리에 그려진다 — 영상도 같은 지점을 맞춰야
+   빛기둥의 목이 코어에 붙는다. 그래서 object-position 이 50% 35.3% 다.
+   scale(1.32) 는 원본에서 쓰던 배율이다. 코어 반지름(폭의 15.1%)이 그 배율에서
+   잰 값이라, 배율을 바꾸면 그린 코어와 영상 속 빛기둥의 굵기가 어긋난다.
+   아래쪽은 마스크로 흐려 흰 바탕으로 이어진다.
+   손은 받지 않는다 — 배경 위에서도 화면이 밀려야 한다. */
+#scr-chat{--nk-stage-h:430px;}
+#scr-chat .nk-stage{position:absolute;left:0;right:0;top:0;height:var(--nk-stage-h);
+  overflow:hidden;background:#141414;z-index:0;pointer-events:none;
+  -webkit-mask-image:linear-gradient(#000 78%,rgba(0,0,0,0) 92%);
+          mask-image:linear-gradient(#000 78%,rgba(0,0,0,0) 92%);}
+#scr-chat .nk-stage .ins-vid{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
+  object-fit:cover;object-position:50% 35.3%;transform-origin:50% 35.3%;transform:scale(1.32);}
+#scr-chat .nk-stage .ins-scene{position:absolute;inset:0;width:100%;height:100%;display:block;}
+/* 장면 위에 올라가는 것들 — 장면이 z-index:0 이라 이 넷이 위다 */
+#scr-chat>.topbar,#scr-chat>.scroll,#scr-chat>.chat-input,#scr-chat>.bottomnav{position:relative;z-index:1;}
+/* 머리 글자는 어두운 장면 위에 선다 — 흰 글자에 옅은 그림자다 */
+#scr-chat .nk-hero{padding-top:var(--nk-hero-pt,127px);}
+#scr-chat .nk-hero .nk-kick{color:rgba(255,255,255,.72);}
+#scr-chat .nk-hero b{color:var(--bg-white);text-shadow:0 1px 10px rgba(0,0,0,.5);}
+#scr-chat .nk-hero p{color:rgba(255,255,255,.84);text-shadow:0 1px 10px rgba(0,0,0,.45);}
+
 /* 권유 카드 — 동그란 아이콘 면은 빼고 제목 왼쪽에 작은 아이콘만 둔다(리건, 2026-11-10).
    검색의 낙타AI 카드(.ai-card)와 같은 꼴이다 — 라임 아이콘에, 테두리만 남긴 알약 버튼.
    라임은 어두운 바탕 위라 가장 밝게 뜬다(라임 '위에' 흰 글자와는 다른 이야기다). */
@@ -2992,6 +3019,16 @@ body.free #scr-viewer .progress-thin{display:none;}
 
 <!-- ══════════ 낙타AI — 탭 첫 화면 (무료) ══════════ -->
 <section class="screen" id="scr-chat">
+  <!-- 머리 배경 — 인사이트 화면에서 뺀 코어 장면을 여기로 들였다(리건, 2026-11-17).
+       영상은 하늘·빛기둥·바닥·안개를, 캔버스는 파편·코어·후광을 그린다.
+       영상이 서면 poster(첫 프레임)가 그림처럼 남는다. -->
+  <div class="nk-stage" aria-hidden="true">
+    <video class="ins-vid" autoplay muted loop playsinline preload="none"
+      poster="../assets/ins/ins-r8.jpg">
+      <source src="../assets/ins/ins-r8.mp4" type="video/mp4">
+    </video>
+    <canvas class="ins-scene"></canvas>
+  </div>
   <div class="topbar">
     <span class="logo">낙타AI</span>
     <div class="topbar-right">
@@ -5339,6 +5376,201 @@ function lseg(key){
   box.addEventListener("keydown", e => {
     if(e.key === "Enter"){ e.preventDefault(); send.click(); }
   });
+})();
+
+/* ── 낙타AI 첫 화면의 코어 장면(리건, 2026-11-17) ──
+   인사이트 화면에서 뺐던 것을 그대로 들였다. 보관본은 insight-hero-3d.html.
+   영상(ins-r8)에는 하늘·빛기둥·바닥·안개·자갈만 있다. 파편과 코어는 여기서 그린다.
+   ⚠ 여기서는 손잡이를 뺐다 — 배경이라 손을 받으면 그 위에서 화면이 안 밀린다.
+     그래서 카메라는 늘 처음 각도에 서 있다(yaw·pitch 가 0 으로 고정이다).
+   합성은 normal 이다. 빛기둥이 지나 바탕이 밝은 자리라, 더하기(screen)로는
+   라임의 파랑을 끌어내릴 수 없어 누런 얼룩이 된다(실측). */
+(function(){
+  const stage = document.querySelector("#scr-chat .nk-stage");
+  if(!stage) return;
+  const cvs = stage.querySelector(".ins-scene");
+  if(!cvs) return;
+  const ctx = cvs.getContext("2d");
+  const LIME = "223,240,0";
+
+  /* 코어 알갱이 — 공 안에 흩는다. 각도마다 뻗은 길이가 달라 완전한 구슬은 아니다 */
+  const lobe = [];
+  for(let i = 0; i < 9; i++) lobe.push(0.72 + Math.random() * 0.42);
+  const CORE = [];
+  for(let i = 0; i < 1500; i++){
+    const u = Math.random() * 2 - 1, th = Math.random() * 6.283185;
+    const s = Math.sqrt(1 - u * u);
+    const q = Math.pow(Math.random(), 0.62) * lobe[(th / 6.283185 * 9 | 0) % 9];
+    CORE.push({x: s * Math.cos(th) * q, y: u * q, z: s * Math.sin(th) * q,
+               r: 0.42 + Math.random() * 0.78 + (Math.random() < 0.03 ? 1.5 : 0),
+               a: (0.78 - 0.50 * q) * (0.45 + Math.random() * 1.25),
+               lime: q > 0.42 && Math.random() < 0.13,
+               m: 1 + (Math.random() * 3 | 0), ph: Math.random(),
+               h1: Math.random() * 6.283185, h2: Math.random() * 6.283185,
+               w: 0.034 + Math.random() * 0.072});
+  }
+  /* 밝기로 가중한 중심을 빼서 덩이가 화면 가운데에 오게 맞춘다 */
+  {
+    let sx = 0, sy = 0, sz = 0, sw = 0;
+    for(const p of CORE){ sx += p.x * p.a; sy += p.y * p.a; sz += p.z * p.a; sw += p.a; }
+    sx /= sw; sy /= sw; sz /= sw;
+    for(const p of CORE){ p.x -= sx; p.y -= sy; p.z -= sz; }
+  }
+
+  /* 파편 — 화면에 뿌리고 깊이를 준다 */
+  function gauss(){ return (Math.random() + Math.random() + Math.random() - 1.5) / 0.5; }
+  const DEB = [];
+  for(let i = 0; i < 380; i++){
+    let vy = -(0.055 + 0.075 * Math.pow(Math.random(), 1.6));
+    if(Math.random() < 0.16) vy = -vy * 0.55;
+    DEB.push({sx: Math.random() * 1.08 - 0.04 - 0.52,
+              sy: Math.random() * 0.81 - 0.05 - 0.353,
+              zz: (Math.random() * 2 - 1) * 0.55,
+              rad: Math.min(16, 1.6 * Math.exp(gauss() * 0.78)),
+              vy: vy, amp: 0.80 + Math.random() * 0.15, ph: Math.random(),
+              sq: 0.45 + Math.random() * 0.55, ang: Math.random() * 3.1416,
+              o2: 0.35 + Math.random() * 0.40, a2: Math.random() * 6.283185,
+              r2: 0.45 + Math.random() * 0.35});
+  }
+
+  /* 점 하나를 매번 그리면 느리다 — 번진 동그라미를 미리 구워 둔다 */
+  function sprite(rgb){
+    const n = 24, c = document.createElement("canvas");
+    c.width = c.height = n;
+    const cc = c.getContext("2d");
+    const g = cc.createRadialGradient(n/2, n/2, 0, n/2, n/2, n/2);
+    g.addColorStop(0, "rgba(" + rgb + ",1)");
+    g.addColorStop(0.42, "rgba(" + rgb + ",0.55)");
+    g.addColorStop(1, "rgba(" + rgb + ",0)");
+    cc.fillStyle = g; cc.fillRect(0, 0, n, n);
+    return c;
+  }
+  const SP_W = sprite("255,255,255"), SP_L = sprite(LIME);
+
+  let S = 0, HC = 0, dpr = 1, run = false;
+  function size(){
+    const b = cvs.getBoundingClientRect();
+    if(!b.width) return false;
+    dpr = Math.min(3, window.devicePixelRatio || 1);
+    S = Math.round(b.width * dpr); HC = Math.round(b.height * dpr);
+    if(cvs.width !== S || cvs.height !== HC){ cvs.width = S; cvs.height = HC; }
+    return true;
+  }
+
+  const far = [], near = [];
+
+  function stones(list, cx, cy){
+    for(let i = 0; i < list.length; i++){
+      const o = list[i];
+      ctx.globalAlpha = o.a;
+      ctx.fillStyle = "#0E0E10";
+      ctx.beginPath();
+      ctx.ellipse(o.x, o.y, Math.max(0.6, o.r), Math.max(0.5, o.r * o.sq),
+                  o.ang, 0, 6.283185);
+      ctx.fill();
+      if(o.r > 1.6){
+        ctx.beginPath();
+        ctx.ellipse(o.x + Math.cos(o.a2 + o.ang) * o.r * o.o2,
+                    o.y + Math.sin(o.a2 + o.ang) * o.r * o.o2,
+                    o.r * o.r2, o.r * o.r2 * o.sq, o.ang + 1.1, 0, 6.283185);
+        ctx.fill();
+      }
+      if(o.r > 1.8){
+        const dx = cx - o.x, dy = cy - o.y, n = Math.hypot(dx, dy) + 1e-3;
+        ctx.globalAlpha = o.a * 0.22; ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.arc(o.x + dx / n * o.r * 0.66, o.y + dy / n * o.r * 0.66,
+                o.r * 0.34, 0, 6.283185);
+        ctx.fill();
+      }
+    }
+  }
+
+  function draw(now){
+    if(!run) return;
+    requestAnimationFrame(draw);
+    if(!size()) return;
+
+    /* 시계를 둘로 나눈다 — 파편과 코어가 영상의 일곱 초에 묶이지 않는다 */
+    const tD = (now / 4000) % 1;
+    const tC = (now / 3400) % 1, w = tC * 6.283185;
+    const cx = 0.50 * S, cy = 0.353 * HC;
+    const D = 2.0 * S;
+    const R = 0.151 * S;
+    const Rb = R * (1 + 0.055 * Math.sin(2 * w));
+    const PX = S / 604;
+
+    ctx.clearRect(0, 0, S, HC);
+    far.length = 0; near.length = 0;
+
+    for(let i = 0; i < DEB.length; i++){
+      const d = DEB[i];
+      const u = (d.ph + tD) % 1;
+      const a = d.amp * Math.min(1, Math.min(u, 1 - u) / 0.16);
+      if(a <= 0.01) continue;
+      const Z0 = d.zz * S, k0 = (D + Z0) / D;
+      const X = d.sx * S * k0;
+      const Y = (d.sy * HC + d.vy * HC * (u - 0.5)) * k0;
+      const den = D + Z0;
+      if(den < 0.25 * S) continue;
+      const k = D / den;
+      const o = {x: cx + X * k, y: cy + Y * k, r: d.rad * PX * k,
+                 a: a, sq: d.sq, ang: d.ang, o2: d.o2, a2: d.a2, r2: d.r2, z: Z0};
+      if(o.x < -40 || o.x > S + 40 || o.y < -40 || o.y > HC + 40) continue;
+      (Z0 > 0 ? far : near).push(o);
+    }
+    far.sort((p, q) => q.z - p.z);
+    near.sort((p, q) => q.z - p.z);
+
+    stones(far, cx, cy);
+
+    /* 코어 후광 — 영상에서 들어냈으니 여기서 그린다 */
+    let g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Rb * 2.38);
+    g.addColorStop(0, "rgba(255,255,255,0.20)");
+    g.addColorStop(0.42, "rgba(255,255,255,0.07)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.globalAlpha = 1; ctx.fillStyle = g; ctx.fillRect(0, 0, S, HC);
+    g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Rb * 1.09);
+    g.addColorStop(0, "rgba(255,255,255,0.34)");
+    g.addColorStop(0.45, "rgba(255,255,255,0.10)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, S, HC);
+    /* 라임 속불은 가운데가 아니라 고리다 — 가운데에 깔면 흰빛에 먹혀 누레진다 */
+    g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Rb * 1.45);
+    g.addColorStop(0, "rgba(" + LIME + ",0)");
+    g.addColorStop(0.42, "rgba(" + LIME + ",0.07)");
+    g.addColorStop(0.72, "rgba(" + LIME + ",0.05)");
+    g.addColorStop(1, "rgba(" + LIME + ",0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, S, HC);
+
+    for(let i = 0; i < CORE.length; i++){
+      const p = CORE[i];
+      const px = (p.x + p.w * (Math.cos(w + p.h1) + 0.45 * Math.cos(3 * w + p.h2))) * Rb;
+      const py = (p.y + p.w * (Math.sin(w + p.h2) + 0.45 * Math.sin(2 * w + p.h1))) * Rb;
+      const pz = (p.z + p.w * (Math.cos(2 * w + p.h1) + 0.45 * Math.sin(3 * w + p.h2))) * Rb;
+      const k = D / (D + pz);
+      const dep = 0.60 + 0.40 * (1 - pz / Rb) * 0.5;
+      const tw = 0.62 + 0.38 * Math.sin(6.283185 * (p.m * tC + p.ph));
+      const a = p.a * dep * tw * (p.lime ? 0.80 : 1);
+      if(a <= 0.01) continue;
+      const s2 = Math.max(1.4, p.r * dpr * 2.6 * dep * k);
+      ctx.globalAlpha = Math.min(1, a);
+      ctx.drawImage(p.lime ? SP_L : SP_W,
+                    cx + px * k - s2, cy + py * k - s2, s2 * 2, s2 * 2);
+    }
+    ctx.globalAlpha = 1;
+
+    stones(near, cx, cy);
+  }
+
+  /* 화면에 들어와 있을 때만 돈다 */
+  if(window.IntersectionObserver){
+    new IntersectionObserver(es => {
+      const on = es.some(e => e.isIntersecting);
+      if(on && !run){ run = true; requestAnimationFrame(draw); }
+      else if(!on){ run = false; }
+    }, {threshold: 0}).observe(cvs);
+  } else { run = true; requestAnimationFrame(draw); }
 })();
 
 /* 아래 띠(읽는 중·완독·저장)는 위 띠(코킷·시리즈) 높이만큼 내려가 붙는다(리건, 2026-11-10).
