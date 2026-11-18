@@ -974,7 +974,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-chat .nk-hero .nk-ill{display:none;}
 #scr-chat .nk-hero .nk-kick{margin-bottom:10px;}
 /* ── 낙타AI 첫 화면의 배경 장면(리건, 2026-11-17 · 세 번째 판) ──
-   두 겹이다. 아래는 영상(ins-r8), 위는 캔버스다.
+   두 겹이다. 아래는 영상(ins-r9), 위는 캔버스다.
    영상이 하늘·빛기둥·지평선·안개·자갈 깔린 바닥을 맡는다.
    캔버스는 양옆의 산, 코어, 떠 있는 돌을 그린다. 세로로 긴 화면에서는 잘려 나간 옆 하늘의 어둠도 덧댄다.
    지난 판에서는 캔버스가 하늘과 바닥까지 그렸는데 영상과 달라서 버렸다.
@@ -7157,13 +7157,22 @@ body.modal-open #scr-interest .ord-sub,
 <div class="nk-widget" id="nk-widget">
 <section class="screen" id="scr-chat">
   <!-- 배경 장면(리건, 2026-11-17) — 화면 전체를 덮는다. 두 겹이다.
-       영상(ins-r8)이 하늘·빛기둥·지평선·안개·자갈 바닥을 맡고,
+       영상(ins-r9)이 하늘·빛기둥·지평선·안개·자갈 바닥을 맡고,
        캔버스가 그 위에 양옆 산과 코어와 떠 있는 돌을 그린다.
        영상이 서면 poster(첫 장)가 그림처럼 남는다. -->
+  <!-- 영상을 ins-r9 로 바꿨다(리건, 2026-11-18).
+       ins-r8 은 7초를 다 틀고 처음으로 돌아갈 때 그림이 튀었다. 끝과 처음이 이어지지 않는 영상이었다.
+       실측: 한 장 넘어갈 때 바뀌는 양이 보통 0.28인데 돌아가는 자리에서는 1.51이었다.
+       4단계 이상 바뀐 픽셀이 보통 0.87%인데 거기서는 9.9%였다. 바닥 자갈이 통째로 자리를 옮겼다.
+       고친 방법은 뒤 0.5초를 앞 0.5초에 겹쳐 녹인 것이다. 7초가 6.5초가 됐고
+       돌아가는 자리의 바뀌는 양이 0.24로 떨어졌다. 보통 한 장 넘어갈 때(0.29)보다 조용하다.
+       다시 묶을 때 B장의 품질을 P장과 같게 맞췄다(crf 23, b-qoffset=0).
+       ins-r8 은 B장에 비트를 7분의 1만 줘서 4장마다 또렷함이 오르내렸다. 그 폭이 2.5%에서 1.6%로 줄었다.
+       ins-r8 파일은 그대로 둔다. -->
   <div class="nk-stage" aria-hidden="true">
     <video class="ins-vid" autoplay muted loop playsinline preload="auto"
-      poster="../assets/ins/ins-r8.jpg">
-      <source src="../assets/ins/ins-r8.mp4" type="video/mp4">
+      poster="../assets/ins/ins-r9.jpg">
+      <source src="../assets/ins/ins-r9.mp4" type="video/mp4">
     </video>
     <canvas class="ins-scene"></canvas>
     <i class="nk-tint"></i>
@@ -8592,7 +8601,7 @@ function lseg(key){
 
 /* ── 낙타AI 첫 화면의 코어 장면 · 세 번째 판(리건, 2026-11-17) ──
    기획에서 준 참고 영상과 같게 만든다. 지난 판은 하늘·빛·바닥을 캔버스로 그렸다가 반려됐다.
-   이번에는 환경을 다시 영상(ins-r8, 1208×1510, 7초 반복)에 맡기고,
+   이번에는 환경을 다시 영상(ins-r9, 1208×1510, 6.5초 반복)에 맡기고,
    캔버스는 영상에 없는 세 가지만 그린다 — 양옆의 산, 코어, 떠 있는 돌.
    그 밖의 자리는 전부 투명하다. 하늘·빛기둥·바닥·잔 알갱이는 그리지 않는다.
    예외가 하나 있다. 세로로 긴 화면에서 영상의 양옆이 잘려 나간 만큼만 옆 하늘을 어둡게 덮는다(옆 어둠).
@@ -8601,8 +8610,8 @@ function lseg(key){
 
    들어가는 마크업은 이렇다.
      <div class="nk-stage" aria-hidden="true">
-       <video class="ins-vid" autoplay muted loop playsinline preload="auto" poster="../assets/ins/ins-r8.jpg">
-         <source src="../assets/ins/ins-r8.mp4" type="video/mp4">
+       <video class="ins-vid" autoplay muted loop playsinline preload="auto" poster="../assets/ins/ins-r9.jpg">
+         <source src="../assets/ins/ins-r9.mp4" type="video/mp4">
        </video>
        <canvas class="ins-scene"></canvas>
      </div>
@@ -9286,7 +9295,7 @@ function lseg(key){
   })();
 
   /* ════════ 산 ════════
-     참고 영상에는 화면 양옆 지평선에 검은 바위산이 있는데 ins-r8 영상에는 없다. 그래서 그린다.
+     참고 영상에는 화면 양옆 지평선에 검은 바위산이 있는데 ins-r9 영상에는 없다. 그래서 그린다.
      한쪽에 두 겹씩 넷이다. 가장자리의 가깝고 검은 산과, 그 뒤의 흐리고 옅은 산.
      땅이라 움직이지 않는다. 크기가 바뀔 때만 한 번 구워 두고 매 장 그대로 붙인다.
      능선(윤곽)은 아래 makeRidge가 만들고, 그 안쪽의 겉은 '산의 땅 모양' 대목에서 만든다.
