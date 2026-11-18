@@ -974,7 +974,7 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
 #scr-chat .nk-hero .nk-ill{display:none;}
 #scr-chat .nk-hero .nk-kick{margin-bottom:10px;}
 /* ── 낙타AI 첫 화면의 배경 장면(리건, 2026-11-17 · 세 번째 판) ──
-   두 겹이다. 아래는 영상(ins-r9), 위는 캔버스다.
+   두 겹이다. 아래는 영상(ins-r10), 위는 캔버스다.
    영상이 하늘·빛기둥·지평선·안개·자갈 깔린 바닥을 맡는다.
    캔버스는 양옆의 산, 코어, 떠 있는 돌을 그린다. 세로로 긴 화면에서는 잘려 나간 옆 하늘의 어둠도 덧댄다.
    지난 판에서는 캔버스가 하늘과 바닥까지 그렸는데 영상과 달라서 버렸다.
@@ -984,23 +984,26 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    그러니 object-fit·object-position 을 바꾸거나 transform 을 넣으면 코어가 빛기둥에서 벗어난다.
 
    장면은 화면 전체를 덮는다 — 기준이 되는 #scr-chat 에 position:relative 가 있어야 한다.
-   바탕색 #16191C 는 영상의 구석 색(22,26,29)과 같다. 영상 첫 장이 뜨기 전에 색이 튀지 않는다.
+   바탕색 #242424 는 영상의 위 구석 색(36,36,36)과 같다. 영상 첫 장이 뜨기 전에 색이 튀지 않는다.
    손은 받지 않는다 — 배경 위에서도 화면이 밀려야 한다.
 
    스크립트가 #scr-chat 에 값 두 개를 적어 준다(px). 글자를 코어 아래에 놓을 때 쓴다.
      --nk-core-cy : 장면 위쪽 끝에서 코어 한가운데까지
      --nk-core-r  : 코어 반지름 */
 #scr-chat .nk-stage{position:absolute;left:0;right:0;top:0;bottom:0;
-  overflow:hidden;background:#16191C;z-index:0;pointer-events:none;}
-/* 영상은 어느 화면에서나 세로에 맞춘다(리건, 2026-11-17).
-   cover 로 두면 넓은 화면에서 폭에 맞춰 커지면서 위아래가 잘린다. 그러면 어두운 하늘과
-   가까운 바닥이 날아가고 빛기둥만 늘어나서, 폰에서 보는 것과 다른 장면이 된다.
-   세로에 맞추면 구도가 하나로 남는다. 폰에서는 영상이 화면보다 넓어 양옆이 잘리고,
-   넓은 화면에서는 영상이 가운데 기둥처럼 서고 양옆이 빈다. 그 빈자리는 캔버스가 잇는다.
-   aspect-ratio 를 적어 두는 것은 영상 정보가 오기 전에도 상자 크기가 정해지게 하려는 것이다. */
-#scr-chat .nk-stage .ins-vid{position:absolute;left:50%;top:0;width:auto;height:100%;
-  aspect-ratio:1208/1510;max-width:none;transform:translateX(-50%);
-  border:0;display:block;object-fit:fill;z-index:0;}
+  overflow:hidden;background:#242424;z-index:0;pointer-events:none;}
+/* 영상은 cover 로 채운다(리건, 2026-11-18).
+   영상을 16:9(2560×1440)로 다시 만들면서 바뀌었다. 전에는 1208×1510 세로 영상이라
+   넓은 화면에서 가운데 기둥처럼 서고 양옆이 비었다. 그 빈자리를 캔버스가 영상 맨 끝 줄을
+   가로로 늘여 메웠는데, 영상의 압축 잡음이 그대로 넓게 퍼져서 그 자리가 깜빡였다.
+   영상이 아직 준비되지 않은 동안에는 그리지도 못해서, 처음 뜰 때 양옆이 잘려 보였다.
+   이제 영상이 넓은 화면을 혼자 채운다. 양옆을 이을 일이 없다.
+   폰에서는 cover 가 세로에 맞추면서 양옆을 잘라 낸다. 가운데 24% 만 보이는데,
+   그 자리에 들어가는 구도를 전 영상의 폰 화면과 같게 맞춰서 만들었다.
+   캔버스 스크립트가 이 cover 계산을 그대로 따라 해서 빛기둥이 모이는 자리를 찾는다.
+   object-fit 이나 object-position 을 바꾸거나 transform 을 넣으면 코어가 빛기둥에서 벗어난다. */
+#scr-chat .nk-stage .ins-vid{position:absolute;left:0;top:0;width:100%;height:100%;
+  border:0;display:block;object-fit:cover;z-index:0;}
 /* 옆 어둠 — 영상(0)과 캔버스(2) 사이에 낀다. 세로로 긴 화면에서 영상의 양옆이 잘려 나가
    빛기둥의 밝은 가운데만 남는 것을 되돌린다. 양옆을 어둡게 덮되 가운데 빛기둥 자리는 비우고,
    아래로 갈수록 옅어져 바닥에는 닿지 않는다. 배경(가로)과 마스크(세로)에 들어갈 값은
@@ -7157,22 +7160,29 @@ body.modal-open #scr-interest .ord-sub,
 <div class="nk-widget" id="nk-widget">
 <section class="screen" id="scr-chat">
   <!-- 배경 장면(리건, 2026-11-17) — 화면 전체를 덮는다. 두 겹이다.
-       영상(ins-r9)이 하늘·빛기둥·지평선·안개·자갈 바닥을 맡고,
+       영상(ins-r10)이 하늘·빛기둥·지평선·안개·자갈 바닥을 맡고,
        캔버스가 그 위에 양옆 산과 코어와 떠 있는 돌을 그린다.
        영상이 서면 poster(첫 장)가 그림처럼 남는다. -->
-  <!-- 영상을 ins-r9 로 바꿨다(리건, 2026-11-18).
-       ins-r8 은 7초를 다 틀고 처음으로 돌아갈 때 그림이 튀었다. 끝과 처음이 이어지지 않는 영상이었다.
-       실측: 한 장 넘어갈 때 바뀌는 양이 보통 0.28인데 돌아가는 자리에서는 1.51이었다.
-       4단계 이상 바뀐 픽셀이 보통 0.87%인데 거기서는 9.9%였다. 바닥 자갈이 통째로 자리를 옮겼다.
-       고친 방법은 뒤 0.5초를 앞 0.5초에 겹쳐 녹인 것이다. 7초가 6.5초가 됐고
-       돌아가는 자리의 바뀌는 양이 0.24로 떨어졌다. 보통 한 장 넘어갈 때(0.29)보다 조용하다.
-       다시 묶을 때 B장의 품질을 P장과 같게 맞췄다(crf 23, b-qoffset=0).
-       ins-r8 은 B장에 비트를 7분의 1만 줘서 4장마다 또렷함이 오르내렸다. 그 폭이 2.5%에서 1.6%로 줄었다.
-       ins-r8 파일은 그대로 둔다. -->
+  <!-- 영상을 ins-r10 으로 바꿨다(리건, 2026-11-18). 16:9 로 다시 그린 새 파일이다.
+       전까지 쓰던 1208×1510 세로 영상은 넓은 화면에서 가운데 기둥처럼 서고 양옆이 비었다.
+       그 빈자리를 캔버스가 영상 맨 끝 한 줄을 매 장 떠다가 가로로 늘여 메웠는데,
+       그 한 줄에 실린 압축 잡음이 수백 픽셀 폭으로 퍼져서 그 자리가 매 장 깜빡였다.
+       영상이 준비되기 전에는 그리지도 못해서, 처음 뜰 때 양옆이 잘려 보였다.
+       16:9 는 넓은 화면을 혼자 채운다. 이을 일이 없다. 폰에서는 cover 가 양옆을 잘라 낸다.
+       ins-r10 은 레이마칭으로 새로 그렸다. 2560×1440, 24fps, 144장(6초).
+       움직이는 값이 전부 시간의 cos·sin 으로만 되어 있어서 한 바퀴 돌면 처음과 똑같다.
+       ins-r8 처럼 끝과 처음을 이어 붙이지 않았고, ins-r9 처럼 겹쳐 녹이지도 않았다.
+       실측: 한 장 넘어갈 때 바뀌는 양 0.098, 돌아가는 자리 0.49(ins-r8 은 1.51, ins-r9 는 1.02).
+       4단계 이상 바뀐 픽셀이 돌아가는 자리에서 0.48%다(ins-r8 은 9.9%).
+       4장 주기 출렁임은 0.3%다(ins-r8 은 2.5%). crf 20, b-qoffset=0 으로 묶었다.
+       매 장 같은 디더를 깔아서 매끈한 회색의 띠를 지우면서도 장마다 흔들리지 않게 했다.
+       폰에 보이는 가운데 24% 밖은 렌더링 단계에서 어둡게 떨어뜨렸다. 16:9 는 그 밖까지
+       진짜 장면이 들어차서, 그냥 두면 넓은 화면이 전체적으로 밝고 펑퍼짐해진다.
+       ins-r8·ins-r9 파일은 그대로 둔다. -->
   <div class="nk-stage" aria-hidden="true">
     <video class="ins-vid" autoplay muted loop playsinline preload="auto"
-      poster="../assets/ins/ins-r9.jpg">
-      <source src="../assets/ins/ins-r9.mp4" type="video/mp4">
+      poster="../assets/ins/ins-r10.jpg">
+      <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
     </video>
     <canvas class="ins-scene"></canvas>
     <i class="nk-tint"></i>
@@ -8601,7 +8611,7 @@ function lseg(key){
 
 /* ── 낙타AI 첫 화면의 코어 장면 · 세 번째 판(리건, 2026-11-17) ──
    기획에서 준 참고 영상과 같게 만든다. 지난 판은 하늘·빛·바닥을 캔버스로 그렸다가 반려됐다.
-   이번에는 환경을 다시 영상(ins-r9, 1208×1510, 6.5초 반복)에 맡기고,
+   이번에는 환경을 다시 영상(ins-r10, 2560×1440, 6초 반복)에 맡기고,
    캔버스는 영상에 없는 세 가지만 그린다 — 양옆의 산, 코어, 떠 있는 돌.
    그 밖의 자리는 전부 투명하다. 하늘·빛기둥·바닥·잔 알갱이는 그리지 않는다.
    예외가 하나 있다. 세로로 긴 화면에서 영상의 양옆이 잘려 나간 만큼만 옆 하늘을 어둡게 덮는다(옆 어둠).
@@ -8610,8 +8620,8 @@ function lseg(key){
 
    들어가는 마크업은 이렇다.
      <div class="nk-stage" aria-hidden="true">
-       <video class="ins-vid" autoplay muted loop playsinline preload="auto" poster="../assets/ins/ins-r9.jpg">
-         <source src="../assets/ins/ins-r9.mp4" type="video/mp4">
+       <video class="ins-vid" autoplay muted loop playsinline preload="auto" poster="../assets/ins/ins-r10.jpg">
+         <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
        </video>
        <canvas class="ins-scene"></canvas>
      </div>
@@ -9295,7 +9305,7 @@ function lseg(key){
   })();
 
   /* ════════ 산 ════════
-     참고 영상에는 화면 양옆 지평선에 검은 바위산이 있는데 ins-r9 영상에는 없다. 그래서 그린다.
+     참고 영상에는 화면 양옆 지평선에 검은 바위산이 있는데 ins-r10 영상에는 없다. 그래서 그린다.
      한쪽에 두 겹씩 넷이다. 가장자리의 가깝고 검은 산과, 그 뒤의 흐리고 옅은 산.
      땅이라 움직이지 않는다. 크기가 바뀔 때만 한 번 구워 두고 매 장 그대로 붙인다.
      능선(윤곽)은 아래 makeRidge가 만들고, 그 안쪽의 겉은 '산의 땅 모양' 대목에서 만든다.
@@ -9374,12 +9384,12 @@ function lseg(key){
        지평선        = 영상 높이의 66%                    (이 아래가 바닥이다)
      확인용: 420×877 이면 코어 (210, 310) 반지름 80 지평선 579.
              1440×830 이면 코어 (720, 150) 반지름 165 지평선 703. */
-  const VW = 1208, VH = 1510, K_CY = 0.353, K_R = 0.1143, K_HZ = 0.66;
+  const VW = 2560, VH = 1440, K_CY = 0.353, K_R = 0.1143, K_HZ = 0.66;   /* 영상 크기. 16:9 로 바뀌었다(2026-11-18) */
   let cw = 0, ch = 0, dpr = 1;            /* 캔버스의 CSS 크기와 배율 */
   let bw = 0, bh = 0;                     /* 캔버스 점 단위 크기 */
   let vL = 0, vT = 0, vW = 0, vH = 0;     /* 영상이 그려진 상자(캔버스 점 단위) */
   let cx = 0, cy = 0, R = 0, hy = 0;      /* 코어 한가운데·반지름·지평선(캔버스 점 단위) */
-  let Rcss = 0, dwCss = 0, dirty = true;
+  let Rcss = 0, dwCss = 0, topCss = 0, dhCss = 0, dirty = true;
   /* 옆이 잘린 정도. 영상 폭 가운데 화면 밖으로 나간 몫이다(0~1).
      1440×830 은 0(하나도 안 잘림), 768×1024 는 0.06, 360×640 은 0.30, 420×877 은 0.40 이다 */
   let crop = 0, cropN = 0, tallK = 1;
@@ -9393,15 +9403,19 @@ function lseg(key){
     if(w === cw && h === ch && pw === bw && ph === bh) return true;
     cw = w; ch = h; dpr = d; bw = pw; bh = ph;
     cvs.width = pw; cvs.height = ph;
-    /* 늘 세로에 맞춘다(리건, 2026-11-17). 전에는 max 라서 넓은 화면에서 폭에 맞춰졌다.
-       그 바람에 위아래가 잘려 폰과 다른 장면이 됐다. 이제 화면이 영상보다 넓으면
-       양옆이 남고, 그 자리는 아래 '양옆 잇기' 에서 캔버스가 채운다 */
-    const s = h / VH, dw = VW * s, dh = VH * s;
+    /* cover 다(리건, 2026-11-18). 영상이 16:9 가 되면서 넓은 화면도 영상이 혼자 채운다.
+       전에는 세로에만 맞춰서 넓은 화면에 양옆이 남았고 그 자리를 캔버스가 이었다.
+       장면을 재는 자(sceneW)는 영상 폭이 아니라 영상 높이의 0.8 배다.
+       전 영상이 1208×1510 이라 폭이 높이의 0.8 배였고, 돌 크기·옆 어둠·잘린 정도가
+       모두 그 값에 맞춰져 있다. 영상이 넓어졌다고 이 자를 영상 폭으로 바꾸면
+       폰에서 돌이 두 배로 커진다(0.8 → 1.78). */
+    const s = Math.max(w / VW, h / VH), dw = VW * s, dh = VH * s;
     const left = (w - dw) * 0.5, top = (h - dh) * 0.5;
-    const cyC = top + K_CY * dh, rC = K_R * dw;
+    const sceneW = 0.8 * dh;
+    const cyC = top + K_CY * dh, rC = K_R * sceneW;
     vL = left * d; vT = top * d; vW = dw * d; vH = dh * d;
     cx = (left + 0.5 * dw) * d; cy = cyC * d; R = rC * d; hy = (top + K_HZ * dh) * d;
-    Rcss = rC; dwCss = dw; dirty = true;
+    Rcss = rC; dwCss = sceneW; topCss = top; dhCss = dh; dirty = true;
     /* 늘린 양옆이 평평한 판처럼 보이지 않게 가장자리로 갈수록 어둡게 덮는다 */
     sideL = sideR = null;
     if(vL > 0.5){
@@ -9414,10 +9428,11 @@ function lseg(key){
         g.addColorStop(1, "rgba(6,8,11,0)");
       }
     }
-    crop = Math.max(0, 1 - w / dw); cropN = Math.min(1, crop / 0.4);
-    /* 돌이 떠다니는 상자. 폰에서는 영상 상자(화면보다 넓다), 넓은 화면에서는 화면 전체다.
-       영상 상자에만 묶어 두면 넓은 화면에서 돌이 가운데 기둥 안에만 모인다 */
-    rL = Math.min(vL, 0); rW = Math.max(vW, bw);
+    crop = Math.max(0, 1 - w / sceneW); cropN = Math.min(1, crop / 0.4);
+    /* 돌이 떠다니는 상자. 영상 상자가 아니라 장면 폭(sceneW)으로 정한다.
+       16:9 영상 상자는 폰에서 화면보다 네 배 넓다. 거기에 고루 뿌리면
+       화면 안에 보이는 돌이 전의 절반이 된다 */
+    rW = Math.max(sceneW * d, bw); rL = (bw - rW) * 0.5;
     /* 산 크기는 어디서나 같다. 영상이 늘 세로에 맞춰지므로 세계를 재는 자가 하나뿐이고,
        화면 비율로 산만 따로 키우면 넓은 화면에서 다른 세계가 된다.
        1.45 는 폰에서 쓰던 값이다 — 폰에서 보던 산 크기를 그대로 넓은 화면으로 옮긴다 */
@@ -9472,9 +9487,9 @@ function lseg(key){
   function shadeCss(){
     shadeA = clamp(2.1 * crop, 0, 0.86);
     const w0 = 0.065 * dwCss, w1 = cw * 0.5;   /* 0.09 → 0.065 (빛기둥 좁히기, 리건 2026-11-17) */
-    const top = (ch - VH * dwCss / VW) * 0.5;
-    const y1 = top + K_CY * VH * dwCss / VW + 0.8 * Rcss;
-    const y2 = top + K_HZ * VH * dwCss / VW - 0.10 * ch * tallK;
+    const top = topCss;
+    const y1 = top + K_CY * dhCss + 0.8 * Rcss;
+    const y2 = top + K_HZ * dhCss - 0.10 * ch * tallK;
     if(shadeOff || shadeA < 0.02 || w1 - w0 < 2 || y2 < 2){
       shadeA = 0;
       stage.style.setProperty("--nk-shade", "none");
@@ -10210,6 +10225,9 @@ function lseg(key){
        매 장 영상에서 떠 오므로 안개가 움직여도 이음매의 밝기가 늘 같다.
        바닥은 늘이면 자갈이 가로 줄이 되므로 그 위에 구워 둔 바닥(bakeSide)을 덮는다.
        마지막에 가장자리로 갈수록 어둡게 덮는다. 빛기둥에서 멀어지는 만큼 어두워져야 한 세계로 보인다. */
+    /* 2026-11-18 부터 여기는 돌지 않는다. 영상이 16:9 라 cover 에서 vL 이 0 이하이고
+       sdOn 은 늘 false 다. 양옆을 잇던 일이 이 깜빡임의 원인이었다(위 .ins-vid 설명 참고).
+       지우지 않고 둔 것은, 세로 영상으로 되돌릴 때 다시 필요해서다 */
     if(sdOn){
       const xR = vL + vW, wl = Math.ceil(vL) + 1, xr = Math.floor(xR) - 1;
       if(vid && vid.readyState >= 2){
