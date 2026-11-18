@@ -1085,7 +1085,7 @@ const NAV = [
     {id:"s-onb", nm:"온보딩 구성", ic:"list-ordered"},
     {id:"s-copy", nm:"서비스 문구", ic:"type"},
     {id:"s-guard", nm:"앱 규정 점검", ic:"shield-check"},
-    {id:"s-open", nm:"정해야 할 것", ic:"clipboard-list", cnt:"60"}
+    {id:"s-open", nm:"정해야 할 것", ic:"clipboard-list", cnt:"61"}
   ]},
   {g:"통계", items:[
     {id:"s-stats", nm:"지표", ic:"activity"},
@@ -1294,7 +1294,7 @@ CMS.ready(function(){
     {b:"warn", t:"태깅 감수 대기 " + rev + "편", s:"36 · 33 · 86 · 83 · 20번", go:"s-tagmap"},
     {b:"info", t:"초안 " + drafts + "편", s:"87 · 72 · 41번이 초안으로 멈춰 있습니다", go:"s-kits"},
     {b:"danger", t:"앱 규정에 걸리는 글 3건", s:"내 코킷 · 뷰어 · 홈 카드의 접근성 글", go:"s-guard"},
-    {b:"warn", t:"정해야 할 것 60건", s:"그 가운데 12건은 정해지기 전에는 더 못 만듭니다", go:"s-open"}
+    {b:"warn", t:"정해야 할 것 61건", s:"그 가운데 12건은 정해지기 전에는 더 못 만듭니다", go:"s-open"}
   ];
   /* 0편이면 줄을 넣지 않는다. 할 일 목록에 "0편" 이 올라오면 할 일이 아니다 */
   if(noCc) TODO.splice(2, 0, {b:"warn", t:"고민이 안 붙은 코킷 " + noCc + "편", s:"고민이 없으면 낙타AI 추천에 걸리지 않습니다", go:"s-tagmap"});
