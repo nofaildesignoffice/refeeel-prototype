@@ -951,6 +951,22 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
   display:flex;align-items:center;justify-content:center;
   border:none;border-radius:50%;background:var(--bg-dark);cursor:pointer;}
 #scr-chat .ci-send i,#scr-chat .ci-send svg{width:18px;height:18px;color:var(--bg-white);}
+/* ── 낙타AI 대화 화면의 말 거는 자리(리건, 2026-11-18) ──
+   첫 화면(#scr-chat)의 입력칸과 같은 꼴로 맞췄다. 흰 알약과 그 안에 들어간 어두운 동그라미다.
+   위 구분선과 바탕은 걷어냈다. 대화 자리가 흰 바탕이 되면서 선만 남으면
+   그 선이 아무것도 나누지 않는 금으로 보인다. 화면 바탕은 이미 흰색이다(.screen).
+   입력칸은 가짜 div 그대로 둔다. 눌러도 키보드가 뜨지 않게 하려고 원래 그렇게 둔 것이다.
+   글자 크기만 16px 으로 올렸다. 첫 화면은 진짜 input 이라 iOS 확대를 막는 규칙이 16px 을 주는데,
+   그 크기로 생긴 높이(43px)에 맞지 않으면 같은 꼴이 아니다. */
+#scr-chatroom .chat-area{background:var(--bg-white);}
+#scr-chatroom .chat-input{border-top:none;background:none;}
+#scr-chatroom .ci-field{position:relative;flex:1;min-width:0;display:flex;align-items:center;}
+#scr-chatroom .ci-box{background:var(--bg-white);font-size:16px;padding-right:50px;}
+#scr-chatroom .ci-send{position:absolute;right:3px;top:50%;transform:translateY(-50%);
+  flex-shrink:0;width:38px;height:38px;margin:0;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  border:none;border-radius:50%;background:var(--bg-dark);cursor:pointer;}
+#scr-chatroom .ci-send i,#scr-chatroom .ci-send svg{width:18px;height:18px;color:var(--bg-white);}
 /* 머리는 홈의 낙타AI 권유와 같은 꼴이다(리건, 2026-11-10) — 반짝임과 이름표.
    ⚠ 흰 바탕이라 색만 뒤집는다. 반짝임은 흰색이면 안 보이고, 이름표의 라임은
      흰 바탕에서 읽히지 않는다 — 라임은 어두운 바탕에서만 쓴다. */
@@ -3376,13 +3392,14 @@ body.modal-open #scr-interest .ord-sub,
   .nk-home-input{display:flex;cursor:pointer;}
   /* 보내기가 단추가 되었다(2026-11-10) — 위 .chat-input>svg 규칙이 더는 닿지 않아
      여기서 같은 꼴(52px 흰 원)로 다시 맞춘다. 머리의 반짝임도 여기서 키운다. */
-  #scr-chat .ci-send{width:52px;height:52px;margin-left:0;
+  #scr-chat .ci-send,#scr-chatroom .ci-send{width:52px;height:52px;margin-left:0;
     background:var(--bg-white);border:1px solid var(--border-light);
     box-shadow:var(--shadow-sm);}
-  #scr-chat .ci-send i,#scr-chat .ci-send svg{width:22px;height:22px;color:var(--text-dark);}
+  #scr-chat .ci-send i,#scr-chat .ci-send svg,
+  #scr-chatroom .ci-send i,#scr-chatroom .ci-send svg{width:22px;height:22px;color:var(--text-dark);}
   /* 넓은 화면도 같이 칸 안에 넣는다 — 단추만 칸 높이에 맞춰 줄인다. */
-  #scr-chat .nk-home-input input.ci-box{padding-right:62px;}
-  #scr-chat .nk-home-input .ci-send{width:44px;height:44px;right:5px;}
+  #scr-chat .nk-home-input input.ci-box,#scr-chatroom .ci-box{padding-right:62px;}
+  #scr-chat .nk-home-input .ci-send,#scr-chatroom .ci-send{width:44px;height:44px;right:5px;}
   #scr-chat .nk-hero .nk-ill{width:64px;margin-bottom:14px;}
   #scr-chat .nk-hero .nk-kick{font-size:11px;margin-bottom:14px;}
 
@@ -7261,9 +7278,12 @@ body.modal-open #scr-interest .ord-sub,
     </div>
   </div>
 
+  <!-- 보내기를 입력칸 안으로 넣었다(리건, 2026-11-18) — 첫 화면의 .nk-home-input 과 같은 구조다 -->
   <div class="chat-input">
-    <div class="ci-box">이어서 물어보세요</div>
-    <i data-lucide="send"></i>
+    <div class="ci-field">
+      <div class="ci-box">이어서 물어보세요</div>
+      <button class="ci-send" aria-label="보내기"><i data-lucide="arrow-up"></i></button>
+    </div>
   </div>
 </section>
 
