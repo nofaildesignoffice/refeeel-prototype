@@ -1004,6 +1004,10 @@ body[data-nav="wide"] .screen.scr-out{display:none;}
    object-fit 이나 object-position 을 바꾸거나 transform 을 넣으면 코어가 빛기둥에서 벗어난다. */
 #scr-chat .nk-stage .ins-vid{position:absolute;left:0;top:0;width:100%;height:100%;
   border:0;display:block;object-fit:cover;z-index:0;}
+/* 같은 영상을 두 장 포갠다(리건, 2026-11-18). 되감기를 없애려는 것이다. 까닭은 대본에 적었다.
+   ⚠ 아래 영상(.ins-vid)은 늘 불투명하게 둔다. 위 영상(.ins-vid-b)의 투명도만 0↔1 로 움직인다.
+   둘 다 반투명하게 하면 가운데쯤에서 뒤 바탕색이 25% 비쳐서 화면이 한 번 어두워진다. */
+#scr-chat .nk-stage .ins-vid-b{opacity:0;}
 /* 옆 어둠 — 영상(0)과 캔버스(2) 사이에 낀다. 세로로 긴 화면에서 영상의 양옆이 잘려 나가
    빛기둥의 밝은 가운데만 남는 것을 되돌린다. 양옆을 어둡게 덮되 가운데 빛기둥 자리는 비우고,
    아래로 갈수록 옅어져 바닥에는 닿지 않는다. 배경(가로)과 마스크(세로)에 들어갈 값은
@@ -7184,6 +7188,9 @@ body.modal-open #scr-interest .ord-sub,
       poster="../assets/ins/ins-r10.jpg">
       <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
     </video>
+    <video class="ins-vid ins-vid-b" muted loop playsinline preload="auto">
+      <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
+    </video>
     <canvas class="ins-scene"></canvas>
     <i class="nk-tint"></i>
   </div>
@@ -8623,8 +8630,12 @@ function lseg(key){
        <video class="ins-vid" autoplay muted loop playsinline preload="auto" poster="../assets/ins/ins-r10.jpg">
          <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
        </video>
+       <video class="ins-vid ins-vid-b" muted loop playsinline preload="auto">
+         <source src="../assets/ins/ins-r10.mp4" type="video/mp4">
+       </video>
        <canvas class="ins-scene"></canvas>
      </div>
+   영상이 두 장인 까닭은 아래 '영상 두 장 번갈아 띄우기'에 적었다. 되감기를 없애려는 것이다.
 
    자리 잡기: 영상은 CSS 가 cover 로 놓는다. 여기서 같은 계산을 해서
    영상 속 빛기둥이 모이는 점에 코어를 그린다. 화면 비율마다 따로 정한 구도는 없다.
@@ -8644,7 +8655,65 @@ function lseg(key){
   if(!stage) return;
   const cvs = stage.querySelector(".ins-scene");
   if(!cvs) return;
-  const vid = stage.querySelector(".ins-vid");   /* 양옆을 이을 때 가장자리 띠를 여기서 떠 온다 */
+  /* ── 영상 두 장 번갈아 띄우기 (리건, 2026-11-18) ──
+     영상 한 장을 loop 로 돌리면 끝에서 처음으로 되감을 때마다 깜빡인다. 두 가지가 겹친다.
+     ① 그림 — 첫 장은 혼자 압축된다(IDR). 다른 장은 앞 장을 보고 압축돼서 오차가 서로 닮는데
+        첫 장만 따로 논다. 그래서 되감는 자리에서 바뀌는 양이 보통의 세 배가 된다.
+        품질을 올려도(crf 23→18) 줄지 않았다. 상수 양자화(qp 16)로 0.60 에서 0.36 까지만 줄었다.
+     ② 시간 — 크롬이 되감을 때 20~40ms 더 걸리고 장을 하나 건너뛸 때가 있다.
+        requestVideoFrameCallback 으로 재 보니 되감은 자리마다 나왔다. 압축으로는 못 잡는다.
+     둘 다 '되감기' 자체에서 나온다. 그래서 보이는 영상은 되감지 않게 한다.
+     같은 파일을 두 장 띄우고 번갈아 쓴다. 쉬는 쪽은 멈춰서 0 초에 세워 둔다.
+     보이는 쪽이 끝에 닿기 전에 쉬는 쪽을 틀고, 0.6초 동안 녹여 바꾸고, 지나간 쪽을
+     멈춰서 0 으로 돌린다. 보이는 영상이 되감는 일이 없다.
+
+     겹치는 동안 두 그림은 1초치 어긋나 있다. 이 영상은 바닥 자갈이 고정이고 안개만
+     천천히 흘러서, 그 차이가 평균 1.6단계다(255 중). 0.6초에 걸쳐 서서히 메워지므로
+     한 장에 0.11단계씩이다. 보통 한 장 넘어갈 때(0.11)와 같은 크기다.
+     어긋남은 0.6초를 넘기면 더 벌어지지 않는다(0.58초 1.72 · 1.0초 1.57 · 1.25초 1.66, 실측).
+     그래서 미리 트는 시간은 넉넉히 잡았다.
+
+     ⚠ 포개는 순서가 중요하다. 아래 영상은 늘 불투명하게 두고 위 영상의 투명도만 0↔1 로 움직인다.
+       둘 다 반투명하게 하면 가운데쯤에서 뒤 바탕색이 25% 비쳐 화면이 한 번 어두워진다.
+     ⚠ 바꿔 넣는 일은 rAF 가 아니라 타이머로 돈다. 창이 뒤로 가면 크롬이 rAF 를 초당 한 번까지
+       늦추는데(실측), 그러면 바꿀 때를 놓쳐서 되감겨 버린다. 녹이는 일은 CSS transition 에
+       맡긴다. 합성기가 맡아서 rAF 가 늦어도 매끄럽다.
+     ⚠ 그래도 놓치면(화면 밖에 오래 있다 오면) loop 가 제 일을 한다. left 가 크게 나오는 걸로
+       알아차려서 처음부터 다시 한다. */
+  const vidA = stage.querySelector(".ins-vid");
+  const vidB = stage.querySelector(".ins-vid-b");
+  let vid = vidA;    /* 지금 보이는 쪽. 아래 '빛기둥 자국 덮기' 가 여기서 떠 간다 */
+  const V_FADE = 0.60;    /* 녹여 바꾸는 데 걸리는 시간(초) */
+  const V_LEAD = 1.00;    /* 쉬는 쪽을 미리 틀어 두는 시간(초) */
+  const V_GO   = 0.74;    /* 남은 시간이 여기까지 오면 녹이기 시작한다. 끝나고도 0.14초 남는다 */
+  let vStep = 0, vTimer = 0;
+  if(vidB) vidB.style.transition = "opacity " + V_FADE + "s linear";
+  function vhand(){
+    if(!vidA || !vidB) return;
+    const live = vid, idle = (vid === vidA ? vidB : vidA);
+    const d = live.duration;
+    if(!d || !isFinite(d) || d < 1) return;
+    const left = d - live.currentTime;
+    if(vStep === 0){
+      if(left <= V_LEAD){
+        vStep = 1;
+        try{ idle.currentTime = 0; }catch(e){}
+        const p = idle.play(); if(p && p.catch) p.catch(function(){});
+      }
+    }else if(vStep === 1){
+      if(left > V_LEAD + 1){          /* 때를 놓쳤다. 되돌리고 다음 바퀴를 기다린다 */
+        idle.pause(); try{ idle.currentTime = 0; }catch(e){}
+        vStep = 0;
+      }else if(left <= V_GO && idle.readyState >= 2){
+        vStep = 2;
+        vidB.style.opacity = (idle === vidB) ? "1" : "0";
+        setTimeout(function(){
+          live.pause(); try{ live.currentTime = 0; }catch(e){}
+          vid = idle; vStep = 0;
+        }, V_FADE * 1000 + 40);
+      }
+    }
+  }
   const ctx = cvs.getContext("2d");
   if(!ctx) return;
   const host = stage.closest ? stage.closest("#scr-chat") : document.getElementById("scr-chat");
@@ -10463,10 +10532,12 @@ function lseg(key){
     if(reduce){ frame(STILL); return; }
     if(run) return;
     run = true; raf = requestAnimationFrame(tick);
+    if(!vTimer && vidB) vTimer = setInterval(vhand, 90);
   }
   function stop(){
     run = false;
     if(raf){ cancelAnimationFrame(raf); raf = 0; }
+    if(vTimer){ clearInterval(vTimer); vTimer = 0; }
   }
   /* 글자 자리가 첫 장을 기다리지 않게, 코어 자리부터 바로 재서 알려 준다 */
   size();
