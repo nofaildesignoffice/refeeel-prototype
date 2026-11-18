@@ -3415,12 +3415,14 @@ body.modal-open #scr-interest .ord-sub,
   #scr-chatroom .chat-input>i:hover,#scr-chatroom .chat-input>svg:hover{background:var(--bg-light);}
   .nk-home-input{display:flex;cursor:pointer;}
   /* 보내기가 단추가 되었다(2026-11-10) — 위 .chat-input>svg 규칙이 더는 닿지 않아
-     여기서 같은 꼴(52px 흰 원)로 다시 맞춘다. 머리의 반짝임도 여기서 키운다. */
+     여기서 크기를 다시 맞춘다. 머리의 반짝임도 여기서 키운다.
+     색은 좁은 화면과 같은 어두운 동그라미에 흰 화살표다(리건, 2026-11-18).
+     전에는 넓은 화면만 흰 원에 어두운 화살표였다 — 같은 단추가 폭에 따라
+     다른 색이 될 까닭이 없다. 테두리와 그림자는 어두운 면에서는 보이지 않으니 걷는다. */
   #scr-chat .ci-send,#scr-chatroom .ci-send{width:52px;height:52px;margin-left:0;
-    background:var(--bg-white);border:1px solid var(--border-light);
-    box-shadow:var(--shadow-sm);}
+    background:var(--bg-dark);border:none;box-shadow:none;}
   #scr-chat .ci-send i,#scr-chat .ci-send svg,
-  #scr-chatroom .ci-send i,#scr-chatroom .ci-send svg{width:22px;height:22px;color:var(--text-dark);}
+  #scr-chatroom .ci-send i,#scr-chatroom .ci-send svg{width:22px;height:22px;color:var(--bg-white);}
   /* 넓은 화면도 같이 칸 안에 넣는다 — 단추만 칸 높이에 맞춰 줄인다. */
   #scr-chat .nk-home-input input.ci-box,#scr-chatroom .ci-box{padding-right:62px;}
   #scr-chat .nk-home-input .ci-send,#scr-chatroom .ci-send{width:44px;height:44px;right:5px;}
