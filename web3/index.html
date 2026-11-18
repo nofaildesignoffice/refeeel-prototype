@@ -2551,6 +2551,23 @@ mark.hl mark.hl{background:none;box-shadow:none;}
 @media(min-width:1024px){
 
   html,body{height:auto;}
+  /* ── 스크롤 막대(리건, 2026-11-18) ──
+     윈도 크롬의 기본 막대는 위아래에 화살표가 달려 있고 손잡이가 둥글고 두껍다.
+     화살표를 없애고, 길은 반투명으로 깔고, 손잡이는 얇은 네모로 세운다.
+     색은 회색에 투명도만 준다 — 흰 바탕에서도 어두운 장면 위에서도 같이 보여야 한다.
+     세로로 긴 것에만 건다 — 가로로 미는 띠들은 이미 각자 막대를 감춰 두었다. */
+  html::-webkit-scrollbar,.scroll::-webkit-scrollbar,.chat-area::-webkit-scrollbar{
+    width:8px;height:8px;background:transparent;}
+  html::-webkit-scrollbar-button,.scroll::-webkit-scrollbar-button,.chat-area::-webkit-scrollbar-button{
+    display:none;width:0;height:0;}
+  html::-webkit-scrollbar-track,.scroll::-webkit-scrollbar-track,.chat-area::-webkit-scrollbar-track{
+    background:rgba(128,128,128,.14);}
+  html::-webkit-scrollbar-thumb,.scroll::-webkit-scrollbar-thumb,.chat-area::-webkit-scrollbar-thumb{
+    background:rgba(128,128,128,.6);border-radius:0;}
+  html::-webkit-scrollbar-thumb:hover,.scroll::-webkit-scrollbar-thumb:hover,.chat-area::-webkit-scrollbar-thumb:hover{
+    background:rgba(128,128,128,.8);}
+  html::-webkit-scrollbar-corner,.scroll::-webkit-scrollbar-corner,.chat-area::-webkit-scrollbar-corner{
+    background:transparent;}
   body{display:block;background:var(--bg-white);}
   /* ── 넓은 화면에서는 접어 둔다(리건, 2026-08-24) ──
      서른일곱 칸이 맨 위를 가로질러 깔려 있으면 그게 먼저 보인다.
@@ -3427,6 +3444,31 @@ body.modal-open #scr-interest .ord-sub,
      반짝임 svg 는 장면이 대신하니 숨긴 채 둔다. 머리 글자도 흰색 그대로다. */
   /* 입력창은 방 바닥에 붙어 있다. 흰 바탕을 걷어 장면이 바닥까지 이어지게 한다 */
   #scr-chat .chat-input{background:none;}
+  /* 말 거는 자리는 띠가 아니라 떠 있는 칸 하나다(리건, 2026-11-18).
+     전에는 방 바닥에 89px 띠로 깔려 있어서 목록이 그 띠 윗선에서 뚝 잘렸다.
+     띠를 흐름에서 빼 같은 자리에 띄우고, 목록은 화면 바닥까지 내려보냈다.
+     띠 자리는 눌리지 않게 비워 둔다 — 칸과 단추만 받는다.
+     그렇게 하지 않으면 빈 띠가 뒤에 있는 목록을 가로막는다. */
+  #scr-chat>.nk-home-input{position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding-block:16px 20px;pointer-events:none;}
+  #scr-chat>.nk-home-input .ci-field{pointer-events:auto;}
+  /* 목록은 칸에 닿기 전에 투명하게 녹아 사라진다(리건, 2026-11-18).
+     잘린 선이 보이면 카드가 접힌 것처럼 읽힌다. 녹는 구간은 40px 이고,
+     끝나는 자리가 칸의 윗변이다 — 띠 높이에서 위 여백 16px 을 되돌린 값이다.
+     아래 여백은 띠 높이만큼 더 준다 — 마지막 카드가 칸 위로 올라올 수 있게.
+     ⚠ --nkin-h 는 아래 NKBAR 가 재서 넣는다. 글자 크기가 바뀌면 89px 이 아니다.
+     ⚠ 녹는 보자기는 두 장이다. 왼쪽 한 장만 녹이고, 막대가 서는 오른쪽 8px 은
+       통째로 남긴다. 한 장으로 덮으면 스크롤 막대까지 같이 녹아서
+       아래쪽 길과 손잡이가 사라진다(실측). 8px 은 위에서 정한 막대 폭이다. */
+  #scr-chat .scroll{padding-bottom:calc(var(--nkin-h,89px) + 16px);
+    -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - var(--nkin-h,89px) - 24px),transparent calc(100% - var(--nkin-h,89px) + 16px)),linear-gradient(#000,#000);
+    -webkit-mask-size:calc(100% - 8px) 100%,8px 100%;
+    -webkit-mask-position:left top,right top;
+    -webkit-mask-repeat:no-repeat,no-repeat;
+    mask-image:linear-gradient(to bottom,#000 calc(100% - var(--nkin-h,89px) - 24px),transparent calc(100% - var(--nkin-h,89px) + 16px)),linear-gradient(#000,#000);
+    mask-size:calc(100% - 8px) 100%,8px 100%;
+    mask-position:left top,right top;
+    mask-repeat:no-repeat,no-repeat;}
   /* 넓은 화면에서는 영상의 위아래가 잘린다. cover 가 폭에 맞춰 키우기 때문이다.
      어두운 하늘이 통째로 날아가고 안개가 밝은 가운데 띠만 남아 화면이 뿌옇다.
      세로 화면에서 옆을 눌러 잘린 옆 하늘을 되돌리는 것과 같은 이유로,
@@ -10576,6 +10618,11 @@ function lseg(key){
   };
   place();
   wide.addEventListener ? wide.addEventListener("change", place) : wide.addListener(place);
+  /* 띠 높이를 재서 알려 준다(2026-11-18) — 넓은 화면에서 목록의 아래 여백과
+     녹아 사라지는 자리가 이 값을 쓴다. 좁은 화면은 이 값을 읽지 않는다. */
+  const putH = () => chat.style.setProperty("--nkin-h", bar.offsetHeight + "px");
+  putH();
+  if(window.ResizeObserver) new ResizeObserver(putH).observe(bar);
 })();
 
 /* 아래 띠(읽는 중·완독·저장)는 위 띠(코킷·시리즈) 높이만큼 내려가 붙는다(리건, 2026-11-10).
