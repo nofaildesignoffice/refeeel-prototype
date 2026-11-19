@@ -560,21 +560,26 @@ CONCERNS.forEach(function(c){
   c.cnt = KITS.filter(function(k){ return k.cc.indexOf(c.c) >= 0 && k.st === "live"; }).length;
 });
 
-/* ── 읽는 묶음(시리즈) ── */
+/* ── 코멜 시리즈 ──
+   코킷의 묶음이 아니라 따로 파는 단독 상품이다. 회차 글은 시리즈가 직접 가진다.
+   코킷 목록에서 골라 오지 않는다. 읽는 자리(리더기)만 코킷과 같다.
+   ep 의 st 는 그 회차 글의 상태다. 회차별 상태가 자료에 없어, 초안 묶음은 전 회차를
+   초안으로, 발행된 묶음은 전 회차를 발행으로 두었다. */
+function mkEp(st, names){ return names.map(function(nm){ return {nm:nm, st:st}; }); }
 const SERIES = [
   {id:"sr-brand", nm:"브랜딩 클래스", sub:"브랜드가 돈이 되는 과정",
-   st:"live", paid:true, ep:[
+   st:"live", paid:true, ep:mkEp("live", [
     "마케팅의 순서","브랜드 정체성","고객 정의","포지셔닝","차별화",
-    "메시지","차별화 실전","채널 전략","가이드라인"]},
+    "메시지","차별화 실전","채널 전략","가이드라인"])},
   {id:"sr-ai", nm:"AI로 혼자 일하기", sub:"사람 한 명 몫을 AI에 맡기는 순서",
-   st:"live", paid:false, ep:["무엇을 맡길까","지시문 쓰는 법","자동화 걸기","검수하기"]},
+   st:"live", paid:false, ep:mkEp("live", ["무엇을 맡길까","지시문 쓰는 법","자동화 걸기","검수하기"])},
   {id:"sr-conv", nm:"전환이 되는 상세페이지", sub:"들어와서 결제까지 가는 길",
-   st:"draft", paid:true, ep:["첫 화면","증거","가격","마지막 문장"]},
+   st:"draft", paid:true, ep:mkEp("draft", ["첫 화면","증거","가격","마지막 문장"])},
   {id:"sr-aeo", nm:"AI 검색 시대 준비", sub:"검색이 사라진 자리에서 발견되는 법",
-   st:"live", paid:true, ep:["제로클릭","AEO 기본","구조화","점검표","사례"]}
+   st:"live", paid:true, ep:mkEp("live", ["제로클릭","AEO 기본","구조화","점검표","사례"])}
 ];
 
-/* ── 파는 묶음(코멜 시리즈 상품). 웹에서만 보인다 ── */
+/* ── 파는 상품. 웹에서만 보인다. 코멜 시리즈도 여기에 값과 랜딩을 둔다 ── */
 const PRODUCTS = [
   {id:"pd-brand", cat:"클래스", nm:"브랜딩 클래스", price:99000, st:"live",
    sub:"브랜드가 돈이 되는 과정 9강", land:true, sold:142},
@@ -1351,7 +1356,7 @@ const NAV = [
   {g:"콘텐츠", items:[
     {id:"s-kits", nm:"코킷", ic:"file-text", cnt:"89"},
     {id:"s-kit", nm:"코킷 편집", ic:"pencil", hide:true},
-    {id:"s-series", nm:"시리즈", ic:"layers"},
+    {id:"s-series", nm:"코멜 시리즈", ic:"layers"},
     {id:"s-series-edit", nm:"시리즈 편집", ic:"pencil", hide:true},
     {id:"s-media", nm:"이미지", ic:"image"}
   ]},
@@ -1377,7 +1382,7 @@ const NAV = [
   ]},
   {g:"멤버십 · 웹에서만", items:[
     {id:"s-plans", nm:"요금제", ic:"credit-card"},
-    {id:"s-prod", nm:"코멜 시리즈", ic:"package"},
+    {id:"s-prod", nm:"상품", ic:"package"},
     {id:"s-subs", nm:"구독", ic:"repeat"},
     {id:"s-orders", nm:"주문·결제", ic:"receipt"}
   ]},
@@ -1820,7 +1825,7 @@ CMS.ready(function(){
   icons();
 });
 </script>
-<!-- 콘텐츠 묶음: 코킷 목록 · 코킷 편집 · 시리즈 목록 · 시리즈 편집 · 이미지 -->
+<!-- 콘텐츠 묶음: 코킷 목록 · 코킷 편집 · 코멜 시리즈 · 시리즈 편집 · 이미지 -->
 <style>
 /* ── 코킷 목록 ── */
 #s-kits .kits-kpi{margin-bottom:14px;}
@@ -1904,8 +1909,9 @@ CMS.ready(function(){
 #s-series .ser-memo{margin-top:10px;}
 
 #s-series-edit .se-no{width:42px;font-size:var(--fs-xs);font-weight:700;color:var(--text-gray);flex-shrink:0;}
-#s-series-edit .se-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:8px;}
-#s-series-edit .se-in input,#s-series-edit .se-in select{width:100%;}
+#s-series-edit .se-in{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;}
+#s-series-edit .se-in input{width:100%;}
+#s-series-edit .se-bd{display:flex;align-items:center;gap:7px;justify-content:flex-end;}
 #s-series-edit .se-lock{min-width:64px;}
 #s-series-edit .se-pv-ep{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--card-line);font-size:12px;}
 #s-series-edit .se-pv-ep:last-child{border-bottom:0;}
@@ -2213,15 +2219,15 @@ CMS.ready(function(){
   </div>
 </section>
 
-<!-- ══════════ 3. 시리즈 목록 ══════════ -->
+<!-- ══════════ 3. 코멜 시리즈 목록 ══════════ -->
 <section class="scr" id="s-series">
   <div class="ph">
     <div>
-      <h1>시리즈</h1>
-      <p>코킷을 순서대로 묶어 읽게 하는 자리다. 묶음의 이름과 회차 순서를 여기서 정한다.</p>
+      <h1>코멜 시리즈</h1>
+      <p>코킷의 묶음이 아니라 따로 파는 단독 상품이다. 회차 글을 여기서 직접 더한다. 읽는 자리만 코킷과 같다.</p>
     </div>
     <div class="ph-act">
-      <button class="btn pri" data-act="soon"><i data-lucide="plus"></i>새 시리즈</button>
+      <button class="btn pri" data-modal="m-se-new"><i data-lucide="plus"></i>새 시리즈</button>
     </div>
   </div>
 
@@ -2229,12 +2235,36 @@ CMS.ready(function(){
 
   <div class="note info ser-note">
     <i data-lucide="info"></i>
-    <div><b>읽는 묶음과 파는 묶음은 다릅니다.</b><br>
-      이 화면의 시리즈는 읽는 묶음이고 앱에도 내려갑니다. 파는 묶음(코멜 시리즈 상품)은 웹에서만 보이고, 멤버십의 코멜 시리즈 화면에서 다룹니다.</div>
-    <button class="btn sm" data-go="s-prod">코멜 시리즈 상품으로<i data-lucide="arrow-right"></i></button>
+    <div><b>회차 글은 이 화면, 값과 랜딩은 상품 화면입니다.</b><br>
+      시리즈의 이름과 회차 글은 여기서 다루고 앱에도 내려갑니다. 가격과 판매 랜딩은 웹에만 내려가므로 멤버십의 상품 화면에서 다룹니다.</div>
+    <button class="btn sm" data-go="s-prod">상품 화면으로<i data-lucide="arrow-right"></i></button>
   </div>
   <div class="note ser-memo"><i data-lucide="info"></i>
     <div>"작업 중인 회차"는 시연 자료에 회차별 상태가 없어, 초안 시리즈는 전 회차를 작업 중으로, 발행된 시리즈는 0으로 셌습니다.</div>
+  </div>
+
+  <div class="modal" id="m-se-new">
+    <div class="bd" data-close></div>
+    <div class="pnl">
+      <div class="hd"><h3>새 시리즈</h3><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="bdy">
+        <div class="note info" style="margin-bottom:14px"><i data-lucide="package"></i>
+          <div><b>코킷을 담지 않습니다.</b> 시리즈는 단독 상품이라 빈 묶음으로 만들고, 회차 글을 그 안에서 직접 씁니다.</div></div>
+        <div class="form">
+          <div class="fld"><label>이름 <span class="req">*</span></label>
+            <input class="inp" id="sn-nm" maxlength="30" placeholder="예: 전환이 되는 상세페이지"></div>
+          <div class="fld"><label>부제</label>
+            <input class="inp" id="sn-sb" maxlength="40" placeholder="끝까지 읽으면 무엇을 얻는지 한 줄로 적습니다"></div>
+          <div class="fld"><label>값 받기</label>
+            <select class="sel" id="sn-paid"><option value="1">유료</option><option value="0">무료</option></select>
+            <span class="hint">가격은 멤버십의 상품 화면에서 정합니다. 앱 빌드에는 가격이 내려가지 않습니다.</span></div>
+        </div>
+      </div>
+      <div class="ft">
+        <button class="btn" data-close>취소</button>
+        <button class="btn pri" id="sn-save"><i data-lucide="check"></i>만들기</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2275,18 +2305,18 @@ CMS.ready(function(){
       </div>
 
       <div class="card">
-        <div class="card-hd"><div><h2>회차</h2><p>손잡이를 끌어 순서를 바꿉니다. 회차 번호는 순서대로 다시 매겨집니다.</p></div>
+        <div class="card-hd"><div><h2>회차</h2><p>회차 글은 시리즈 안에서 직접 씁니다. 코킷에서 고르지 않습니다. 손잡이를 끌어 순서를 바꾸면 번호가 다시 매겨집니다.</p></div>
           <div class="r"><span class="bdg" id="se-cnt"></span></div></div>
         <div class="card-bd flush">
           <div class="list" id="se-list"></div>
-          <div class="empty" id="se-empty" style="display:none"><i data-lucide="layers"></i><b>회차가 없습니다</b><p>회차를 더해 코킷을 이으세요.</p></div>
+          <div class="empty" id="se-empty" style="display:none"><i data-lucide="layers"></i><b>회차가 없습니다</b><p>회차를 더해 글을 쓰세요.</p></div>
         </div>
         <div class="card-ft"><button class="btn" id="se-add"><i data-lucide="plus"></i>회차 더하기</button>
           <span class="muted" style="font-size:12px;margin-left:auto" id="se-link"></span></div>
       </div>
 
       <div class="note"><i data-lucide="info"></i>
-        <div>회차와 코킷을 잇는 값은 시연 자료에 없어 코킷 칸을 비워 두었습니다. 무료로 여는 회차의 기준도 받은 자료에 없어, 유료 시리즈는 1회차만 무료로 두었습니다.</div></div>
+        <div>회차 본문 원고는 이 프로토타입에 들어 있지 않아 글의 상태만 두었습니다. 무료로 여는 회차의 기준도 받은 자료에 없어, 유료 시리즈는 1회차만 무료로 두었습니다.</div></div>
     </div>
 
     <div class="stack">
@@ -2295,6 +2325,33 @@ CMS.ready(function(){
         <div class="card-bd kitv-center">
           <div class="phone"><div class="ptop">시리즈</div><div class="pbd" id="se-phone"></div></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="m-se-ep">
+    <div class="bd" data-close></div>
+    <div class="pnl wide">
+      <div class="hd"><h3 id="se-m-t">회차 본문</h3><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="bdy">
+        <div class="note info" style="margin-bottom:14px"><i data-lucide="book-open"></i>
+          <div><b>리더기는 코킷과 같습니다.</b> 회차 글은 코킷과 같은 리더기로 읽히지만, 코킷 목록에서 골라 오지 않고 이 시리즈 안에서 직접 씁니다.</div></div>
+        <div class="form">
+          <div class="frow">
+            <div class="fld"><label>회차 이름 <span class="req">*</span></label><input class="inp" id="se-m-nm" maxlength="30"></div>
+            <div class="fld"><label>글 상태</label>
+              <select class="sel" id="se-m-st"><option value="draft">초안</option><option value="live">발행</option></select></div>
+          </div>
+          <div class="fld"><label>한 줄 설명</label>
+            <input class="inp" id="se-m-sum" maxlength="60" placeholder="이 회차에서 무엇을 하게 되는지 한 줄로 적습니다"></div>
+          <div class="fld"><label>본문</label>
+            <textarea class="ta" id="se-m-bd" style="min-height:170px" placeholder="회차 본문을 적습니다"></textarea>
+            <span class="hint">본문 원고는 이 프로토타입에 들어 있지 않습니다. 코킷 편집처럼 글 블록으로 쌓는 편집기를 붙일 자리입니다.</span></div>
+        </div>
+      </div>
+      <div class="ft">
+        <button class="btn" data-close>취소</button>
+        <button class="btn pri" id="se-m-save"><i data-lucide="check"></i>저장</button>
       </div>
     </div>
   </div>
@@ -2886,30 +2943,44 @@ CMS.ready(function(){
 
   loadKit(89);
 
-  /* ════════ 3. 시리즈 목록 ════════ */
-  const kitOpts = '<option value="">코킷 고르기</option>' +
-    KITS.map(function(k){ return opt(k.n, k.n + " · " + k.t); }).join("");
+  /* ════════ 3. 코멜 시리즈 목록 ════════ */
   function serBdg(s){
     return bdg(ST_KIT, s.st) + '<span class="bdg ' + (s.paid ? "dark" : "") + '">' + (s.paid ? "유료" : "무료") + "</span>";
   }
-
-  $("#ser-grid").innerHTML = SERIES.map(function(s){
-    /* 회차별 상태가 자료에 없다. 초안 묶음은 전 회차가 작업 중이라고 본다 */
-    const doing = s.st === "live" ? 0 : s.ep.length;
-    return '<div class="card ser-card"><div class="card-bd">' +
-      '<div class="row">' + serBdg(s) + "</div>" +
-      "<h2>" + esc(s.nm) + '</h2><div class="ser-sub">' + esc(s.sub) + "</div>" +
-      '<dl class="dl"><dt>회차</dt><dd>' + s.ep.length + "회차</dd>" +
-      "<dt>작업 중인 회차</dt><dd>" + doing + "회차</dd>" +
-      "<dt>첫 회차</dt><dd>" + esc(s.ep[0]) + "</dd></dl></div>" +
-      '<div class="card-ft"><button class="btn sm" data-sedit="' + s.id + '"><i data-lucide="pencil"></i>편집</button>' +
-      '<span class="muted mono" style="font-size:11px;margin-left:auto">' + s.id + "</span></div></div>";
-  }).join("") +
-    '<button class="ser-new" data-act="soon"><i data-lucide="plus"></i>새 시리즈</button>';
+  function drawSerGrid(){
+    $("#ser-grid").innerHTML = SERIES.map(function(s){
+      /* 회차별 상태가 자료에 없다. 초안 묶음은 전 회차가 작업 중이라고 본다 */
+      const doing = s.ep.filter(function(e){ return e.st !== "live"; }).length;
+      return '<div class="card ser-card"><div class="card-bd">' +
+        '<div class="row">' + serBdg(s) + "</div>" +
+        "<h2>" + esc(s.nm) + '</h2><div class="ser-sub">' + esc(s.sub) + "</div>" +
+        '<dl class="dl"><dt>회차</dt><dd>' + s.ep.length + "회차</dd>" +
+        "<dt>작업 중인 회차</dt><dd>" + doing + "회차</dd>" +
+        "<dt>첫 회차</dt><dd>" + (s.ep.length ? esc(s.ep[0].nm) : "아직 없음") + "</dd></dl></div>" +
+        '<div class="card-ft"><button class="btn sm" data-sedit="' + s.id + '"><i data-lucide="pencil"></i>편집</button>' +
+        '<span class="muted mono" style="font-size:11px;margin-left:auto">' + s.id + "</span></div></div>";
+    }).join("") +
+      '<button class="ser-new" data-modal="m-se-new"><i data-lucide="plus"></i>새 시리즈</button>';
+    icons();
+  }
+  drawSerGrid();
   $("#ser-grid").addEventListener("click", function(e){
     const b = e.target.closest("[data-sedit]");
     if(!b) return;
     loadSeries(b.dataset.sedit); go("s-series-edit");
+  });
+  /* 새 시리즈는 빈 묶음으로 만든다. 코킷을 담아 오지 않는다 */
+  $("#sn-save").addEventListener("click", function(){
+    const nm = $("#sn-nm").value.trim();
+    if(!nm){ toast("이름을 적어 주세요", true); return; }
+    const id = "sr-n" + (SERIES.length + 1);
+    SERIES.push({id:id, nm:nm, sub:$("#sn-sb").value.trim(), st:"draft",
+      paid:$("#sn-paid").value === "1", ep:[]});
+    drawSerGrid();
+    closeModal("m-se-new");
+    $("#sn-nm").value = ""; $("#sn-sb").value = "";
+    loadSeries(id); go("s-series-edit");
+    toast("시리즈를 만들었어요. 회차를 더해 글을 쓰세요");
   });
 
   /* ════════ 4. 시리즈 편집 ════════ */
@@ -2918,12 +2989,18 @@ CMS.ready(function(){
     return '<button class="btn sm se-lock" data-free="' + (free ? 1 : 0) + '" title="눌러서 바꾸기">' +
       '<i data-lucide="' + (free ? "lock-open" : "lock") + '"></i>' + (free ? "무료" : "잠금") + "</button>";
   }
-  function epRow(nm, free){
-    return '<div class="lrow" draggable="true">' +
+  /* 회차 글은 시리즈가 직접 가진다. 코킷 목록에서 골라 오지 않는다 */
+  function bodyCell(st){
+    return bdg(ST_KIT, st) +
+      '<button class="btn sm se-body"><i data-lucide="' + (st === "live" ? "file-text" : "file-plus") + '"></i>' +
+      (st === "live" ? "본문" : "본문 쓰기") + "</button>";
+  }
+  function epRow(nm, free, st){
+    return '<div class="lrow" draggable="true" data-st="' + st + '">' +
       '<span class="drag" title="끌어서 옮기기"><i data-lucide="grip-vertical"></i></span>' +
       '<span class="se-no mono"></span>' +
       '<div class="tx"><div class="se-in"><input class="inp se-nm" value="' + esc(nm) + '" placeholder="회차 이름">' +
-      '<select class="sel se-kit" aria-label="코킷">' + kitOpts + "</select></div></div>" +
+      '<div class="se-bd">' + bodyCell(st) + "</div></div></div>" +
       '<div class="r"><span class="se-lk">' + lockBtn(free) + "</span>" +
       '<button class="btn sm ico ghost se-del" title="회차 빼기"><i data-lucide="circle-minus"></i></button></div></div>';
   }
@@ -2932,8 +3009,8 @@ CMS.ready(function(){
     rs.forEach(function(r, i){ $(".se-no", r).textContent = (i + 1) + "회차"; });
     $("#se-cnt").textContent = rs.length + "회차";
     $("#se-empty").style.display = rs.length ? "none" : "";
-    const linked = rs.filter(function(r){ return $(".se-kit", r).value; }).length;
-    $("#se-link").textContent = "코킷을 이은 회차 " + linked + " / " + rs.length;
+    const live = rs.filter(function(r){ return r.dataset.st === "live"; }).length;
+    $("#se-link").textContent = "글을 발행한 회차 " + live + " / " + rs.length;
     $("#se-phone").innerHTML =
       '<div class="kitv-eye">SERIES · ' + rs.length + "회차</div>" +
       '<div class="kitv-t">' + esc($("#se-nm").value || "이름 없음") + "</div>" +
@@ -2956,7 +3033,7 @@ CMS.ready(function(){
     $("#se-sb").value = s.sub;
     $("#se-intro").value = "";
     /* 무료로 여는 회차의 기준이 자료에 없다. 유료 묶음은 1회차만 열어 둔다 */
-    slist.innerHTML = s.ep.map(function(nm, i){ return epRow(nm, !s.paid || i === 0); }).join("");
+    slist.innerHTML = s.ep.map(function(e, i){ return epRow(e.nm, !s.paid || i === 0, e.st); }).join("");
     drawSeries();
   }
   sortable(slist, function(){ drawSeries(); toast("회차 순서를 바꿨어요"); });
@@ -2969,16 +3046,41 @@ CMS.ready(function(){
       toast(free ? "무료로 열었어요" : "잠갔어요");
       return;
     }
+    const bd = e.target.closest(".se-body");
+    if(bd){ openEp(bd.closest(".lrow")); return; }
     const d = e.target.closest(".se-del");
     if(d){ d.closest(".lrow").remove(); drawSeries(); toast("회차를 뺐어요"); }
   });
   ["input", "change"].forEach(function(ev){ $("#s-series-edit").addEventListener(ev, drawSeries); });
   $("#se-add").addEventListener("click", function(){
-    slist.insertAdjacentHTML("beforeend", epRow("", true));
+    slist.insertAdjacentHTML("beforeend", epRow("", true, "draft"));
     drawSeries();
     const ins = $$(".se-nm", slist);
     ins[ins.length - 1].focus();
-    toast("회차를 더했어요");
+    toast("회차를 더했어요. 본문은 이 안에서 씁니다");
+  });
+
+  /* 회차 본문 창. 코킷을 고르는 자리가 아니라 글을 쓰는 자리다 */
+  let epCur = null;
+  function openEp(row){
+    epCur = row;
+    $("#se-m-t").textContent = $(".se-no", row).textContent + " 본문";
+    $("#se-m-nm").value = $(".se-nm", row).value;
+    $("#se-m-st").value = row.dataset.st;
+    $("#se-m-sum").value = "";
+    $("#se-m-bd").value = "";
+    openModal("m-se-ep");
+  }
+  $("#se-m-save").addEventListener("click", function(){
+    if(!epCur) return;
+    const nm = $("#se-m-nm").value.trim();
+    if(!nm){ toast("회차 이름을 적어 주세요", true); return; }
+    $(".se-nm", epCur).value = nm;
+    epCur.dataset.st = $("#se-m-st").value;
+    $(".se-bd", epCur).innerHTML = bodyCell(epCur.dataset.st);
+    closeModal("m-se-ep");
+    drawSeries();
+    toast("회차를 저장했어요");
   });
   loadSeries("sr-brand");
 
@@ -6647,7 +6749,7 @@ CMS.ready(function(){
   ];
   const WEB_ROWS = [
     {nm:"요금제", n:PLANS.length, u:"개", go:"s-plans"},
-    {nm:"상품 (코멜 시리즈)", n:PRODUCTS.length, u:"개", go:"s-prod"},
+    {nm:"상품", n:PRODUCTS.length, u:"개", go:"s-prod"},
     {nm:"결제", n:ORDERS.length, u:"건", go:"s-orders"}
   ];
   function rows(list, badge){
@@ -7487,7 +7589,7 @@ CMS.ready(function(){
       "<div class=\"ud-sub-t\">지난 주문 <span class=\"bdg\">" + orders.length + "건</span></div>" +
       tbl("<th>주문 번호</th><th>무엇을</th><th class=\"num\">금액</th><th>상태</th><th>결제사</th><th>날짜</th>",
         orders.length ? orders.map(function(o){
-          return "<tr><td class=\"mono\">" + esc(o.id) + "</td><td>" + esc(o.nm) + " <span class=\"muted\">" + (o.kind === "sub" ? "구독" : "코멜 시리즈") + "</span></td>" +
+          return "<tr><td class=\"mono\">" + esc(o.id) + "</td><td>" + esc(o.nm) + " <span class=\"muted\">" + (o.kind === "sub" ? "구독" : "상품") + "</span></td>" +
             "<td class=\"num\">" + won(o.amt) + "</td><td>" + bdg(ST_PAY, o.st) + "</td><td class=\"muted\">" + esc(o.pg) + "</td>" +
             "<td class=\"mono muted nowrap\">" + esc(o.dt) + "</td></tr>";
         }).join("") : emptyRow(6, "주문이 없습니다")) +
@@ -7897,7 +7999,7 @@ CMS.ready(function(){
 
       <div class="note warn">
         <i data-lucide="circle-help"></i>
-        <span><b>요금제 구조가 아직 확정되지 않았습니다(기능 정의 Q3).</b> 시리즈를 따로 팔지, 요금제에 넣을지도 포함입니다.</span>
+        <span><b>요금제 구조가 아직 확정되지 않았습니다(기능 정의 Q3).</b> 코멜 시리즈는 따로 파는 단독 상품으로 정했고, 구독에 주는 시리즈 할인 폭은 남았습니다.</span>
       </div>
     </div>
 
@@ -7916,12 +8018,12 @@ CMS.ready(function(){
   </div>
 </section>
 
-<!-- ════════ 2. 코멜 시리즈 (파는 묶음) ════════ -->
+<!-- ════════ 2. 상품 ════════ -->
 <section class="scr" id="s-prod">
   <div class="ph">
     <div>
-      <h1>코멜 시리즈</h1>
-      <p>웹에서 따로 파는 상품의 이름, 값, 상태, 랜딩 페이지를 고칩니다.</p>
+      <h1>상품</h1>
+      <p>웹에서 따로 파는 상품의 이름, 값, 상태, 랜딩 페이지를 고칩니다. 코멜 시리즈의 값도 여기서 정합니다.</p>
     </div>
     <div class="ph-act">
       <button class="btn" data-go="s-orders"><i data-lucide="receipt"></i>주문 보기</button>
@@ -7935,8 +8037,8 @@ CMS.ready(function(){
   </div>
   <div class="note info" style="margin-bottom:14px;align-items:center">
     <i data-lucide="layers"></i>
-    <span style="flex:1"><b>읽는 묶음과 파는 묶음은 다릅니다.</b> 읽는 묶음(시리즈)은 앱에도 내려갑니다. 파는 묶음은 웹에서만 보입니다.</span>
-    <button class="btn sm" data-go="s-series">읽는 묶음(시리즈)으로<i data-lucide="arrow-right"></i></button>
+    <span style="flex:1"><b>코멜 시리즈는 코킷의 묶음이 아니라 단독 상품입니다.</b> 회차 글은 코멜 시리즈 화면에서 쓰고 앱에도 내려갑니다. 값과 판매 랜딩은 이 화면에서 다루고 웹에만 내려갑니다.</span>
+    <button class="btn sm" data-go="s-series">코멜 시리즈로<i data-lucide="arrow-right"></i></button>
   </div>
 
   <div class="grid g-main">
@@ -8391,7 +8493,7 @@ CMS.ready(function(){
     toast(nm + " 요금제를 저장했어요");
   });
 
-  /* ══════════ 2. 코멜 시리즈 ══════════ */
+  /* ══════════ 2. 상품 ══════════ */
   const PD = PRODUCTS.map(function(p){ return {id:p.id, cat:p.cat, nm:p.nm, price:p.price, st:p.st, sub:p.sub, land:p.land, sold:p.sold}; });
   const prodOf = function(id){ return PD.filter(function(p){ return p.id === id; })[0]; };
   const cats = PD.map(function(p){ return p.cat; }).filter(function(v, i, a){ return a.indexOf(v) === i; });
@@ -11190,7 +11292,6 @@ CMS.ready(function(){
     ["콘텐츠","미정","곧","읽는 시간을 어떻게 셈할지. 89편 가운데 76편이 템플릿 기본값 `4 MIN READ` 라 그대로 믿을 수 없다","태깅표 §2.1",["s-kit"]],
     ["콘텐츠","어긋남","곧","88번 코킷의 제목이 둘이다. 홈과 코킷 목록은 `인스타랑 밀당하는 법`, 검색 결과와 내 코킷 일부는 `조회수는 수십만, 그런데 통장은 그대로`","화면",["s-kits","s-kit"]],
     ["콘텐츠","어긋남","곧","브랜딩 클래스의 회차가 두 가지다. 시리즈 화면은 01~09 아홉 개, 판매 랜딩의 커리큘럼은 00~09 열 개","화면",["s-series-edit","s-prod"]],
-    ["콘텐츠","빠짐","곧","한 코킷이 여러 시리즈에 속할 수 있는지, 시리즈에만 있는 코킷이 일반 목록에 나오는지","빠짐",["s-series-edit","s-kits"]],
     ["콘텐츠","빠짐","곧","코킷 단위의 무료·유료 구분과 유료편의 무료 공개 범위","빠짐 · 화면 주석",["s-kit"]],
     ["콘텐츠","빠짐","나중","표지 이미지 규격과 저자 표기 규칙","빠짐",["s-kit","s-media"]],
     ["콘텐츠","빠짐","곧","기존 데이터 오류 다섯 가지(D1~D5)를 언제 어떻게 고칠지","태그 §3.1",["s-tagmap"]],
@@ -11211,7 +11312,7 @@ CMS.ready(function(){
     ["낙타AI","빠짐","곧","요금제가 말하는 `기본 사용량`·`확장 사용량`의 실제 값과, 한도에 닿았을 때 보여 줄 화면","화면 · 빠짐",["s-ai","s-plans"]],
     ["낙타AI","빠짐","나중","낙타AI 가 무엇을 읽고 답하는지(지식 원천)와 지시문을 누가 고치는지","빠짐",["s-ai"]],
 
-    ["회원·결제","미정","막힘","요금제 구조. 시리즈를 따로 팔지 요금제에 넣을지도 함께","기능 Q3",["s-plans","s-prod"]],
+    ["회원·결제","미정","막힘","요금제 구조. 코멜 시리즈는 단독 상품으로 정했고, 구독에 주는 시리즈 할인 폭이 남았다","기능 Q3",["s-plans","s-prod"]],
     ["회원·결제","미정","곧","크레딧 수치(월 400 · 종합 비즈니스 북 300). 화면 주석에 가설이라고 적혀 있다","화면",["s-plans"]],
     ["회원·결제","미정","나중","컨설팅·기업 플랜을 넣을지","기능 Q4",["s-plans"]],
     ["회원·결제","어긋남","곧","상품 값이 화면마다 다르다. 브랜딩 클래스 99,000원과 330,000원, 1:1 컨설팅 479,000원과 150,000원. 이름도 `브랜드 전략 가이드라인`과 `브랜드 콘텐츠 가이드라인`으로 갈린다","화면",["s-prod","s-orders"]],
