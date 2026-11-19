@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMMEL CMS 사이트맵 다시 짜기</title>
+<meta name="description" content="COMMEL 관리자 도구의 사이트맵 다섯 가지. 블록을 끌어 옮겨 직접 고쳐 본다.">
+<style>
+:root{
+  --brand:#DFF000; --brand-soft:#FAFFD6;
+  --ink:#111111; --gray:#6B6B6B; --light:#9A9A9A; --muted:#BDBDBD;
+  --bg:#F4F4F2; --white:#FFFFFF; --soft:#FAFAF8;
+  --line:#E6E6E2; --line2:#D6D6D0;
+  --ok:#1B7F4B; --ok-soft:#E8F6EE;
+  --warn:#9A6B00; --warn-soft:#FDF3DC;
+  --danger:#B3261E; --danger-soft:#FCEDEC;
+  --info:#1F5FA8; --info-soft:#E9F1FB;
+  --r:10px; --r-s:7px; --r-f:999px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,p,ul,ol,dl{margin:0;}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;}
+.wrap{max-width:1560px;margin:0 auto;padding:0 20px 80px;}
+
+/* ── 머리 ── */
+header{background:var(--white);border-bottom:1px solid var(--line);}
+.hd{max-width:1560px;margin:0 auto;padding:18px 20px 0;}
+.hd h1{font-size:20px;font-weight:800;letter-spacing:-0.4px;}
+.hd .sub{font-size:13px;color:var(--gray);margin-top:5px;max-width:760px;}
+.tabs{display:flex;gap:6px;margin-top:15px;overflow-x:auto;padding-bottom:1px;}
+.tabs button{flex-shrink:0;border:1px solid var(--line);border-bottom:0;background:var(--soft);
+  padding:9px 14px;border-radius:var(--r-s) var(--r-s) 0 0;font-size:13px;font-weight:700;color:var(--gray);}
+.tabs button:hover{color:var(--ink);}
+.tabs button.on{background:var(--ink);border-color:var(--ink);color:var(--white);}
+.tabs button.base{font-weight:600;}
+
+/* ── 안 설명 ── */
+.lead{background:var(--white);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r);
+  padding:16px 18px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;}
+.lead .one{font-size:15px;font-weight:700;letter-spacing:-0.2px;}
+.lead .why{font-size:13px;color:var(--gray);margin-top:7px;}
+.lead ul{list-style:none;padding:0;font-size:12.5px;}
+.lead li{position:relative;padding-left:15px;margin-top:4px;color:var(--gray);}
+.lead li:before{content:"";position:absolute;left:3px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--muted);}
+.lead li.good:before{background:var(--ok);} .lead li.bad:before{background:var(--danger);}
+.lead .lb{font-size:11px;font-weight:800;color:var(--light);letter-spacing:0.3px;}
+
+/* ── 셈 ── */
+.counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.cnt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--white);
+  border-radius:var(--r-s);padding:8px 12px;font-size:12.5px;}
+.cnt b{font-size:16px;font-weight:800;}
+.cnt span{color:var(--gray);}
+.cnt.alert{border-color:var(--danger);background:var(--danger-soft);color:var(--danger);}
+.cnt.fine{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);}
+
+/* ── 연장 ── */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 12px;}
+.btn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--line2);
+  background:var(--white);border-radius:var(--r-s);font-size:12.5px;font-weight:700;}
+.btn:hover{border-color:var(--ink);}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--ink);}
+.btn.pri:hover{filter:brightness(0.95);}
+.btn.sm{height:27px;padding:0 9px;font-size:11.5px;font-weight:600;}
+.btn.ghost{background:none;border-color:transparent;color:var(--gray);}
+.btn.ghost:hover{color:var(--ink);background:var(--white);border-color:var(--line);}
+.hint{font-size:12px;color:var(--light);margin-left:auto;}
+
+/* ── 보드 ── */
+/* 묶음마다 키가 달라서 칸을 나눠 쌓는다. 줄을 맞추면 빈자리가 크게 남는다 */
+.board{column-width:272px;column-gap:12px;}
+.col{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  break-inside:avoid;page-break-inside:avoid;margin-bottom:12px;}
+.col.drag{opacity:.45;}
+.col-hd{display:flex;align-items:center;gap:7px;padding:11px 12px;border-bottom:1px solid var(--line);
+  background:var(--soft);cursor:grab;}
+.col-hd .gp{width:9px;height:14px;flex-shrink:0;
+  background-image:radial-gradient(var(--muted) 1px, transparent 1px);background-size:4px 4px;}
+.col-hd h3{font-size:13.5px;font-weight:800;letter-spacing:-0.2px;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.col-hd .n{font-size:11px;font-weight:800;color:var(--gray);background:var(--white);
+  border:1px solid var(--line);border-radius:var(--r-f);padding:1px 7px;flex-shrink:0;}
+.col-hd .x{border:0;background:none;color:var(--muted);font-size:15px;line-height:1;padding:2px 3px;}
+.col-hd .x:hover{color:var(--danger);}
+.col-bd{padding:8px;}
+.sub{margin-top:2px;}
+.sub-nm{font-size:10.5px;font-weight:800;color:var(--light);letter-spacing:0.3px;padding:7px 4px 5px;}
+.zone{min-height:34px;border-radius:var(--r-s);padding:2px;transition:background .12s;}
+.zone.over{background:var(--brand-soft);outline:1px dashed var(--line2);}
+.zone.pick{outline:1px dashed var(--line2);}
+.zone.empty:after{content:"여기로 옮깁니다";display:block;text-align:center;font-size:11.5px;color:var(--muted);padding:8px 0;}
+
+/* ── 블록 ── */
+.blk{border:1px solid var(--line);border-radius:var(--r-s);background:var(--white);padding:8px 9px;
+  margin-bottom:5px;cursor:grab;}
+.blk:hover{border-color:var(--line2);background:var(--soft);}
+.blk.drag{opacity:.4;}
+.blk.sel{border-color:var(--ink);background:var(--brand-soft);}
+.blk .t{display:flex;align-items:center;gap:6px;}
+.blk .nm{font-size:12.5px;font-weight:700;letter-spacing:-0.1px;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.blk .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;color:var(--muted);flex-shrink:0;}
+.blk .neo{font-size:9.5px;font-weight:800;color:var(--ink);background:var(--brand);
+  border-radius:var(--r-f);padding:1px 6px;flex-shrink:0;}
+.blk .was{font-size:10.5px;color:var(--light);margin-top:3px;}
+.blk .kids{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.blk .kid{font-size:10px;color:var(--gray);background:var(--soft);border:1px solid var(--line);
+  border-radius:var(--r-f);padding:1px 7px;}
+.blk .d{display:none;font-size:11.5px;color:var(--gray);margin-top:5px;line-height:1.5;}
+body.desc .blk .d{display:block;}
+
+/* ── 보관함 ── */
+.park{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);}
+.park-hd{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);background:var(--soft);}
+.park-hd h3{font-size:13px;font-weight:800;}
+.park-hd p{font-size:11.5px;color:var(--gray);}
+.park-bd{padding:9px;}
+.park .zone{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:5px;}
+.park .blk{margin-bottom:0;}
+
+/* ── 길 ── */
+.ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin-top:14px;}
+.way{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:12px 13px;}
+.way .wt{display:flex;align-items:baseline;gap:8px;}
+.way .wt b{font-size:13px;font-weight:800;}
+.way .wt em{font-style:normal;font-size:11.5px;color:var(--gray);margin-left:auto;}
+.way .num{font-size:12.5px;font-weight:800;margin-top:3px;}
+.way .num.g{color:var(--ok);} .way .num.b{color:var(--danger);}
+.way .steps{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px;font-size:11px;}
+.way .st{border:1px solid var(--line);border-radius:var(--r-f);padding:2px 8px;color:var(--gray);background:var(--soft);}
+.way .ar{color:var(--muted);}
+.way .ar.jump{color:var(--danger);font-weight:800;}
+
+/* ── 창 ── */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+.modal.on{display:flex;}
+.modal .bd{position:absolute;inset:0;background:rgba(17,17,17,.38);}
+.modal .pnl{position:relative;background:var(--white);border-radius:var(--r);width:100%;max-width:640px;
+  max-height:86vh;display:flex;flex-direction:column;border:1px solid var(--line);}
+.modal .ph{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);}
+.modal .ph h3{font-size:15px;font-weight:800;flex:1;}
+.modal .pb{padding:14px 16px;overflow:auto;}
+.modal .pf{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;}
+textarea.out{width:100%;height:320px;border:1px solid var(--line);border-radius:var(--r-s);padding:11px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.65;resize:vertical;}
+.inp{width:100%;height:34px;border:1px solid var(--line2);border-radius:var(--r-s);padding:0 10px;font-size:13px;font-family:inherit;}
+
+/* ── 쪽지 ── */
+#toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:7px;align-items:center;}
+.toast{background:var(--ink);color:var(--white);font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:var(--r-f);}
+
+.foot{margin-top:26px;font-size:11.5px;color:var(--light);}
+@media (max-width:720px){
+  .lead{grid-template-columns:1fr;}
+  .hd h1{font-size:17px;}
+  .wrap{padding:0 16px 60px;}
+  .hd{padding:16px 16px 0;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>COMMEL CMS 사이트맵 다시 짜기</h1>
+    <p class="sub">지금 묶음 13개를 다시 묶은 다섯 가지입니다. 블록을 끌어 다른 묶음으로 옮기면 아래 "길" 의 숫자가 바로 다시 셈됩니다.
+      고친 것은 이 브라우저에만 남습니다.</p>
+    <div class="tabs" id="tabs"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="lead" id="lead"></div>
+  <div class="counts" id="counts"></div>
+
+  <div class="bar">
+    <button class="btn" id="b-add">묶음 더하기</button>
+    <button class="btn" id="b-desc">설명 보기</button>
+    <button class="btn" id="b-reset">처음으로</button>
+    <button class="btn pri" id="b-out">내보내기</button>
+    <span class="hint" id="hint">블록을 끌어 옮깁니다. 손가락으로 볼 때는 블록을 누른 뒤 옮길 자리를 누릅니다.</span>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="park">
+    <div class="park-hd">
+      <h3>보관함</h3>
+      <p>아직 자리를 정하지 않은 화면입니다. 비어 있어야 합니다.</p>
+      <span class="btn sm" style="margin-left:auto;cursor:default" id="park-n">0개</span>
+    </div>
+    <div class="park-bd"><div class="zone" id="park" data-g="-1" data-s="0"></div></div>
+  </div>
+
+  <div class="ways" id="ways"></div>
+
+  <p class="foot">화면 44개는 COMMEL CMS 프로토타입에서 그대로 가져왔습니다.
+    <b style="padding:1px 6px;border-radius:999px;background:var(--brand);color:var(--ink);font-size:9.5px;font-weight:800">새</b>
+    표가 붙은 것은 이번에 새로 제안한 화면입니다. 블록에 적힌 <b style="font-weight:700">지금:</b> 은 그 화면이 지금 어느 묶음에 있는지입니다.</p>
+</div>
+
+<div class="modal" id="m-out">
+  <div class="bd" data-close></div>
+  <div class="pnl">
+    <div class="ph"><h3>지금 보드를 글로</h3><button class="btn sm ghost" data-close>닫기</button></div>
+    <div class="pb"><textarea class="out" id="out" readonly></textarea></div>
+    <div class="pf"><button class="btn" data-close>닫기</button><button class="btn pri" id="b-copy">복사</button></div>
+  </div>
+</div>
+
+<div class="modal" id="m-nm">
+  <div class="bd" data-close></div>
+  <div class="pnl" style="max-width:420px">
+    <div class="ph"><h3 id="nm-t">묶음 이름</h3><button class="btn sm ghost" data-close>닫기</button></div>
+    <div class="pb"><input class="inp" id="nm-i" maxlength="24" placeholder="묶음 이름"></div>
+    <div class="pf"><button class="btn" data-close>취소</button><button class="btn pri" id="nm-ok">저장</button></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+/* 지금 있는 화면 44개. id 와 이름은 cms2 에서 그대로 가져왔다 */
+const SCREENS = [
+  {id:"s-dash", nm:"대시보드", g:"대시보드", d:"오늘 손봐야 할 것과 이번 주 지표입니다. 숫자는 시연용이고, 코킷 89편의 제목과 태그만 실제 값입니다."},
+  {id:"a-home", nm:"지시하기", g:"에이전트", d:"에이전트에게 일을 시키고, 내 답이나 승인을 기다리는 작업을 확인하는 자리입니다."},
+  {id:"a-jobs", nm:"작업", g:"에이전트", d:"에이전트에게 시킨 일이 한 줄씩 쌓입니다. 검토 대기와 물어봄이 맨 위에 옵니다. 승인하기 전에는 서비스에 반영…"},
+  {id:"a-job", nm:"작업 상세", g:"에이전트", hide:1, d:""},
+  {id:"a-recipes", nm:"자주 쓰는 지시", g:"에이전트", d:"한 번 쓴 지시를 모아 두고 다시 돌린다. 예약을 걸면 정한 때에 사람 없이 돌고, 결과는 검토 대기로 올라온다."},
+  {id:"a-rules", nm:"권한 규칙", g:"에이전트", d:"에이전트에게 무엇까지 맡길지 정한다. 일마다 혼자 해도 됨, 물어보고 함, 절대 안 함 가운데 하나를 고른다."},
+  {id:"a-ctx", nm:"읽는 것", g:"에이전트", d:"에이전트에게 무엇을 읽히는지 정합니다. 무엇을 읽혔는지 알아야 왜 그렇게 고쳤는지도 알 수 있습니다."},
+  {id:"a-conn", nm:"CLI 연결", g:"에이전트", d:"클로드 코드와 코덱스 CLI 를 붙이고, 어떤 도구를 열어 줄지 정합니다."},
+  {id:"s-kits", nm:"코킷", g:"콘텐츠", d:"89편을 만들고 고치고 발행한다. 발행하면 구독 회원에게 알림이 나간다."},
+  {id:"s-kit", nm:"코킷 편집", g:"콘텐츠", hide:1, d:"CO:KIT 89"},
+  {id:"s-series", nm:"코멜 시리즈", g:"콘텐츠", d:"코킷의 묶음이 아니라 따로 파는 단독 상품이다. 회차 글을 여기서 직접 더한다. 읽는 자리만 코킷과 같다."},
+  {id:"s-series-edit", nm:"시리즈 편집", g:"콘텐츠", hide:1, d:"브랜딩 클래스"},
+  {id:"s-media", nm:"이미지", g:"콘텐츠", d:"표지·히어로·큐레이션·상품에 쓰는 이미지를 올리고, 어디에 쓰이는지 본다."},
+  {id:"s-tags", nm:"태그 체계", g:"분류", d:"채널·주제·유형 세 층의 태그를 더하고 고치고 합친다. 코킷 수는 지금 붙어 있는 태그에서 바로 센다."},
+  {id:"s-concerns", nm:"고민", g:"분류", d:"온보딩 4단계에서 사용자가 고르는 고민 C1~C9 를 관리한다. 고민마다 걸린 코킷 수와 대표 코킷을 정한다."},
+  {id:"s-tagmap", nm:"태깅 점검", g:"분류", d:"코킷 89편의 태그 상태를 한 표에서 보고, 규칙에 어긋난 편과 감수를 기다리는 편을 찾는다."},
+  {id:"s-home", nm:"홈 편성", g:"편성", d:"사용자 홈 화면의 섹션 8개를 켜고 끄고, 순서를 바꾸고, 직접 고르는 자리를 채운다."},
+  {id:"s-cura", nm:"낙타의 큐레이션", g:"편성", d:"코킷을 주제별로 묶어 홈에 띄운다. 묶음마다 담을 코킷과 순서를 정한다."},
+  {id:"s-find", nm:"검색·둘러보기", g:"편성", d:"둘러보기의 거르개 축과 정렬 옵션, 인기 TOP 3, 검색에 실패한 말을 다룬다."},
+  {id:"s-rank", nm:"인기점수", g:"편성", d:"인기순과 정확도순에 쓰는 점수의 가중치를 고친다. 고치면 아래 순위가 바로 다시 계산된다."},
+  {id:"s-ai", nm:"낙타AI 설정", g:"낙타AI", d:"낙타AI 화면에 나오는 글, 처음 보여 주는 질문 보기, 답변이 지켜야 할 가드를 고친다."},
+  {id:"s-ailog", nm:"대화 로그", g:"낙타AI", d:"고객이 낙타AI에게 무엇을 물었고 어떤 코킷을 추천받았는지, 가드가 언제 작동했는지 본다."},
+  {id:"s-users", nm:"회원", g:"회원", d:"가입한 사람을 찾고, 구독 상태와 읽은 기록을 확인합니다."},
+  {id:"s-user", nm:"회원 상세", g:"회원", hide:1, d:""},
+  {id:"s-seg", nm:"세그먼트", g:"회원", d:"온보딩에서 모은 값으로 회원을 묶어 봅니다. 어떤 고민의 코킷이 모자란지도 여기서 봅니다."},
+  {id:"s-plans", nm:"요금제", g:"멤버십 · 웹에서만", d:"웹 멤버십 화면에 보이는 요금제 셋의 이름, 값, 혜택을 고칩니다."},
+  {id:"s-prod", nm:"상품", g:"멤버십 · 웹에서만", d:"웹에서 따로 파는 상품의 이름, 값, 상태, 랜딩 페이지를 고칩니다. 코멜 시리즈의 값도 여기서 정합니다."},
+  {id:"s-subs", nm:"구독", g:"멤버십 · 웹에서만", d:"누가 어떤 요금제를 쓰고 있는지 보고, 결제 실패와 해지 예약을 챙깁니다."},
+  {id:"s-orders", nm:"주문·결제", g:"멤버십 · 웹에서만", d:"구독 결제와 상품 주문을 한 표에서 찾고, 환불을 처리합니다."},
+  {id:"s-push", nm:"알림 발송", g:"알림 · 공지", d:"회원에게 알림을 직접 써서 보내거나 예약합니다. 보낸 알림이 얼마나 열렸는지도 여기서 봅니다."},
+  {id:"s-notitype", nm:"알림 종류", g:"알림 · 공지", d:"알림 여섯 가지의 문구 틀과 보내는 때를 정합니다. 사용자 화면의 알림 설정과 같은 묶음입니다."},
+  {id:"s-notice", nm:"공지사항", g:"알림 · 공지", d:"회원 전체에게 알릴 글을 쓰고, 보일 기간과 자리를 정합니다."},
+  {id:"s-inq", nm:"문의", g:"고객지원", d:"회원이 보낸 문의를 읽고 답합니다. 왼쪽에서 고르면 오른쪽에 내용이 열립니다."},
+  {id:"s-faq", nm:"자주 묻는 질문", g:"고객지원", d:"고객센터에 보이는 질문과 답을 고치고 순서를 정합니다. 문의 분류도 여기서 다룹니다."},
+  {id:"s-legal", nm:"약관·정책", g:"고객지원", d:"약관 문서의 판을 관리하고, 가입할 때 받는 동의 항목을 정합니다."},
+  {id:"s-onb", nm:"온보딩 구성", g:"서비스", d:"처음 들어온 사용자에게 묻는 다섯 단계의 질문과 보기를 고친다."},
+  {id:"s-copy", nm:"서비스 문구", g:"서비스", d:"사용자 화면 곳곳에 들어 있는 글을 한자리에서 고친다."},
+  {id:"s-guard", nm:"앱 규정 점검", g:"서비스", d:"앱으로 내려가는 글에 결제·가격·구독·요금제 요소가 남아 있는지 발행 전에 모두 검사한다. 하나라도 남으면 앱…"},
+  {id:"s-open", nm:"정해야 할 것", g:"서비스", d:"기획 문서 열한 편과 사용자 화면 두 벌을 훑어서 모은 미정 항목입니다. 지어낸 것은 없고 줄마다 어디서 나왔는…"},
+  {id:"s-stats", nm:"지표", g:"통계", d:"기능 정의 문서가 정한 지표 구조입니다. 북극성 지표 하나와 접속에서 순환까지 다섯 단계, 가드레일을 봅니다."},
+  {id:"s-stat-kit", nm:"콘텐츠 성과", g:"통계", d:"코킷 89편이 얼마나 읽히고 기록을 남기는지 봅니다. 다음에 무엇을 만들고 무엇을 고칠지 정하는 자리입니다."},
+  {id:"s-stat-find", nm:"검색·수요", g:"통계", d:"회원이 무엇을 찾았고 무엇을 못 찾았는지 봅니다. 다음에 만들 코킷의 주제를 여기서 정합니다."},
+  {id:"s-admin", nm:"운영자·권한", g:"설정", d:"누가 이 도구를 쓰고, 어디까지 손댈 수 있는지 정합니다."},
+  {id:"s-audit", nm:"활동 기록", g:"설정", d:"사람이 한 것과 에이전트가 한 것을 한 줄기로 남깁니다. 에이전트 줄은 눌러서 바뀐 것을 그대로 볼 수 있습니다."}
+];
+
+/* 이번에 새로 제안한 화면. 코덱스와 파블이 둘 다 필요하다고 한 것만 남겼다 */
+const NEWS = [
+  {id:"n-consult", nm:"1:1 컨설팅", neo:1, d:"상담 상품과 신청 현황. 소개, 상담 시간, 사전 질문지를 정한다."},
+  {id:"n-consult-edit", nm:"컨설팅 편집", neo:1, hide:1, d:""},
+  {id:"n-consult-book", nm:"컨설팅 예약", neo:1, d:"신청·확정·완료·불참과 상담 뒤 메모. 글이 아니라 약속이라 따로 둔다."},
+  {id:"n-guides", nm:"브랜드 콘텐츠 가이드", neo:1, d:"가이드 목록. 소개, 목차, 본문이나 파일, 사기 전에 보여 줄 범위."},
+  {id:"n-guide-edit", nm:"가이드 편집", neo:1, hide:1, d:""},
+  {id:"n-tpls", nm:"템플릿", neo:1, d:"사업 관리 노션 템플릿 같은 것. 미리보기, 전달 방법, 판 관리."},
+  {id:"n-tpl-edit", nm:"템플릿 편집", neo:1, hide:1, d:""},
+  {id:"n-file", nm:"영상·파일", neo:1, d:"가이드 PDF, 템플릿 원본, 서비스에 쓰는 영상. 판과 내려받기 권한을 둔다."}
+];
+SCREENS.push.apply(SCREENS, NEWS);
+
+/* 딸린 상세 화면은 따로 끌지 않는다. 부모를 옮기면 같이 간다 */
+const ATTACH = {"s-kit":"s-kits", "s-series-edit":"s-series", "s-user":"s-users", "a-job":"a-jobs",
+  "n-consult-edit":"n-consult", "n-guide-edit":"n-guides", "n-tpl-edit":"n-tpls"};
+
+const SC = {};
+SCREENS.forEach(function(s){ SC[s.id] = s; });
+const KIDS = {};
+Object.keys(ATTACH).forEach(function(k){ (KIDS[ATTACH[k]] = KIDS[ATTACH[k]] || []).push(k); });
+/* 끌 수 있는 블록. 딸린 상세는 뺀다 */
+const BLOCKS = SCREENS.filter(function(s){ return !ATTACH[s.id]; }).map(function(s){ return s.id; });
+
+/* ══════════ 다섯 가지 안 ══════════
+   코덱스 CLI(아스트라)와 클로드 코드(파블 5.2)가 각각 다섯을 내고 서로 판정한 뒤 추린 것이다.
+   g 는 1층 묶음, s 는 2층이다. s 의 이름이 빈 것은 2층을 두지 않는다는 뜻이다. */
+function G(nm, subs){ return {nm:nm, subs:subs}; }
+function S(nm, items){ return {nm:nm, items:items}; }
+function P(items){ return [S("", items)]; }
+
+const PLANS = [
+{
+  id:"now", nm:"지금 쓰는 것", one:"지금 CMS 의 묶음 13개를 그대로 옮겨 놓은 것이다.",
+  why:"견주어 볼 바탕이다. 새로 제안한 화면 다섯은 자리가 없어 보관함에 있다.",
+  good:["화면마다 자리가 이미 정해져 있어 다시 익힐 것이 없다."],
+  bad:["1층이 13개다. 무엇이 어디 있는지 찾기 어렵다.",
+       "파는 것이 코킷뿐인 것처럼 보인다. 컨설팅·가이드·템플릿이 콘텐츠로 서 있지 않다.",
+       "통계가 마케팅과 떨어져 있고, 푸시는 알림·공지에 있다."],
+  groups:[
+    G("대시보드", P(["s-dash"])),
+    G("에이전트", P(["a-home","a-jobs","a-recipes","a-rules","a-ctx","a-conn"])),
+    G("콘텐츠", P(["s-kits","s-series","s-media"])),
+    G("분류", P(["s-tags","s-concerns","s-tagmap"])),
+    G("편성", P(["s-home","s-cura","s-find","s-rank"])),
+    G("낙타AI", P(["s-ai","s-ailog"])),
+    G("회원", P(["s-users","s-seg"])),
+    G("멤버십 · 웹에서만", P(["s-plans","s-prod","s-subs","s-orders"])),
+    G("알림 · 공지", P(["s-push","s-notitype","s-notice"])),
+    G("고객지원", P(["s-inq","s-faq","s-legal"])),
+    G("서비스", P(["s-onb","s-copy","s-guard","s-open"])),
+    G("통계", P(["s-stats","s-stat-kit","s-stat-find"])),
+    G("설정", P(["s-admin","s-audit"]))
+  ]
+},
+{
+  id:"v1", nm:"1. 말씀하신 그대로", one:"리건이 부른 여덟 묶음을 이름 그대로 세운다.",
+  why:"자리가 없다고 말한 화면만 가장 가까운 묶음에 넣었다. 그 결과가 어떤 모양이 되는지 먼저 본다.",
+  good:["찾는 이름이 그대로 있다. 상품 다섯 종이 콘텐츠로 선다.",
+        "통계 넷과 알림 둘이 마케팅 관리 한곳에 모인다."],
+  bad:["말씀에 없던 에이전트·운영자·활동 기록·정해야 할 것이 전부 서비스 관리로 몰려 16개가 된다.",
+       "묶음 수만 줄고 오가는 횟수는 지금과 같다."],
+  groups:[
+    G("대시보드", P(["s-dash"])),
+    G("회원 관리", P(["s-users"])),
+    G("멤버십 · 요금 관리", P(["s-plans","s-prod","s-subs"])),
+    G("콘텐츠 관리", [S("코킷",["s-kits"]), S("단독 시리즈",["s-series"]),
+      S("1:1 컨설팅",["n-consult","n-consult-book"]), S("브랜드 콘텐츠 가이드",["n-guides"]),
+      S("템플릿",["n-tpls"]), S("분류",["s-tags","s-concerns","s-tagmap"]),
+      S("편성",["s-home","s-cura","s-find","s-rank"])]),
+    G("주문 관리", P(["s-orders"])),
+    G("마케팅 관리", [S("통계 · 분석",["s-stats","s-stat-kit","s-stat-find","s-seg"]),
+      S("CRM 알림",["s-push","s-notitype"])]),
+    G("서비스(품질) 관리", P(["s-guard","s-inq","s-faq","s-legal","s-notice","s-onb","s-copy",
+      "s-open","s-admin","s-audit","a-home","a-jobs","a-recipes","a-rules","a-ctx","a-conn"])),
+    G("클라우드", P(["s-media","n-file"])),
+    G("낙타AI", P(["s-ai","s-ailog"]))
+  ]
+},
+{
+  id:"v2", nm:"2. 말씀하신 안 + 운영 분리", one:"이름은 그대로 두고, 몰린 서비스 관리에서 운영을 떼어 낸다.",
+  why:"코덱스와 파블이 둘 다 이 모양을 권했다. 에이전트·권한·활동 기록·정해야 할 것을 운영 관리로 빼고, 발행 점검을 콘텐츠로 옮겼다.",
+  good:["서비스 관리가 16개에서 6개로 줄어든다. 묶음마다 크기가 고르다.",
+        "발행 점검이 코킷 옆에 있어 발행 길에서 묶음을 덜 넘는다."],
+  bad:["운영 관리는 리건이 부르지 않은 이름이다.",
+       "문의가 서비스에 있어 환불 한 건에 묶음을 두 번 넘는다."],
+  groups:[
+    G("대시보드", P(["s-dash"])),
+    G("회원 관리", P(["s-users"])),
+    G("멤버십 · 요금 관리", P(["s-plans","s-prod","s-subs"])),
+    G("콘텐츠 관리", [S("코킷",["s-kits"]), S("단독 시리즈",["s-series"]),
+      S("1:1 컨설팅",["n-consult","n-consult-book"]), S("브랜드 콘텐츠 가이드",["n-guides"]),
+      S("템플릿",["n-tpls"]), S("분류",["s-tags","s-concerns","s-tagmap"]),
+      S("편성",["s-home","s-cura","s-find","s-rank"]), S("발행 점검",["s-guard"])]),
+    G("주문 관리", P(["s-orders"])),
+    G("마케팅 관리", [S("통계 · 분석",["s-stats","s-stat-kit","s-stat-find","s-seg"]),
+      S("CRM 알림",["s-push","s-notitype"])]),
+    G("서비스(품질) 관리", P(["s-inq","s-faq","s-legal","s-notice","s-onb","s-copy"])),
+    G("운영 관리", [S("에이전트",["a-home","a-jobs","a-recipes","a-rules","a-ctx","a-conn"]),
+      S("권한 · 기록",["s-admin","s-audit","s-open"])]),
+    G("클라우드", P(["s-media","n-file"])),
+    G("낙타AI", P(["s-ai","s-ailog"]))
+  ]
+},
+{
+  id:"v3", nm:"3. 하루 일의 흐름", one:"만들고, 내보내고, 알리고, 응대하는 차례대로 묶는다.",
+  why:"묶음 이름이 일의 단계다. 한 가지 일을 끝낼 때까지 한 묶음 안에 머문다.",
+  good:["코킷 한 편을 만들어 내보내는 길이 가장 짧다.",
+        "아침에 `오늘` 만 열면 할 일이 다 보인다."],
+  bad:["`내보내기` 는 리건이 쓰지 않은 이름이다. 무엇이 들었는지 열어 봐야 안다.",
+       "같은 화면을 만들 때와 고칠 때 다른 묶음에서 찾게 된다."],
+  groups:[
+    G("오늘", P(["s-dash","s-open"])),
+    G("만들기", [S("파는 것",["s-kits","s-series","n-consult","n-consult-book","n-guides","n-tpls"]),
+      S("분류",["s-tags","s-concerns","s-tagmap"]), S("값",["s-plans","s-prod"])]),
+    G("내보내기", P(["s-guard","s-home","s-cura","s-find","s-rank","s-notice","s-onb","s-copy"])),
+    G("마케팅", P(["s-stats","s-stat-kit","s-stat-find","s-seg","s-push","s-notitype"])),
+    G("응대", P(["s-inq","s-users","s-subs","s-faq","s-legal"])),
+    G("주문 관리", P(["s-orders"])),
+    G("클라우드", P(["s-media","n-file"])),
+    G("낙타AI", P(["s-ai","s-ailog"])),
+    G("에이전트 · 설정", P(["a-home","a-jobs","a-recipes","a-rules","a-ctx","a-conn","s-admin","s-audit"]))
+  ]
+},
+{
+  id:"v4", nm:"4. 에이전트가 먼저", one:"사람이 여는 곳을 `오늘` 하나로 모으고, 나머지는 확인하러 갈 때만 연다.",
+  why:"클로드 코드와 코덱스 CLI 가 고쳐 올리면 사람은 승인만 한다. 그 전제로 묶었다.",
+  good:["혼자 운영하는 사람이 아침에 보는 곳이 하나다.",
+        "문의와 정해야 할 것이 승인 대기와 한 줄에 선다."],
+  bad:["에이전트는 cms2 에만 있다. 기존 /cms/ 에는 이 구조를 쓸 수 없다.",
+       "에이전트가 틀리면 규칙·설정 11개에서 원인을 찾아야 한다."],
+  groups:[
+    G("오늘", P(["s-dash","a-home","a-jobs","s-inq","s-open"])),
+    G("콘텐츠", [S("파는 것",["s-kits","s-series","n-consult","n-consult-book","n-guides","n-tpls"]),
+      S("분류",["s-tags","s-concerns","s-tagmap"]),
+      S("편성 · 점검",["s-home","s-cura","s-find","s-rank","s-guard"])]),
+    G("회원 · 멤버십", P(["s-users","s-subs","s-plans","s-prod"])),
+    G("주문 관리", P(["s-orders"])),
+    G("마케팅", P(["s-stats","s-stat-kit","s-stat-find","s-seg","s-push","s-notitype"])),
+    G("클라우드", P(["s-media","n-file"])),
+    G("낙타AI", P(["s-ai","s-ailog"])),
+    G("규칙 · 설정", [S("에이전트",["a-recipes","a-rules","a-ctx","a-conn"]),
+      S("서비스 글",["s-onb","s-copy","s-faq","s-legal","s-notice"]),
+      S("운영자",["s-admin","s-audit"])])
+  ]
+},
+{
+  id:"v5", nm:"5. 만드는 일과 거는 일을 가름", one:"상품을 만드는 일과 사용자 화면에 거는 일을 1층에서 나눈다.",
+  why:"만드는 날과 거는 날이 다르다는 전제다. 편성만 바꾸려고 편집기를 열 일이 없다.",
+  good:["편성을 손볼 때 상품 편집 화면을 지나지 않는다.",
+        "값과 판매가 만드는 묶음 안에 있어 상품 하나를 끝까지 한곳에서 낸다."],
+  bad:["홈 편성은 코킷도 시리즈도 싣는데 어느 상품에도 속하지 않는다.",
+       "만드는 묶음이 12개로 가장 크다."],
+  groups:[
+    G("대시보드", P(["s-dash"])),
+    G("상품 제작", [S("파는 것",["s-kits","s-series","n-consult","n-consult-book","n-guides","n-tpls"]),
+      S("분류",["s-tags","s-concerns","s-tagmap"]), S("값 · 판매",["s-plans","s-prod"]),
+      S("점검",["s-guard"])]),
+    G("편성", P(["s-home","s-cura","s-find","s-rank","s-onb","s-copy"])),
+    G("회원 · 구독", P(["s-users","s-subs"])),
+    G("주문 관리", P(["s-orders"])),
+    G("마케팅", P(["s-stats","s-stat-kit","s-stat-find","s-seg","s-push","s-notitype"])),
+    G("서비스", P(["s-inq","s-faq","s-legal","s-notice","s-open"])),
+    G("클라우드", P(["s-media","n-file"])),
+    G("낙타AI", P(["s-ai","s-ailog"])),
+    G("에이전트 · 운영", P(["a-home","a-jobs","a-recipes","a-rules","a-ctx","a-conn","s-admin","s-audit"]))
+  ]
+}
+];
+
+/* 자주 가는 길. 묶음을 몇 번 넘는지 보드에서 바로 센다 */
+const WAYS = [
+  {nm:"코킷 한 편 발행", note:"표지 고르고 태그 보고 앱 규정 보고 발행하고 홈에 건다",
+   path:["s-kits","s-media","s-tagmap","s-guard","s-kits","s-cura"]},
+  {nm:"환불 한 건", note:"문의 열고 회원 보고 환불하고 답장한다",
+   path:["s-inq","s-users","s-orders","s-inq"]},
+  {nm:"템플릿 하나 올려 알리기", note:"템플릿 만들고 원본 올리고 값 정하고 알린다",
+   path:["n-tpls","n-file","s-prod","s-push"]}
+];
+
+/* ══════════ 바탕 ══════════ */
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]; }); }
+function toast(m){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = m;
+  $("#toasts").appendChild(t);
+  setTimeout(function(){ t.style.opacity = "0"; t.style.transition = "opacity .25s"; }, 1700);
+  setTimeout(function(){ t.remove(); }, 2000);
+}
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
+
+const KEY = "commel-sitemap-v1";
+let cur = 2;            /* 권하는 안부터 연다 */
+let board = null;       /* 지금 보고 있는 안의 묶음들 */
+let park = [];          /* 보관함 */
+let picked = null;      /* 손가락으로 옮길 때 고른 블록 */
+
+function store(){
+  try {
+    const all = JSON.parse(localStorage.getItem(KEY) || "{}");
+    all[PLANS[cur].id] = {groups:board, park:park};
+    localStorage.setItem(KEY, JSON.stringify(all));
+  } catch(e){ /* 사생활 보호 창에서는 저장이 막힌다. 화면은 그대로 쓴다 */ }
+}
+function load(i){
+  let saved = null;
+  try {
+    const all = JSON.parse(localStorage.getItem(KEY) || "{}");
+    saved = all[PLANS[i].id] || null;
+  } catch(e){ saved = null; }
+  if(saved && saved.groups){ board = saved.groups; park = saved.park || []; }
+  else reset(i);
+}
+function reset(i){
+  board = clone(PLANS[i].groups);
+  const placed = {};
+  board.forEach(function(g){ g.subs.forEach(function(s){ s.items.forEach(function(id){ placed[id] = 1; }); }); });
+  park = BLOCKS.filter(function(id){ return !placed[id]; });
+}
+
+/* ══════════ 그리기 ══════════ */
+function groupOf(id){
+  for(let i = 0; i < board.length; i++){
+    for(let j = 0; j < board[i].subs.length; j++){
+      if(board[i].subs[j].items.indexOf(id) >= 0) return board[i].nm;
+    }
+  }
+  return null;
+}
+function blkHtml(id){
+  const s = SC[id];
+  if(!s) return "";
+  const kids = (KIDS[id] || []).map(function(k){
+    return '<span class="kid">' + esc(SC[k] ? SC[k].nm : k) + "</span>"; }).join("");
+  return '<div class="blk' + (picked === id ? " sel" : "") + '" draggable="true" data-id="' + id + '">' +
+    '<div class="t"><span class="nm">' + esc(s.nm) + "</span>" +
+    (s.neo ? '<span class="neo">새</span>' : "") +
+    '<span class="id">' + esc(id) + "</span></div>" +
+    (s.g ? '<div class="was">지금: ' + esc(s.g) + "</div>" : "") +
+    (kids ? '<div class="kids">' + kids + "</div>" : "") +
+    (s.d ? '<div class="d">' + esc(s.d) + "</div>" : "") +
+    "</div>";
+}
+function draw(){
+  const p = PLANS[cur];
+
+  $("#tabs").innerHTML = PLANS.map(function(x, i){
+    return '<button data-i="' + i + '"' + (i === cur ? ' class="on"' : (i === 0 ? ' class="base"' : "")) + ">" +
+      esc(x.nm) + "</button>"; }).join("");
+
+  $("#lead").innerHTML =
+    '<div><div class="lb">이 안의 기준</div><div class="one">' + esc(p.one) + "</div>" +
+    '<div class="why">' + esc(p.why) + "</div></div>" +
+    "<div><div class=\"lb\">좋은 점과 위험한 점</div><ul>" +
+    p.good.map(function(t){ return '<li class="good">' + esc(t) + "</li>"; }).join("") +
+    p.bad.map(function(t){ return '<li class="bad">' + esc(t) + "</li>"; }).join("") + "</ul></div>";
+
+  const placed = board.reduce(function(n, g){
+    return n + g.subs.reduce(function(m, s){ return m + s.items.length; }, 0); }, 0);
+  const big = board.slice().sort(function(a, b){ return cnt(b) - cnt(a); })[0];
+  const diff = changed();
+  $("#counts").innerHTML =
+    cntHtml(board.length, "1층 묶음", board.length >= 6 && board.length <= 9 ? "fine" : (board.length > 11 ? "alert" : "")) +
+    cntHtml(placed, "자리를 받은 화면", "") +
+    cntHtml(park.length, "보관함", park.length ? "alert" : "fine") +
+    cntHtml(big ? cnt(big) : 0, "가장 큰 묶음 · " + (big ? big.nm : "-"), big && cnt(big) > 14 ? "alert" : "") +
+    cntHtml(diff, "처음 안에서 옮긴 블록", diff ? "" : "");
+
+  $("#board").innerHTML = board.map(function(g, gi){
+    return '<div class="col" data-g="' + gi + '" draggable="true">' +
+      '<div class="col-hd"><span class="gp"></span><h3 data-rn="' + gi + '">' + esc(g.nm) + "</h3>" +
+      '<span class="n">' + cnt(g) + "</span>" +
+      '<button class="x" data-del="' + gi + '" title="묶음 지우기">&times;</button></div>' +
+      '<div class="col-bd">' + g.subs.map(function(s, si){
+        return '<div class="sub">' + (s.nm ? '<div class="sub-nm" data-rs="' + gi + "." + si + '">' + esc(s.nm) + "</div>" : "") +
+          '<div class="zone' + (s.items.length ? "" : " empty") + (picked ? " pick" : "") +
+          '" data-g="' + gi + '" data-s="' + si + '">' +
+          s.items.map(blkHtml).join("") + "</div></div>";
+      }).join("") + "</div></div>";
+  }).join("");
+
+  $("#park").innerHTML = park.map(blkHtml).join("");
+  $("#park").className = "zone" + (park.length ? "" : " empty") + (picked ? " pick" : "");
+  $("#park-n").textContent = park.length + "개";
+
+  $("#ways").innerHTML = WAYS.map(function(w){
+    const gs = w.path.map(groupOf);
+    let jumps = 0, miss = false;
+    for(let i = 1; i < gs.length; i++){
+      if(!gs[i] || !gs[i - 1]) { miss = true; continue; }
+      if(gs[i] !== gs[i - 1]) jumps++;
+    }
+    const steps = w.path.map(function(id, i){
+      const jump = i > 0 && gs[i] && gs[i - 1] && gs[i] !== gs[i - 1];
+      return (i ? '<span class="ar' + (jump ? " jump" : "") + '">' + (jump ? "&rarr;" : "&middot;") + "</span>" : "") +
+        '<span class="st">' + esc(SC[id] ? SC[id].nm : id) + "</span>";
+    }).join("");
+    return '<div class="way"><div class="wt"><b>' + esc(w.nm) + "</b><em>" + esc(w.note) + "</em></div>" +
+      '<div class="num ' + (miss ? "b" : (jumps <= 1 ? "g" : (jumps >= 4 ? "b" : ""))) + '">묶음 넘기 ' +
+      (miss ? "셀 수 없음 (보관함에 있는 화면이 있습니다)" : jumps + "번") + "</div>" +
+      '<div class="steps">' + steps + "</div></div>";
+  }).join("");
+}
+function cnt(g){ return g.subs.reduce(function(n, s){ return n + s.items.length; }, 0); }
+function cntHtml(n, lb, cls){
+  return '<div class="cnt ' + cls + '"><b>' + n + "</b><span>" + esc(lb) + "</span></div>";
+}
+function changed(){
+  const base = {};
+  PLANS[cur].groups.forEach(function(g){ g.subs.forEach(function(s){
+    s.items.forEach(function(id){ base[id] = g.nm; }); }); });
+  let n = 0;
+  BLOCKS.forEach(function(id){ if((groupOf(id) || "") !== (base[id] || "")) n++; });
+  return n;
+}
+
+/* ══════════ 옮기기 ══════════ */
+function take(id){
+  board.forEach(function(g){ g.subs.forEach(function(s){
+    const i = s.items.indexOf(id); if(i >= 0) s.items.splice(i, 1); }); });
+  const i = park.indexOf(id); if(i >= 0) park.splice(i, 1);
+}
+function put(id, gi, si, before){
+  take(id);
+  const list = gi < 0 ? park : board[gi].subs[si].items;
+  const at = before == null ? list.length : list.indexOf(before);
+  list.splice(at < 0 ? list.length : at, 0, id);
+  store(); draw();
+}
+
+let dragId = null, dragCol = null;
+document.addEventListener("dragstart", function(e){
+  const b = e.target.closest(".blk");
+  if(b){ dragId = b.dataset.id; dragCol = null; b.classList.add("drag");
+    e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", dragId); return; }
+  const c = e.target.closest(".col");
+  if(c){ dragCol = +c.dataset.g; dragId = null; c.classList.add("drag");
+    e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", "col"); }
+});
+document.addEventListener("dragend", function(){
+  $$(".drag").forEach(function(x){ x.classList.remove("drag"); });
+  $$(".over").forEach(function(x){ x.classList.remove("over"); });
+  dragId = null; dragCol = null;
+});
+document.addEventListener("dragover", function(e){
+  if(dragId){
+    const z = e.target.closest(".zone");
+    if(!z) return;
+    e.preventDefault();
+    $$(".over").forEach(function(x){ if(x !== z) x.classList.remove("over"); });
+    z.classList.add("over");
+  } else if(dragCol !== null){
+    const c = e.target.closest(".col");
+    if(!c) return;
+    e.preventDefault();
+  }
+});
+document.addEventListener("drop", function(e){
+  if(dragId){
+    const z = e.target.closest(".zone");
+    if(!z) return;
+    e.preventDefault();
+    const over = e.target.closest(".blk");
+    put(dragId, +z.dataset.g, +z.dataset.s, over && over.dataset.id !== dragId ? over.dataset.id : null);
+  } else if(dragCol !== null){
+    const c = e.target.closest(".col");
+    if(!c) return;
+    e.preventDefault();
+    const to = +c.dataset.g;
+    if(to === dragCol) return;
+    const g = board.splice(dragCol, 1)[0];
+    board.splice(to, 0, g);
+    store(); draw();
+  }
+});
+
+/* 손가락으로 옮기기. 블록을 누르고 자리를 누른다 */
+document.addEventListener("click", function(e){
+  const b = e.target.closest(".blk");
+  if(b){
+    picked = picked === b.dataset.id ? null : b.dataset.id;
+    draw();
+    if(picked) toast("옮길 자리를 누르세요");
+    return;
+  }
+  const z = e.target.closest(".zone");
+  if(z && picked){
+    put(picked, +z.dataset.g, +z.dataset.s, null);
+    picked = null;
+    draw();
+    return;
+  }
+  const t = e.target.closest("#tabs button");
+  if(t){ cur = +t.dataset.i; picked = null; load(cur); draw(); window.scrollTo(0, 0); return; }
+  const d = e.target.closest("[data-del]");
+  if(d){
+    const gi = +d.dataset.del;
+    const g = board[gi];
+    g.subs.forEach(function(s){ s.items.forEach(function(id){ park.push(id); }); });
+    board.splice(gi, 1);
+    store(); draw();
+    toast("묶음을 지우고 안에 있던 화면은 보관함으로 보냈어요");
+    return;
+  }
+  const rn = e.target.closest("[data-rn]");
+  if(rn){ openName("g", rn.dataset.rn, board[+rn.dataset.rn].nm); return; }
+  const rs = e.target.closest("[data-rs]");
+  if(rs){
+    const p = rs.dataset.rs.split(".");
+    openName("s", rs.dataset.rs, board[+p[0]].subs[+p[1]].nm);
+    return;
+  }
+  if(e.target.closest("[data-close]")){ $$(".modal.on").forEach(function(m){ m.classList.remove("on"); }); }
+});
+
+/* ══════════ 이름 고치기 ══════════ */
+let nmFor = null;
+function openName(kind, key, val){
+  nmFor = {kind:kind, key:key};
+  $("#nm-t").textContent = kind === "g" ? "묶음 이름" : "2층 이름";
+  $("#nm-i").value = val;
+  $("#m-nm").classList.add("on");
+  setTimeout(function(){ $("#nm-i").focus(); $("#nm-i").select(); }, 30);
+}
+$("#nm-ok").addEventListener("click", function(){
+  const v = $("#nm-i").value.trim();
+  if(!v){ toast("이름을 적어 주세요"); return; }
+  if(nmFor.kind === "g") board[+nmFor.key].nm = v;
+  else { const p = nmFor.key.split("."); board[+p[0]].subs[+p[1]].nm = v; }
+  $("#m-nm").classList.remove("on");
+  store(); draw();
+});
+$("#nm-i").addEventListener("keydown", function(e){ if(e.key === "Enter") $("#nm-ok").click(); });
+
+/* ══════════ 연장 ══════════ */
+$("#b-add").addEventListener("click", function(){
+  board.push(G("새 묶음", P([])));
+  store(); draw();
+  toast("묶음을 더했어요. 이름을 눌러 고칩니다");
+});
+$("#b-desc").addEventListener("click", function(){
+  document.body.classList.toggle("desc");
+  this.textContent = document.body.classList.contains("desc") ? "설명 감추기" : "설명 보기";
+});
+$("#b-reset").addEventListener("click", function(){
+  reset(cur); store(); draw();
+  toast("처음 안으로 되돌렸어요");
+});
+$("#b-out").addEventListener("click", function(){
+  const L = ["# " + PLANS[cur].nm, "", PLANS[cur].one, ""];
+  board.forEach(function(g){
+    L.push("## " + g.nm + " (" + cnt(g) + ")");
+    g.subs.forEach(function(s){
+      if(s.nm) L.push("### " + s.nm);
+      s.items.forEach(function(id){
+        const kids = (KIDS[id] || []).map(function(k){ return SC[k] ? SC[k].nm : k; });
+        L.push("- `" + id + "` " + (SC[id] ? SC[id].nm : id) + (kids.length ? " (+ " + kids.join(", ") + ")" : ""));
+      });
+    });
+    L.push("");
+  });
+  if(park.length){
+    L.push("## 보관함");
+    park.forEach(function(id){ L.push("- `" + id + "` " + (SC[id] ? SC[id].nm : id)); });
+    L.push("");
+  }
+  WAYS.forEach(function(w){
+    const gs = w.path.map(groupOf);
+    let j = 0;
+    for(let i = 1; i < gs.length; i++) if(gs[i] && gs[i - 1] && gs[i] !== gs[i - 1]) j++;
+    L.push("- " + w.nm + ": 묶음 넘기 " + j + "번");
+  });
+  $("#out").value = L.join("\n");
+  $("#m-out").classList.add("on");
+});
+$("#b-copy").addEventListener("click", function(){
+  const t = $("#out");
+  t.removeAttribute("readonly"); t.select();
+  try { document.execCommand("copy"); toast("복사했어요"); }
+  catch(e){ toast("직접 골라서 복사해 주세요"); }
+  t.setAttribute("readonly", "readonly");
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){ $$(".modal.on").forEach(function(m){ m.classList.remove("on"); });
+    if(picked){ picked = null; draw(); } }
+});
+
+load(cur);
+draw();
+</script>
+</body>
+</html>
