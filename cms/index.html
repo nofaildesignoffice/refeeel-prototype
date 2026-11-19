@@ -764,14 +764,16 @@ const ONB = [
    op:T_TP}
 ];
 
-/* ── 낙타의 큐레이션 ── */
+/* ── 낙타의 큐레이션 ──
+   img 는 묶음의 커버 이미지다. 사용자 화면의 큐레이션 카드는 커버가 가장 먼저 보인다.
+   뒤의 두 묶음은 비워 두었다. 커버가 없는 묶음이 화면에서 어떻게 보이는지 확인해야 한다. */
 const CURA = [
-  {id:"cu1", nm:"릴스로 매출까지 가는 길", tp:["릴스","전환·매출"], kits:[88,84,76,61,52,41]},
-  {id:"cu2", nm:"처음 브랜딩하는 사장님께", tp:["브랜딩","타겟·차별화"], kits:[87,79,70,58,45]},
-  {id:"cu3", nm:"AI 한 명 고용하기", tp:["AI·프롬프트","자동화"], kits:[89,86,85,73,66,54]},
-  {id:"cu4", nm:"고객 마음 읽는 법", tp:["소비자 심리","카피·후킹"], kits:[82,69,57,44,33]},
-  {id:"cu5", nm:"검색이 사라진 자리", tp:["AEO·AI검색","SEO"], kits:[80,67,50,38]},
-  {id:"cu6", nm:"혼자 일하는 사람의 구조", tp:["사업 성장","자동화"], kits:[77,64,51,40,27]}
+  {id:"cu1", nm:"릴스로 매출까지 가는 길", tp:["릴스","전환·매출"], img:"cura-cu1.jpg", kits:[88,84,76,61,52,41]},
+  {id:"cu2", nm:"처음 브랜딩하는 사장님께", tp:["브랜딩","타겟·차별화"], img:"cura-cu2.jpg", kits:[87,79,70,58,45]},
+  {id:"cu3", nm:"AI 한 명 고용하기", tp:["AI·프롬프트","자동화"], img:"cura-cu3.jpg", kits:[89,86,85,73,66,54]},
+  {id:"cu4", nm:"고객 마음 읽는 법", tp:["소비자 심리","카피·후킹"], img:"cura-cu4.jpg", kits:[82,69,57,44,33]},
+  {id:"cu5", nm:"검색이 사라진 자리", tp:["AEO·AI검색","SEO"], img:"", kits:[80,67,50,38]},
+  {id:"cu6", nm:"혼자 일하는 사람의 구조", tp:["사업 성장","자동화"], img:"", kits:[77,64,51,40,27]}
 ];
 
 /* ── 홈 편성 ── */
@@ -2529,7 +2531,8 @@ CMS.ready(function(){
   let MEDIA = [];
   KITS.slice(0, 8).forEach(function(k){ MEDIA.push({f:"cokit-" + k.n + "-cover.png", use:"표지", at:"CO:KIT " + k.n + " · " + k.t}); });
   HERO.forEach(function(h, i){ MEDIA.push({f:"hero-" + (i + 1) + ".jpg", use:"히어로", at:"홈 히어로 " + (i + 1) + "번 · " + h.lb}); });
-  CURA.slice(0, 4).forEach(function(c){ MEDIA.push({f:"cura-" + c.id + ".jpg", use:"큐레이션", at:c.nm}); });
+  /* 큐레이션 이미지는 커버가 붙은 묶음에서 가져온다. 묶음 화면과 이 화면의 수가 어긋나면 안 된다 */
+  CURA.filter(function(c){ return c.img; }).forEach(function(c){ MEDIA.push({f:c.img, use:"큐레이션", at:c.nm}); });
   PRODUCTS.slice(0, 3).forEach(function(p){ MEDIA.push({f:p.id + ".jpg", use:"상품", at:p.nm}); });
   for(let i = 1; i <= 6; i++) MEDIA.push({f:"upload-" + String(i).padStart(2, "0") + ".png", use:"안 쓰임", at:"쓰인 곳 없음"});
   MEDIA.forEach(function(m, i){ m.id = i; m.kb = seed(i + 1, 61, 96, 940); m.sel = false; });
@@ -4039,6 +4042,24 @@ CMS.ready(function(){
 /* ── 낙타의 큐레이션 ── */
 #s-cura .cu-card.off .cu-in{opacity:.5;}
 #s-cura .cu-nm{font-size:var(--fs-lg);font-weight:700;min-width:0;}
+/* 커버. 사용자 화면의 큐레이션 카드와 같은 3:2 비율이다 */
+#s-cura .cu-cover{position:relative;aspect-ratio:3/2;border-radius:var(--radius-sm);background:var(--bg-light);
+  border:1px solid var(--card-line);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:12px;}
+#s-cura .cu-cover.none{border-style:dashed;color:var(--warn);}
+#s-cura .cu-card.off .cu-cover{opacity:.5;}
+#s-cura .cu-cover em{position:absolute;top:8px;left:8px;font-style:normal;font-size:10px;font-weight:800;
+  color:var(--text-black);background:var(--bg-white);border:1px solid var(--card-line);
+  border-radius:var(--radius-full);padding:2px 8px;}
+#s-cura .cu-cover u{position:absolute;right:8px;bottom:8px;text-decoration:none;font-size:10px;font-weight:700;
+  color:#fff;background:var(--bg-black);border-radius:var(--radius-full);padding:2px 8px;}
+#s-cura .cu-cv-row{display:flex;gap:12px;align-items:flex-start;}
+#s-cura .cu-cv-row .cu-cv-r{flex:1;min-width:0;}
+#s-cura .cu-cv-row .drop{padding:14px 12px;}
+#s-cura .cu-cv-pic{width:138px;flex-shrink:0;aspect-ratio:3/2;border-radius:var(--radius-sm);background:var(--bg-light);
+  border:1px solid var(--card-line);display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:6px;line-height:1.35;font-size:10.5px;font-weight:700;color:var(--text-muted);word-break:break-all;}
+#s-cura .cu-cv-pic.none{border-style:dashed;color:var(--warn);}
 #s-cura .cu-meta{font-size:var(--fs-xs);color:var(--text-gray);margin:10px 0 7px;font-weight:600;}
 #s-cura .cu-thumbs{display:flex;gap:5px;flex-wrap:wrap;}
 #s-cura .cu-thumbs .thumb{width:34px;height:44px;}
@@ -4054,6 +4075,10 @@ CMS.ready(function(){
 #s-cura .cu-scroll .tx b{font-size:var(--fs-sm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #s-cura .cu-scroll .empty{padding:36px 16px;}
 #s-cura .cu-pv{border:1px solid var(--card-line);border-radius:var(--radius-sm);padding:9px 10px;margin-bottom:6px;}
+#s-cura .cu-pv .pv-im{aspect-ratio:3/2;border-radius:var(--radius-xs);background:var(--bg-light);
+  border:1px solid var(--card-line);display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--text-light);margin-bottom:7px;}
+#s-cura .cu-pv .pv-im.none{border-style:dashed;color:var(--warn);}
 #s-cura .cu-pv b{display:block;font-size:11.5px;}
 #s-cura .cu-pv span{display:block;font-size:9.5px;color:var(--text-light);margin-top:2px;}
 #s-cura .cu-side{position:sticky;top:0;display:flex;flex-direction:column;align-items:center;gap:10px;}
@@ -4193,6 +4218,7 @@ CMS.ready(function(){
         <div class="empty"><i data-lucide="package-open"></i><b>묶음이 없습니다</b><p>묶음을 더하면 홈의 낙타의 큐레이션에 나옵니다.</p>
           <button class="btn pri" id="cu-new2"><i data-lucide="plus"></i>묶음 더하기</button></div>
       </div>
+      <div class="note warn" id="cu-nocv" style="display:none"><i data-lucide="image-off"></i><div><b id="cu-nocv-n"></b>에 커버 이미지가 없습니다. 커버가 없으면 사용자 화면의 큐레이션 카드에 회색 자리만 나옵니다. 이미지 화면에 올린 뒤 묶음 편집에서 붙입니다.</div></div>
       <div class="note warn"><i data-lucide="alert-triangle"></i><div>지금 사용자 화면에서는 큐레이션을 누르면 검색 결과 화면이 열리면서 제목과 개수만 바뀝니다. 담긴 코킷 목록으로 열리지 않습니다. 실제 구현에서 묶음의 코킷 목록을 넘겨야 합니다.</div></div>
       <div class="note"><i data-lucide="info"></i><div>묶음이 홈에 나오는 순서는 <b>홈 편성</b>의 낙타의 큐레이션 줄에서 바꿉니다. 한 묶음에 몇 편까지 담을지는 아직 정해지지 않았습니다.</div></div>
     </div>
@@ -4214,6 +4240,22 @@ CMS.ready(function(){
           <div class="fld">
             <label>묶음 이름 <span class="req">*</span></label>
             <input class="inp" type="text" id="cu-f-nm" placeholder="예: 처음 브랜딩하는 사장님께">
+          </div>
+          <div class="fld">
+            <label>커버 이미지</label>
+            <div class="cu-cv-row">
+              <div class="cu-cv-pic" id="cu-f-cv"></div>
+              <div class="cu-cv-r">
+                <div class="drop" data-act="toast" data-msg="프로토타입에서는 파일을 올리지 않습니다">
+                  <i data-lucide="upload"></i><b>커버 이미지를 끌어 놓거나 눌러서 고르기</b><span>1200×800 · 이미지 화면에 올려 둔 것에서도 고를 수 있습니다</span>
+                </div>
+                <div class="row" style="gap:8px;margin-top:9px">
+                  <button class="btn sm" data-go="s-media"><i data-lucide="image"></i>이미지에서 고르기</button>
+                  <button class="btn sm" id="cu-cv-tog"></button>
+                </div>
+              </div>
+            </div>
+            <span class="hint">사용자 화면에서는 커버가 가장 먼저 보이고 그 위에 담긴 코킷 수가 붙습니다.</span>
           </div>
           <div class="fld">
             <label>주제 태그</label>
@@ -4481,7 +4523,7 @@ CMS.ready(function(){
   const LIVE = KITS.filter(function(k){ return k.st === "live"; });
 
   /* 큐레이션 묶음은 홈 편성(순서·켜기)과 큐레이션 화면(내용)이 같이 고친다. 한 벌만 둔다 */
-  const cura = CURA.map(function(c){ return {id:c.id, nm:c.nm, tp:c.tp.slice(), kits:c.kits.slice(), on:true}; });
+  const cura = CURA.map(function(c){ return {id:c.id, nm:c.nm, tp:c.tp.slice(), img:c.img, kits:c.kits.slice(), on:true}; });
   let curaSeq = cura.length;
 
   /* ════════════ 1. 홈 편성 ════════════ */
@@ -4702,11 +4744,20 @@ CMS.ready(function(){
   function curaChanged(){ renderCura(); renderSecs(); renderHomePhone(); }
 
   const cuGrid = $("#cu-grid");
+  /* 커버. 번호는 켜진 묶음만 받는다. 꺼진 묶음은 홈에 나오지 않으니 번호가 없다 */
+  function cuCover(c, ord){
+    return '<div class="cu-cover' + (c.img ? "" : " none") + '">' +
+      (ord ? "<em>" + (ord < 10 ? "0" : "") + ord + "</em>" : "") +
+      (c.img ? esc(c.img) : "커버 없음") +
+      "<u>코킷 " + c.kits.length + "편</u></div>";
+  }
   function renderCura(){
+    const ord = {};
+    cura.filter(function(c){ return c.on; }).forEach(function(c, i){ ord[c.id] = i + 1; });
     cuGrid.innerHTML = cura.map(function(c){
       const more = c.kits.length - 7;
       return '<div class="card cu-card' + (c.on ? "" : " off") + '" data-id="' + c.id + '">' +
-        '<div class="card-bd"><div class="row"><b class="cu-nm">' + esc(c.nm) + "</b>" +
+        '<div class="card-bd">' + cuCover(c, ord[c.id]) + '<div class="row"><b class="cu-nm">' + esc(c.nm) + "</b>" +
         '<button class="sw' + (c.on ? " on" : "") + '" data-id="' + c.id + '" style="margin-left:auto" aria-label="켜기"></button></div>' +
         '<div class="cu-in"><div class="chips" style="margin-top:9px">' +
           (c.tp.length ? c.tp.map(function(t){ return '<span class="chip">' + esc(t) + "</span>"; }).join("") : '<span class="muted" style="font-size:11px">태그 없음</span>') + "</div>" +
@@ -4721,9 +4772,15 @@ CMS.ready(function(){
     $("#cu-empty").style.display = cura.length ? "none" : "";
     const on = cura.filter(function(c){ return c.on; });
     $("#cu-phone").innerHTML = '<div style="font-size:12px;font-weight:700;margin-bottom:8px">낙타의 큐레이션</div>' +
-      (on.map(function(c){
-        return '<div class="cu-pv"><b>' + esc(c.nm) + "</b><span>코킷 " + c.kits.length + "편</span></div>";
+      (on.map(function(c, i){
+        return '<div class="cu-pv"><div class="pv-im' + (c.img ? "" : " none") + '">' +
+          (c.img ? "커버 이미지" : "커버 없음") + "</div><b>" +
+          ((i < 9 ? "0" : "") + (i + 1)) + " " + esc(c.nm) + "</b><span>코킷 " + c.kits.length + "편</span></div>";
       }).join("") || '<div class="empty"><b>켜진 묶음이 없습니다</b></div>');
+    /* 커버가 빠진 묶음은 이름으로 알려 준다. 수만 알려 주면 어느 묶음인지 찾아야 한다 */
+    const nocv = cura.filter(function(c){ return !c.img; });
+    $("#cu-nocv").style.display = nocv.length ? "" : "none";
+    if(nocv.length) $("#cu-nocv-n").textContent = nocv.map(function(c){ return c.nm; }).join(", ");
     swOn(cuGrid, function(sw, on){
       const c = curaOf(sw.dataset.id); c.on = on;
       toast(c.nm + (on ? " 묶음을 켰어요" : " 묶음을 껐어요"));
@@ -4738,7 +4795,7 @@ CMS.ready(function(){
     if(b.dataset.cu === "edit") openCuraEdit(c);
     else if(b.dataset.cu === "copy"){
       /* 복제본은 꺼 둔다. 같은 묶음이 홈에 두 번 나오면 안 된다 */
-      cura.splice(cura.indexOf(c) + 1, 0, {id:"cu" + (++curaSeq), nm:c.nm + " 복사본", tp:c.tp.slice(), kits:c.kits.slice(), on:false});
+      cura.splice(cura.indexOf(c) + 1, 0, {id:"cu" + (++curaSeq), nm:c.nm + " 복사본", tp:c.tp.slice(), img:c.img, kits:c.kits.slice(), on:false});
       curaChanged(); toast("복제했어요. 복사본은 꺼 두었습니다");
     } else {
       delId = c.id; $("#cu-del-nm").textContent = c.nm; openModal("m-cura-del");
@@ -4754,13 +4811,30 @@ CMS.ready(function(){
   let ed = null;
   const TAGS = T_TP.concat(T_CH);
   function openCuraEdit(c){
-    ed = c ? {id:c.id, nm:c.nm, tp:c.tp.slice(), kits:c.kits.slice()} : {id:"", nm:"", tp:[], kits:[]};
+    ed = c ? {id:c.id, nm:c.nm, tp:c.tp.slice(), img:c.img, kits:c.kits.slice()} : {id:"", nm:"", tp:[], img:"", kits:[]};
     $("#cu-m-t").textContent = c ? "묶음 편집" : "묶음 더하기";
     $("#cu-f-nm").value = ed.nm;
     $("#cu-q").value = "";
-    renderEdTp(); renderEdRes(); renderEdIn();
+    renderEdTp(); renderEdCv(); renderEdRes(); renderEdIn();
     openModal("m-cura-edit");
   }
+  function renderEdCv(){
+    const pic = $("#cu-f-cv");
+    pic.className = "cu-cv-pic" + (ed.img ? "" : " none");
+    pic.textContent = ed.img || "커버 없음";
+    $("#cu-cv-tog").innerHTML = ed.img
+      ? '<i data-lucide="x"></i>커버 비우기'
+      : '<i data-lucide="image-plus"></i>커버 넣기';
+    icons();
+  }
+  $("#cu-cv-tog").addEventListener("click", function(){
+    if(ed.img){ ed.img = ""; toast("커버를 비웠어요"); }
+    else {
+      ed.img = "cura-" + (ed.id || "cu" + (curaSeq + 1)) + ".jpg";
+      toast("커버 자리를 채웠어요. 프로토타입에서는 파일을 올리지 않습니다");
+    }
+    renderEdCv();
+  });
   function renderEdTp(){
     $("#cu-f-tp").innerHTML = TAGS.map(function(t){
       return '<button type="button" class="chip' + (ed.tp.indexOf(t) >= 0 ? " on" : "") + '" data-t="' + esc(t) + '" style="cursor:pointer">' + esc(t) + "</button>";
@@ -4816,8 +4890,8 @@ CMS.ready(function(){
     if(!nm){ toast("묶음 이름을 적어 주세요", true); $("#cu-f-nm").focus(); return; }
     if(!ed.kits.length){ toast("코킷을 한 편 이상 담아 주세요", true); return; }
     const c = curaOf(ed.id);
-    if(c){ c.nm = nm; c.tp = ed.tp; c.kits = ed.kits; }
-    else cura.push({id:"cu" + (++curaSeq), nm:nm, tp:ed.tp, kits:ed.kits, on:true});
+    if(c){ c.nm = nm; c.tp = ed.tp; c.img = ed.img; c.kits = ed.kits; }
+    else cura.push({id:"cu" + (++curaSeq), nm:nm, tp:ed.tp, img:ed.img, kits:ed.kits, on:true});
     closeModal("m-cura-edit"); curaChanged(); toast(c ? "묶음을 저장했어요" : "묶음을 더했어요");
   });
   $("#cu-new").addEventListener("click", function(){ openCuraEdit(null); });
