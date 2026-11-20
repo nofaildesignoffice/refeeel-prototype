@@ -25,6 +25,8 @@ body{background:var(--bg);color:var(--ink);
 h1,h2,h3,p,ul,ol{margin:0;}
 button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;}
 .wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px;}
+.wrap.top{padding-bottom:0;}
+.wrap.btm{padding-top:2px;}
 
 header{background:var(--white);border-bottom:1px solid var(--line);}
 .hd{max-width:1180px;margin:0 auto;padding:20px;}
@@ -40,7 +42,8 @@ header{background:var(--white);border-bottom:1px solid var(--line);}
 .cnt.fine{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);}
 .cnt.neo{border-color:var(--line2);background:var(--brand-soft);}
 
-.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 12px;}
+.how{font-size:12px;color:var(--light);margin-top:14px;}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 12px;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 13px;
   border:1px solid var(--line2);background:var(--white);border-radius:var(--r-s);font-size:12.5px;font-weight:700;}
 .btn:hover{border-color:var(--ink);}
@@ -50,9 +53,20 @@ header{background:var(--white);border-bottom:1px solid var(--line);}
 .btn.ghost{background:none;border-color:transparent;color:var(--gray);}
 
 /* ── 묶음 ── */
-.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start;}
-.g{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
-.g-hd{display:flex;align-items:center;gap:8px;padding:13px 14px;border-bottom:1px solid var(--line);
+/* 묶음을 한 줄로 세운다. 옆으로 밀어 본다 */
+.strip{padding:0 20px;}
+.groups{display:flex;flex-wrap:nowrap;align-items:flex-start;gap:12px;overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x proximity;padding-bottom:12px;
+  overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+.groups::-webkit-scrollbar{height:11px;}
+.groups::-webkit-scrollbar-track{background:var(--white);border:1px solid var(--line);border-radius:var(--r-f);}
+.groups::-webkit-scrollbar-thumb{background:var(--line2);border:2px solid var(--white);border-radius:var(--r-f);}
+.groups::-webkit-scrollbar-thumb:hover{background:var(--light);}
+.g{flex:0 0 340px;width:340px;scroll-snap-align:start;display:flex;flex-direction:column;
+  max-height:max(360px, calc(100vh - 330px));
+  background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+.g.fold{max-height:none;}
+.g-hd{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:13px 14px;border-bottom:1px solid var(--line);
   background:var(--soft);cursor:pointer;-webkit-user-select:none;user-select:none;}
 .g-hd .no{font-size:11px;font-weight:800;color:var(--light);width:15px;flex-shrink:0;}
 .g-hd h2{font-size:15px;font-weight:800;letter-spacing:-0.2px;}
@@ -63,7 +77,7 @@ header{background:var(--white);border-bottom:1px solid var(--line);}
 .g-hd .cr{font-size:10px;color:var(--gray);flex-shrink:0;}
 .g.fold .g-hd{border-bottom:0;}
 .g.fold .g-bd{display:none;}
-.g-bd{padding:12px 14px 14px;}
+.g-bd{padding:12px 14px 14px;overflow-y:auto;overscroll-behavior-y:contain;}
 .g-one{font-size:12.5px;color:var(--gray);padding-bottom:10px;border-bottom:1px solid var(--line);}
 .g-dash{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:9px 10px;
   border:1px solid var(--line);border-radius:var(--r-s);background:var(--soft);font-size:12px;color:var(--gray);}
@@ -131,7 +145,9 @@ textarea.out{width:100%;height:340px;border:1px solid var(--line);border-radius:
   .counts{gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-left:-14px;margin-right:-14px;padding:0 14px 2px;}
   .cnt{flex-shrink:0;padding:7px 10px;font-size:12px;}
   .bar .btn{height:42px;flex:1 1 calc(33.333% - 4px);padding:0 6px;}
-  .groups{grid-template-columns:1fr;gap:10px;}
+  .strip{padding:0 14px;}
+  .groups{gap:10px;}
+  .g{flex:0 0 300px;width:300px;max-height:max(360px, calc(100dvh - 300px));}
   .g-hd{padding:14px 12px;}
   .g-bd{padding:11px 12px 12px;}
   .row{padding:11px 10px;}
@@ -156,15 +172,20 @@ textarea.out{width:100%;height:340px;border:1px solid var(--line);border-radius:
   </div>
 </header>
 
-<div class="wrap">
+<div class="wrap top">
+  <p class="how" id="how">묶음 열 개가 한 줄로 서 있습니다. 옆으로 밀어서 봅니다. 묶음 이름을 누르면 접힙니다.</p>
+
   <div class="bar">
     <button class="btn" id="b-fold">모두 펴기</button>
     <button class="btn" id="b-only">새로 만들 것만</button>
     <button class="btn pri" id="b-out">내보내기</button>
   </div>
 
-  <div class="groups" id="groups"></div>
+</div>
 
+<div class="strip"><div class="groups" id="groups"></div></div>
+
+<div class="wrap btm">
   <div class="note">
     <div class="note-hd">
       <h2>노션 정리에서 빠져 있던 것</h2>
@@ -551,7 +572,7 @@ document.addEventListener("keydown", function(e){
 });
 
 /* 창이 넓어지거나 좁아지면 접힘을 다시 정한다. 리건이 직접 접은 뒤에는 그대로 둔다 */
-function foldDefault(){ if(touched) return; foldAll(isMob()); draw(); }
+function foldDefault(){ if(touched) return; foldAll(false); draw(); }
 if(MQ.addEventListener) MQ.addEventListener("change", foldDefault);
 else if(MQ.addListener) MQ.addListener(foldDefault);
 window.addEventListener("load", foldDefault);
