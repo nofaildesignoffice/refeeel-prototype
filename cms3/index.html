@@ -86,6 +86,16 @@ a{color:inherit;text-decoration:none;}
 .side-item .cnt{margin-left:auto;font-size:var(--fs-xs);font-weight:700;
   background:rgba(255,255,255,.14);color:#fff;border-radius:var(--radius-full);padding:1px 6px;}
 .side-item.on .cnt{background:rgba(0,0,0,.16);color:var(--brand-ink);}
+.side-fold .caret{margin-left:auto;width:14px;height:14px;transition:transform .15s;}
+.side-fold.open .caret{transform:rotate(180deg);}
+.side-fold.half:not(.on){color:#fff;}
+.side-fold.half:not(.on)::before{content:"";position:absolute;left:2px;top:9px;bottom:9px;
+  width:2px;border-radius:2px;background:var(--brand);}
+.side-fold{position:relative;}
+.side-sub{display:none;margin:1px 0 3px 12px;padding-left:9px;border-left:1px solid rgba(255,255,255,.14);}
+.side-sub.open{display:block;}
+.side-sub .side-item{font-size:var(--fs-xs);padding-top:6px;padding-bottom:6px;}
+.side-sub .side-item i,.side-sub .side-item svg{width:14px;height:14px;}
 .side-ft{margin-top:auto;padding:14px 18px 18px;border-top:1px solid rgba(255,255,255,.1);
   font-size:var(--fs-xs);color:rgba(255,255,255,.4);line-height:1.7;}
 
@@ -291,6 +301,7 @@ input.inp:disabled,textarea.ta:disabled,select.sel:disabled{background:var(--bg-
 .tabs button.on{color:var(--text-black);font-weight:700;border-bottom-color:var(--bg-black);}
 .tabs button .cnt{font-size:var(--fs-xs);color:var(--text-light);margin-left:4px;font-weight:600;}
 .tabp{display:none;} .tabp.on{display:block;}
+.scr-tabs{padding:0;margin:0 0 16px;}
 
 /* 알약 갈래 — 표 위에 올리는 작은 것 */
 .pills{display:flex;gap:5px;flex-wrap:wrap;}
@@ -1565,57 +1576,69 @@ const NAV = [
   {g:"콘텐츠", items:[
     {id:"d-content", nm:"콘텐츠 현황", ic:"gauge"},
     {id:"s-stat-kit", nm:"콘텐츠 성과", ic:"bar-chart-3"},
-    {id:"s-kits", nm:"코킷", ic:"file-text", cnt:"89"},
-    {id:"s-kit", nm:"코킷 편집", ic:"pencil", hide:true},
-    {id:"s-series", nm:"코멜 시리즈", ic:"layers"},
-    {id:"s-series-edit", nm:"시리즈 편집", ic:"pencil", hide:true},
-    {id:"n-consult", nm:"1:1 컨설팅", ic:"handshake"},
-    {id:"n-consult-edit", nm:"컨설팅 편집", ic:"pencil", hide:true},
-    {id:"n-consult-apply", nm:"컨설팅 신청자", ic:"clipboard-list", cnt:"6"},
-    {id:"n-consult-user", nm:"컨설팅 신청자 상세", ic:"user-search", hide:true},
-    {id:"n-consult-book", nm:"컨설팅 예약", ic:"calendar-clock"},
-    {id:"n-guides", nm:"브랜드 콘텐츠 가이드", ic:"book-marked"},
-    {id:"n-guide-edit", nm:"가이드 편집", ic:"pencil", hide:true},
-    {id:"n-guide-apply", nm:"가이드 신청자", ic:"clipboard-check", cnt:"5"},
-    {id:"n-guide-user", nm:"가이드 신청자 상세", ic:"user-search", hide:true},
-    {id:"n-tpls", nm:"템플릿", ic:"layout-template"},
-    {id:"n-tpl-edit", nm:"템플릿 편집", ic:"pencil", hide:true},
-    {id:"s-cura", nm:"낙타의 큐레이션", ic:"sparkles"},
-    {id:"s-media", nm:"이미지", ic:"image"},
-    {id:"n-file", nm:"영상·파일", ic:"folder-open"}
+    {nm:"콘텐츠 관리", ic:"folder-tree", sub:[
+      {id:"s-kits", nm:"코킷", ic:"file-text", cnt:"89"},
+      {id:"s-kit", nm:"코킷 편집", ic:"pencil", hide:true},
+      {id:"s-series", nm:"코멜 시리즈", ic:"layers"},
+      {id:"s-series-edit", nm:"시리즈 편집", ic:"pencil", hide:true},
+      {id:"n-consult", nm:"1:1 컨설팅", ic:"handshake", cnt:"6"},
+      {id:"n-consult-edit", nm:"컨설팅 편집", ic:"pencil", hide:true},
+      {id:"n-consult-user", nm:"컨설팅 신청자 상세", ic:"user-search", hide:true},
+      {id:"n-guides", nm:"브랜드 콘텐츠 가이드", ic:"book-marked", cnt:"5"},
+      {id:"n-guide-edit", nm:"가이드 편집", ic:"pencil", hide:true},
+      {id:"n-guide-user", nm:"가이드 신청자 상세", ic:"user-search", hide:true},
+      {id:"n-tpls", nm:"템플릿", ic:"layout-template"},
+      {id:"n-tpl-edit", nm:"템플릿 편집", ic:"pencil", hide:true},
+      {id:"s-cura", nm:"낙타의 큐레이션", ic:"sparkles"}
+    ]},
+    {nm:"클라우드", ic:"cloud", sub:[
+      {id:"s-media", nm:"이미지", ic:"image"},
+      {id:"n-file", nm:"영상·파일", ic:"folder-open"}
+    ]}
   ]},
   {g:"상품·가격", items:[
     {id:"d-sell", nm:"상품·가격 현황", ic:"gauge"},
-    {id:"s-plans", nm:"구독 요금제", ic:"credit-card"},
-    {id:"s-prod", nm:"단일 상품", ic:"package"},
-    {id:"n-promo", nm:"쿠폰·이벤트", ic:"ticket-percent"}
+    {nm:"상품 등록·관리", ic:"package", sub:[
+      {id:"s-plans", nm:"구독 요금제", ic:"credit-card"},
+      {id:"s-prod", nm:"단일 상품", ic:"box"}
+    ]},
+    {id:"n-promo", nm:"프로모션", ic:"ticket-percent"}
   ]},
   {g:"마케팅", items:[
     {id:"d-mkt", nm:"마케팅 현황", ic:"gauge"},
-    {id:"n-camp", nm:"캠페인·매체 성과", ic:"megaphone"},
-    {id:"n-land", nm:"랜딩·어트리뷰션", ic:"mouse-pointer-click"},
-    {id:"n-retention", nm:"리텐션 분석", ic:"repeat-2"},
-    {id:"s-seg", nm:"고객 세그먼트", ic:"pie-chart"},
-    {id:"s-push", nm:"알림 발송", ic:"send"},
-    {id:"s-notitype", nm:"알림 종류", ic:"bell"}
+    {nm:"퍼포먼스", ic:"megaphone", sub:[
+      {id:"n-camp", nm:"캠페인·매체 성과", ic:"radio"},
+      {id:"n-land", nm:"랜딩·어트리뷰션", ic:"mouse-pointer-click"}
+    ]},
+    {nm:"CRM", ic:"heart-handshake", sub:[
+      {id:"n-retention", nm:"리텐션 분석", ic:"repeat-2"},
+      {id:"s-seg", nm:"고객 세그먼트", ic:"pie-chart"},
+      {id:"s-push", nm:"알림", ic:"bell"}
+    ]}
   ]},
   {g:"프로덕트", items:[
     {id:"d-ux", nm:"프로덕트 현황", ic:"gauge"},
-    {id:"n-funnel", nm:"퍼널·이탈 분석", ic:"filter"},
-    {id:"s-rank", nm:"인기 점수", ic:"trending-up"},
-    {id:"s-stats", nm:"지표 정의", ic:"activity"},
-    {id:"s-home", nm:"홈 편성", ic:"home"},
-    {id:"s-find", nm:"검색·둘러보기", ic:"search"},
-    {id:"s-stat-find", nm:"검색 분석", ic:"search-code"},
-    {id:"s-tags", nm:"태그 체계", ic:"tags"},
-    {id:"s-concerns", nm:"고민", ic:"help-circle"},
-    {id:"s-tagmap", nm:"태깅 점검", ic:"list-checks", cnt:"5"},
+    {nm:"프로덕트 분석", ic:"line-chart", sub:[
+      {id:"s-rank", nm:"인기 점수", ic:"trending-up"},
+      {id:"n-funnel", nm:"퍼널·이탈 분석", ic:"filter"},
+      {id:"s-stats", nm:"지표 정의", ic:"activity"}
+    ]},
+    {nm:"앱·웹 화면관리", ic:"monitor-smartphone", sub:[
+      {id:"s-home", nm:"홈 편성", ic:"home"},
+      {id:"s-find", nm:"검색·둘러보기", ic:"search"},
+      {id:"s-stat-find", nm:"검색 분석", ic:"search-code"}
+    ]},
+    {nm:"분류", ic:"tags", sub:[
+      {id:"s-tags", nm:"태그 체계", ic:"tag"},
+      {id:"s-concerns", nm:"고민", ic:"help-circle"},
+      {id:"s-tagmap", nm:"태깅 점검", ic:"list-checks", cnt:"5"}
+    ]},
     {id:"s-onb", nm:"온보딩 구성", ic:"list-ordered"},
     {id:"s-guard", nm:"앱스토어 심사 대응", ic:"shield-check"}
   ]},
   {g:"AI솔루션", items:[
     {id:"d-ai", nm:"AI솔루션 현황", ic:"gauge"},
-    {id:"n-ai-stat", nm:"낙타AI 분석", ic:"chart-column"},
+    {id:"n-ai-stat", nm:"분석", ic:"chart-column"},
     {id:"s-ai", nm:"낙타AI 설정", ic:"message-circle"},
     {id:"s-ailog", nm:"대화 로그", ic:"scroll-text"}
   ]},
@@ -1632,16 +1655,19 @@ const NAV = [
     {id:"s-admin", nm:"운영자 권한", ic:"user-cog"},
     {id:"s-audit", nm:"활동 기록", ic:"history"},
     {id:"n-integr", nm:"외부 채널 연동", ic:"plug-zap"},
-    {id:"a-home", nm:"지시하기", ic:"bot"},
-    {id:"a-jobs", nm:"작업", ic:"list-todo", cnt:String(A_WAIT)},
-    {id:"a-job", nm:"작업 상세", ic:"file-search", hide:true},
-    {id:"a-recipes", nm:"자주 쓰는 지시", ic:"zap"},
-    {id:"a-rules", nm:"권한 규칙", ic:"lock"},
-    {id:"a-ctx", nm:"읽는 것", ic:"book-open"},
-    {id:"a-conn", nm:"CLI 연결", ic:"plug"},
+    {nm:"에이전트", ic:"bot", sub:[
+      {id:"a-home", nm:"지시하기", ic:"sparkle"},
+      {id:"a-jobs", nm:"작업", ic:"list-todo", cnt:String(A_WAIT)},
+      {id:"a-job", nm:"작업 상세", ic:"file-search", hide:true},
+      {id:"a-recipes", nm:"자주 쓰는 지시", ic:"zap"},
+      {id:"a-rules", nm:"권한 규칙", ic:"lock"},
+      {id:"a-ctx", nm:"읽는 것", ic:"book-open"},
+      {id:"a-conn", nm:"CLI 연결", ic:"plug"}
+    ]},
     {id:"s-open", nm:"정해야 할 것", ic:"clipboard-list", cnt:"61"}
   ]}
 ];
+
 </script>
 
 <style>
@@ -1893,9 +1919,8 @@ CMS.ready(function(){
 
   /* 묶음의 화면 목록은 메뉴에서 그대로 가져온다. 따로 적으면 금세 어긋난다 */
   function screensOf(id){
-    const g = NAV.filter(function(x){
-      return x.items.some(function(i){ return i.id === id; }); })[0];
-    return g ? g.items.filter(function(i){ return !i.hide && i.id !== id; }) : [];
+    const grp = (navOf(id) || {}).grp;
+    return FLAT.filter(function(i){ return i.grp === grp && !i.hide && i.id !== id; });
   }
 
   $$(".gd").forEach(function(box){
@@ -8942,15 +8967,23 @@ CMS.ready(function(){
 <section class="scr" id="s-push">
   <div class="ph">
     <div>
-      <h1>알림 발송</h1>
-      <p>회원에게 알림을 직접 써서 보내거나 예약합니다. 보낸 알림이 얼마나 열렸는지도 여기서 봅니다.</p>
+      <h1>알림</h1>
+      <p>회원에게 나가는 알림을 씁니다. 푸시는 지금 돌고, 알림톡과 이메일은 붙을 자리만 있습니다.</p>
     </div>
     <div class="ph-act">
-      <button class="btn" data-go="s-notitype"><i data-lucide="bell"></i>알림 종류</button>
       <button class="btn" data-go="s-seg"><i data-lucide="pie-chart"></i>세그먼트</button>
+      <button class="btn" data-go="n-retention"><i data-lucide="repeat-2"></i>리텐션 분석</button>
     </div>
   </div>
 
+  <div class="tabs scr-tabs" data-tabs="s-push">
+    <button data-tab="push" class="on">푸시</button>
+    <button data-tab="alim">알림톡</button>
+    <button data-tab="mail">이메일</button>
+    <button data-tab="kind">알림 종류<span class="cnt">6</span></button>
+  </div>
+
+  <div class="tabp on" data-tabp="push">
   <div class="grid g4" id="pu-kpi"></div>
 
   <div class="note warn" style="margin-top:14px">
@@ -9063,21 +9096,38 @@ CMS.ready(function(){
     <i data-lucide="plug-zap"></i>
     <span><b>푸시(FCM)는 아직 연결되지 않았습니다.</b> 알림함만 돕니다. 지금 보내는 알림은 앱 안의 알림함에만 쌓입니다.</span>
   </div>
-</section>
-
-<!-- ════════ 2. 알림 종류 ════════ -->
-<section class="scr" id="s-notitype">
-  <div class="ph">
-    <div>
-      <h1>알림 종류</h1>
-      <p>알림 여섯 가지의 문구 틀과 보내는 때를 정합니다. 사용자 화면의 알림 설정과 같은 묶음입니다.</p>
-    </div>
-    <div class="ph-act">
-      <button class="btn" data-go="s-push"><i data-lucide="send"></i>알림 발송</button>
-      <button class="btn pri" data-act="save"><i data-lucide="check"></i>저장</button>
-    </div>
   </div>
 
+  <div class="tabp" data-tabp="alim">
+  <div class="card">
+    <div class="card-bd">
+      <div class="empty">
+        <i data-lucide="message-square"></i>
+        <b>알림톡은 아직 붙이지 않았습니다</b>
+        <span>기능 정의 문서를 쓴 뒤에 붙입니다. 붙을 자리는 외부 채널 연동입니다.</span>
+        <button class="btn sm" data-go="n-integr">외부 채널 연동 열기</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="tabp" data-tabp="mail">
+  <div class="card">
+    <div class="card-bd">
+      <div class="empty">
+        <i data-lucide="mail"></i>
+        <b>이메일은 아직 붙이지 않았습니다</b>
+        <span>기능 정의 문서를 쓴 뒤에 붙입니다. 붙을 자리는 외부 채널 연동입니다.</span>
+        <button class="btn sm" data-go="n-integr">외부 채널 연동 열기</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="tabp" data-tabp="kind">
+    <div class="row" style="justify-content:flex-end;margin-bottom:12px">
+      <button class="btn pri" data-act="save"><i data-lucide="check"></i>저장</button>
+    </div>
   <div class="grid g-main">
     <div class="stack">
       <div class="card">
@@ -9111,7 +9161,9 @@ CMS.ready(function(){
       </div>
     </div>
   </div>
+  </div>
 </section>
+
 
 <!-- ════════ 3. 공지사항 ════════ -->
 <section class="scr" id="s-notice">
@@ -11452,7 +11504,7 @@ CMS.ready(function(){
   const LV = {"막힘":"danger", "곧":"warn", "나중":""};
   const KD = {"어긋남":"danger", "빠짐":"warn", "미정":"info"};
   const NM = {};
-  NAV.forEach(function(g){ g.items.forEach(function(i){ NM[i.id] = i.nm; }); });
+  FLAT.forEach(function(i){ NM[i.id] = i.nm; });
 
   $("#op-list").innerHTML = OPEN.map(function(o){
     return '<tr data-k="' + esc(o[0] + " " + o[1] + " " + o[3] + " " + o[4]) + '"' +
@@ -11858,7 +11910,7 @@ CMS.ready(function(){
 CMS.ready(function(){
   /* 화면 id 를 메뉴 이름으로 바꾸는 표. NAV 하나만 읽는다 */
   const SCR_NM = {};
-  NAV.forEach(function(g){ g.items.forEach(function(it){ SCR_NM[it.id] = it.nm; }); });
+  FLAT.forEach(function(it){ SCR_NM[it.id] = it.nm; });
 
   /* 내 차례인 것이 위로 오게 하는 순서. 사람이 손대야 하는 것 → 기다리면 되는 것 → 끝난 것 */
   const ORDER = ["review", "ask", "run", "fail", "done", "queue"];
@@ -12286,7 +12338,7 @@ CMS.ready(function(){
 CMS.ready(function(){
   /* 화면 id 를 메뉴 이름으로 바꾼다. 이름을 따로 적어 두면 메뉴가 바뀔 때 어긋난다 */
   const NM = {};
-  NAV.forEach(function(g){ g.items.forEach(function(i){ NM[i.id] = i.nm; }); });
+  FLAT.forEach(function(i){ NM[i.id] = i.nm; });
 
   /* ───────────── 자주 쓰는 지시 ───────────── */
   const DOW = ["일","월","화","수","목","금","토"];
@@ -12983,14 +13035,21 @@ CMS.ready(function(){
   <div class="ph">
     <div>
       <h1>1:1 컨설팅</h1>
-      <p>상담 상품의 소개, 상담 시간, 사전 질문지를 정합니다. 값은 단일 상품에서 정합니다.</p>
+      <p>파는 상담, 신청한 사람, 잡힌 일정을 한 화면에서 봅니다.</p>
     </div>
     <div class="ph-act">
-      <button class="btn" data-go="n-consult-apply"><i data-lucide="clipboard-list"></i>신청자</button>
+      <button class="btn" data-act="soon"><i data-lucide="download"></i>내보내기</button>
       <button class="btn pri" data-go="n-consult-edit"><i data-lucide="plus"></i>상담 상품 만들기</button>
     </div>
   </div>
 
+  <div class="tabs scr-tabs" data-tabs="n-consult">
+    <button data-tab="prod" class="on">상담 상품</button>
+    <button data-tab="apply">신청자<span class="cnt" id="ct-n-apply"></span></button>
+    <button data-tab="book">예약<span class="cnt" id="ct-n-book"></span></button>
+  </div>
+
+  <div class="tabp on" data-tabp="prod">
   <div class="grid g-main">
     <div class="stack">
       <div class="card">
@@ -13031,6 +13090,65 @@ CMS.ready(function(){
         지금은 일정을 손으로 잡고, 보낸 링크만 적어 둡니다.</span>
       </div>
     </div>
+  </div>
+  </div>
+
+  <div class="tabp" data-tabp="apply">
+  <div class="card">
+    <div class="toolbar" data-filter="ca-tbl" id="ca-tbl-filter">
+      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름이나 사업으로 찾기"></div>
+      <select class="sel" data-key="st">
+        <option value="">상태 전체</option>
+        <option value="new">새 신청</option>
+        <option value="pre">질문지 받음</option>
+        <option value="book">일정 잡음</option>
+        <option value="done">상담 끝</option>
+        <option value="no">불참</option>
+      </select>
+      <select class="sel" data-key="item">
+        <option value="">상담 전체</option>
+      </select>
+      <span class="sp muted"><b data-count>0</b>명</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="ca-tbl">
+        <thead><tr><th>신청자</th><th>사업</th><th>상담</th><th>받은 날</th><th>상태</th><th>일정</th><th></th></tr></thead>
+        <tbody id="ca-list"></tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  <div class="tabp" data-tabp="book">
+  <div class="grid g-main">
+    <div class="card">
+      <div class="card-hd"><div><h2>다가오는 일정</h2><p id="bk-sum"></p></div></div>
+      <div class="card-bd flush">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>때</th><th>신청자</th><th>상담</th><th>상태</th><th></th></tr></thead>
+            <tbody id="bk-list"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <div class="card-hd"><div><h2>받는 시간</h2><p>이 시간 안에서만 신청 칸이 열립니다</p></div></div>
+        <div class="card-bd">
+          <div class="swrow"><div class="tx"><b>화요일 10:00 ~ 18:00</b><span>60분씩 여덟 칸</span></div><button class="sw on" data-say="화요일"></button></div>
+          <div class="swrow"><div class="tx"><b>목요일 13:00 ~ 18:00</b><span>60분씩 다섯 칸</span></div><button class="sw on" data-say="목요일"></button></div>
+          <div class="swrow"><div class="tx"><b>토요일 10:00 ~ 13:00</b><span>60분씩 세 칸</span></div><button class="sw" data-say="토요일"></button></div>
+        </div>
+      </div>
+      <div class="note warn">
+        <i data-lucide="video"></i>
+        <span><b>줌 자동 예약과 캘린더 연동은 기능 정의 뒤에 붙입니다.</b>
+        붙는 자리는 <button class="btn sm" data-go="n-integr">외부 채널 연동</button> 입니다.</span>
+      </div>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -13080,43 +13198,6 @@ CMS.ready(function(){
       <div class="card-hd"><div><h2>받을 질문</h2><p>신청 칸에 그대로 나갑니다</p></div></div>
       <div class="card-bd flush"><div class="list" id="ce-pre"></div></div>
       <div class="card-ft"><button class="btn sm" data-act="soon"><i data-lucide="plus"></i>물음 더하기</button></div>
-    </div>
-  </div>
-</section>
-
-<section class="scr" id="n-consult-apply">
-  <div class="ph">
-    <div>
-      <h1>컨설팅 신청자</h1>
-      <p>신청한 사람의 목록입니다. 한 줄을 누르면 사전 질문지에 적은 것이 한 장에 열립니다.</p>
-    </div>
-    <div class="ph-act">
-      <button class="btn" data-go="n-consult-book"><i data-lucide="calendar-clock"></i>예약 일정</button>
-      <button class="btn" data-act="soon"><i data-lucide="download"></i>내보내기</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="toolbar" data-filter="ca-tbl">
-      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름이나 사업으로 찾기"></div>
-      <select class="sel" data-key="st">
-        <option value="">상태 전체</option>
-        <option value="new">새 신청</option>
-        <option value="pre">질문지 받음</option>
-        <option value="book">일정 잡음</option>
-        <option value="done">상담 끝</option>
-        <option value="no">불참</option>
-      </select>
-      <select class="sel" data-key="item">
-        <option value="">상담 전체</option>
-      </select>
-      <span class="sp muted"><b data-count>0</b>명</span>
-    </div>
-    <div class="tbl-wrap">
-      <table class="tbl" id="ca-tbl">
-        <thead><tr><th>신청자</th><th>사업</th><th>상담</th><th>받은 날</th><th>상태</th><th>일정</th><th></th></tr></thead>
-        <tbody id="ca-list"></tbody>
-      </table>
     </div>
   </div>
 </section>
@@ -13171,49 +13252,6 @@ CMS.ready(function(){
   </div>
 </section>
 
-<section class="scr" id="n-consult-book">
-  <div class="ph">
-    <div>
-      <h1>컨설팅 예약</h1>
-      <p>잡힌 일정만 모아 봅니다. 확정, 완료, 불참을 여기서 바꿉니다.</p>
-    </div>
-    <div class="ph-act">
-      <button class="btn" data-go="n-consult-apply"><i data-lucide="clipboard-list"></i>신청자</button>
-      <button class="btn pri" data-act="soon"><i data-lucide="plus"></i>일정 잡기</button>
-    </div>
-  </div>
-
-  <div class="grid g-main">
-    <div class="card">
-      <div class="card-hd"><div><h2>다가오는 일정</h2><p id="bk-sum"></p></div></div>
-      <div class="card-bd flush">
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>때</th><th>신청자</th><th>상담</th><th>상태</th><th></th></tr></thead>
-            <tbody id="bk-list"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="stack">
-      <div class="card">
-        <div class="card-hd"><div><h2>받는 시간</h2><p>이 시간 안에서만 신청 칸이 열립니다</p></div></div>
-        <div class="card-bd">
-          <div class="swrow"><div class="tx"><b>화요일 10:00 ~ 18:00</b><span>60분씩 여덟 칸</span></div><button class="sw on" data-say="화요일"></button></div>
-          <div class="swrow"><div class="tx"><b>목요일 13:00 ~ 18:00</b><span>60분씩 다섯 칸</span></div><button class="sw on" data-say="목요일"></button></div>
-          <div class="swrow"><div class="tx"><b>토요일 10:00 ~ 13:00</b><span>60분씩 세 칸</span></div><button class="sw" data-say="토요일"></button></div>
-        </div>
-      </div>
-      <div class="note warn">
-        <i data-lucide="video"></i>
-        <span><b>줌 자동 예약과 캘린더 연동은 기능 정의 뒤에 붙입니다.</b>
-        붙는 자리는 <button class="btn sm" data-go="n-integr">외부 채널 연동</button> 입니다.</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <script>
 CMS.ready(function(){
   const CNM = {}; CONSULTS.forEach(function(c){ CNM[c.id] = c.nm; });
@@ -13255,7 +13293,7 @@ CMS.ready(function(){
     }).join("") || '<div class="empty"><i data-lucide="inbox"></i><b>기다리는 신청이 없습니다</b></div>';
 
   /* ── 신청자 목록 ── */
-  $("#n-consult-apply select[data-key=item]").innerHTML =
+  $("#ca-tbl-filter select[data-key=item]").innerHTML =
     '<option value="">상담 전체</option>' + CONSULTS.map(function(c){
       return '<option value="' + c.id + '">' + esc(c.nm) + "</option>"; }).join("");
 
@@ -13322,6 +13360,9 @@ CMS.ready(function(){
       '<td><div class="rowact"><button class="btn sm" data-ca="' + c.id + '">신청자 보기</button></div></td></tr>';
   }).join("");
 
+  $("#ct-n-apply").textContent = CAPPLY.length;
+  $("#ct-n-book").textContent = booked.filter(function(c){ return c.st === "book"; }).length;
+
   icons();
 });
 </script>
@@ -13346,14 +13387,20 @@ CMS.ready(function(){
   <div class="ph">
     <div>
       <h1>브랜드 콘텐츠 가이드</h1>
-      <p>고객의 사업과 인스타그램을 보고 콘텐츠 가이드라인을 문서로 써서 보냅니다. 여기서는 무엇을 파는지와 어떤 차례로 만드는지를 정합니다.</p>
+      <p>고객의 사업과 인스타그램을 보고 콘텐츠 가이드라인을 문서로 써서 보냅니다.</p>
     </div>
     <div class="ph-act">
-      <button class="btn" data-go="n-guide-apply"><i data-lucide="clipboard-check"></i>신청자</button>
+      <button class="btn" data-go="n-file"><i data-lucide="folder-open"></i>보낸 문서</button>
       <button class="btn pri" data-go="n-guide-edit"><i data-lucide="plus"></i>가이드 만들기</button>
     </div>
   </div>
 
+  <div class="tabs scr-tabs" data-tabs="n-guides">
+    <button data-tab="prod" class="on">파는 가이드</button>
+    <button data-tab="apply">신청자<span class="cnt" id="ct-g-apply"></span></button>
+  </div>
+
+  <div class="tabp on" data-tabp="prod">
   <div class="grid g-main">
     <div class="stack">
       <div class="card">
@@ -13385,6 +13432,30 @@ CMS.ready(function(){
         <div class="card-ft"><button class="btn sm" data-act="soon"><i data-lucide="plus"></i>볼 자리 더하기</button></div>
       </div>
     </div>
+  </div>
+  </div>
+
+  <div class="tabp" data-tabp="apply">
+  <div class="card">
+    <div class="toolbar" data-filter="ga-tbl">
+      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름, 사업, 계정으로 찾기"></div>
+      <select class="sel" data-key="st">
+        <option value="">상태 전체</option>
+        <option value="new">접수</option><option value="look">분석 중</option>
+        <option value="write">작성 중</option><option value="sent">보냄</option><option value="hold">멈춤</option>
+      </select>
+      <select class="sel" data-key="who">
+        <option value="">맡은 사람 전체</option><option>낙타</option><option>솔이</option>
+      </select>
+      <span class="sp muted"><b data-count>0</b>명</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="ga-tbl">
+        <thead><tr><th>신청자</th><th>사업</th><th>계정</th><th>받은 날</th><th>보낼 날</th><th>맡은 사람</th><th>상태</th><th></th></tr></thead>
+        <tbody id="ga-list"></tbody>
+      </table>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -13432,40 +13503,6 @@ CMS.ready(function(){
         <span>값과 랜딩은 <b>단일 상품</b> 에서 정합니다.
         <button class="btn sm" data-go="s-prod">단일 상품 열기</button></span>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="scr" id="n-guide-apply">
-  <div class="ph">
-    <div>
-      <h1>가이드 신청자</h1>
-      <p>신청한 사람과 지금 어디까지 왔는지입니다. 한 줄을 누르면 그 사람의 계정과 분석이 한 장에 열립니다.</p>
-    </div>
-    <div class="ph-act">
-      <button class="btn" data-go="n-file"><i data-lucide="folder-open"></i>보낸 문서</button>
-      <button class="btn" data-act="soon"><i data-lucide="download"></i>내보내기</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="toolbar" data-filter="ga-tbl">
-      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름, 사업, 계정으로 찾기"></div>
-      <select class="sel" data-key="st">
-        <option value="">상태 전체</option>
-        <option value="new">접수</option><option value="look">분석 중</option>
-        <option value="write">작성 중</option><option value="sent">보냄</option><option value="hold">멈춤</option>
-      </select>
-      <select class="sel" data-key="who">
-        <option value="">맡은 사람 전체</option><option>낙타</option><option>솔이</option>
-      </select>
-      <span class="sp muted"><b data-count>0</b>명</span>
-    </div>
-    <div class="tbl-wrap">
-      <table class="tbl" id="ga-tbl">
-        <thead><tr><th>신청자</th><th>사업</th><th>계정</th><th>받은 날</th><th>보낼 날</th><th>맡은 사람</th><th>상태</th><th></th></tr></thead>
-        <tbody id="ga-list"></tbody>
-      </table>
     </div>
   </div>
 </section>
@@ -13646,6 +13683,8 @@ CMS.ready(function(){
     toast("문서를 보냈어요. 신청자에게 알림이 나갑니다");
   });
   openGa(GAPPLY[0].id);
+
+  $("#ct-g-apply").textContent = GAPPLY.length;
 
   icons();
 });
@@ -14498,7 +14537,7 @@ CMS.ready(function(){
 
   function nameOf(id){
     let nm = id;
-    NAV.forEach(function(g){ g.items.forEach(function(i){ if(i.id === id) nm = i.nm; }); });
+    FLAT.forEach(function(i){ if(i.id === id) nm = i.nm; });
     return nm;
   }
 
@@ -14627,10 +14666,12 @@ CMS.ready(function(){
       });
     }
     const sc = [];
-    NAV.forEach(function(g){ g.items.forEach(function(i){
+    FLAT.forEach(function(i){
       if(i.hide) return;
-      if(!q || (i.nm + " " + (g.g || "")).toLowerCase().indexOf(lq) >= 0) sc.push({g:g.g || "운영", i:i});
-    }); });
+      const path = i.grp + (i.up ? " " + i.up : "");
+      if(!q || (i.nm + " " + path).toLowerCase().indexOf(lq) >= 0)
+        sc.push({g:i.up ? i.grp + " · " + i.up : i.grp, i:i});
+    });
     if(sc.length){
       h += "<em>화면 이동</em>";
       sc.slice(0, 8).forEach(function(o){
@@ -14691,45 +14732,99 @@ CMS.ready(function(){
    왼쪽 기둥과 아래 목록이 같은 NAV 하나를 읽는다. 둘로 적으면 금세 어긋난다.
    주소의 # 에 화면 id 를 남긴다 — 리건이 링크로 한 화면을 바로 열 수 있어야 한다. */
 const FLAT = [];
-NAV.forEach(function(g){ g.items.forEach(function(it){ it.grp = g.g || "운영"; FLAT.push(it); }); });
+NAV.forEach(function(g){
+  g.items.forEach(function(it){
+    if(it.sub){
+      it.sub.forEach(function(s){ s.grp = g.g || "운영"; s.up = it.nm; FLAT.push(s); });
+      return;
+    }
+    it.grp = g.g || "운영";
+    FLAT.push(it);
+  });
+});
 function navOf(id){ return FLAT.filter(function(i){ return i.id === id; })[0]; }
+
+/* 한 화면 안의 탭으로 들어간 것들.
+   메뉴에는 줄이 없지만 다른 화면이 이 이름으로 부를 수 있어야 한다. */
+const TABOF = {
+  "n-consult-apply": ["n-consult", "apply"],
+  "n-consult-book":  ["n-consult", "book"],
+  "n-guide-apply":   ["n-guides", "apply"],
+  "s-notitype":      ["s-push", "kind"]
+};
+function openTab(host, key){
+  const bar = document.querySelector('[data-tabs="' + host + '"]');
+  if(!bar) return;
+  const b = bar.querySelector('button[data-tab="' + key + '"]');
+  if(b) b.click();
+}
 
 let current = "";
 
 function go(id){
+  const tb = TABOF[id];
+  if(tb){ go(tb[0]); openTab(tb[0], tb[1]); return; }
   if(!document.getElementById(id)){ toast("아직 없는 화면입니다: " + id, true); return; }
   if(id === current) return;
   closeAllOverlays();
   document.querySelectorAll(".scr").forEach(function(s){ s.classList.toggle("active", s.id === id); });
   current = id;
   const it = navOf(id) || {nm:id, grp:"운영"};
-  document.getElementById("crumb-g").textContent = it.grp;
+  document.getElementById("crumb-g").textContent = it.grp + (it.up ? " · " + it.up : "");
   document.getElementById("crumb-n").textContent = it.nm;
   document.title = "COMMEL CMS · " + it.nm;
   /* 켜진 자리 표시 — 상세 화면은 목록에 없으니 그 윗자리를 켠다 */
   const lit = it.hide ? (navOf(id.replace(/-edit$/, "").replace(/^s-user$/, "s-users")
-    .replace(/-user$/, "-apply").replace(/^a-job$/, "a-jobs")) || it) : it;
+    .replace(/^n-consult-user$/, "n-consult").replace(/^n-guide-user$/, "n-guides")
+    .replace(/^a-job$/, "a-jobs")) || it) : it;
   document.querySelectorAll(".side-item").forEach(function(b){ b.classList.toggle("on", b.dataset.id === lit.id); });
+  /* 그 화면이 든 서랍을 편다 */
+  if(lit.up){
+    const f = document.querySelector('.side-fold[data-up="' + lit.up + '"]');
+    if(f && !f.classList.contains("open")) f.click();
+  }
+  document.querySelectorAll(".side-fold").forEach(function(f){
+    f.classList.toggle("half", f.dataset.up === lit.up);
+  });
   document.querySelectorAll("#jump-l button").forEach(function(b){ b.classList.toggle("on", b.dataset.id === id); });
   if(location.hash.slice(1) !== id) history.replaceState(null, "", "#" + id);
   const w = document.getElementById("work"); if(w) w.scrollTop = 0;
   wire(document.getElementById(id));
 }
 
-/* ── 왼쪽 기둥 ── */
+/* ── 왼쪽 기둥 ──
+   1층은 묶음, 2층은 서랍이다. 서랍은 눌러서 편다. */
 (function(){
   const box = document.getElementById("navbox");
+  function btn(it){
+    const b = el('<button class="side-item" data-id="' + it.id + '">' +
+      '<i data-lucide="' + it.ic + '"></i><span>' + esc(it.nm) + "</span>" +
+      (it.cnt ? '<span class="cnt">' + it.cnt + "</span>" : "") + "</button>");
+    b.addEventListener("click", function(){ go(it.id); });
+    return b;
+  }
   NAV.forEach(function(g){
     const d = document.createElement("div");
     d.className = "side-grp";
     if(g.g) d.innerHTML = "<em>" + esc(g.g) + "</em>";
     g.items.forEach(function(it){
+      if(it.sub){
+        const open = el('<button class="side-item side-fold" data-up="' + esc(it.nm) + '">' +
+          '<i data-lucide="' + it.ic + '"></i><span>' + esc(it.nm) + "</span>" +
+          '<i class="caret" data-lucide="chevron-down"></i></button>');
+        const wrap = document.createElement("div");
+        wrap.className = "side-sub";
+        it.sub.forEach(function(s){ if(!s.hide) wrap.appendChild(btn(s)); });
+        open.addEventListener("click", function(){
+          open.classList.toggle("open");
+          wrap.classList.toggle("open");
+        });
+        d.appendChild(open);
+        d.appendChild(wrap);
+        return;
+      }
       if(it.hide) return;
-      const b = el('<button class="side-item" data-id="' + it.id + '">' +
-        '<i data-lucide="' + it.ic + '"></i><span>' + esc(it.nm) + "</span>" +
-        (it.cnt ? '<span class="cnt">' + it.cnt + "</span>" : "") + "</button>");
-      b.addEventListener("click", function(){ go(it.id); });
-      d.appendChild(b);
+      d.appendChild(btn(it));
     });
     box.appendChild(d);
   });
@@ -14743,9 +14838,12 @@ function go(id){
     em.textContent = g.g || "시작";
     l.appendChild(em);
     g.items.forEach(function(it){
-      const b = el('<button data-id="' + it.id + '">' + esc(it.nm) + "</button>");
-      b.addEventListener("click", function(){ go(it.id); });
-      l.appendChild(b);
+      (it.sub || [it]).forEach(function(s){
+        const b = el('<button data-id="' + s.id + '">' +
+          esc(it.sub ? it.nm + " · " + s.nm : s.nm) + "</button>");
+        b.addEventListener("click", function(){ go(s.id); });
+        l.appendChild(b);
+      });
     });
   });
   document.getElementById("jump-t").addEventListener("click", function(){
