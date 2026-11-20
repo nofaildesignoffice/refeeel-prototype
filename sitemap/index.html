@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>COMMEL CMS 사이트맵 다시 짜기</title>
 <meta name="description" content="COMMEL 관리자 도구의 사이트맵 다섯 가지. 블록을 끌어 옮겨 직접 고쳐 본다.">
 <style>
@@ -48,6 +48,7 @@ header{background:var(--white);border-bottom:1px solid var(--line);}
 .lead li:before{content:"";position:absolute;left:3px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--muted);}
 .lead li.good:before{background:var(--ok);} .lead li.bad:before{background:var(--danger);}
 .lead .lb{font-size:11px;font-weight:800;color:var(--light);letter-spacing:0.3px;}
+.lead .lb .cr{display:none;margin-left:5px;}
 
 /* ── 셈 ── */
 .counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
@@ -84,6 +85,9 @@ header{background:var(--white);border-bottom:1px solid var(--line);}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .col-hd .n{font-size:11px;font-weight:800;color:var(--gray);background:var(--white);
   border:1px solid var(--line);border-radius:var(--r-f);padding:1px 7px;flex-shrink:0;}
+.col-hd .fd{display:none;width:12px;flex-shrink:0;font-size:10px;color:var(--gray);text-align:center;}
+.col-hd .ren{display:none;border:0;background:none;color:var(--muted);font-size:13px;line-height:1;padding:3px 6px;}
+.col-hd .ren:hover{color:var(--ink);}
 .col-hd .x{border:0;background:none;color:var(--muted);font-size:15px;line-height:1;padding:2px 3px;}
 .col-hd .x:hover{color:var(--danger);}
 .col-bd{padding:8px;}
@@ -153,12 +157,71 @@ textarea.out{width:100%;height:320px;border:1px solid var(--line);border-radius:
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:7px;align-items:center;}
 .toast{background:var(--ink);color:var(--white);font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:var(--r-f);}
 
+/* ── 옮길 곳 고르는 줄. 좁은 화면에서만 뜬다 ── */
+.mv{display:none;position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--white);
+  border-top:1px solid var(--line2);box-shadow:0 -6px 18px rgba(17,17,17,.10);
+  padding:9px 12px;padding-bottom:calc(9px + env(safe-area-inset-bottom));}
+.mv .mvt{display:flex;align-items:center;gap:7px;font-size:12.5px;}
+.mv .mvt b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv .mvt span{color:var(--gray);flex-shrink:0;}
+.mv .mvt .cx{margin-left:auto;flex-shrink:0;}
+.mv .chips{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+.mv .chips button{flex-shrink:0;height:38px;padding:0 14px;border:1px solid var(--line2);background:var(--white);
+  border-radius:var(--r-f);font-size:12.5px;font-weight:700;white-space:nowrap;}
+.mv .chips button.here{border-color:var(--ink);background:var(--brand-soft);}
+.mob{display:none;}
+
 .foot{margin-top:26px;font-size:11.5px;color:var(--light);}
 @media (max-width:720px){
-  .lead{grid-template-columns:1fr;}
+  /* 손가락으로 쓰는 화면. 누를 곳을 키우고, 묶음은 접어서 한눈에 본다 */
+  button,.blk,.col-hd,.zone{touch-action:manipulation;}
+  .lead{grid-template-columns:1fr;gap:10px;padding:13px 14px;}
+  .lead .one{font-size:14.5px;}
+  .lead .pros{border-top:1px solid var(--line);padding-top:9px;}
+  .lead .pros .lb{display:flex;align-items:center;color:var(--gray);font-size:12px;padding:3px 0;}
+  .lead .pros .lb .cr{display:inline;margin-left:auto;}
+  .lead:not(.open) .pros ul{display:none;}
+  .lead.open .pros .lb .cr{transform:rotate(180deg);}
   .hd h1{font-size:17px;}
-  .wrap{padding:0 16px 60px;}
-  .hd{padding:16px 16px 0;}
+  .hd .sub{font-size:12.5px;}
+  .wrap{padding:0 14px 60px;}
+  .hd{padding:14px 14px 0;}
+  .tabs{gap:5px;margin:13px -14px 0;padding:0 14px 1px;-webkit-overflow-scrolling:touch;}
+  .tabs button{padding:11px 14px;}
+  .counts{gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-left:-14px;margin-right:-14px;padding:0 14px 2px;}
+  .cnt{flex-shrink:0;padding:7px 10px;font-size:12px;}
+  .bar{gap:6px;margin:12px 0 10px;}
+  .bar .btn{height:42px;flex:1 1 calc(33.333% - 4px);justify-content:center;font-size:12.5px;padding:0 6px;}
+  .bar .btn.mob{display:inline-flex;}
+  .bar #b-fold{order:1;} .bar #b-desc{order:2;} .bar #b-out{order:3;}
+  .bar #b-add{order:4;} .bar #b-reset{order:5;}
+  .hint{display:none;}
+  .hd .sub .wide{display:none;}
+  .col-hd .fd{font-size:11px;color:var(--ink);}
+  .board{column-width:auto;columns:1;}
+  .col{margin-bottom:10px;}
+  .col-hd{padding:13px 12px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+  .col-hd .gp{display:none;}
+  .col-hd .fd{display:block;}
+  .col-hd .ren{display:block;font-size:15px;padding:6px 8px;}
+  .col-hd .x{font-size:19px;padding:4px 7px;}
+  .col-hd h3{font-size:14px;}
+  .col.fold .col-hd{border-bottom:0;}
+  .col.fold .col-bd{display:none;}
+  .col-bd{padding:9px;}
+  .blk{padding:11px 10px;margin-bottom:6px;-webkit-user-select:none;user-select:none;}
+  .blk .nm{font-size:13px;}
+  .blk .d{font-size:12px;}
+  .park .zone{grid-template-columns:1fr;}
+  .ways{grid-template-columns:1fr;}
+  .modal{padding:0;align-items:flex-end;}
+  .modal .pnl{max-width:none;border-radius:var(--r) var(--r) 0 0;max-height:88vh;max-height:88dvh;}
+  .modal .pf .btn{height:42px;}
+  textarea.out{height:44vh;font-size:12px;}
+  .inp{height:44px;font-size:16px;}
+  .mv.on{display:block;}
+  body.picking{padding-bottom:108px;}
+  #toasts{top:14px;bottom:auto;}
 }
 </style>
 </head>
@@ -167,8 +230,8 @@ textarea.out{width:100%;height:320px;border:1px solid var(--line);border-radius:
 <header>
   <div class="hd">
     <h1>COMMEL CMS 사이트맵 다시 짜기</h1>
-    <p class="sub">지금 묶음 13개를 다시 묶은 다섯 가지입니다. 블록을 끌어 다른 묶음으로 옮기면 아래 "길" 의 숫자가 바로 다시 셈됩니다.
-      고친 것은 이 브라우저에만 남습니다.</p>
+    <p class="sub">지금 묶음 13개를 다시 묶은 다섯 가지입니다. 블록을 누르면 아래에 옮길 곳이 뜨고, 옮기면 "길" 의 숫자가 바로 다시 셈됩니다.
+      <span class="wide">넓은 화면에서는 블록을 끌어서도 옮깁니다. 고친 것은 이 브라우저에만 남습니다.</span></p>
     <div class="tabs" id="tabs"></div>
   </div>
 </header>
@@ -180,6 +243,7 @@ textarea.out{width:100%;height:320px;border:1px solid var(--line);border-radius:
   <div class="bar">
     <button class="btn" id="b-add">묶음 더하기</button>
     <button class="btn" id="b-desc">설명 보기</button>
+    <button class="btn mob" id="b-fold">모두 펴기</button>
     <button class="btn" id="b-reset">처음으로</button>
     <button class="btn pri" id="b-out">내보내기</button>
     <span class="hint" id="hint">블록을 끌어 옮깁니다. 손가락으로 볼 때는 블록을 누른 뒤 옮길 자리를 누릅니다.</span>
@@ -220,6 +284,8 @@ textarea.out{width:100%;height:320px;border:1px solid var(--line);border-radius:
     <div class="pf"><button class="btn" data-close>취소</button><button class="btn pri" id="nm-ok">저장</button></div>
   </div>
 </div>
+
+<div class="mv" id="mv"></div>
 
 <div id="toasts"></div>
 
@@ -471,6 +537,10 @@ let cur = 2;            /* 권하는 안부터 연다 */
 let board = null;       /* 지금 보고 있는 안의 묶음들 */
 let park = [];          /* 보관함 */
 let picked = null;      /* 손가락으로 옮길 때 고른 블록 */
+let fold = {};          /* 접어 둔 묶음. 이름으로 센다 */
+
+function isMob(){ return window.matchMedia("(max-width:720px)").matches; }
+function foldAll(v){ fold = {}; if(v) board.forEach(function(g){ fold[g.nm] = true; }); }
 
 function store(){
   try {
@@ -524,11 +594,13 @@ function draw(){
   $("#tabs").innerHTML = PLANS.map(function(x, i){
     return '<button data-i="' + i + '"' + (i === cur ? ' class="on"' : (i === 0 ? ' class="base"' : "")) + ">" +
       esc(x.nm) + "</button>"; }).join("");
+  const onTab = $("#tabs .on");
+  if(onTab) $("#tabs").scrollLeft = Math.max(0, onTab.offsetLeft - 14);
 
   $("#lead").innerHTML =
     '<div><div class="lb">이 안의 기준</div><div class="one">' + esc(p.one) + "</div>" +
     '<div class="why">' + esc(p.why) + "</div></div>" +
-    "<div><div class=\"lb\">좋은 점과 위험한 점</div><ul>" +
+    "<div class=\"pros\"><div class=\"lb\" data-lead>좋은 점과 위험한 점<span class=\"cr\">&#9662;</span></div><ul>" +
     p.good.map(function(t){ return '<li class="good">' + esc(t) + "</li>"; }).join("") +
     p.bad.map(function(t){ return '<li class="bad">' + esc(t) + "</li>"; }).join("") + "</ul></div>";
 
@@ -544,9 +616,12 @@ function draw(){
     cntHtml(diff, "처음 안에서 옮긴 블록", diff ? "" : "");
 
   $("#board").innerHTML = board.map(function(g, gi){
-    return '<div class="col" data-g="' + gi + '" draggable="true">' +
-      '<div class="col-hd"><span class="gp"></span><h3 data-rn="' + gi + '">' + esc(g.nm) + "</h3>" +
+    const fo = !!fold[g.nm];
+    return '<div class="col' + (fo ? " fold" : "") + '" data-g="' + gi + '" draggable="true">' +
+      '<div class="col-hd"><span class="gp"></span><span class="fd">' + (fo ? "&#9656;" : "&#9662;") + "</span>" +
+      '<h3 data-rn="' + gi + '">' + esc(g.nm) + "</h3>" +
       '<span class="n">' + cnt(g) + "</span>" +
+      '<button class="ren" data-ren="' + gi + '" title="이름 고치기">&#9998;</button>' +
       '<button class="x" data-del="' + gi + '" title="묶음 지우기">&times;</button></div>' +
       '<div class="col-bd">' + g.subs.map(function(s, si){
         return '<div class="sub">' + (s.nm ? '<div class="sub-nm" data-rs="' + gi + "." + si + '">' + esc(s.nm) + "</div>" : "") +
@@ -577,6 +652,30 @@ function draw(){
       (miss ? "셀 수 없음 (보관함에 있는 화면이 있습니다)" : jumps + "번") + "</div>" +
       '<div class="steps">' + steps + "</div></div>";
   }).join("");
+
+  drawMove();
+  const fb = $("#b-fold");
+  if(fb) fb.textContent = board.some(function(g){ return fold[g.nm]; }) ? "모두 펴기" : "모두 접기";
+}
+
+/* 고른 블록을 어디로 보낼지 고르는 줄. 좁은 화면에서만 보인다 */
+function drawMove(){
+  const mv = $("#mv");
+  document.body.classList.toggle("picking", !!picked);
+  if(!picked || !SC[picked]){ mv.classList.remove("on"); mv.innerHTML = ""; return; }
+  const here = groupOf(picked);
+  let chips = "";
+  board.forEach(function(g, gi){
+    g.subs.forEach(function(s, si){
+      chips += '<button data-mv="' + gi + "." + si + '"' + (g.nm === here ? ' class="here"' : "") + ">" +
+        esc(s.nm ? g.nm + " · " + s.nm : g.nm) + "</button>";
+    });
+  });
+  chips += '<button data-mv="-1.0">보관함</button>';
+  mv.innerHTML = '<div class="mvt"><b>' + esc(SC[picked].nm) + "</b><span>을 옮길 곳</span>" +
+    '<button class="btn sm ghost cx" id="mv-x">그만</button></div>' +
+    '<div class="chips">' + chips + "</div>";
+  mv.classList.add("on");
 }
 function cnt(g){ return g.subs.reduce(function(n, s){ return n + s.items.length; }, 0); }
 function cntHtml(n, lb, cls){
@@ -653,6 +752,38 @@ document.addEventListener("drop", function(e){
 
 /* 손가락으로 옮기기. 블록을 누르고 자리를 누른다 */
 document.addEventListener("click", function(e){
+  /* 옮길 곳 고르는 줄 */
+  const mvb = e.target.closest("[data-mv]");
+  if(mvb && picked){
+    const p = mvb.dataset.mv.split(".");
+    const gi = +p[0], si = +p[1];
+    const nm = gi < 0 ? "보관함" : board[gi].nm;
+    const id = picked;
+    if(gi >= 0) fold[board[gi].nm] = false;
+    picked = null;
+    put(id, gi, si, null);
+    toast(nm + "(으)로 옮겼어요");
+    const moved = $('.blk[data-id="' + id + '"]');
+    if(moved) moved.scrollIntoView({block:"center", behavior:"smooth"});
+    return;
+  }
+  if(e.target.closest("#mv-x")){ picked = null; draw(); return; }
+
+  /* 좁은 화면에서 좋은 점 목록 펴기 */
+  if(e.target.closest("[data-lead]")){ $("#lead").classList.toggle("open"); return; }
+
+  /* 묶음 이름 고치기 단추 */
+  const ren = e.target.closest("[data-ren]");
+  if(ren){ openName("g", ren.dataset.ren, board[+ren.dataset.ren].nm); return; }
+
+  /* 좁은 화면에서는 묶음 머리를 누르면 접고 편다 */
+  const hd = e.target.closest(".col-hd");
+  if(hd && isMob() && !e.target.closest("[data-del]")){
+    const g = board[+hd.parentNode.dataset.g];
+    if(g){ fold[g.nm] = !fold[g.nm]; draw(); }
+    return;
+  }
+
   const b = e.target.closest(".blk");
   if(b){
     picked = picked === b.dataset.id ? null : b.dataset.id;
@@ -668,7 +799,7 @@ document.addEventListener("click", function(e){
     return;
   }
   const t = e.target.closest("#tabs button");
-  if(t){ cur = +t.dataset.i; picked = null; load(cur); draw(); window.scrollTo(0, 0); return; }
+  if(t){ cur = +t.dataset.i; picked = null; load(cur); foldAll(isMob()); draw(); window.scrollTo(0, 0); return; }
   const d = e.target.closest("[data-del]");
   if(d){
     const gi = +d.dataset.del;
@@ -719,6 +850,10 @@ $("#b-desc").addEventListener("click", function(){
   document.body.classList.toggle("desc");
   this.textContent = document.body.classList.contains("desc") ? "설명 감추기" : "설명 보기";
 });
+$("#b-fold").addEventListener("click", function(){
+  foldAll(!board.some(function(g){ return fold[g.nm]; }));
+  draw();
+});
 $("#b-reset").addEventListener("click", function(){
   reset(cur); store(); draw();
   toast("처음 안으로 되돌렸어요");
@@ -763,6 +898,7 @@ document.addEventListener("keydown", function(e){
 });
 
 load(cur);
+foldAll(isMob());
 draw();
 </script>
 </body>
