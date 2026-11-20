@@ -539,7 +539,9 @@ let park = [];          /* 보관함 */
 let picked = null;      /* 손가락으로 옮길 때 고른 블록 */
 let fold = {};          /* 접어 둔 묶음. 이름으로 센다 */
 
-function isMob(){ return window.matchMedia("(max-width:720px)").matches; }
+const MQ = window.matchMedia("(max-width:720px)");
+function isMob(){ return MQ.matches; }
+let touched = false;   /* 리건이 직접 접거나 편 뒤에는 건드리지 않는다 */
 function foldAll(v){ fold = {}; if(v) board.forEach(function(g){ fold[g.nm] = true; }); }
 
 function store(){
@@ -779,6 +781,7 @@ document.addEventListener("click", function(e){
   /* 좁은 화면에서는 묶음 머리를 누르면 접고 편다 */
   const hd = e.target.closest(".col-hd");
   if(hd && isMob() && !e.target.closest("[data-del]")){
+    touched = true;
     const g = board[+hd.parentNode.dataset.g];
     if(g){ fold[g.nm] = !fold[g.nm]; draw(); }
     return;
@@ -851,6 +854,7 @@ $("#b-desc").addEventListener("click", function(){
   this.textContent = document.body.classList.contains("desc") ? "설명 감추기" : "설명 보기";
 });
 $("#b-fold").addEventListener("click", function(){
+  touched = true;
   foldAll(!board.some(function(g){ return fold[g.nm]; }));
   draw();
 });
@@ -897,9 +901,14 @@ document.addEventListener("keydown", function(e){
     if(picked){ picked = null; draw(); } }
 });
 
+/* 창이 넓어지거나 좁아지면 접힘을 다시 정한다. 리건이 직접 접은 뒤에는 그대로 둔다 */
+function foldDefault(){ if(touched) return; foldAll(isMob()); draw(); }
+if(MQ.addEventListener) MQ.addEventListener("change", foldDefault);
+else if(MQ.addListener) MQ.addListener(foldDefault);
+window.addEventListener("load", foldDefault);
+
 load(cur);
-foldAll(isMob());
-draw();
+foldDefault();
 </script>
 </body>
 </html>

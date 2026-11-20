@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>코멜 CMS 사이트맵 정리안</title>
+<meta name="description" content="리건이 노션에 정리한 묶음 열 개를 그대로 두고, 자리가 없던 화면과 아직 없는 화면을 채운 사이트맵.">
+<style>
+:root{
+  --brand:#DFF000; --brand-soft:#FAFFD6;
+  --ink:#111111; --gray:#6B6B6B; --light:#9A9A9A; --muted:#BDBDBD;
+  --bg:#F4F4F2; --white:#FFFFFF; --soft:#FAFAF8;
+  --line:#E6E6E2; --line2:#D6D6D0;
+  --ok:#1B7F4B; --ok-soft:#E8F6EE;
+  --warn:#9A6B00; --warn-soft:#FDF3DC;
+  --info:#1F5FA8; --info-soft:#E9F1FB;
+  --danger:#B3261E; --danger-soft:#FCEDEC;
+  --r:10px; --r-s:7px; --r-f:999px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,p,ul,ol{margin:0;}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px;}
+
+header{background:var(--white);border-bottom:1px solid var(--line);}
+.hd{max-width:1180px;margin:0 auto;padding:20px;}
+.hd h1{font-size:20px;font-weight:800;letter-spacing:-0.4px;}
+.hd .sub{font-size:13px;color:var(--gray);margin-top:6px;max-width:780px;}
+.hd .src{font-size:11.5px;color:var(--light);margin-top:8px;}
+
+.counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.cnt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--white);
+  border-radius:var(--r-s);padding:8px 12px;font-size:12.5px;}
+.cnt b{font-size:16px;font-weight:800;}
+.cnt span{color:var(--gray);}
+.cnt.fine{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);}
+.cnt.neo{border-color:var(--line2);background:var(--brand-soft);}
+
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 12px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 13px;
+  border:1px solid var(--line2);background:var(--white);border-radius:var(--r-s);font-size:12.5px;font-weight:700;}
+.btn:hover{border-color:var(--ink);}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--ink);}
+.btn.on{background:var(--ink);border-color:var(--ink);color:var(--white);}
+.btn.sm{height:28px;padding:0 10px;font-size:11.5px;}
+.btn.ghost{background:none;border-color:transparent;color:var(--gray);}
+
+/* ── 묶음 ── */
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start;}
+.g{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+.g-hd{display:flex;align-items:center;gap:8px;padding:13px 14px;border-bottom:1px solid var(--line);
+  background:var(--soft);cursor:pointer;-webkit-user-select:none;user-select:none;}
+.g-hd .no{font-size:11px;font-weight:800;color:var(--light);width:15px;flex-shrink:0;}
+.g-hd h2{font-size:15px;font-weight:800;letter-spacing:-0.2px;}
+.g-hd .team{font-size:11px;color:var(--gray);background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r-f);padding:1px 8px;flex-shrink:0;}
+.g-hd .n{margin-left:auto;font-size:11px;font-weight:800;color:var(--gray);background:var(--white);
+  border:1px solid var(--line);border-radius:var(--r-f);padding:1px 8px;flex-shrink:0;}
+.g-hd .cr{font-size:10px;color:var(--gray);flex-shrink:0;}
+.g.fold .g-hd{border-bottom:0;}
+.g.fold .g-bd{display:none;}
+.g-bd{padding:12px 14px 14px;}
+.g-one{font-size:12.5px;color:var(--gray);padding-bottom:10px;border-bottom:1px solid var(--line);}
+.g-dash{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:9px 10px;
+  border:1px solid var(--line);border-radius:var(--r-s);background:var(--soft);font-size:12px;color:var(--gray);}
+.g-dash b{color:var(--ink);font-weight:800;flex-shrink:0;}
+
+.s{margin-top:12px;}
+.s-nm{font-size:10.5px;font-weight:800;color:var(--light);letter-spacing:0.3px;margin-bottom:5px;}
+.row{border:1px solid var(--line);border-radius:var(--r-s);padding:9px 10px;margin-bottom:5px;background:var(--white);}
+.row.neo{border-color:var(--line2);background:var(--brand-soft);}
+.row.lnk{background:var(--soft);border-style:dashed;}
+.row .t{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.row .nm{font-size:13px;font-weight:700;letter-spacing:-0.1px;}
+.row .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;color:var(--muted);margin-left:auto;}
+.tag{font-size:9.5px;font-weight:800;border-radius:var(--r-f);padding:1px 7px;flex-shrink:0;}
+.tag.n{background:var(--brand);color:var(--ink);}
+.tag.f{background:var(--info-soft);color:var(--info);border:1px solid #CBDDF3;}
+.tag.l{background:var(--white);color:var(--gray);border:1px solid var(--line2);}
+.row .d{font-size:11.5px;color:var(--gray);margin-top:4px;line-height:1.55;}
+.row .kids{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.row .kid{font-size:10px;color:var(--gray);background:var(--soft);border:1px solid var(--line);
+  border-radius:var(--r-f);padding:1px 7px;}
+body.only .row:not(.neo):not(.fil){display:none;}
+body.only .s:not(.has){display:none;}
+
+/* ── 아래 두 묶음 ── */
+.note{margin-top:22px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);}
+.note-hd{padding:13px 15px;border-bottom:1px solid var(--line);background:var(--soft);}
+.note-hd h2{font-size:15px;font-weight:800;}
+.note-hd p{font-size:12px;color:var(--gray);margin-top:3px;}
+.note-bd{padding:6px 15px 14px;}
+.why{padding:11px 0;border-bottom:1px solid var(--line);}
+.why:last-child{border-bottom:0;}
+.why .wt{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.why .wt b{font-size:13px;font-weight:800;}
+.why .wt code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;color:var(--light);}
+.why p{font-size:12.5px;color:var(--gray);margin-top:4px;}
+.ask li{font-size:12.5px;color:var(--gray);margin:7px 0 7px 2px;padding-left:14px;position:relative;list-style:none;}
+.ask li:before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:var(--warn);}
+.ask{padding:0;}
+
+/* ── 창 ── */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+.modal.on{display:flex;}
+.modal .bd{position:absolute;inset:0;background:rgba(17,17,17,.38);}
+.modal .pnl{position:relative;background:var(--white);border-radius:var(--r);width:100%;max-width:680px;
+  max-height:86vh;display:flex;flex-direction:column;border:1px solid var(--line);}
+.modal .ph{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line);}
+.modal .ph h3{font-size:15px;font-weight:800;flex:1;}
+.modal .pb{padding:14px 16px;overflow:auto;}
+.modal .pf{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;}
+textarea.out{width:100%;height:340px;border:1px solid var(--line);border-radius:var(--r-s);padding:11px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.65;resize:vertical;}
+
+#toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:7px;align-items:center;}
+.toast{background:var(--ink);color:var(--white);font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:var(--r-f);}
+.foot{margin-top:24px;font-size:11.5px;color:var(--light);}
+.foot a{color:var(--gray);}
+
+@media (max-width:720px){
+  button,.g-hd{touch-action:manipulation;}
+  .wrap{padding:0 14px 60px;}
+  .hd{padding:16px 14px;}
+  .hd h1{font-size:17px;}
+  .hd .sub{font-size:12.5px;}
+  .counts{gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-left:-14px;margin-right:-14px;padding:0 14px 2px;}
+  .cnt{flex-shrink:0;padding:7px 10px;font-size:12px;}
+  .bar .btn{height:42px;flex:1 1 calc(33.333% - 4px);padding:0 6px;}
+  .groups{grid-template-columns:1fr;gap:10px;}
+  .g-hd{padding:14px 12px;}
+  .g-bd{padding:11px 12px 12px;}
+  .row{padding:11px 10px;}
+  .row .id{margin-left:0;flex-basis:100%;}
+  .modal{padding:0;align-items:flex-end;}
+  .modal .pnl{max-width:none;border-radius:var(--r) var(--r) 0 0;max-height:88vh;max-height:88dvh;}
+  .modal .pf .btn{height:42px;}
+  textarea.out{height:46vh;font-size:12px;}
+  #toasts{top:14px;bottom:auto;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>코멜 CMS 사이트맵 정리안</h1>
+    <p class="sub">리건이 노션에 정리한 묶음 열 개와 그 차례를 그대로 두고, 자리를 못 받은 화면과 아직 없는 화면을 채웠습니다.
+      <b class="tag n">새</b> 는 아직 만들지 않은 화면, <b class="tag f">채움</b> 은 노션 정리에 없어서 내가 자리를 정한 줄입니다.</p>
+    <p class="src">바탕: 노션 "코멜 CMS기획" 2026-11-20 판 · 지금 화면: COMMEL CMS 프로토타입 cms2</p>
+    <div class="counts" id="counts"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="bar">
+    <button class="btn" id="b-fold">모두 펴기</button>
+    <button class="btn" id="b-only">새로 만들 것만</button>
+    <button class="btn pri" id="b-out">내보내기</button>
+  </div>
+
+  <div class="groups" id="groups"></div>
+
+  <div class="note">
+    <div class="note-hd">
+      <h2>노션 정리에서 빠져 있던 것</h2>
+      <p>내가 자리를 정한 줄입니다. 틀렸으면 그 줄만 말씀해 주시면 옮기겠습니다.</p>
+    </div>
+    <div class="note-bd" id="why"></div>
+  </div>
+
+  <div class="note">
+    <div class="note-hd">
+      <h2>화면을 그리기 전에 정해야 할 것</h2>
+      <p>이 다섯 가지가 정해져야 새 화면의 꼴이 나옵니다.</p>
+    </div>
+    <div class="note-bd"><ul class="ask" id="ask"></ul></div>
+  </div>
+
+  <p class="foot">다섯 가지 안을 견주어 보던 보드는 그대로 있습니다. <a href="../sitemap/">사이트맵 다시 짜기 보드</a> ·
+    지금 쓰는 도구 <a href="../cms2/">cms2</a></p>
+</div>
+
+<div class="modal" id="m-out">
+  <div class="bd" data-close></div>
+  <div class="pnl">
+    <div class="ph"><h3>노션에 붙일 글</h3><button class="btn sm ghost" data-close>닫기</button></div>
+    <div class="pb"><textarea class="out" id="out" readonly></textarea></div>
+    <div class="pf"><button class="btn" data-close>닫기</button><button class="btn pri" id="b-copy">복사</button></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+/* ══════════ 리건이 노션에 정리한 묶음 열 개 ══════════
+   2026-11-20 노션 "코멜 CMS기획" 에서 가져왔다. 1층 이름과 차례는 적으신 그대로 두었다.
+   st 는 그 화면이 지금 어떤 상태인지다.
+     old  지금 CMS 에 이미 있는 화면
+     new  적으신 자리인데 화면이 아직 없는 것
+     link 원본은 다른 묶음에 있고 여기서는 바로가기만 둔다
+   fill 은 노션 정리에 없어서 내가 자리를 채운 줄이다. 왜 채웠는지는 아래 WHY 에 적었다. */
+
+function O(id, nm, d, kids){ return {id:id, nm:nm, st:"old", d:d, kids:kids || null}; }
+function F(id, nm, d, kids){ return {id:id, nm:nm, st:"old", fill:1, d:d, kids:kids || null}; }
+function N(id, nm, d, kids){ return {id:id, nm:nm, st:"new", d:d, kids:kids || null}; }
+function NF(id, nm, d, kids){ return {id:id, nm:nm, st:"new", fill:1, d:d, kids:kids || null}; }
+function L(id, nm, where){ return {id:id, nm:nm, st:"link", d:"원본은 " + where + " 에 있다"}; }
+function S(nm, rows){ return {nm:nm, rows:rows}; }
+
+const TREE = [
+{
+  nm:"대시보드", team:"통합", dash:null,
+  one:"매출, 신규 가입, 리텐션, LTV·CAC 같은 핵심 지표를 한 화면에서 본다.",
+  subs:[S("", [
+    O("s-dash", "대시보드", "핵심 지표 요약과 오늘 손봐야 할 것. 묶음마다 있는 상세 대시보드의 윗자리다."),
+    L("a-jobs", "에이전트 검토 대기", "설정 · 에이전트"),
+    L("s-inq", "안 읽은 문의", "CS")
+  ])]
+},
+{
+  nm:"고객·주문", team:"공통", dash:"가입과 해지, 결제 실패, 환불 건수만 모은 상세 대시보드",
+  one:"사람과 돈을 한 묶음에서 본다. 환불 한 건이 문의에서 시작해 여기서 끝난다.",
+  subs:[
+    S("회원", [O("s-users", "회원", "가입한 사람을 찾고 구독 상태와 읽은 기록을 본다.", ["회원 상세"])]),
+    S("주문·결제", [O("s-orders", "주문·결제", "구독 결제와 상품 주문을 한 표에서 찾고 환불을 처리한다.")]),
+    S("구독 상태", [O("s-subs", "구독", "누가 어떤 요금제를 쓰는지 보고 결제 실패와 해지 예약을 챙긴다.")]),
+    S("", [L("s-seg", "고객 세그먼트", "마케팅 · CRM")])
+  ]
+},
+{
+  nm:"콘텐츠", team:"콘텐츠팀", dash:"편마다 읽힌 수와 남긴 기록, 발행 대기 편수를 모은 상세 대시보드",
+  one:"파는 물건 다섯 종을 모두 여기서 만든다. 코킷만이 아니다.",
+  subs:[
+    S("콘텐츠 성과", [O("s-stat-kit", "콘텐츠 성과", "89편이 얼마나 읽히고 기록을 남기는지 본다. 다음에 무엇을 만들지 정한다.")]),
+    S("콘텐츠 관리 · 코킷", [O("s-kits", "코킷", "89편을 만들고 고치고 발행한다. 발행하면 구독 회원에게 알림이 나간다.", ["코킷 편집"])]),
+    S("콘텐츠 관리 · 단독 시리즈", [O("s-series", "코멜 시리즈", "코킷의 묶음이 아니라 따로 파는 단독 상품이다. 회차 글을 여기서 직접 쓴다.", ["시리즈 편집"])]),
+    S("콘텐츠 관리 · 1:1 컨설팅", [
+      N("n-consult", "1:1 컨설팅", "상담 상품 소개, 상담 시간, 사전 질문지를 정한다.", ["컨설팅 편집"]),
+      N("n-consult-book", "컨설팅 예약", "캘린더와 줌 자동 예약. 신청·확정·완료·불참과 상담 뒤 메모를 남긴다.")
+    ]),
+    S("콘텐츠 관리 · 브랜드 콘텐츠 가이드", [
+      N("n-guides", "브랜드 콘텐츠 가이드", "가이드 목록. 소개, 목차, 본문이나 파일, 사기 전에 보여 줄 범위.", ["가이드 편집"]),
+      N("n-guide-apply", "가이드 신청자", "신청자 목록과 분석 템플릿. 신청을 받는다고 적으셔서 따로 두었다.")
+    ]),
+    S("콘텐츠 관리 · 템플릿", [
+      NF("n-tpls", "템플릿", "사업 관리 노션 템플릿 같은 것. 미리보기, 전달 방법, 판 관리.", ["템플릿 편집"])
+    ]),
+    S("콘텐츠 관리 · 낙타 큐레이션", [O("s-cura", "낙타의 큐레이션", "코킷을 주제별로 묶어 홈에 띄운다. 묶음마다 담을 편과 차례를 정한다.")]),
+    S("클라우드", [
+      O("s-media", "이미지", "표지, 히어로, 큐레이션, 상품에 쓰는 이미지를 올리고 어디에 쓰이는지 본다."),
+      N("n-file", "영상·파일", "가이드 PDF, 템플릿 원본, 서비스에 쓰는 영상. 판과 내려받기 권한을 둔다.")
+    ]),
+    S("", [L("s-guard", "발행 전 앱 규정 점검", "프로덕트 · 앱스토어 심사 대응")])
+  ]
+},
+{
+  nm:"상품·가격", team:"MD·BM팀", dash:"상품별 매출과 전환, 쿠폰이 먹은 금액을 모은 상세 대시보드",
+  one:"만든 것에 값을 붙여 파는 자리다. 만드는 일은 콘텐츠 묶음에 있다.",
+  subs:[
+    S("상품 등록·관리 · 구독 요금제", [O("s-plans", "요금제", "웹 멤버십 화면에 보이는 요금제 셋의 이름, 값, 혜택을 고친다.")]),
+    S("상품 등록·관리 · 단일 상품", [O("s-prod", "상품", "시리즈, 컨설팅, 가이드, 템플릿의 값과 상태와 랜딩 페이지를 고친다.")]),
+    S("프로모션", [N("n-promo", "쿠폰·이벤트", "할인 코드를 만들고 쓸 수 있는 조건과 기간을 정한다. 쓰인 수를 센다.")]),
+    S("", [L("s-orders", "주문·결제", "고객·주문")])
+  ]
+},
+{
+  nm:"마케팅", team:"퍼포먼스팀", dash:"매체비와 들어온 수, 보낸 알림이 연 수를 모은 상세 대시보드",
+  one:"밖에서 데려오는 일과 안에서 다시 오게 하는 일을 한 묶음에 둔다.",
+  subs:[
+    S("퍼포먼스", [
+      N("n-camp", "캠페인·매체 성과", "매체별로 쓴 돈과 들어온 수, 소재마다 어느 것이 먹었는지 본다."),
+      N("n-land", "랜딩페이지·어트리뷰션", "랜딩을 만들고 전환을 센다. 어느 매체가 가입까지 데려왔는지 가린다.")
+    ]),
+    S("CRM · 리텐션 분석", [
+      N("n-retention", "리텐션 분석", "보낸 알림의 성과와 다시 온 비율, 이탈, 구독 갱신을 한 화면에서 본다.")
+    ]),
+    S("CRM · 고객 세그먼트", [
+      O("s-seg", "세그먼트", "온보딩에서 모은 값으로 회원을 묶는다. 어떤 고민의 코킷이 모자란지도 본다.")
+    ]),
+    S("CRM · 알림", [
+      O("s-push", "알림 발송", "푸시, 알림톡, 이메일을 골라 쓰고 예약한다. 얼마나 열렸는지 여기서 본다."),
+      O("s-notitype", "알림 종류", "알림 여섯 가지의 문구 틀과 보내는 때를 정한다. 사용자 알림 설정과 짝이다.")
+    ])
+  ]
+},
+{
+  nm:"프로덕트", team:"프로덕트·UX팀", dash:"화면별 들어온 수와 이탈, 온보딩 끝낸 비율을 모은 상세 대시보드",
+  one:"사용자가 보는 화면을 짜고 고친다. 무엇을 파는지가 아니라 어떻게 보이는지다.",
+  subs:[
+    S("프로덕트 분석", [
+      N("n-funnel", "퍼널·이탈 분석", "화면마다 어디서 나가는지 본다. 이벤트를 정하고 A/B 테스트를 건다."),
+      O("s-rank", "인기 점수", "인기순과 정확도순에 쓰는 가중치를 고친다. 고치면 순위가 바로 다시 셈된다.")
+    ]),
+    S("앱·웹 화면 관리", [
+      O("s-home", "홈 편성", "사용자 홈의 섹션 여덟을 켜고 끄고 차례를 바꾸고 직접 고르는 자리를 채운다."),
+      O("s-find", "검색·둘러보기", "둘러보기의 거르개 축과 정렬, 인기 셋, 검색에 실패한 말을 다룬다."),
+      O("s-stat-find", "검색 분석", "회원이 무엇을 찾았고 무엇을 못 찾았는지 본다. 다음 코킷 주제를 여기서 정한다."),
+      F("s-copy", "서비스 문구", "사용자 화면 곳곳의 글을 한자리에서 고친다.")
+    ]),
+    S("분류", [
+      O("s-tags", "태그 체계", "채널, 주제, 유형 세 층의 태그를 더하고 고치고 합친다."),
+      O("s-concerns", "고민", "온보딩에서 고르는 고민 아홉 가지를 관리한다. 고민마다 대표 코킷을 정한다."),
+      O("s-tagmap", "태깅 점검", "89편의 태그 상태를 한 표에서 보고 규칙에 어긋난 편을 찾는다.")
+    ]),
+    S("온보딩 구성", [O("s-onb", "온보딩 구성", "처음 들어온 사용자에게 묻는 다섯 단계의 질문과 보기를 고친다.")]),
+    S("앱스토어 심사 대응", [
+      O("s-guard", "앱 규정 점검", "앱으로 내려가는 글에 결제, 가격, 구독, 요금제가 남았는지 발행 전에 검사한다.")
+    ])
+  ]
+},
+{
+  nm:"AI솔루션", team:"따로 디벨롭", dash:"물어본 수와 추천이 맞은 비율, 가드가 걸린 수를 모은 상세 대시보드",
+  one:"제품으로 계속 키울 자리라 다른 묶음과 섞지 않는다.",
+  subs:[
+    S("분석", [N("n-ai-stat", "낙타AI 분석", "무엇을 묻는지, 추천한 코킷을 열었는지, 가드가 언제 걸렸는지 본다.")]),
+    S("낙타AI 설정", [O("s-ai", "낙타AI 설정", "화면에 나오는 글, 처음 보여 주는 질문 보기, 답이 지켜야 할 가드를 고친다.")]),
+    S("대화 로그", [O("s-ailog", "대화 로그", "고객이 무엇을 묻고 어떤 코킷을 추천받았는지 한 줄씩 본다.")]),
+    S("", [L("s-cura", "낙타의 큐레이션", "콘텐츠")])
+  ]
+},
+{
+  nm:"CS", team:"서비스팀", dash:"가장 많은 클레임과 가장 많은 칭찬을 가려 보여 주는 상세 대시보드",
+  one:"고객이 말을 걸어오는 자리를 모은다.",
+  subs:[
+    S("문의", [O("s-inq", "문의", "회원이 보낸 문의를 읽고 답한다. 환불은 주문·결제로 건너간다.")]),
+    S("자주 묻는 질문", [O("s-faq", "자주 묻는 질문", "고객센터에 보이는 질문과 답을 고치고 차례를 정한다. 문의 분류도 여기서 다룬다.")]),
+    S("공지사항", [O("s-notice", "공지사항", "회원 전체에게 알릴 글을 쓰고 보일 기간과 자리를 정한다.")])
+  ]
+},
+{
+  nm:"정책", team:"", dash:null,
+  one:"바꾸면 날짜와 판을 남겨야 하는 글만 따로 둔다.",
+  subs:[
+    S("약관 및 정책", [
+      O("s-legal", "약관·정책", "이용약관, 환불 규정, 전자상거래법, 저작권, 개인정보 처리방침, 마케팅 수신 동의의 판과 가입 동의 항목.")
+    ])
+  ]
+},
+{
+  nm:"설정", team:"", dash:null,
+  one:"도구를 쓰는 사람과 도구끼리의 연결을 정한다. 에이전트도 쓰는 쪽이라 여기 둔다.",
+  subs:[
+    S("운영자 권한", [O("s-admin", "운영자·권한", "누가 이 도구를 쓰고 어디까지 손댈 수 있는지 정한다.")]),
+    S("활동 기록", [O("s-audit", "활동 기록", "사람이 한 것과 에이전트가 한 것을 한 줄기로 남긴다.")]),
+    S("트래킹·지표 정의", [
+      F("s-stats", "지표", "북극성 지표 하나와 접속에서 순환까지 다섯 단계, 가드레일을 정의한다.")
+    ]),
+    S("외부 채널 연동", [
+      N("n-integr", "외부 채널 연동", "마케팅 채널, 사스, PG사 API 를 붙이고 키와 상태를 본다.")
+    ]),
+    S("에이전트", [
+      F("a-home", "지시하기", "에이전트에게 일을 시키고 내 답이나 승인을 기다리는 작업을 본다."),
+      F("a-jobs", "작업", "시킨 일이 한 줄씩 쌓인다. 승인하기 전에는 서비스에 반영되지 않는다.", ["작업 상세"]),
+      F("a-recipes", "자주 쓰는 지시", "한 번 쓴 지시를 모아 두고 다시 돌린다. 예약을 걸면 정한 때에 혼자 돈다."),
+      F("a-rules", "권한 규칙", "무엇까지 맡길지 정한다. 혼자 해도 됨, 물어보고 함, 절대 안 함."),
+      F("a-ctx", "읽는 것", "에이전트에게 무엇을 읽히는지 정한다."),
+      F("a-conn", "CLI 연결", "클로드 코드와 코덱스 CLI 를 붙이고 어떤 도구를 열어 줄지 정한다.")
+    ]),
+    S("정해야 할 것", [
+      F("s-open", "정해야 할 것", "기획 문서에서 모은 미정 항목. 줄마다 어디서 나왔는지 적혀 있다.")
+    ])
+  ]
+}
+];
+
+/* 노션 정리에 없어서 내가 채운 것과 그 까닭 */
+const WHY = [
+  {nm:"에이전트 여섯 화면을 설정 아래 두었다", id:"a-home · a-jobs · a-recipes · a-rules · a-ctx · a-conn",
+   d:"노션 정리에 에이전트가 통째로 빠져 있다. 클로드 코드와 코덱스로 CMS 를 운영하기로 한 자리라 지울 수 없다. 도구를 쓰는 쪽이니 운영자 권한 옆이 맞다. 매일 여는 지시하기와 작업은 대시보드에 바로가기로 올렸다."},
+  {nm:"템플릿을 콘텐츠 관리에 되살렸다", id:"n-tpls",
+   d:"지난번에 파는 물건으로 부르셨는데 이번 정리에서 빠졌다. 값은 단일 상품에서 정하더라도 만드는 자리가 있어야 한다. 접는 것이라면 빼겠다."},
+  {nm:"지표 정의를 설정으로 옮겼다", id:"s-stats",
+   d:"지표를 보는 화면이 아니라 무엇을 지표로 셀지 정하는 화면이다. 보는 것은 묶음마다의 상세 대시보드가 맡는다."},
+  {nm:"서비스 문구를 앱·웹 화면 관리에 넣었다", id:"s-copy",
+   d:"사용자가 보는 글이라 화면을 짜는 묶음에 있어야 고칠 때 한 번에 본다."},
+  {nm:"정해야 할 것을 설정에 남겼다", id:"s-open",
+   d:"서비스에 나가는 화면이 아니라 기획을 끌고 가는 화면이다. 활동 기록 옆이 가장 덜 걸린다."},
+  {nm:"가이드 신청자를 따로 뗐다", id:"n-guide-apply",
+   d:"브랜드 콘텐츠 가이드에 신청자 목록을 적으셨다. 글을 쓰는 일과 신청을 받는 일은 쓰는 때가 달라 화면을 나눴다."},
+  {nm:"알림톡과 이메일은 새 화면을 만들지 않았다", id:"s-push",
+   d:"보내는 일은 같고 채널만 다르다. 지금 알림 발송 화면에 채널 고르기를 더하는 것이 화면 셋을 두는 것보다 낫다."},
+  {nm:"발행 점검은 앱스토어 심사 대응에 두고 코킷에서 바로가기를 걸었다", id:"s-guard",
+   d:"적으신 자리를 그대로 썼다. 다만 쓰는 때는 코킷을 발행하기 직전이라 콘텐츠에서 바로 열리게 했다."}
+];
+
+/* 화면을 그리기 전에 답이 있어야 하는 것 */
+const ASK = [
+  "브랜드 콘텐츠 가이드는 읽는 글인가, 내려받는 파일인가. 신청자를 받는다고 적으셔서 신청 상품으로 보고 짰다.",
+  "컨설팅 예약에 캘린더와 줌 자동 예약을 적으셨다. 바깥 도구를 붙이는 일이라 외부 채널 연동과 한 묶음으로 간다. 어느 도구를 쓸지 정해야 한다.",
+  "템플릿을 접는지 남기는지. 남기면 전달이 복제 링크인지 파일인지.",
+  "알림톡과 이메일을 보내려면 사스 계약이 있어야 한다. 어디를 쓸지.",
+  "묶음마다 팀 이름을 붙이셨다. 운영자 권한을 팀 단위로 나눌지, 사람마다 줄지."
+];
+
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]; }); }
+function toast(m){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = m;
+  $("#toasts").appendChild(t);
+  setTimeout(function(){ t.style.opacity = "0"; t.style.transition = "opacity .25s"; }, 1700);
+  setTimeout(function(){ t.remove(); }, 2000);
+}
+const MQ = window.matchMedia("(max-width:720px)");
+function isMob(){ return MQ.matches; }
+let touched = false;   /* 리건이 직접 접거나 편 뒤에는 건드리지 않는다 */
+
+/* ── 셈 ── */
+function tally(){
+  let old = 0, neo = 0, fil = 0, dash = 0, link = 0;
+  TREE.forEach(function(g){
+    if(g.dash) dash++;
+    g.subs.forEach(function(s){
+      s.rows.forEach(function(r){
+        if(r.st === "link"){ link++; return; }
+        const k = (r.kids || []).length;
+        if(r.st === "new") neo += 1 + k; else old += 1 + k;
+        if(r.fill) fil++;
+      });
+    });
+  });
+  return {old:old, neo:neo, fil:fil, dash:dash, link:link};
+}
+
+let fold = {};
+function foldAll(v){ fold = {}; if(v) TREE.forEach(function(g){ fold[g.nm] = true; }); }
+
+function rowHtml(r){
+  const neo = r.st === "new", lnk = r.st === "link";
+  const kids = (r.kids || []).map(function(k){
+    return '<span class="kid">' + esc(k) + (neo ? " · 새" : "") + "</span>"; }).join("");
+  return '<div class="row' + (neo ? " neo" : "") + (r.fill ? " fil" : "") + (lnk ? " lnk" : "") + '">' +
+    '<div class="t"><span class="nm">' + esc(r.nm) + "</span>" +
+    (neo ? '<span class="tag n">새</span>' : "") +
+    (r.fill ? '<span class="tag f">채움</span>' : "") +
+    (lnk ? '<span class="tag l">바로가기</span>' : "") +
+    '<span class="id">' + esc(r.id) + "</span></div>" +
+    (r.d ? '<div class="d">' + esc(r.d) + "</div>" : "") +
+    (kids ? '<div class="kids">' + kids + "</div>" : "") + "</div>";
+}
+function gCount(g){
+  let n = 0;
+  g.subs.forEach(function(s){ s.rows.forEach(function(r){
+    if(r.st !== "link") n += 1 + (r.kids || []).length; }); });
+  return n;
+}
+function draw(){
+  const t = tally();
+  $("#counts").innerHTML =
+    cnt(TREE.length, "1층 묶음", "") +
+    cnt(t.old, "지금 있는 화면", "fine") +
+    cnt(t.neo, "새로 만들 화면", "neo") +
+    cnt(t.dash, "묶음 대시보드", "neo") +
+    cnt(t.fil, "내가 자리를 채운 줄", "");
+
+  $("#groups").innerHTML = TREE.map(function(g, i){
+    const fo = !!fold[g.nm];
+    const has = g.subs.map(function(s){
+      const any = s.rows.some(function(r){ return r.st === "new" || r.fill; });
+      return '<div class="s' + (any ? " has" : "") + '">' +
+        (s.nm ? '<div class="s-nm">' + esc(s.nm) + "</div>" : "") +
+        s.rows.map(rowHtml).join("") + "</div>";
+    }).join("");
+    return '<div class="g' + (fo ? " fold" : "") + '" data-g="' + i + '">' +
+      '<div class="g-hd"><span class="no">' + (i + 1) + '</span><h2>' + esc(g.nm) + "</h2>" +
+      (g.team ? '<span class="team">' + esc(g.team) + "</span>" : "") +
+      '<span class="n">' + gCount(g) + '</span><span class="cr">' + (fo ? "&#9656;" : "&#9662;") + "</span></div>" +
+      '<div class="g-bd"><div class="g-one">' + esc(g.one) + "</div>" +
+      (g.dash ? '<div class="g-dash"><b>묶음 대시보드</b><span>' + esc(g.dash) + "</span></div>" : "") +
+      has + "</div></div>";
+  }).join("");
+
+  $("#why").innerHTML = WHY.map(function(w){
+    return '<div class="why"><div class="wt"><b>' + esc(w.nm) + "</b><code>" + esc(w.id) + "</code></div>" +
+      "<p>" + esc(w.d) + "</p></div>"; }).join("");
+  $("#ask").innerHTML = ASK.map(function(a){ return "<li>" + esc(a) + "</li>"; }).join("");
+  $("#b-fold").textContent = TREE.some(function(g){ return fold[g.nm]; }) ? "모두 펴기" : "모두 접기";
+}
+function cnt(n, lb, cls){
+  return '<div class="cnt ' + cls + '"><b>' + n + "</b><span>" + esc(lb) + "</span></div>";
+}
+
+document.addEventListener("click", function(e){
+  const hd = e.target.closest(".g-hd");
+  if(hd){
+    touched = true;
+    const g = TREE[+hd.parentNode.dataset.g];
+    fold[g.nm] = !fold[g.nm];
+    draw();
+    return;
+  }
+  if(e.target.closest("[data-close]")){ $$(".modal.on").forEach(function(m){ m.classList.remove("on"); }); }
+});
+$("#b-fold").addEventListener("click", function(e){
+  e.stopPropagation();
+  touched = true;
+  foldAll(!TREE.some(function(g){ return fold[g.nm]; }));
+  draw();
+});
+$("#b-only").addEventListener("click", function(){
+  const on = document.body.classList.toggle("only");
+  this.classList.toggle("on", on);
+  this.textContent = on ? "모두 보기" : "새로 만들 것만";
+  if(on) foldAll(false);
+  draw();
+});
+$("#b-out").addEventListener("click", function(){
+  const t = tally();
+  const L = ["# 코멜 CMS 사이트맵 정리안", "",
+    "노션 정리의 묶음 열 개를 그대로 두고 빠진 화면을 채웠다.",
+    "지금 있는 화면 " + t.old + "개 · 새로 만들 화면 " + t.neo + "개 · 묶음 대시보드 " + t.dash + "개", ""];
+  TREE.forEach(function(g, i){
+    L.push("## " + (i + 1) + ". " + g.nm + (g.team ? " (" + g.team + ")" : ""));
+    L.push(g.one);
+    if(g.dash) L.push("- 묶음 대시보드: " + g.dash);
+    g.subs.forEach(function(s){
+      if(s.nm) L.push("### " + s.nm);
+      s.rows.forEach(function(r){
+        const mark = r.st === "new" ? " [새]" : (r.st === "link" ? " [바로가기]" : "");
+        const fill = r.fill ? " [채움]" : "";
+        const kids = (r.kids || []).length ? " (+ " + r.kids.join(", ") + ")" : "";
+        L.push("- `" + r.id + "` " + r.nm + mark + fill + kids + " : " + r.d);
+      });
+    });
+    L.push("");
+  });
+  L.push("## 노션 정리에서 빠져 있던 것");
+  WHY.forEach(function(w){ L.push("- " + w.nm + " (" + w.id + "): " + w.d); });
+  L.push("");
+  L.push("## 화면을 그리기 전에 정해야 할 것");
+  ASK.forEach(function(a){ L.push("- " + a); });
+  $("#out").value = L.join("\n");
+  $("#m-out").classList.add("on");
+});
+$("#b-copy").addEventListener("click", function(){
+  const t = $("#out");
+  t.removeAttribute("readonly"); t.select();
+  try { document.execCommand("copy"); toast("복사했어요"); }
+  catch(e){ toast("직접 골라서 복사해 주세요"); }
+  t.setAttribute("readonly", "readonly");
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") $$(".modal.on").forEach(function(m){ m.classList.remove("on"); });
+});
+
+/* 창이 넓어지거나 좁아지면 접힘을 다시 정한다. 리건이 직접 접은 뒤에는 그대로 둔다 */
+function foldDefault(){ if(touched) return; foldAll(isMob()); draw(); }
+if(MQ.addEventListener) MQ.addEventListener("change", foldDefault);
+else if(MQ.addListener) MQ.addListener(foldDefault);
+window.addEventListener("load", foldDefault);
+foldDefault();
+</script>
+</body>
+</html>
