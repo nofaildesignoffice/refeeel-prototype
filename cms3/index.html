@@ -1023,12 +1023,29 @@ const CREATIVES = [
 
 /* ── 랜딩 ── */
 const LANDS = [
-  {id:"ld-kit", nm:"코킷 구독 소개", url:"/l/kit", vis:18400, join:1120, pay:214, st:"live"},
-  {id:"ld-guide", nm:"브랜드 콘텐츠 가이드", url:"/l/guide", vis:5200, join:310, pay:14, st:"live"},
-  {id:"ld-consult", nm:"1:1 컨설팅", url:"/l/consult", vis:3100, join:142, pay:11, st:"live"},
-  {id:"ld-tpl", nm:"노션 템플릿", url:"/l/notion", vis:7600, join:402, pay:63, st:"live"},
-  {id:"ld-old", nm:"지난 이벤트 랜딩", url:"/l/oct", vis:9100, join:380, pay:51, st:"off"}
+  {id:"ld-kit", nm:"코킷 구독 소개", url:"/l/kit", prod:"", vis:18400, join:1120, pay:214, st:"live",
+   secs:["첫 화면", "무엇을 받나", "먼저 읽은 사람들", "값", "자주 묻는 것", "마지막"]},
+  {id:"ld-brand", nm:"브랜딩 클래스", url:"/l/brand", prod:"pd-brand", vis:12900, join:840, pay:142, st:"live",
+   secs:["첫 화면", "무엇을 받나", "숫자", "먼저 들은 사람들", "만든 사람", "왜 제자리인가",
+     "매출이라는 허상", "왜 하는데도 안 되는가", "다시 정의", "필요한 것", "어떻게", "같은 물건, 다른 값",
+     "내 업종에도 될까", "커리큘럼", "자가 진단", "값", "자주 묻는 것", "마지막"]},
+  {id:"ld-guide", nm:"브랜드 콘텐츠 가이드", url:"/l/guide", prod:"pd-guide", vis:5200, join:310, pay:14, st:"live",
+   secs:["첫 화면", "이런 분께", "분석하는 자리", "받는 문서", "값", "마지막"]},
+  {id:"ld-consult", nm:"1:1 컨설팅", url:"/l/consult", prod:"pd-consult", vis:3100, join:142, pay:11, st:"live",
+   secs:["첫 화면", "60분 동안 하는 것", "상담한 분들", "값", "신청하기"]},
+  {id:"ld-tpl", nm:"노션 템플릿", url:"/l/notion", prod:"pd-notion", vis:7600, join:402, pay:63, st:"live",
+   secs:["첫 화면", "안에 든 것", "미리보기", "값", "마지막"]},
+  {id:"ld-old", nm:"지난 이벤트 랜딩", url:"/l/oct", prod:"", vis:9100, join:380, pay:51, st:"off", secs:[]}
 ];
+
+/* 랜딩을 새로 만들 때 고르는 틀 */
+const LAND_TPL = [
+  {id:"lt-sell", nm:"판매형", d:"첫 화면 · 무엇을 받나 · 증거 · 값 · 마지막", n:6},
+  {id:"lt-apply", nm:"신청형", d:"첫 화면 · 하는 것 · 사례 · 신청 칸", n:4},
+  {id:"lt-sub", nm:"구독형", d:"첫 화면 · 쌓이는 것 · 요금제 · 자주 묻는 것", n:5},
+  {id:"lt-blank", nm:"빈 장", d:"섹션 없이 시작한다", n:0}
+];
+
 const ATTRIB = [
   {src:"인스타그램", first:41, last:28},
   {src:"네이버 검색", first:17, last:24},
@@ -1608,7 +1625,7 @@ const NAV = [
     {id:"d-mkt", nm:"마케팅 현황", ic:"gauge"},
     {nm:"퍼포먼스", ic:"megaphone", sub:[
       {id:"n-camp", nm:"캠페인·매체 성과", ic:"radio"},
-      {id:"n-land", nm:"랜딩·어트리뷰션", ic:"mouse-pointer-click"}
+      {id:"n-land", nm:"랜딩페이지", ic:"layout-template"}
     ]},
     {nm:"CRM", ic:"heart-handshake", sub:[
       {id:"n-retention", nm:"리텐션 분석", ic:"repeat-2"},
@@ -1885,7 +1902,7 @@ CMS.ready(function(){
            ["가입 한 명값", won(Math.round(adCost / adJoin)), "calculator", "지난달 6,100원", "up"],
            ["알림 열람률", "38.4%", "send", "지난 발송 기준", "flat"]],
       now:[["스레드는 돈을 안 쓰고 240명이 들어왔습니다", "소재를 더 만들 자리입니다", "n-camp", "캠페인·매체 성과"],
-           ["가이드 랜딩은 들어온 수에 견줘 결제가 적습니다", "신청까지는 오는데 거기서 멈춥니다", "n-land", "랜딩·어트리뷰션"],
+           ["가이드 랜딩은 들어온 수에 견줘 결제가 적습니다", "신청까지는 오는데 거기서 멈춥니다", "n-land", "랜딩페이지"],
            ["4주 뒤에 남는 사람이 49%", "첫째 사유는 읽을 시간이 없다는 것입니다", "n-retention", "리텐션 분석"]]
     },
     "d-ux":{
@@ -2326,13 +2343,6 @@ CMS.ready(function(){
 #s-kit .note + .form,#s-kit .form + .note{margin-top:16px;}
 
 /* ── 시리즈 ── */
-#s-series .ser-card h2{font-size:var(--fs-xl);font-weight:800;letter-spacing:-0.3px;margin-top:12px;}
-#s-series .ser-card .ser-sub{font-size:var(--fs-sm);color:var(--text-gray);margin-top:4px;min-height:38px;}
-#s-series .ser-card .dl{margin-top:14px;}
-#s-series .ser-new{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  min-height:200px;border:1.5px dashed var(--border-default);border-radius:var(--radius-md);
-  background:none;font-family:inherit;font-size:var(--fs-sm);font-weight:600;color:var(--text-gray);cursor:pointer;}
-#s-series .ser-new:hover{border-color:var(--text-light);color:var(--text-black);}
 #s-series .ser-note{margin-top:16px;align-items:center;}
 #s-series .ser-note .btn{margin-left:auto;flex-shrink:0;}
 #s-series .ser-memo{margin-top:10px;}
@@ -2660,12 +2670,41 @@ CMS.ready(function(){
     </div>
   </div>
 
-  <div class="grid g3" id="ser-grid"></div>
+  <div class="grid g4 ser-kpi">
+    <div class="kpi"><div class="lb"><i data-lucide="layers"></i>시리즈</div><div class="val"><span id="ser-c-all">0</span><small>개</small></div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="circle-check"></i>발행</div><div class="val"><span id="ser-c-live">0</span><small>개</small></div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="list-ordered"></i>회차</div><div class="val"><span id="ser-c-ep">0</span><small>회차</small></div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="pencil"></i>작업 중인 회차</div><div class="val"><span id="ser-c-doing">0</span><small>회차</small></div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="toolbar" data-filter="ser-tbl">
+      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름이나 부제로 찾기"></div>
+      <select class="sel" data-key="st">
+        <option value="">상태 전체</option>
+        <option value="live">발행</option>
+        <option value="draft">초안</option>
+      </select>
+      <select class="sel" data-key="paid">
+        <option value="">값 전체</option>
+        <option value="1">유료</option>
+        <option value="0">무료</option>
+      </select>
+      <span class="sp muted"><b data-count>0</b>개</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="ser-tbl">
+        <thead><tr><th>이름</th><th>상태</th><th>값 받기</th><th class="num">회차</th><th class="num">작업 중</th><th>첫 회차</th><th style="width:96px"></th></tr></thead>
+        <tbody id="ser-list"></tbody>
+      </table>
+    </div>
+  </div>
 
   <div class="note info ser-note">
     <i data-lucide="info"></i>
-    <div><b>회차 글은 이 화면, 값과 랜딩은 상품 화면입니다.</b><br>
-      시리즈의 이름과 회차 글은 여기서 다루고 앱에도 내려갑니다. 가격과 판매 랜딩은 웹에만 내려가므로 멤버십의 상품 화면에서 다룹니다.</div>
+    <div><b>회차 글은 이 화면, 값은 단일 상품입니다.</b><br>
+      시리즈의 이름과 회차 글은 여기서 다루고 앱에도 내려갑니다. 값은 웹에만 내려가므로 단일 상품에서 정하고,
+      판매 랜딩은 퍼포먼스의 랜딩페이지에서 만듭니다.</div>
     <button class="btn sm" data-go="s-prod">상품 화면으로<i data-lucide="arrow-right"></i></button>
   </div>
   <div class="note ser-memo"><i data-lucide="info"></i>
@@ -3377,23 +3416,30 @@ CMS.ready(function(){
     return bdg(ST_KIT, s.st) + '<span class="bdg ' + (s.paid ? "dark" : "") + '">' + (s.paid ? "유료" : "무료") + "</span>";
   }
   function drawSerGrid(){
-    $("#ser-grid").innerHTML = SERIES.map(function(s){
+    let ep = 0, doing = 0;
+    $("#ser-list").innerHTML = SERIES.map(function(s){
       /* 회차별 상태가 자료에 없다. 초안 묶음은 전 회차가 작업 중이라고 본다 */
-      const doing = s.ep.filter(function(e){ return e.st !== "live"; }).length;
-      return '<div class="card ser-card"><div class="card-bd">' +
-        '<div class="row">' + serBdg(s) + "</div>" +
-        "<h2>" + esc(s.nm) + '</h2><div class="ser-sub">' + esc(s.sub) + "</div>" +
-        '<dl class="dl"><dt>회차</dt><dd>' + s.ep.length + "회차</dd>" +
-        "<dt>작업 중인 회차</dt><dd>" + doing + "회차</dd>" +
-        "<dt>첫 회차</dt><dd>" + (s.ep.length ? esc(s.ep[0].nm) : "아직 없음") + "</dd></dl></div>" +
-        '<div class="card-ft"><button class="btn sm" data-sedit="' + s.id + '"><i data-lucide="pencil"></i>편집</button>' +
-        '<span class="muted mono" style="font-size:11px;margin-left:auto">' + s.id + "</span></div></div>";
-    }).join("") +
-      '<button class="ser-new" data-modal="m-se-new"><i data-lucide="plus"></i>새 시리즈</button>';
+      const d = s.ep.filter(function(e){ return e.st !== "live"; }).length;
+      ep += s.ep.length; doing += d;
+      return '<tr data-k="' + esc(s.nm + " " + s.sub) + '" data-st="' + s.st +
+        '" data-paid="' + (s.paid ? "1" : "0") + '">' +
+        '<td><div class="t-main">' + esc(s.nm) + '</div><div class="t-sub">' + esc(s.sub) + "</div></td>" +
+        "<td>" + bdg(ST_KIT, s.st) + "</td>" +
+        '<td><span class="bdg' + (s.paid ? " dark" : "") + '">' + (s.paid ? "유료" : "무료") + "</span></td>" +
+        '<td class="num">' + s.ep.length + "회차</td>" +
+        '<td class="num">' + (d ? d + "회차" : "-") + "</td>" +
+        '<td class="muted">' + (s.ep.length ? esc(s.ep[0].nm) : "아직 없음") + "</td>" +
+        '<td><div class="rowact"><button class="btn sm" data-sedit="' + s.id + '">' +
+        '<i data-lucide="pencil"></i>편집</button></div></td></tr>';
+    }).join("");
+    $("#ser-c-all").textContent = SERIES.length;
+    $("#ser-c-live").textContent = SERIES.filter(function(s){ return s.st === "live"; }).length;
+    $("#ser-c-ep").textContent = ep;
+    $("#ser-c-doing").textContent = doing;
     icons();
   }
   drawSerGrid();
-  $("#ser-grid").addEventListener("click", function(e){
+  $("#ser-list").addEventListener("click", function(e){
     const b = e.target.closest("[data-sedit]");
     if(!b) return;
     loadSeries(b.dataset.sedit); go("s-series-edit");
@@ -7958,55 +8004,14 @@ CMS.ready(function(){
 </script>
 <style>
 /* 멤버십 묶음 네 화면. 여기서 다루는 값은 웹에만 내려간다.
-   요금제 카드는 웹 멤버십 화면의 요금제 표와 같은 짜임으로 둔다. 운영자가 보는 것과 고객이 보는 것이 같아야 고칠 때 헷갈리지 않는다. */
-#s-plans .pl-card{display:flex;flex-direction:column;}
-#s-plans .pl-card.best{border-color:var(--bg-black);}
-#s-plans .pl-card .card-bd{flex:1;}
-#s-plans .pl-nm{font-size:var(--fs-lg);font-weight:800;}
-#s-plans .pl-cost{margin-top:12px;display:flex;align-items:baseline;gap:4px;}
-#s-plans .pl-cost b{font-size:26px;font-weight:800;letter-spacing:-0.8px;}
-#s-plans .pl-cost span{font-size:var(--fs-sm);color:var(--text-light);font-weight:600;}
-#s-plans .pl-line{font-size:var(--fs-sm);color:var(--text-gray);margin-top:6px;line-height:1.55;min-height:38px;}
-#s-plans .pl-ppl{font-size:var(--fs-xs);color:var(--text-gray);margin-top:10px;padding-top:10px;border-top:1px solid var(--card-line);}
-#s-plans .pl-ppl b{font-size:var(--fs-md);color:var(--text-black);}
-#s-plans .pl-ben{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;}
-#s-plans .pl-ben li{display:flex;gap:6px;font-size:var(--fs-sm);line-height:1.5;}
-#s-plans .pl-ben li i,#s-plans .pl-ben li svg{width:13px;height:13px;flex-shrink:0;margin-top:3px;color:var(--ok);}
-#s-plans .pl-ft{font-size:var(--fs-xs);color:var(--text-gray);font-weight:600;}
+   목록은 코킷·상품과 같은 표로 둔다. 같은 성격의 목록은 같은 꼴이어야 한다. */
 #s-plans .pl-stat{display:grid;grid-template-columns:110px minmax(0,1fr) 110px;gap:10px;align-items:center;padding:7px 0;font-size:var(--fs-sm);}
 #s-plans .pl-stat .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
 #s-plans .pl-cr{width:90px;text-align:right;}
-/* 폰 미리보기 안의 요금제 카드. 좁은 폭에서는 세로로 쌓인다 */
-.bl-pv-seg{display:flex;gap:4px;background:var(--bg-light);border-radius:var(--radius-full);padding:3px;margin-bottom:12px;}
-.bl-pv-seg span{flex:1;text-align:center;font-size:10.5px;font-weight:700;padding:5px 0;border-radius:var(--radius-full);color:var(--text-light);}
-.bl-pv-seg span.on{background:var(--bg-black);color:#fff;}
-.bl-pv-h{font-size:13px;font-weight:800;}
-.bl-pv-p{font-size:10.5px;color:var(--text-gray);margin:3px 0 10px;line-height:1.5;}
-.bl-pv-c{border:1px solid var(--card-line);border-radius:var(--radius-md);padding:10px;margin-bottom:8px;}
-.bl-pv-c.best{border-color:var(--bg-black);}
-.bl-pv-c .n{font-size:11px;font-weight:800;display:flex;align-items:center;gap:5px;}
-.bl-pv-c .n em{font-style:normal;font-size:9px;font-weight:700;background:var(--brand);color:var(--brand-ink);padding:1px 6px;border-radius:var(--radius-full);}
-.bl-pv-c .c{font-size:17px;font-weight:800;margin-top:4px;}
-.bl-pv-c .c small{font-size:10px;color:var(--text-light);font-weight:600;margin-left:2px;}
-.bl-pv-c .l{font-size:10px;color:var(--text-gray);margin-top:3px;line-height:1.5;}
-.bl-pv-c ul{list-style:none;margin:7px 0 0;padding:0;font-size:10px;line-height:1.7;color:var(--text-dark);}
-.bl-pv-c ul li::before{content:"✓ ";color:var(--ok);font-weight:700;}
-.bl-pv-c .b{margin-top:8px;height:26px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;border:1px solid var(--border-default);}
-.bl-pv-c .b.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);}
-.bl-pv-c .b.off{color:var(--text-light);background:var(--bg-light);}
-.bl-pv-r{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--card-line);}
-.bl-pv-r:last-child{border-bottom:0;}
-.bl-pv-r .t{min-width:0;flex:1;}
-.bl-pv-r .t b{display:block;font-size:11px;font-weight:700;}
-.bl-pv-r .t span{display:block;font-size:9.5px;color:var(--text-light);margin-top:1px;}
-.bl-pv-r .w{font-size:11px;font-weight:800;white-space:nowrap;}
 /* 고치는 창의 혜택 줄 */
 #m-plan .list{border:1px solid var(--card-line);border-radius:var(--radius-sm);}
 #m-plan .lrow{padding:7px 10px;}
 #m-plan .lrow .inp{flex:1;min-width:0;}
-/* 랜딩 섹션 목록 */
-#s-prod .ld-n{width:24px;font-size:var(--fs-xs);color:var(--text-light);font-weight:700;font-variant-numeric:tabular-nums;}
-#s-prod .ld-list{max-height:420px;overflow-y:auto;}
 /* 구독 숫자 타일은 다섯 개라 한 줄 다섯 칸으로 둔다 */
 #s-subs .sb-kpi{grid-template-columns:repeat(5,minmax(0,1fr));}
 @media (max-width:1180px){#s-subs .sb-kpi{grid-template-columns:repeat(3,minmax(0,1fr));}}
@@ -8038,9 +8043,18 @@ CMS.ready(function(){
     <span><b>이 묶음에서 고친 값은 웹에만 내려갑니다.</b> 앱 빌드에는 가격·결제·구독 요소를 넣지 않습니다. 앱에서는 잠금 표시만 합니다.</span>
   </div>
 
-  <div class="grid g-main">
-    <div class="stack">
-      <div class="grid g3" id="pl-cards"></div>
+  <div class="stack">
+      <div class="card">
+        <div class="card-hd"><div><h2>요금제</h2><p id="pl-sum"></p></div></div>
+        <div class="card-bd flush">
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>이름</th><th class="num">값</th><th>상태</th><th class="num">쓰는 사람</th><th class="num">혜택</th><th class="ctr">배지</th><th style="width:88px"></th></tr></thead>
+              <tbody id="pl-list"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <div class="card">
         <div class="card-hd">
@@ -8081,24 +8095,17 @@ CMS.ready(function(){
         </div>
       </div>
 
+      <div class="note">
+        <i data-lucide="lock"></i>
+        <span>앱에는 이 화면이 없습니다. 잠긴 편에는 앱용 잠금 문구만 보입니다.</span>
+      </div>
+
       <div class="note warn">
         <i data-lucide="circle-help"></i>
         <span><b>요금제 구조가 아직 확정되지 않았습니다(기능 정의 Q3).</b> 코멜 시리즈는 따로 파는 단독 상품으로 정했고, 구독에 주는 시리즈 할인 폭은 남았습니다.</span>
       </div>
     </div>
 
-    <div class="stack">
-      <div class="card">
-        <div class="card-hd"><div><h2>웹 미리보기</h2><p>멤버십 화면 · 코킷 구독</p></div></div>
-        <div class="card-bd" style="display:flex;justify-content:center">
-          <div class="phone"><div class="ptop">웹 · 멤버십</div><div class="pbd" id="pl-pv"></div></div>
-        </div>
-      </div>
-      <div class="note">
-        <i data-lucide="lock"></i>
-        <span>앱에는 이 화면이 없습니다. 잠긴 편에는 앱용 잠금 문구만 보입니다.</span>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -8107,7 +8114,7 @@ CMS.ready(function(){
   <div class="ph">
     <div>
       <h1>상품</h1>
-      <p>웹에서 따로 파는 상품의 이름, 값, 상태, 랜딩 페이지를 고칩니다. 코멜 시리즈의 값도 여기서 정합니다.</p>
+      <p>웹에서 따로 파는 상품을 등록하고 이름, 값, 상태를 고칩니다. 코멜 시리즈의 값도 여기서 정합니다.</p>
     </div>
     <div class="ph-act">
       <button class="btn" data-go="s-orders"><i data-lucide="receipt"></i>주문 보기</button>
@@ -8121,12 +8128,11 @@ CMS.ready(function(){
   </div>
   <div class="note info" style="margin-bottom:14px;align-items:center">
     <i data-lucide="layers"></i>
-    <span style="flex:1"><b>코멜 시리즈는 코킷의 묶음이 아니라 단독 상품입니다.</b> 회차 글은 코멜 시리즈 화면에서 쓰고 앱에도 내려갑니다. 값과 판매 랜딩은 이 화면에서 다루고 웹에만 내려갑니다.</span>
+    <span style="flex:1"><b>코멜 시리즈는 코킷의 묶음이 아니라 단독 상품입니다.</b> 회차 글은 코멜 시리즈 화면에서 쓰고 앱에도 내려갑니다. 값은 이 화면에서 정하고 웹에만 내려갑니다.</span>
     <button class="btn sm" data-go="s-series">코멜 시리즈로<i data-lucide="arrow-right"></i></button>
   </div>
 
-  <div class="grid g-main">
-    <div class="stack">
+  <div class="stack">
       <div class="card">
         <div class="toolbar" data-filter="pd-tbl">
           <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름이나 소개로 찾기"></div>
@@ -8139,24 +8145,12 @@ CMS.ready(function(){
         </div>
         <div class="tbl-wrap">
           <table class="tbl" id="pd-tbl">
-            <thead><tr><th>분류</th><th>이름</th><th>소개</th><th class="num">가격</th><th>상태</th><th class="num">판매 수</th><th>랜딩</th><th style="width:120px"></th></tr></thead>
+            <thead><tr><th>분류</th><th>이름</th><th>소개</th><th class="num">가격</th><th>상태</th><th class="num">판매 수</th><th style="width:96px"></th></tr></thead>
             <tbody id="pd-list"></tbody>
           </table>
         </div>
         <div class="empty" id="pd-empty" style="display:none">
           <i data-lucide="package-search"></i><b>맞는 상품이 없습니다</b><p>찾는 말이나 거르개를 바꿔 보세요.</p>
-        </div>
-      </div>
-
-      <div class="card" id="pd-land">
-        <div class="card-hd">
-          <div><h2>랜딩 페이지</h2><p id="pd-land-sub"></p></div>
-          <div class="r"><div class="pills" id="pd-land-pick"></div></div>
-        </div>
-        <div class="card-bd flush" id="pd-land-bd"></div>
-        <div class="card-ft" id="pd-land-ft">
-          <span class="muted" style="font-size:var(--fs-xs)">줄을 끌어서 순서를 바꿉니다. 스위치를 끄면 그 섹션은 웹에서 빠집니다.</span>
-          <button class="btn sm pri" style="margin-left:auto" data-act="toast" data-msg="랜딩 순서를 저장했어요">저장</button>
         </div>
       </div>
 
@@ -8166,24 +8160,11 @@ CMS.ready(function(){
         1:1 컨설팅도 479,000원과 150,000원으로 다릅니다. 이름도 <span class="mono">브랜드 전략 가이드라인</span> 과 <span class="mono">브랜드 콘텐츠 가이드라인</span> 으로 갈립니다.
         지금 파는 값과 지난 주문의 값을 나눠 두어야 합니다.</span>
       </div>
-      <div class="note warn">
-        <i data-lucide="list-ordered"></i>
-        <span><b>브랜딩 클래스의 회차 구성이 두 곳에서 다릅니다.</b> 시리즈 화면은 01~09 아홉 개이고, 랜딩의 커리큘럼은 00~09 열 개입니다.</span>
-      </div>
-    </div>
-
-    <div class="stack">
-      <div class="card">
-        <div class="card-hd"><div><h2>웹 미리보기</h2><p>멤버십 화면 · 코멜 시리즈</p></div></div>
-        <div class="card-bd" style="display:flex;justify-content:center">
-          <div class="phone"><div class="ptop">웹 · 멤버십</div><div class="pbd" id="pd-pv"></div></div>
-        </div>
-      </div>
       <div class="note">
-        <i data-lucide="mouse-pointer-click"></i>
-        <span>웹의 구매 단추는 아직 갈 곳이 없습니다. 결제 흐름이 정해지면 잇습니다.</span>
+        <i data-lucide="layout-template"></i>
+        <span><b>판매 랜딩은 여기서 만들지 않습니다.</b> 랜딩은 퍼포먼스의 랜딩페이지에서 등록하고 고칩니다.
+        <button class="btn sm" data-go="n-land">랜딩페이지 열기</button></span>
       </div>
-    </div>
   </div>
 </section>
 
@@ -8374,9 +8355,6 @@ CMS.ready(function(){
         </div>
         <div class="fld"><label>이미지</label>
           <div class="drop" data-act="soon"><i data-lucide="image-up"></i><b>이미지 올리기</b><span>웹 멤버십 화면의 상품 카드에 쓰입니다</span></div></div>
-        <div class="fld"><label>랜딩 연결</label>
-          <select class="sel" id="m-prod-land"><option value="0">랜딩 없음</option><option value="1">랜딩 페이지 연결</option></select>
-          <span class="hint">랜딩이 없으면 웹의 상품 카드는 눌러도 제자리입니다.</span></div>
       </div>
     </div>
     <div class="ft"><button class="btn" data-close>그만두기</button><button class="btn pri" id="m-prod-save">저장</button></div>
@@ -8478,19 +8456,19 @@ CMS.ready(function(){
   const planOf = function(id){ return P.filter(function(p){ return p.id === id; })[0]; };
 
   const drawPlans = function(){
-    $("#pl-cards").innerHTML = P.map(function(p){
-      return "<div class=\"card pl-card" + (p.best ? " best" : "") + "\" data-id=\"" + p.id + "\"><div class=\"card-bd\">" +
-        "<div class=\"rowg\"><span class=\"pl-nm\">" + esc(p.nm) + "</span>" +
-        (p.best ? "<span class=\"bdg brand\">가장 많이 고릅니다</span>" : "") +
-        "<span style=\"margin-left:auto\">" + bdg(ST_SALE, p.st) + "</span></div>" +
-        "<div class=\"pl-cost\"><b>" + fmt(p.price) + "</b><span>" + (p.price ? "원 / 월" : "원") + "</span></div>" +
-        "<p class=\"pl-line\">" + esc(p.line) + "</p>" +
-        "<div class=\"pl-ppl\">" + (p.price ? "구독자 " : "쓰는 사람 ") + "<b>" + fmt(p.ppl) + "</b>명" +
-        (p.credit ? " · 크레딧 " + fmt(p.credit) + " <span class=\"bdg warn\">가설</span>" : "") + "</div>" +
-        "<ul class=\"pl-ben\">" + p.ben.map(function(b){ return "<li><i data-lucide=\"check\"></i><span>" + esc(b) + "</span></li>"; }).join("") + "</ul>" +
-        "</div><div class=\"card-ft\"><span class=\"pl-ft\">배지</span>" +
-        "<button class=\"sw pl-best" + (p.best ? " on" : "") + "\" title=\"가장 많이 고릅니다 배지\"></button>" +
-        "<button class=\"btn sm pl-edit\" style=\"margin-left:auto\"><i data-lucide=\"pencil\"></i>고치기</button></div></div>";
+    $("#pl-sum").textContent = P.length + "개 · 구독자 " +
+      fmt(P.filter(function(p){ return p.price; }).reduce(function(n, p){ return n + p.ppl; }, 0)) + "명";
+    $("#pl-list").innerHTML = P.map(function(p){
+      return "<tr data-id=\"" + p.id + "\">" +
+        "<td><div class=\"t-main\">" + esc(p.nm) + "</div>" +
+        "<div class=\"t-sub\">" + esc(p.line) + "</div></td>" +
+        "<td class=\"num mono nowrap\">" + (p.price ? won(p.price) + " / 월" : "0원") + "</td>" +
+        "<td>" + bdg(ST_SALE, p.st) + "</td>" +
+        "<td class=\"num\">" + fmt(p.ppl) + "명" +
+        (p.credit ? "<div class=\"t-sub\">크레딧 " + fmt(p.credit) + " <span class=\"bdg warn\">가설</span></div>" : "") + "</td>" +
+        "<td class=\"num\">" + p.ben.length + "가지</td>" +
+        "<td class=\"ctr\"><button class=\"sw pl-best" + (p.best ? " on" : "") + "\" title=\"가장 많이 고릅니다 배지\"></button></td>" +
+        "<td><div class=\"rowact\"><button class=\"btn sm pl-edit\"><i data-lucide=\"pencil\"></i>고치기</button></div></td></tr>";
     }).join("");
 
     const maxP = Math.max.apply(null, P.map(function(p){ return p.ppl; })) || 1;
@@ -8507,16 +8485,6 @@ CMS.ready(function(){
     }).join("");
     $("#pl-stat-sum").textContent = "사람 수에 월 가격을 곱한 값. 합계 " + won(total);
 
-    $("#pl-pv").innerHTML = "<div class=\"bl-pv-seg\"><span class=\"on\">코킷 구독</span><span>코멜 시리즈</span></div>" +
-      "<div class=\"bl-pv-h\">먼저 읽어 보고 정하세요</div>" +
-      "<div class=\"bl-pv-p\">무료로도 충분히 읽힙니다. 더 필요해지는 순간에 올리면 됩니다.</div>" +
-      P.filter(function(p){ return p.st === "live"; }).map(function(p){
-        return "<div class=\"bl-pv-c" + (p.best ? " best" : "") + "\"><div class=\"n\">" + esc(p.nm) + (p.best ? "<em>가장 많이 고릅니다</em>" : "") + "</div>" +
-          "<div class=\"c\">" + fmt(p.price) + "<small>" + (p.price ? "원 / 월" : "원") + "</small></div>" +
-          "<div class=\"l\">" + esc(p.line) + "</div>" +
-          "<ul>" + p.ben.map(function(b){ return "<li>" + esc(b) + "</li>"; }).join("") + "</ul>" +
-          "<div class=\"b " + (!p.price ? "off" : p.best ? "pri" : "") + "\">" + (!p.price ? "지금 쓰는 중" : p.best ? "구독하기" : "시작하기") + "</div></div>";
-      }).join("");
     icons();
   };
   drawPlans();
@@ -8527,10 +8495,10 @@ CMS.ready(function(){
       "<input class=\"inp\" type=\"text\" value=\"" + esc(v) + "\" placeholder=\"혜택 한 줄\">" +
       "<button class=\"btn sm ico ghost ben-del\" type=\"button\" title=\"지우기\"><i data-lucide=\"x\"></i></button></div>";
   };
-  $("#pl-cards").addEventListener("click", function(e){
-    const card = e.target.closest(".pl-card");
-    if(!card) return;
-    const p = planOf(card.dataset.id);
+  $("#pl-list").addEventListener("click", function(e){
+    const row = e.target.closest("tr[data-id]");
+    if(!row) return;
+    const p = planOf(row.dataset.id);
     if(e.target.closest(".pl-best")){
       /* 배지는 한 요금제에만 붙는다. 하나를 켜면 나머지는 꺼진다 */
       const on = !p.best;
@@ -8578,49 +8546,14 @@ CMS.ready(function(){
   });
 
   /* ══════════ 2. 상품 ══════════ */
-  const PD = PRODUCTS.map(function(p){ return {id:p.id, cat:p.cat, nm:p.nm, price:p.price, st:p.st, sub:p.sub, land:p.land, sold:p.sold}; });
+  const PD = PRODUCTS.map(function(p){ return {id:p.id, cat:p.cat, nm:p.nm, price:p.price, st:p.st, sub:p.sub, sold:p.sold}; });
   const prodOf = function(id){ return PD.filter(function(p){ return p.id === id; })[0]; };
   const cats = PD.map(function(p){ return p.cat; }).filter(function(v, i, a){ return a.indexOf(v) === i; });
   $("#pd-f-cat").insertAdjacentHTML("beforeend", optHtml(cats, function(c){ return "<option>" + esc(c) + "</option>"; }));
   $("#m-prod-cat").innerHTML = optHtml(cats, function(c){ return "<option>" + esc(c) + "</option>"; });
 
-  /* 브랜딩 클래스 랜딩의 섹션 18개. 웹 랜딩 화면에 적힌 이름과 순서 그대로다 */
-  const LAND = {"pd-brand":["첫 화면","무엇을 받나","숫자","먼저 들은 사람들","만든 사람","왜 제자리인가",
-    "매출이라는 허상","왜 하는데도 안 되는가","다시 정의","필요한 것","어떻게","같은 물건, 다른 값",
-    "내 업종에도 될까","커리큘럼","자가 진단","값","자주 묻는 것","마지막"]};
-  let landCur = "pd-brand";
   const refreshPd = watchEmpty("s-prod", "pd-empty");
 
-  const drawLand = function(){
-    $("#pd-land-pick").innerHTML = PD.map(function(p){
-      return "<button data-id=\"" + p.id + "\" class=\"" + (p.id === landCur ? "on" : "") + "\">" + esc(p.nm) + "</button>";
-    }).join("");
-    const p = prodOf(landCur), secs = LAND[landCur];
-    if(p.land && secs){
-      $("#pd-land-sub").textContent = p.nm + " · 섹션 " + secs.length + "개";
-      $("#pd-land-bd").innerHTML = "<div class=\"list ld-list\" id=\"pd-land-list\">" + secs.map(function(s, i){
-        return "<div class=\"lrow\" draggable=\"true\" data-s=\"" + esc(s) + "\"><span class=\"drag\"><i data-lucide=\"grip-vertical\"></i></span>" +
-          "<span class=\"ld-n\">" + String(i + 1).padStart(2, "0") + "</span>" +
-          "<div class=\"tx\"><b>" + esc(s) + "</b>" + (s === "커리큘럼" ? "<span>회차 00~09 열 개. 시리즈 화면은 01~09 아홉 개입니다</span>" : "") +
-          (s === "값" ? "<span>상품 가격을 그대로 읽어 옵니다</span>" : "") + "</div>" +
-          "<div class=\"r\"><button class=\"sw on\" data-say=\"" + esc(s) + " 섹션\"></button></div></div>";
-      }).join("") + "</div>";
-      $("#pd-land-ft").style.display = "";
-      sortable($("#pd-land-list"), function(){
-        LAND[landCur] = $$("#pd-land-list .lrow").map(function(r){ return r.dataset.s; });
-        $$("#pd-land-list .ld-n").forEach(function(n, i){ n.textContent = String(i + 1).padStart(2, "0"); });
-        toast("섹션 순서를 바꿨어요");
-      });
-      wire($("#pd-land-bd"));
-    } else {
-      $("#pd-land-sub").textContent = p.nm + " · 랜딩 없음";
-      $("#pd-land-bd").innerHTML = "<div class=\"empty\"><i data-lucide=\"layout-template\"></i><b>랜딩 없음</b>" +
-        "<p>" + esc(p.nm) + " 에는 랜딩 페이지가 없습니다. 웹의 상품 카드는 눌러도 제자리입니다.</p>" +
-        "<button class=\"btn\" data-act=\"soon\"><i data-lucide=\"plus\"></i>만들기</button></div>";
-      $("#pd-land-ft").style.display = "none";
-    }
-    icons();
-  };
   const drawProds = function(){
     $("#pd-list").innerHTML = PD.map(function(p){
       return "<tr data-id=\"" + p.id + "\" data-k=\"" + esc(p.nm + " " + p.sub + " " + p.cat) + "\" data-cat=\"" + esc(p.cat) + "\" data-st=\"" + p.st + "\">" +
@@ -8630,21 +8563,10 @@ CMS.ready(function(){
         "<td class=\"num mono nowrap\">" + won(p.price) + "</td>" +
         "<td>" + bdg(ST_SALE, p.st) + "</td>" +
         "<td class=\"num mono\">" + fmt(p.sold) + "</td>" +
-        "<td class=\"nowrap\">" + (p.land && LAND[p.id] ? "<span class=\"bdg ok\">있음 · " + LAND[p.id].length + "개 섹션</span>" :
-          p.land ? "<span class=\"bdg info\">연결만 됨</span>" : "<span class=\"muted\">랜딩 없음</span>") + "</td>" +
         "<td><div class=\"rowact\"><button class=\"btn sm ico pd-edit\" title=\"고치기\"><i data-lucide=\"pencil\"></i></button>" +
-        "<button class=\"btn sm ico pd-land\" title=\"랜딩 보기\"><i data-lucide=\"layout-template\"></i></button>" +
         "<button class=\"btn sm ico pd-tog\" title=\"" + (p.st === "live" ? "잠깐 멈춤" : "다시 팔기") + "\"><i data-lucide=\"" + (p.st === "live" ? "pause" : "play") + "\"></i></button></div></td></tr>";
     }).join("");
-    const live = PD.filter(function(p){ return p.st === "live"; });
-    $("#pd-pv").innerHTML = "<div class=\"bl-pv-seg\"><span>코킷 구독</span><span class=\"on\">코멜 시리즈</span></div>" +
-      (live.length ? live.map(function(p){
-        return "<div class=\"bl-pv-r\"><div class=\"t\"><b>" + esc(p.nm) + "</b><span>" + esc(p.cat + " · " + p.sub) + "</span></div>" +
-          "<span class=\"w\">" + won(p.price) + "</span></div>";
-      }).join("") : "<div class=\"bl-pv-p\">지금 파는 상품이 없습니다.</div>") +
-      "<div class=\"bl-pv-p\" style=\"margin-top:10px\">판매 중인 상품만 보입니다. 잠깐 멈춤과 판매 중단은 빠집니다.</div>";
     refreshPd();
-    drawLand();
   };
   drawProds();
 
@@ -8657,7 +8579,6 @@ CMS.ready(function(){
     $("#m-prod-sub").value = p ? p.sub : "";
     $("#m-prod-price").value = p ? p.price : "";
     $("#m-prod-st").value = p ? p.st : "pause";
-    $("#m-prod-land").value = p && p.land ? "1" : "0";
     openModal("m-prod");
   };
   $("#pd-new").addEventListener("click", function(){ openProd(null); });
@@ -8665,27 +8586,20 @@ CMS.ready(function(){
     const tr = e.target.closest("tr"); if(!tr) return;
     const p = prodOf(tr.dataset.id);
     if(e.target.closest(".pd-edit")) openProd(p);
-    else if(e.target.closest(".pd-land")){
-      landCur = p.id; drawLand();
-      $("#pd-land").scrollIntoView({behavior:"smooth", block:"start"});
-    } else if(e.target.closest(".pd-tog")){
+    else if(e.target.closest(".pd-tog")){
       p.st = p.st === "live" ? "pause" : "live";
       drawProds();
       toast(p.nm + (p.st === "live" ? " 다시 팔아요" : " 판매를 잠깐 멈췄어요"));
     }
-  });
-  $("#pd-land-pick").addEventListener("click", function(e){
-    const b = e.target.closest("button[data-id]");
-    if(b){ landCur = b.dataset.id; drawLand(); }
   });
   $("#m-prod-save").addEventListener("click", function(){
     const nm = $("#m-prod-nm").value.trim();
     if(!nm){ toast("이름을 적어 주세요", true); return; }
     const v = {cat:$("#m-prod-cat").value, nm:nm, sub:$("#m-prod-sub").value.trim(),
       price:Math.max(0, parseInt($("#m-prod-price").value, 10) || 0),
-      st:$("#m-prod-st").value, land:$("#m-prod-land").value === "1"};
+      st:$("#m-prod-st").value};
     if(prodEd){ Object.keys(v).forEach(function(k){ prodEd[k] = v[k]; }); }
-    else { v.id = "pd-new" + (PD.length + 1); v.sold = 0; PD.push(v); landCur = v.id; }
+    else { v.id = "pd-new" + (PD.length + 1); v.sold = 0; PD.push(v); }
     closeModal("m-prod");
     drawProds();
     toast(nm + " 상품을 저장했어요");
@@ -13913,6 +13827,9 @@ CMS.ready(function(){
 #n-retention .rt-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--card-line);}
 #n-retention .rt-row:last-child{border-bottom:0;}
 #n-retention .rt-row .wk{width:44px;font-size:var(--fs-sm);font-weight:700;}
+#n-land .ld-n{width:24px;font-size:var(--fs-xs);color:var(--text-light);font-weight:700;font-variant-numeric:tabular-nums;}
+#n-land .ld-list{max-height:420px;overflow-y:auto;}
+#n-land #ld-list tr{cursor:pointer;}
 </style>
 
 <section class="scr" id="n-promo">
@@ -13960,10 +13877,10 @@ CMS.ready(function(){
   <div class="ph">
     <div>
       <h1>캠페인·매체 성과</h1>
-      <p>매체마다 쓴 돈과 들어온 수, 소재마다 어느 것이 먹었는지 봅니다.</p>
+      <p>매체마다 쓴 돈과 들어온 수, 소재마다 어느 것이 먹었는지, 그리고 어디서 왔는지를 봅니다.</p>
     </div>
     <div class="ph-act">
-      <button class="btn" data-go="n-land"><i data-lucide="mouse-pointer-click"></i>랜딩·어트리뷰션</button>
+      <button class="btn" data-go="n-land"><i data-lucide="layout-template"></i>랜딩페이지</button>
       <button class="btn" data-act="soon"><i data-lucide="download"></i>내보내기</button>
     </div>
   </div>
@@ -13980,7 +13897,8 @@ CMS.ready(function(){
     </div>
   </div>
 
-  <div class="card" style="margin-top:14px">
+  <div class="grid g-main" style="margin-top:14px">
+    <div class="card">
     <div class="card-hd"><div><h2>소재</h2><p>같은 매체 안에서 어느 말이 먹었는지</p></div></div>
     <div class="card-bd flush">
       <div class="tbl-wrap">
@@ -13990,32 +13908,6 @@ CMS.ready(function(){
         </table>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="scr" id="n-land">
-  <div class="ph">
-    <div>
-      <h1>랜딩·어트리뷰션</h1>
-      <p>랜딩마다 들어온 수와 결제까지 간 수를 봅니다. 어느 매체가 데려왔는지도 여기서 가립니다.</p>
-    </div>
-    <div class="ph-act">
-      <button class="btn" data-go="n-camp"><i data-lucide="megaphone"></i>캠페인</button>
-      <button class="btn pri" data-act="soon"><i data-lucide="plus"></i>랜딩 만들기</button>
-    </div>
-  </div>
-
-  <div class="grid g-main">
-    <div class="card">
-      <div class="card-hd"><div><h2>랜딩</h2></div></div>
-      <div class="card-bd flush">
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>이름</th><th>주소</th><th class="num">들어온 수</th><th class="num">가입</th><th class="num">결제</th><th class="num">결제율</th><th>상태</th></tr></thead>
-            <tbody id="ld-list"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
     <div class="stack">
@@ -14026,6 +13918,85 @@ CMS.ready(function(){
       <div class="note">
         <i data-lucide="info"></i>
         <span>처음 만난 곳과 마지막에 들른 곳이 다릅니다. 인스타에서 알고 검색으로 들어와 결제하는 길이 가장 많습니다.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scr" id="n-land">
+  <div class="ph">
+    <div>
+      <h1>랜딩페이지</h1>
+      <p>판매와 신청에 쓰는 랜딩을 여기서 등록하고 섹션 순서를 고칩니다. 상품 화면에서는 상품만 등록합니다.</p>
+    </div>
+    <div class="ph-act">
+      <button class="btn" data-go="n-camp"><i data-lucide="megaphone"></i>캠페인·매체 성과</button>
+      <button class="btn pri" data-modal="m-land-new"><i data-lucide="plus"></i>랜딩 만들기</button>
+    </div>
+  </div>
+
+  <div class="grid g4">
+    <div class="kpi"><div class="lb"><i data-lucide="layout-template"></i>랜딩</div><div class="val"><span id="ld-c-all">0</span><small>장</small></div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="users"></i>들어온 수</div><div class="val" id="ld-c-vis">0</div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="credit-card"></i>결제</div><div class="val" id="ld-c-pay">0</div></div>
+    <div class="kpi"><div class="lb"><i data-lucide="percent"></i>결제율</div><div class="val" id="ld-c-rate">0%</div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="toolbar" data-filter="ld-tbl">
+      <div class="srch"><i data-lucide="search"></i><input type="text" placeholder="이름이나 주소로 찾기"></div>
+      <select class="sel" data-key="st">
+        <option value="">상태 전체</option><option value="live">열림</option><option value="off">닫음</option>
+      </select>
+      <span class="sp muted"><b data-count>0</b>장</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="ld-tbl">
+        <thead><tr><th>이름</th><th>주소</th><th>파는 것</th><th class="num">섹션</th><th class="num">들어온 수</th><th class="num">가입</th><th class="num">결제</th><th class="num">결제율</th><th>상태</th><th style="width:96px"></th></tr></thead>
+        <tbody id="ld-list"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="ld-edit" style="margin-top:14px">
+    <div class="card-hd">
+      <div><h2>섹션 순서</h2><p id="ld-sub"></p></div>
+      <div class="r"><div class="pills" id="ld-pick"></div></div>
+    </div>
+    <div class="card-bd flush" id="ld-bd"></div>
+    <div class="card-ft" id="ld-ft">
+      <span class="muted" style="font-size:var(--fs-xs)">줄을 끌어서 순서를 바꿉니다. 스위치를 끄면 그 섹션은 웹에서 빠집니다.</span>
+      <button class="btn sm pri" style="margin-left:auto" data-act="toast" data-msg="섹션 순서를 저장했어요">저장</button>
+    </div>
+  </div>
+
+  <div class="note warn" style="margin-top:14px">
+    <i data-lucide="list-ordered"></i>
+    <span><b>브랜딩 클래스의 회차 구성이 두 곳에서 다릅니다.</b> 시리즈 화면은 01~09 아홉 개이고,
+    랜딩의 커리큘럼은 00~09 열 개입니다.</span>
+  </div>
+
+  <div class="modal" id="m-land-new">
+    <div class="bd" data-close></div>
+    <div class="pnl">
+      <div class="hd"><h3>랜딩 만들기</h3><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="bdy">
+        <div class="form">
+          <div class="fld"><label>이름 <span class="req">*</span></label>
+            <input class="inp" type="text" id="ln-nm" placeholder="예: 브랜딩 클래스"></div>
+          <div class="fld"><label>주소 <span class="req">*</span></label>
+            <input class="inp" type="text" id="ln-url" placeholder="/l/brand">
+            <span class="hint">웹 주소 뒤에 붙는 길입니다</span></div>
+          <div class="fld"><label>파는 것</label>
+            <select class="sel" id="ln-prod"></select>
+            <span class="hint">값과 이름은 고른 상품에서 읽어 옵니다</span></div>
+          <div class="fld"><label>틀</label>
+            <div class="list" id="ln-tpl"></div></div>
+        </div>
+      </div>
+      <div class="ft">
+        <button class="btn" data-close>그만두기</button>
+        <button class="btn pri" id="ln-save"><i data-lucide="check"></i>만들기</button>
       </div>
     </div>
   </div>
@@ -14150,21 +14121,119 @@ CMS.ready(function(){
       Math.round(c.clk / maxClk * 100) + '%"></i></div></div></td></tr>';
   }).join("");
 
-  /* ── 랜딩 ── */
-  $("#ld-list").innerHTML = LANDS.map(function(l){
-    return '<tr><td><div class="t-main">' + esc(l.nm) + "</div></td>" +
-      '<td class="mono muted">' + esc(l.url) + "</td>" +
-      '<td class="num">' + fmt(l.vis) + "</td>" +
-      '<td class="num">' + fmt(l.join) + "</td>" +
-      '<td class="num">' + fmt(l.pay) + "</td>" +
-      '<td class="num">' + pct(l.pay / l.vis * 100) + "</td>" +
-      "<td>" + (l.st === "live" ? '<span class="bdg ok">열림</span>' : '<span class="bdg">닫음</span>') + "</td></tr>";
-  }).join("");
+  /* ── 랜딩페이지 ── */
+  const LD = LANDS.map(function(l){ return Object.assign({}, l, {secs:l.secs.slice()}); });
+  const ldOf = function(id){ return LD.filter(function(l){ return l.id === id; })[0]; };
+  const PDNM = {}; PRODUCTS.forEach(function(p){ PDNM[p.id] = p.nm; });
+  let ldCur = LD[1].id;
 
+  function drawLdTbl(){
+    $("#ld-list").innerHTML = LD.map(function(l){
+      return '<tr data-id="' + l.id + '" data-k="' + esc(l.nm + " " + l.url) + '" data-st="' + l.st + '">' +
+        '<td><div class="t-main">' + esc(l.nm) + "</div></td>" +
+        '<td class="mono muted">' + esc(l.url) + "</td>" +
+        "<td>" + (l.prod ? esc(PDNM[l.prod] || l.prod) : '<span class="muted">연결 없음</span>') + "</td>" +
+        '<td class="num">' + (l.secs.length ? l.secs.length + "개" : "-") + "</td>" +
+        '<td class="num">' + fmt(l.vis) + "</td>" +
+        '<td class="num">' + fmt(l.join) + "</td>" +
+        '<td class="num">' + fmt(l.pay) + "</td>" +
+        '<td class="num">' + pct(l.pay / l.vis * 100) + "</td>" +
+        "<td>" + (l.st === "live" ? '<span class="bdg ok">열림</span>' : '<span class="bdg">닫음</span>') + "</td>" +
+        '<td><div class="rowact"><button class="btn sm ld-go">섹션</button></div></td></tr>';
+    }).join("");
+    $("#ld-c-all").textContent = LD.length;
+    const vis = LD.reduce(function(n, l){ return n + l.vis; }, 0);
+    const pay = LD.reduce(function(n, l){ return n + l.pay; }, 0);
+    $("#ld-c-vis").textContent = fmt(vis);
+    $("#ld-c-pay").textContent = fmt(pay);
+    $("#ld-c-rate").textContent = pct(pay / vis * 100);
+    icons();
+  }
+
+  function drawLdEdit(){
+    $("#ld-pick").innerHTML = LD.map(function(l){
+      return '<button data-id="' + l.id + '" class="' + (l.id === ldCur ? "on" : "") + '">' + esc(l.nm) + "</button>";
+    }).join("");
+    const l = ldOf(ldCur);
+    if(l.secs.length){
+      $("#ld-sub").textContent = l.nm + " · 섹션 " + l.secs.length + "개";
+      $("#ld-bd").innerHTML = '<div class="list ld-list" id="ld-rows">' + l.secs.map(function(s, i){
+        return '<div class="lrow" draggable="true" data-s="' + esc(s) + '">' +
+          '<span class="drag"><i data-lucide="grip-vertical"></i></span>' +
+          '<span class="ld-n">' + String(i + 1).padStart(2, "0") + "</span>" +
+          '<div class="tx"><b>' + esc(s) + "</b>" +
+          (s === "커리큘럼" ? "<span>회차 00~09 열 개. 시리즈 화면은 01~09 아홉 개입니다</span>" : "") +
+          (s === "값" ? "<span>상품 가격을 그대로 읽어 옵니다</span>" : "") + "</div>" +
+          '<div class="r"><button class="sw on" data-say="' + esc(s) + ' 섹션"></button></div></div>';
+      }).join("") + "</div>";
+      $("#ld-ft").style.display = "";
+      sortable($("#ld-rows"), function(){
+        l.secs = $$("#ld-rows .lrow").map(function(r){ return r.dataset.s; });
+        $$("#ld-rows .ld-n").forEach(function(n, i){ n.textContent = String(i + 1).padStart(2, "0"); });
+        toast("섹션 순서를 바꿨어요");
+      });
+      wire($("#ld-bd"));
+    } else {
+      $("#ld-sub").textContent = l.nm + " · 섹션 없음";
+      $("#ld-bd").innerHTML = '<div class="empty"><i data-lucide="layout-template"></i><b>섹션이 없습니다</b>' +
+        "<p>" + esc(l.nm) + " 은 아직 빈 장입니다. 틀을 고르거나 섹션을 하나씩 더합니다.</p>" +
+        '<button class="btn" data-act="soon"><i data-lucide="plus"></i>섹션 더하기</button></div>';
+      $("#ld-ft").style.display = "none";
+    }
+    icons();
+  }
+
+  $("#ld-list").addEventListener("click", function(e){
+    const tr = e.target.closest("tr[data-id]");
+    if(!tr) return;
+    ldCur = tr.dataset.id;
+    drawLdEdit();
+    $("#ld-edit").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  $("#ld-pick").addEventListener("click", function(e){
+    const b = e.target.closest("button[data-id]");
+    if(b){ ldCur = b.dataset.id; drawLdEdit(); }
+  });
+
+  /* 만들기 창 */
+  $("#ln-prod").innerHTML = '<option value="">연결 없음</option>' +
+    PRODUCTS.map(function(p){ return '<option value="' + p.id + '">' + esc(p.nm) + "</option>"; }).join("");
+  let lnTpl = LAND_TPL[0].id;
+  function drawLnTpl(){
+    $("#ln-tpl").innerHTML = LAND_TPL.map(function(x){
+      return '<div class="lrow"><div class="tx"><b>' + esc(x.nm) + "</b><span>" + esc(x.d) + "</span></div>" +
+        '<button class="btn sm' + (x.id === lnTpl ? " pri" : "") + '" data-tpl="' + x.id + '">' +
+        (x.id === lnTpl ? "고름" : "고르기") + "</button></div>";
+    }).join("");
+  }
+  $("#ln-tpl").addEventListener("click", function(e){
+    const b = e.target.closest("[data-tpl]");
+    if(b){ lnTpl = b.dataset.tpl; drawLnTpl(); }
+  });
+  drawLnTpl();
+  $("#ln-save").addEventListener("click", function(){
+    const nm = $("#ln-nm").value.trim(), url = $("#ln-url").value.trim();
+    if(!nm){ toast("이름을 적어 주세요", true); return; }
+    if(!url){ toast("주소를 적어 주세요", true); return; }
+    const tpl = LAND_TPL.filter(function(x){ return x.id === lnTpl; })[0];
+    LD.push({id:"ld-new" + LD.length, nm:nm, url:url, prod:$("#ln-prod").value,
+      vis:0, join:0, pay:0, st:"off",
+      secs:tpl.n ? tpl.d.split(" · ") : []});
+    ldCur = LD[LD.length - 1].id;
+    closeModal("m-land-new");
+    $("#ln-nm").value = ""; $("#ln-url").value = "";
+    drawLdTbl(); drawLdEdit();
+    toast(nm + " 랜딩을 만들었어요. 아직 닫혀 있습니다");
+  });
+  drawLdTbl();
+  drawLdEdit();
+
+  const atMax = Math.max.apply(null, ATTRIB.map(function(a){ return a.first; }));
   $("#at-list").innerHTML = ATTRIB.map(function(a){
     return '<div class="swrow"><div class="tx"><b>' + esc(a.src) + "</b>" +
       "<span>처음 " + a.first + "% · 마지막 " + a.last + "%</span></div>" +
-      '<div class="mk-bar" style="width:140px"><div class="bar"><i style="width:' + (a.first * 2) + '%"></i></div>' +
+      '<div class="mk-bar" style="width:140px"><div class="bar"><i style="width:' +
+      Math.round(a.first / atMax * 100) + '%"></i></div>' +
       "<b>" + a.first + "%</b></div></div>";
   }).join("");
 
